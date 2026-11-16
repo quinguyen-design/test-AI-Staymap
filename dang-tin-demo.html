@@ -271,6 +271,35 @@
       color: #ecfdf5;
       border: 1px solid rgba(167, 243, 208, 0.5);
     }
+    /* 4-Tier VIP Icon Hierarchy */
+    .lc-vip-tag.tag-dacquyen {
+      background: #000000 !important;
+      border: 1px solid rgba(255, 157, 0, 0.45);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+    .lc-vip-tag.tag-vip1 {
+      background: rgba(0, 0, 0, 0.70) !important;
+      border: 1px solid rgba(255, 157, 0, 0.35);
+      backdrop-filter: blur(4px);
+    }
+    .lc-vip-tag.tag-vip2 {
+      background: rgba(0, 0, 0, 0.70) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(4px);
+    }
+    .lc-vip-tag.tag-vip3 {
+      background: rgba(0, 0, 0, 0.50) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(4px);
+    }
+    .vip-grad-text {
+      background: linear-gradient(135deg, #f15a22 0%, #ff9d00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
     @keyframes fadeSlideDown {
       from { opacity: 0; transform: translateY(-6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -683,12 +712,12 @@
 
   <script>
     const ZONES = [
-      { id: 1, name: "Banner Đặc Quyền", badge: "✦ ĐẶC QUYỀN", badgeClass: "tag-top1", zoneClass: "zone-spotlight", rate: 50000, desc: "Top đầu trang chủ" },
-      { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-top1", zoneClass: "zone-spotlight", rate: 35000, desc: "Spotlight nổi bật" },
-      { id: 3, name: "TOP 2 Nổi Bật", badge: "• VIP 2", badgeClass: "tag-top2", zoneClass: "zone-featured", rate: 25000, desc: "Featured ưu tiên" },
-      { id: 5, name: "TOP 3 Hiệu Quả", badge: "• VIP 3", badgeClass: "tag-top3", zoneClass: "zone-prime", rate: 15000, desc: "Prime tiết kiệm" },
-      { id: 4, name: "Tin Cơ Bản", badge: "", badgeClass: "", zoneClass: "", rate: 1000, desc: "Lên bản đồ chuẩn" },
-      { id: 13, name: "Đăng Tin Miễn Phí", badge: "", badgeClass: "", zoneClass: "", rate: 0, desc: "Không lên bản đồ" }
+      { id: 1, name: "Banner Đặc Quyền", badge: "✦ ĐẶC QUYỀN", badgeClass: "tag-dacquyen", useGradText: true, zoneClass: "zone-spotlight", rate: 50000, desc: "Top đầu trang chủ" },
+      { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-vip1", useGradText: true, zoneClass: "zone-spotlight", rate: 35000, desc: "Spotlight nổi bật" },
+      { id: 3, name: "TOP 2 Nổi Bật", badge: "• VIP 2", badgeClass: "tag-vip2", useGradText: false, zoneClass: "zone-featured", rate: 25000, desc: "Featured ưu tiên" },
+      { id: 5, name: "TOP 3 Hiệu Quả", badge: "• VIP 3", badgeClass: "tag-vip3", useGradText: false, zoneClass: "zone-prime", rate: 15000, desc: "Prime tiết kiệm" },
+      { id: 4, name: "Tin Cơ Bản", badge: "", badgeClass: "", useGradText: false, zoneClass: "", rate: 1000, desc: "Lên bản đồ chuẩn" },
+      { id: 13, name: "Đăng Tin Miễn Phí", badge: "", badgeClass: "", useGradText: false, zoneClass: "", rate: 0, desc: "Không lên bản đồ" }
     ];
     const DURATIONS = [
       { days: 3, label: "3 ngày", off: 0 },
@@ -1066,8 +1095,10 @@
       const coverPhoto = D.photos[D.coverIdx] || D.photos[0];
       const z = ZONES.find((x) => x.id === D.selectedZoneId);
       const badgeText = z ? z.badge : "✦ VIP 1";
-      const badgeClass = z ? z.badgeClass : "tag-top1";
+      const badgeClass = z ? z.badgeClass : "tag-vip1";
+      const useGradText = z ? z.useGradText : true;
       const zoneClass = z ? z.zoneClass : "zone-spotlight";
+      const badgeInner = useGradText ? `<span class="vip-grad-text">${badgeText}</span>` : badgeText;
 
       const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
       const stickerHTML = stObj
@@ -1084,7 +1115,7 @@
                   ? `<img src="${coverPhoto}" alt="${title}">`
                   : `<div style="width:100%;height:100%;min-height:190px;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;gap:6px;"><i class="fa-regular fa-image" style="font-size:26px;"></i><span>Chưa có hình ảnh</span></div>`}
                 <div class="lc-card-badges" style="display:flex;flex-direction:column;align-items:flex-start;gap:5px;">
-                  ${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeText}</span>` : ""}
+                  ${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeInner}</span>` : ""}
                   ${stickerHTML}
                 </div>
                 <div class="lc-photo-count">
