@@ -3714,6 +3714,82 @@ button, input, select, textarea, .leaflet-container {
   vertical-align: middle;
 }
 
+/* Auth & Secure Registration Modal Polish */
+.auth-portal-grid {
+  display: grid;
+  grid-template-columns: 0.92fr 1.28fr;
+  gap: 22px;
+  align-items: stretch;
+}
+
+.auth-left-card {
+  background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth-right-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.auth-right-card .post-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-right-card .post-input:focus {
+  outline: none;
+  border-color: var(--ctt-orange);
+  box-shadow: 0 0 0 3px rgba(241, 90, 34, 0.14);
+}
+
+.auth-pwd-wrap {
+  position: relative;
+}
+
+.auth-pwd-wrap .post-input {
+  padding-right: 40px;
+}
+
+.auth-pwd-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+}
+
+.auth-pwd-eye:hover {
+  color: var(--ctt-orange);
+}
+
+.auth-security-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
 @media (max-width: 1200px) {
   .lc-grid, .news-grid, .post-studio-grid, .portal-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -3739,7 +3815,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 @media (max-width: 768px) {
-  .lc-grid, .news-grid, .seo-container, .footer-container, .pd-content-grid, .post-cat-selector, .post-zone-clean-grid, .post-duration-4grid, .portal-kpi-grid {
+  .lc-grid, .news-grid, .seo-container, .footer-container, .pd-content-grid, .post-cat-selector, .post-zone-clean-grid, .post-duration-4grid, .portal-kpi-grid, .auth-portal-grid {
     grid-template-columns: 1fr;
   }
   .shn-list {

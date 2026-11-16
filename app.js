@@ -2498,6 +2498,281 @@ function logoutAccount() {
   navigateTo("/");
 }
 
+const REG_STATE = {
+  zaloOtp: "",
+  zaloPhone: "",
+  zaloCooldown: null,
+  googleCode: "",
+  googleEmail: "",
+  googleCooldown: null,
+  otpAttempts: 0
+};
+
+function switchAuthMode(mode) {
+  const isReg = mode === "register";
+  const tabLogin = document.getElementById("authTabLogin");
+  const tabReg = document.getElementById("authTabRegister");
+  const panelLogin = document.getElementById("authPanelLogin");
+  const panelReg = document.getElementById("authPanelRegister");
+
+  if (panelLogin) panelLogin.style.display = isReg ? "none" : "block";
+  if (panelReg) panelReg.style.display = isReg ? "block" : "none";
+
+  if (tabLogin) {
+    tabLogin.style.background = isReg ? "transparent" : "#fff";
+    tabLogin.style.color = isReg ? "#64748b" : "#0f172a";
+    tabLogin.style.boxShadow = isReg ? "none" : "0 2px 6px rgba(15,23,42,0.08)";
+  }
+  if (tabReg) {
+    tabReg.style.background = isReg ? "#fff" : "transparent";
+    tabReg.style.color = isReg ? "#0f172a" : "#64748b";
+    tabReg.style.boxShadow = isReg ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
+  }
+}
+
+function switchRegisterMethod(method) {
+  const isGoogle = method === "google";
+  const zaloBtn = document.getElementById("regMethodZaloBtn");
+  const googleBtn = document.getElementById("regMethodGoogleBtn");
+  const zaloPanel = document.getElementById("regPanelZalo");
+  const googlePanel = document.getElementById("regPanelGoogle");
+
+  if (zaloPanel) zaloPanel.style.display = isGoogle ? "none" : "flex";
+  if (googlePanel) googlePanel.style.display = isGoogle ? "flex" : "none";
+
+  if (zaloBtn) {
+    zaloBtn.style.borderColor = isGoogle ? "#e2e8f0" : "#0284c7";
+    zaloBtn.style.background = isGoogle ? "#fff" : "#f0f9ff";
+    zaloBtn.style.color = isGoogle ? "#475569" : "#0369a1";
+  }
+  if (googleBtn) {
+    googleBtn.style.borderColor = isGoogle ? "#ea4335" : "#e2e8f0";
+    googleBtn.style.background = isGoogle ? "#fef2f2" : "#fff";
+    googleBtn.style.color = isGoogle ? "#b91c1c" : "#475569";
+  }
+}
+
+function toggleAuthPassword(inputId, btnEl) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const isPwd = input.type === "password";
+  input.type = isPwd ? "text" : "password";
+  if (btnEl) {
+    btnEl.innerHTML = isPwd ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+  }
+}
+
+function evaluatePasswordStrength(pwd) {
+  if (!pwd) return { score: 0, label: "Chưa nhập", color: "#cbd5e1", isStrong: false };
+  let score = 0;
+  if (pwd.length >= 8) score++;
+  if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+  if (/\d/.test(pwd)) score++;
+  if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+  const levels = [
+    { label: "Quá yếu (<8 ký tự)", color: "#ef4444" },
+    { label: "Yếu", color: "#f97316" },
+    { label: "Trung bình", color: "#f59e0b" },
+    { label: "Mạnh (Đạt chuẩn)", color: "#10b981" },
+    { label: "Rất mạnh (2FA Ready)", color: "#059669" }
+  ];
+  return {
+    score,
+    label: levels[score].label,
+    color: levels[score].color,
+    isStrong: pwd.length >= 8 && score >= 3
+  };
+}
+
+function updateRegPasswordStrength(pwd, channel) {
+  const res = evaluatePasswordStrength(pwd);
+  const barId = channel === "google" ? "regGoogleStrengthBar" : "regZaloStrengthBar";
+  const lblId = channel === "google" ? "regGoogleStrengthLabel" : "regZaloStrengthLabel";
+  const bar = document.getElementById(barId);
+  const lbl = document.getElementById(lblId);
+  if (bar) {
+    bar.style.width = `${(res.score / 4) * 100}%`;
+    bar.style.background = res.color;
+  }
+  if (lbl) {
+    lbl.textContent = res.label;
+    lbl.style.color = res.color;
+  }
+}
+
+function startOtpButtonCooldown(btnEl, defaultText, timerKey) {
+  if (!btnEl) return;
+  if (REG_STATE[timerKey]) clearInterval(REG_STATE[timerKey]);
+  let sec = 60;
+  btnEl.disabled = true;
+  btnEl.style.opacity = "0.65";
+  btnEl.textContent = `Gửi lại (${sec}s)`;
+  REG_STATE[timerKey] = setInterval(() => {
+    sec -= 1;
+    if (sec <= 0) {
+      clearInterval(REG_STATE[timerKey]);
+      REG_STATE[timerKey] = null;
+      btnEl.disabled = false;
+      btnEl.style.opacity = "1";
+      btnEl.textContent = defaultText;
+    } else {
+      btnEl.textContent = `Gửi lại (${sec}s)`;
+    }
+  }, 1000);
+}
+
+function showRegError(elId, msg) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (msg) {
+    el.textContent = msg;
+    el.style.display = "block";
+  } else {
+    el.textContent = "";
+    el.style.display = "none";
+  }
+}
+
+function sendZaloRegisterOtp() {
+  showRegError("regZaloError", "");
+  const phoneRaw = (document.getElementById("regZaloPhone")?.value || "").replace(/\s+/g, "");
+  if (!/^0(3|5|7|8|9)\d{8}$/.test(phoneRaw)) {
+    showRegError("regZaloError", "Vui lòng nhập số điện thoại Việt Nam hợp lệ (10 chữ số, bắt đầu bằng 03/05/07/08/09).");
+    return;
+  }
+  const otp = String(Math.floor(100000 + Math.random() * 900000));
+  REG_STATE.zaloOtp = otp;
+  REG_STATE.zaloPhone = phoneRaw;
+  REG_STATE.otpAttempts = 0;
+
+  const banner = document.getElementById("regZaloOtpBanner");
+  if (banner) {
+    banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã gửi mã OTP 6 số qua <strong>Zalo ZNS</strong> tới SĐT <strong>${phoneRaw}</strong> (Hiệu lực 5 phút).<br><span style="color:#047857;">Mã kiểm thử Zalo ZNS: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${otp}</strong></span>`;
+    banner.style.display = "block";
+  }
+  startOtpButtonCooldown(document.getElementById("btnSendZaloOtp"), "Gửi mã Zalo", "zaloCooldown");
+}
+
+function submitZaloRegister() {
+  showRegError("regZaloError", "");
+  const name = (document.getElementById("regZaloName")?.value || "").trim();
+  const phoneRaw = (document.getElementById("regZaloPhone")?.value || "").replace(/\s+/g, "");
+  const otpInput = (document.getElementById("regZaloOtpInput")?.value || "").trim();
+  const pwd = document.getElementById("regZaloPassword")?.value || "";
+  const agreed = document.getElementById("regZaloAgree")?.checked;
+
+  if (name.length < 2) {
+    showRegError("regZaloError", "Vui lòng nhập họ và tên chính chủ.");
+    return;
+  }
+  if (!REG_STATE.zaloOtp || phoneRaw !== REG_STATE.zaloPhone) {
+    showRegError("regZaloError", "Vui lòng bấm 'Gửi mã Zalo' để nhận mã xác thực OTP cho số điện thoại này.");
+    return;
+  }
+  if (REG_STATE.otpAttempts >= 5) {
+    showRegError("regZaloError", "Bạn đã nhập sai OTP quá 5 lần. Vui lòng yêu cầu gửi mã Zalo mới.");
+    return;
+  }
+  if (otpInput !== REG_STATE.zaloOtp) {
+    REG_STATE.otpAttempts += 1;
+    showRegError("regZaloError", `Mã OTP Zalo chưa chính xác (${REG_STATE.otpAttempts}/5 lần thử).`);
+    return;
+  }
+  if (!evaluatePasswordStrength(pwd).isStrong) {
+    showRegError("regZaloError", "Mật khẩu chưa đủ mạnh: cần tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
+    return;
+  }
+  if (!agreed) {
+    showRegError("regZaloError", "Vui lòng đồng ý chính sách bảo mật & xác thực SĐT chính chủ.");
+    return;
+  }
+
+  STATE.auth = {
+    isLoggedIn: true,
+    role: "member",
+    displayName: `${name} (Zalo Verified)`
+  };
+  persistAuthSession();
+  updateAuthUI();
+  closeAuthModal();
+  navigateTo("/tai-khoan.html");
+}
+
+function startGoogleOAuthLink() {
+  showRegError("regGoogleError", "");
+  const emailEl = document.getElementById("regGoogleEmail");
+  const nameEl = document.getElementById("regGoogleName");
+  if (emailEl && !emailEl.value.trim()) {
+    emailEl.value = "quinguyen.designer@gmail.com";
+  }
+  if (nameEl && !nameEl.value.trim()) {
+    nameEl.value = "Quí Nguyễn";
+  }
+  sendGoogleEmailCode(true);
+}
+
+function sendGoogleEmailCode(fromOAuth = false) {
+  showRegError("regGoogleError", "");
+  const email = (document.getElementById("regGoogleEmail")?.value || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showRegError("regGoogleError", "Vui lòng nhập địa chỉ Email Google hợp lệ (VD: tenban@gmail.com).");
+    return;
+  }
+  const code = String(Math.floor(100000 + Math.random() * 900000));
+  REG_STATE.googleCode = code;
+  REG_STATE.googleEmail = email;
+  REG_STATE.otpAttempts = 0;
+
+  const banner = document.getElementById("regGoogleCodeBanner");
+  if (banner) {
+    banner.innerHTML = `<i class="fa-brands fa-google"></i> ${fromOAuth ? "Đã liên kết Google OAuth 2.0 & " : ""}Đã gửi mã xác minh 6 số tới <strong>${email}</strong>.<br><span>Mã kiểm thử Gmail: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${code}</strong></span>`;
+    banner.style.display = "block";
+  }
+  startOtpButtonCooldown(document.getElementById("btnSendGoogleCode"), "Gửi mã Gmail", "googleCooldown");
+}
+
+function submitGoogleRegister() {
+  showRegError("regGoogleError", "");
+  const email = (document.getElementById("regGoogleEmail")?.value || "").trim().toLowerCase();
+  const name = (document.getElementById("regGoogleName")?.value || "").trim();
+  const codeInput = (document.getElementById("regGoogleCodeInput")?.value || "").trim();
+  const pwd = document.getElementById("regGooglePassword")?.value || "";
+  const agreed = document.getElementById("regGoogleAgree")?.checked;
+
+  if (!REG_STATE.googleCode || email !== REG_STATE.googleEmail) {
+    showRegError("regGoogleError", "Vui lòng bấm 'Liên kết Google' hoặc 'Gửi mã Gmail' để xác minh Email.");
+    return;
+  }
+  if (name.length < 2) {
+    showRegError("regGoogleError", "Vui lòng nhập họ và tên hiển thị.");
+    return;
+  }
+  if (codeInput !== REG_STATE.googleCode) {
+    REG_STATE.otpAttempts += 1;
+    showRegError("regGoogleError", `Mã xác minh Gmail chưa đúng (${REG_STATE.otpAttempts}/5 lần thử).`);
+    return;
+  }
+  if (!evaluatePasswordStrength(pwd).isStrong) {
+    showRegError("regGoogleError", "Mật khẩu bảo vệ cần tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
+    return;
+  }
+  if (!agreed) {
+    showRegError("regGoogleError", "Vui lòng đồng ý liên kết Google OAuth 2.0 & bảo mật 2 lớp.");
+    return;
+  }
+
+  STATE.auth = {
+    isLoggedIn: true,
+    role: "member",
+    displayName: `${name} (Google Verified)`
+  };
+  persistAuthSession();
+  updateAuthUI();
+  closeAuthModal();
+  navigateTo("/tai-khoan.html");
+}
+
 // ==========================================================================
 // 11. ANIMATED 4-STEP WIZARD POST LISTING IN MODAL FRAME (#postModalBackdrop)
 //     & FULL MEMBER ACCOUNT PORTAL (#view-member) + ADMIN CONTROL CENTER (#view-admin)
