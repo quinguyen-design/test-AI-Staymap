@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng | CHOTHUETOT.VN</title>
+  <meta name="description" content="CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng uy tín hàng đầu Việt Nam.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Fonts: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Leaflet Interactive Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- Master Luxury Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. SITE HEADER HERO MAP (.site-header-hero.hero-is-map) — 6-TIER MAP HIERARCHY
+       ======================================================================== -->
+  <header class="site-header-hero hero-is-map" id="siteHeaderHero">
+    <!-- Interactive Map Canvas -->
+    <div id="heroMap" aria-label="Bản đồ bất động sản cho thuê toàn quốc"></div>
+
+    <!-- Top Floating Glassmorphic Bar (.site-header-bar) -->
+    <div class="site-header-bar">
+      <a href="javascript:void(0)" onclick="navigateTo('/')" class="shb-logo" title="CHOTHUETOT.VN - Trang chủ">
+        <img src="assets/logo.png" alt="ChoThueTot.vn Logo" onerror="this.src='https://chothuetot.vn/assets/images/logo/logo_cms_1782625511.png'">
+      </a>
+
+      <div class="shb-actions">
+        <!-- Upgraded Instant VietQR Wallet Pill -->
+        <button type="button" class="shb-wallet-pill" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR +11%">
+          <i class="fa-solid fa-wallet" style="color:#ffd700;"></i>
+          <span>Ví: <strong class="wallet-amount js-wallet-balance">550.000đ</strong></span>
+          <span class="wallet-topup-tag">+11%</span>
+        </button>
+
+        <!-- Member Account Portal Pill -->
+        <button type="button" class="shb-btn-auth" onclick="navigateTo('/tai-khoan.html')" title="Trang Hồ sơ & Quản lý tin đăng Thành viên">
+          <i class="fa-solid fa-user-check" style="color:#059669;font-size:14px;"></i>
+          <span>HỒ SƠ THÀNH VIÊN</span>
+        </button>
+
+        <!-- Admin Control Center Pill -->
+        <button type="button" class="shb-btn-auth" onclick="navigateTo('/admin.html')" title="Trang Quản trị Hệ thống Admin">
+          <i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);font-size:14px;"></i>
+          <span>ADMIN</span>
+        </button>
+
+        <!-- Auth Login / Register Pill -->
+        <button type="button" class="shb-btn-auth" onclick="openAuthModal()">
+          <i class="fa-regular fa-circle-user" style="color:var(--ctt-orange);font-size:15px;"></i>
+          <span>ĐĂNG NHẬP</span>
+        </button>
+
+        <!-- Post Listing Pill (.shb-btn-post) -> Opens Animated Multi-Step Modal Frame -->
+        <button type="button" class="shb-btn-post" onclick="openPostModal()">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>ĐĂNG TIN NGAY</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Floating Map HUD Controls (Category Quick Filters & 3D Morphing Switcher) -->
+    <div class="hero-map-hud-bottom">
+      <div class="map-quick-filters" role="tablist" aria-label="Lọc nhanh trên bản đồ">
+        <button type="button" class="map-filter-chip active" onclick="filterMapCategory('all', this)">
+          <i class="fa-solid fa-layer-group"></i> Tất cả BĐS <span class="chip-count" id="mapCountAll">20</span>
+        </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('phong-tro', this)">
+          <i class="fa-solid fa-door-open"></i> Phòng trọ <span class="chip-count" id="mapCountPhongTro">7</span>
+        </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('can-ho-chung-cu', this)">
+          <i class="fa-solid fa-building"></i> Căn hộ, Studio <span class="chip-count" id="mapCountCanHo">4</span>
+        </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('nha-o', this)">
+          <i class="fa-solid fa-house-chimney"></i> Nhà nguyên căn <span class="chip-count" id="mapCountNhaO">3</span>
+        </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('mat-bang-van-phong', this)">
+          <i class="fa-solid fa-shop"></i> Mặt bằng, VP <span class="chip-count" id="mapCountMatBang">2</span>
+        </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('bai-dat-kho-xuong', this)">
+          <i class="fa-solid fa-warehouse"></i> Kho xưởng <span class="chip-count" id="mapCountKhoXuong">4</span>
+        </button>
+      </div>
+
+      <div class="map-hud-right">
+        <div class="map-style-switcher">
+          <button type="button" class="map-style-btn active" onclick="setMapStyle('streets', this)">
+            <i class="fa-solid fa-map"></i> Đường phố
+          </button>
+          <button type="button" class="map-style-btn" onclick="setMapStyle('satellite', this)">
+            <i class="fa-solid fa-satellite"></i> Vệ tinh
+          </button>
+          <button type="button" class="map-style-btn" onclick="setMapStyle('night', this)">
+            <i class="fa-solid fa-moon"></i> Đêm
+          </button>
+        </div>
+
+        <button type="button" class="map-expand-btn" onclick="toggleExpandHeroMap()">
+          <i class="fa-solid fa-expand"></i>
+          <span id="expandMapBtnText">Mở rộng</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. STICKY NAVIGATION BAR (.site-header-nav) + WIDE 2-COL MEGA SEARCH
+       ======================================================================== -->
+  <nav class="site-header-nav" id="siteHeaderNav" aria-label="Điều hướng chính">
+    <div class="shn-inner">
+      <!-- Left: CHO THUÊ Dropdown Pill -->
+      <div class="shn-cho-thue-pill">
+        <a href="javascript:void(0)">
+          <i class="fa-solid fa-bars-staggered"></i>
+          <span>CHO THUÊ</span>
+          <i class="fa-solid fa-chevron-down" style="font-size:11px;"></i>
+        </a>
+        <ul class="shn-dropdown">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')"><span><i class="fa-solid fa-door-open" style="color:var(--ctt-orange);width:20px;"></i> Phòng trọ</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')"><span><i class="fa-solid fa-house-chimney" style="color:var(--ctt-orange);width:20px;"></i> Nhà ở nguyên căn</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')"><span><i class="fa-solid fa-building" style="color:var(--ctt-orange);width:20px;"></i> Căn hộ, chung cư</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')"><span><i class="fa-solid fa-shop" style="color:var(--ctt-orange);width:20px;"></i> Mặt bằng, văn phòng</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')"><span><i class="fa-solid fa-warehouse" style="color:var(--ctt-orange);width:20px;"></i> Bãi, Đất, Kho, Xưởng</span> <i class="fa-solid fa-angle-right"></i></a></li>
+        </ul>
+      </div>
+
+      <!-- Center: Search Input + Wide 760px 2-Column Mega-Filter Panel -->
+      <div class="shn-search">
+        <div class="hsp-bar" id="hspBar">
+          <i class="fa-solid fa-location-dot hsp-bar-icon"></i>
+          <input type="text" id="hspSearchInput" class="hsp-input" placeholder="Bạn muốn tìm thuê nhà ở đâu? (Nhập đường, phường, quận...)" autocomplete="off">
+          <button type="button" class="hsp-filter-trigger" id="hspFilterTrigger">
+            <i class="fa-solid fa-sliders"></i> Bộ lọc thông minh
+          </button>
+          <button type="button" class="hsp-submit" onclick="executeMegaSearch()" title="Tìm kiếm ngay">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+
+        <!-- Upgraded Wide 2-Column Mega Search Dropdown -->
+        <div class="hsp-panel" id="hspMegaPanel">
+          <div class="hsp-panel-header">
+            <div class="hsp-panel-title">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>BỘ LỌC TÌM KIẾM CÔNG NGHỆ CAO (CHUẨN ĐỊA GIỚI PHƯỜNG/XÃ MỚI)</span>
+            </div>
+            <span style="font-size:11.5px;color:#059669;font-weight:800;"><i class="fa-solid fa-circle-check"></i> 100% Tin thật xác minh</span>
+          </div>
+
+          <div class="hsp-grid-2col">
+            <!-- Col 1: Location & Category -->
+            <div>
+              <div style="margin-bottom:14px;">
+                <div class="hsp-sec-title"><span><i class="fa-solid fa-list"></i> Loại hình bất động sản</span></div>
+                <select id="megaCatSelect" class="hsp-select">
+                  <option value="all">Tất cả loại hình cho thuê</option>
+                  <option value="phong-tro">Phòng trọ & Studio</option>
+                  <option value="nha-o">Nhà ở nguyên căn</option>
+                  <option value="can-ho-chung-cu">Căn hộ, chung cư</option>
+                  <option value="mat-bang-van-phong">Mặt bằng, văn phòng</option>
+                  <option value="bai-dat-kho-xuong">Bãi, Đất, Kho, Xưởng</option>
+                </select>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div>
+                  <div class="hsp-sec-title"><span>Tỉnh / Thành phố</span></div>
+                  <select id="megaCitySelect" class="hsp-select">
+                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                    <option value="TP. Hà Nội">TP. Hà Nội</option>
+                    <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
+                    <option value="Bình Dương">Bình Dương</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="hsp-sec-title"><span>Phường / Xã sáp nhập</span></div>
+                  <select id="megaWardSelect" class="hsp-select">
+                    <option value="all">Tất cả Phường/Xã</option>
+                    <option value="P. Cầu Kiệu">P. Cầu Kiệu (Phú Nhuận)</option>
+                    <option value="P. Nhiêu Lộc">P. Nhiêu Lộc (Quận 3)</option>
+                    <option value="P. Hạnh Thông">P. Hạnh Thông (Gò Vấp)</option>
+                    <option value="P. Gia Định">P. Gia Định (Bình Thạnh)</option>
+                    <option value="P. Tân Hưng">P. Tân Hưng (Quận 7)</option>
+                    <option value="P. Tân Sơn Nhì">P. Tân Sơn Nhì (Tân Phú)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <div class="hsp-sec-title"><span>Hướng nhà & Đối tượng thuê</span></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <select class="hsp-select">
+                    <option value="">Mọi hướng nhà</option>
+                    <option>Đông Nam (Mát mẻ)</option>
+                    <option>Chính Nam</option>
+                    <option>Đông Bắc</option>
+                    <option>Tây Nam</option>
+                  </select>
+                  <select class="hsp-select">
+                    <option value="">Tất cả đối tượng</option>
+                    <option>Sinh viên / NVVP</option>
+                    <option>Gia đình</option>
+                    <option>Kinh doanh / Mở VP</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 2: Price Slider, Area Slider & Amenities -->
+            <div>
+              <div style="margin-bottom:14px;">
+                <div class="hsp-sec-title">
+                  <span>Mức giá thuê</span>
+                  <span class="hsp-range-val" id="megaPriceLabel">Dưới 25 Triệu/tháng</span>
+                </div>
+                <input type="range" id="megaPriceRange" class="hsp-range-slider" min="1" max="50" value="25" oninput="updateMegaSliderLabels()">
+                <div class="hsp-quick-pills">
+                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(3.5, this)">&lt; 3.5 Triệu</button>
+                  <button type="button" class="hsp-q-pill active" onclick="setQuickPriceFilter(6, this)">3.5 - 6 Triệu</button>
+                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(12, this)">6 - 12 Triệu</button>
+                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(50, this)">Tất cả giá</button>
+                </div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="hsp-sec-title">
+                  <span>Diện tích tối thiểu</span>
+                  <span class="hsp-range-val" id="megaAreaLabel">Từ 20 m² trở lên</span>
+                </div>
+                <input type="range" id="megaAreaRange" class="hsp-range-slider" min="10" max="200" value="20" oninput="updateMegaSliderLabels()">
+              </div>
+
+              <div>
+                <div class="hsp-sec-title"><span>Tiện ích & Cam kết minh bạch</span></div>
+                <div class="hsp-checks-grid">
+                  <label class="hsp-check-item"><input type="checkbox" checked> Điện giá dân</label>
+                  <label class="hsp-check-item"><input type="checkbox" checked> Đã xác minh</label>
+                  <label class="hsp-check-item"><input type="checkbox"> Có ban công</label>
+                  <label class="hsp-check-item"><input type="checkbox"> Full nội thất</label>
+                  <label class="hsp-check-item"><input type="checkbox"> Thang máy</label>
+                  <label class="hsp-check-item"><input type="checkbox"> Không ngập</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NEW UPGRADE: Landmark / Metro / University Proximity Quick Filter -->
+          <div class="landmark-pills-row">
+            <span style="font-size:11.5px;font-weight:800;color:#0f172a;"><i class="fa-solid fa-compass" style="color:var(--ctt-orange);margin-right:4px;"></i> Tìm theo Điểm mốc (&lt; 2.5km):</span>
+            <button type="button" class="landmark-pill" onclick="filterByLandmark('metro', this)">
+              <i class="fa-solid fa-train-subway"></i> Ga Metro Bến Thành - Suối Tiên
+            </button>
+            <button type="button" class="landmark-pill" onclick="filterByLandmark('uni-q10', this)">
+              <i class="fa-solid fa-graduation-cap"></i> ĐH Kinh Tế / Bách Khoa (Q.10)
+            </button>
+            <button type="button" class="landmark-pill" onclick="filterByLandmark('airport', this)">
+              <i class="fa-solid fa-plane-departure"></i> Sân bay Tân Sơn Nhất / Etown
+            </button>
+            <button type="button" class="landmark-pill" onclick="filterByLandmark('pxl', this)">
+              <i class="fa-solid fa-city"></i> Khu Phan Xích Long
+            </button>
+            <button type="button" class="landmark-pill" onclick="filterByLandmark('ten-lua', this)">
+              <i class="fa-solid fa-bag-shopping"></i> Khu Tên Lửa / Aeon Bình Tân
+            </button>
+          </div>
+
+          <div class="hsp-actions">
+            <button type="button" class="hsp-btn-reset" onclick="document.getElementById('hspSearchInput').value='';setQuickPriceFilter(50);clearLandmarkFilter();">
+              <i class="fa-solid fa-rotate-left"></i> Đặt lại bộ lọc
+            </button>
+            <button type="button" class="hsp-btn-apply" onclick="executeMegaSearch()">
+              <i class="fa-solid fa-magnifying-glass"></i> Áp dụng & Hiển thị kết quả ngay
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Main Menu Links (.shn-list) -->
+      <ul class="shn-list" id="shnList">
+        <li id="nav-home" class="active"><a href="javascript:void(0)" onclick="navigateTo('/')">TRANG CHỦ</a></li>
+        <li id="nav-pricing"><a href="javascript:void(0)" onclick="navigateTo('/bao-gia.html')">BẢNG GIÁ</a></li>
+        <li id="nav-news" class="has-drop">
+          <a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">TIN TỨC <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+          <ul class="shn-sub">
+            <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">Thị trường BĐS 2026</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">Pháp lý & Tạm trú VNeID</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">Cẩm nang chống cọc ảo</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">Phong thủy & Nhà đẹp</a></li>
+          </ul>
+        </li>
+        <li id="nav-promo"><a href="javascript:void(0)" onclick="navigateTo('/uu-dai.html')">ƯU ĐÃI</a></li>
+        <li id="nav-member"><a href="javascript:void(0)" onclick="navigateTo('/tai-khoan.html')">THÀNH VIÊN</a></li>
+        <li id="nav-admin"><a href="javascript:void(0)" onclick="navigateTo('/admin.html')">ADMIN</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="shn-sticky-spacer" id="shnStickySpacer"></div>
+
+  <!-- ========================================================================
+       ROUTE 1: TRANG CHỦ (#view-home)
+       ======================================================================== -->
+  <main id="view-home" class="app-route-view">
+
+    <!-- 3. 3D LUXURY "BANNER ĐẶC QUYỀN" (.sv1) — EXCLUSIVE VIP SHOWCASE -->
+    <section class="sv1-luxury-stage" aria-label="Banner Đặc Quyền VIP 1">
+      <div class="sv1-wrap">
+        <div class="sv1-stage-topbar">
+          <div>
+            <span style="font-size:11px;font-weight:800;letter-spacing:1.6px;color:var(--ctt-orange);text-transform:uppercase;display:block;">01 / EXCLUSIVE SHOWCASE</span>
+            <h2 style="font-size:24px;font-weight:900;color:#0f172a;letter-spacing:-0.3px;">Banner Đặc Quyền Trang Chủ</h2>
+          </div>
+
+          <div class="sv1-slide-controls">
+            <div class="sv1-dot-indicator">
+              <button type="button" class="sv1-dot active" onclick="switchSv1Slide(0, true)" aria-label="Slide 1"></button>
+              <button type="button" class="sv1-dot" onclick="switchSv1Slide(1, true)" aria-label="Slide 2"></button>
+              <button type="button" class="sv1-dot" onclick="switchSv1Slide(2, true)" aria-label="Slide 3"></button>
+            </div>
+            <button type="button" class="sv1-nav-btn" onclick="switchSv1Slide(-1)" title="Tin VIP trước"><i class="fa-solid fa-chevron-left"></i></button>
+            <button type="button" class="sv1-nav-btn" onclick="switchSv1Slide(1)" title="Tin VIP tiếp"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+
+        <!-- 3D Showcase Card (Rendered dynamically by app.js) -->
+        <div class="sv1-card-3d" id="sv1CardContainer"></div>
+      </div>
+    </section>
+
+    <!-- 4. REAL GRAPHIC WEBP PROMO BANNERS WITH 3D GLASS SHINE (.promo-3d-section) -->
+    <section class="promo-3d-section" aria-label="Chương trình ưu đãi nổi bật">
+      <div class="promo-3d-grid">
+        <div class="promo-3d-banner-card" onclick="navigateTo('/bao-gia.html')" title="Sale Off Tin VIP Đến 20%">
+          <img src="assets/promo1.webp" alt="Sale Off Tin VIP Đến 20%">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-crown"></i> Xem bảng giá VIP (-20%) <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+
+        <div class="promo-3d-banner-card" onclick="openPostModalWithZone(4)" title="Ưu Đãi Đăng Tin 1.000đ/Ngày">
+          <img src="assets/promo2.webp" alt="Ưu Đãi Đăng Tin 1.000đ/Ngày">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-bolt"></i> Đăng gói 1.000đ/ngày <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+
+        <div class="promo-3d-banner-card" onclick="openWalletModal()" title="Khuyến Mãi Nạp Tháng 11 +11%">
+          <img src="assets/promo3.webp" alt="Khuyến Mãi Nạp Tháng 11 +11%">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví nhận +11% <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5A. SPOTLIGHT SECTION (TOP 1 HIỂN THỊ) -->
+    <section class="lc-section lc-spotlight-zone">
+      <div class="lc-wrap">
+        <div class="lc-header">
+          <div class="lc-header-left">
+            <div>
+              <span class="lc-tier-kicker">02 / TOP 1 HIỂN THỊ</span>
+              <h3>Spotlight</h3>
+              <p>Đỉnh cao hiển thị, dẫn đầu vị thế</p>
+            </div>
+          </div>
+
+          <div class="lc-header-actions">
+            <button type="button" class="lc-quick-tab active" onclick="filterTierSection('spotlight', 'all', this)">Tất cả</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'phong-tro', this)">Phòng trọ</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'can-ho-chung-cu', this)">Căn hộ</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'nha-o', this)">Nhà ở</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'bai-dat-kho-xuong', this)">Kho xưởng</button>
+            <select class="lc-sort-select" onchange="sortTierSection('spotlight', this.value)" aria-label="Sắp xếp tin Spotlight">
+              <option value="default">Sắp xếp: Mặc định VIP</option>
+              <option value="price-asc">Giá: Thấp → Cao</option>
+              <option value="price-desc">Giá: Cao → Thấp</option>
+              <option value="area-desc">Diện tích: Lớn nhất</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lc-grid" id="spotlightGrid"></div>
+
+        <div class="lc-more">
+          <a href="javascript:void(0)" onclick="navigateTo('/spotlight.html')">
+            Xem thêm tin Spotlight <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- MID-PAGE HORIZONTAL PROMO BANNER (Real mid_banner.webp) -->
+    <section class="lc-banner-row-section">
+      <a href="javascript:void(0)" onclick="openAuthModal()" class="lc-banner-row-card" title="Đăng ký tài khoản nhận ngay 100.000đ vào Ví đăng tin">
+        <img src="assets/mid_banner.webp" alt="Đăng ký tài khoản nhận ngay 100.000đ">
+      </a>
+    </section>
+
+    <!-- 5B. FEATURED SECTION (TOP 2 NỔI BẬT) -->
+    <section class="lc-section">
+      <div class="lc-wrap">
+        <div class="lc-header">
+          <div class="lc-header-left">
+            <div>
+              <span class="lc-tier-kicker">03 / TOP 2 NỔI BẬT</span>
+              <h3>Featured</h3>
+              <p>Nổi bật mỗi ngày, khách chốt thuê ngay</p>
+            </div>
+          </div>
+
+          <div class="lc-header-actions">
+            <button type="button" class="lc-quick-tab active" onclick="filterTierSection('featured', 'all', this)">Tất cả</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'phong-tro', this)">Phòng trọ</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'can-ho-chung-cu', this)">Căn hộ</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'nha-o', this)">Nhà ở</button>
+          </div>
+        </div>
+
+        <div class="lc-grid" id="featuredGrid"></div>
+
+        <div class="lc-more">
+          <a href="javascript:void(0)" onclick="navigateTo('/featured.html')">
+            Xem thêm tin Featured <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5C. PRIME SECTION (TOP 3 HIỆU QUẢ) -->
+    <section class="lc-section" style="background:#ffffff;border-top:1px solid #f1f5f9;">
+      <div class="lc-wrap">
+        <div class="lc-header">
+          <div class="lc-header-left">
+            <div>
+              <span class="lc-tier-kicker">04 / TOP 3 HIỆU QUẢ</span>
+              <h3>Prime</h3>
+              <p>Tiết kiệm chi phí, hiệu quả duy trì</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lc-grid" id="primeGrid"></div>
+
+        <div class="lc-more">
+          <a href="javascript:void(0)" onclick="navigateTo('/prime.html')">
+            Xem thêm tin Prime <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. KINH NGHIỆM BẤT ĐỘNG SẢN (.experience-section) -->
+    <section class="experience-section">
+      <div class="experience-header">
+        <div>
+          <h2 class="section-title">Kinh nghiệm Bất động sản</h2>
+          <p style="font-size:13.5px;color:#64748b;">Cập nhật quy hoạch TOD Metro, pháp lý tạm trú VNeID và cẩm nang thuê nhà an toàn 2026</p>
+        </div>
+
+        <div class="filter-tabs">
+          <button type="button" class="tab-btn active" onclick="renderNewsSection('noi-bat', this)">Tin nổi bật</button>
+          <button type="button" class="tab-btn" onclick="renderNewsSection('thi-truong', this)">Thị trường</button>
+          <button type="button" class="tab-btn" onclick="renderNewsSection('phap-ly', this)">Pháp lý</button>
+          <button type="button" class="tab-btn" onclick="renderNewsSection('dau-tu', this)">Đầu tư</button>
+        </div>
+      </div>
+
+      <div class="news-grid" id="homeNewsGrid"></div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       ROUTE 2: CATEGORY & SEARCH RESULTS (#view-category)
+       ======================================================================== -->
+  <section id="view-category" class="app-route-view" style="display:none;">
+    <div class="cat-filter-section">
+      <div class="cat-filter-wrap">
+        <div>
+          <h1 id="catViewTitle" style="font-size:22px;font-weight:900;color:#0f172a;">Cho Thuê Phòng Trọ</h1>
+          <p id="catViewSubtitle" style="font-size:13px;color:#64748b;">Danh sách tin đăng đã xác minh thực tế</p>
+        </div>
+
+        <div class="cat-filter-controls">
+          <select id="catBarPrice" class="cat-select" onchange="applyCategoryBarFilter()">
+            <option value="999">-- Mức giá thuê --</option>
+            <option value="3.5">Dưới 3.5 Triệu/tháng</option>
+            <option value="6">Dưới 6 Triệu/tháng</option>
+            <option value="12">Dưới 12 Triệu/tháng</option>
+            <option value="25">Dưới 25 Triệu/tháng</option>
+          </select>
+
+          <select id="catBarArea" class="cat-select" onchange="applyCategoryBarFilter()">
+            <option value="0">-- Diện tích --</option>
+            <option value="20">Từ 20 m² trở lên</option>
+            <option value="30">Từ 30 m² trở lên</option>
+            <option value="50">Từ 50 m² trở lên</option>
+          </select>
+
+          <select id="catBarCity" class="cat-select" onchange="applyCategoryBarFilter()">
+            <option value="all">-- Tất cả Tỉnh/TP --</option>
+            <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+            <option value="TP. Hà Nội">TP. Hà Nội</option>
+          </select>
+
+          <span id="catResultCount" class="sv1-badge-verified" style="padding:8px 14px;font-size:12px;">16 tin đăng</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lc-section">
+      <div class="lc-wrap">
+        <div class="lc-grid" id="categoryListingsGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ROUTE 3: PROPERTY DETAIL PAGE (#view-detail)
+       ======================================================================== -->
+  <section id="view-detail" class="app-route-view" style="display:none;"></section>
+
+  <!-- ========================================================================
+       ROUTE 4: BẢNG GIÁ DỊCH VỤ ĐĂNG TIN (#view-pricing -> /bao-gia.html)
+       ======================================================================== -->
+  <section id="view-pricing" class="app-route-view" style="display:none;">
+    <div class="price-hero-area">
+      <div class="price-hero-container">
+        <h1>BẢNG GIÁ DỊCH VỤ ĐĂNG TIN</h1>
+        <p>Giải pháp tiếp cận hàng nghìn khách thuê thực mỗi ngày tại CHOTHUETOT.VN — Minh bạch, tự động, hiệu quả vượt trội</p>
+        <div class="price-hero-line"></div>
+      </div>
+    </div>
+
+    <div class="pricing-section-v3">
+      <div class="pricing-grid-3col" id="pricingCardsGrid"></div>
+    </div>
+
+    <div class="comp-table-wrap">
+      <h2 style="text-align:center;font-size:26px;font-weight:900;margin-bottom:24px;color:#0f172a;">So sánh chi tiết quyền lợi 6 gói tin</h2>
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Quyền lợi hiển thị</th>
+            <th class="super"><i class="fa-solid fa-crown"></i> Banner Đặc Quyền</th>
+            <th>TOP 1 Hiển Thị</th>
+            <th class="highlight">TOP 2 Nổi Bật</th>
+            <th>TOP 3 Hiệu Quả</th>
+            <th>Tin Cơ Bản</th>
+            <th>Miễn Phí</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-label">Đơn giá / Ngày</td>
+            <td class="tabular-nums"><strong>50.000đ</strong></td>
+            <td class="tabular-nums"><strong>35.000đ</strong></td>
+            <td class="tabular-nums"><strong style="color:var(--ctt-orange);">25.000đ</strong></td>
+            <td class="tabular-nums"><strong>15.000đ</strong></td>
+            <td class="tabular-nums"><strong>1.000đ</strong></td>
+            <td class="tabular-nums"><strong>0đ (3 ngày)</strong></td>
+          </tr>
+          <tr>
+            <td class="feature-label">Khu vực hiển thị</td>
+            <td><strong>Slide 3D Trang Chủ (.sv1)</strong></td>
+            <td>Khu vực <strong>Spotlight</strong></td>
+            <td>Khu vực <strong>Featured</strong></td>
+            <td>Khu vực <strong>Prime</strong></td>
+            <td>Trang danh mục</td>
+            <td>Trang danh mục</td>
+          </tr>
+          <tr>
+            <td class="feature-label">Hiển thị trên Bản đồ</td>
+            <td><i class="fa-solid fa-crown" style="color:#f59e0b;"></i> <strong>Ghim VIP Luxury (Vàng Kim)</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><strong>Nền trắng chữ đen</strong></td>
+            <td style="color:#94a3b8;"><i class="fa-solid fa-ban"></i> Không hiển thị</td>
+          </tr>
+          <tr>
+            <td class="feature-label">Chiết khấu gói 7 / 15 / 30 ngày</td>
+            <td>Giảm <strong>5% / 10% / 20%</strong></td>
+            <td>Giảm <strong>5% / 10% / 20%</strong></td>
+            <td>Giảm <strong>5% / 10% / 20%</strong></td>
+            <td>Giảm <strong>5% / 10% / 20%</strong></td>
+            <td>Giảm tới <strong>20% (60 ngày)</strong></td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td class="feature-label">Sửa tin miễn phí</td>
+            <td>Miễn phí 3 lần đầu</td>
+            <td>Miễn phí 3 lần đầu</td>
+            <td>Miễn phí 3 lần đầu</td>
+            <td>Miễn phí 3 lần đầu</td>
+            <td>Miễn phí 3 lần đầu</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ROUTE 5: TIN TỨC (#view-news), ƯU ĐÃI (#view-promo), HỢP TÁC (#view-partner)
+       ======================================================================== -->
+  <section id="view-news" class="app-route-view" style="display:none;">
+    <div class="experience-section" style="margin-top:36px;">
+      <h1 class="section-title" style="margin-bottom:8px;">Chuyên Mục Tin Tức & Kinh Nghiệm Thuê Nhà 2026</h1>
+      <p style="color:#64748b;margin-bottom:24px;">Cập nhật thị trường BĐS cho thuê, quy hoạch TOD Metro, pháp lý VNeID và kinh nghiệm thực chiến</p>
+      <div class="news-grid" id="fullNewsPageGrid"></div>
+    </div>
+  </section>
+
+  <section id="view-promo" class="app-route-view" style="display:none;">
+    <div class="promo-3d-section" style="margin-top:36px;">
+      <h1 class="section-title" style="margin-bottom:8px;">Trung Tâm Ưu Đãi & Khuyến Mãi Thành Viên</h1>
+      <p style="color:#64748b;margin-bottom:24px;">Nhận ngay ưu đãi +11% khi nạp Ví VietQR, giảm 20% gói VIP 30 ngày và gói đăng tin 1.000đ/ngày</p>
+      <div class="promo-3d-grid">
+        <div class="promo-3d-banner-card" onclick="openPostModalWithZone(1)">
+          <img src="assets/promo1.webp" alt="Sale Off Tin VIP Đến 20%">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-crown"></i> Áp dụng gói VIP (-20%) <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+        <div class="promo-3d-banner-card" onclick="openPostModalWithZone(4)">
+          <img src="assets/promo2.webp" alt="Ưu Đãi Đăng Tin 1.000đ/Ngày">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-bolt"></i> Đăng gói 1.000đ/ngày <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+        <div class="promo-3d-banner-card" onclick="openWalletModal()">
+          <img src="assets/promo3.webp" alt="Khuyến Mãi Nạp Tháng 11 +11%">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví nhận +11% <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-partner" class="app-route-view" style="display:none;">
+    <div class="pd-container">
+      <div class="pd-card-box" style="text-align:center;padding:48px 32px;">
+        <span class="sv1-badge-vip" style="margin-bottom:12px;"><i class="fa-solid fa-handshake"></i> HỢP TÁC ĐỐI TÁC & MÔI GIỚI CHUYÊN NGHIỆP</span>
+        <h1 style="font-size:30px;font-weight:900;margin-bottom:12px;">Đồng Hành Phát Triển Hệ Sinh Thái Cho Thuê BĐS Minh Bạch</h1>
+        <p style="max-width:720px;margin:0 auto 28px;color:#475569;font-size:15px;">
+          ChoThueTot.vn cung cấp giải pháp quản lý giỏ hàng, đẩy tin tự động, xác thực thực tế và chiết khấu hoa hồng hấp dẫn cho hệ thống nhà trọ, tòa nhà CHDV và môi giới uy tín.
+        </p>
+        <div style="display:flex;justify-content:center;gap:14px;">
+          <a href="tel:0906344877" class="sv1-btn-detail"><i class="fa-solid fa-phone"></i> Hotline Hợp Tác: 0906 344 877</a>
+          <button type="button" class="sv1-btn-map-focus" onclick="openPostModal()">Đăng ký tài khoản Đối tác</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ROUTE 7: HỒ SƠ & QUẢN LÝ TÀI KHOẢN THÀNH VIÊN (#view-member -> /tai-khoan.html)
+       ======================================================================== -->
+  <section id="view-member" class="app-route-view" style="display:none;">
+    <div class="portal-container">
+      <div class="portal-layout">
+        <!-- Left Sidebar: Member Profile & Navigation -->
+        <aside class="portal-sidebar">
+          <div style="text-align:center;padding-bottom:18px;border-bottom:1px solid #f1f5f9;">
+            <div style="width:72px;height:72px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 8px 20px rgba(241,90,34,0.28);">
+              MQ
+            </div>
+            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">Chính chủ Minh Quân</h3>
+            <div style="font-size:12px;color:#059669;font-weight:700;margin-top:3px;">
+              <i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & SĐT
+            </div>
+            <div style="font-size:11.5px;color:#64748b;margin-top:4px;">ID Thành viên: #CTT-8829 • Hạng Vàng</div>
+          </div>
+
+          <!-- Wallet Box inside Sidebar -->
+          <div style="margin-top:16px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <span style="font-size:11px;color:#cbd5e1;">Số dư Ví đăng tin:</span>
+              <span style="font-size:10px;background:#f59e0b;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight:800;">+11% Tháng 11</span>
+            </div>
+            <div style="font-size:22px;font-weight:900;color:#ffd700;margin-bottom:10px;" class="js-wallet-balance tabular-nums">550.000đ</div>
+            <button type="button" onclick="openWalletModal()" style="width:100%;padding:8px;border-radius:9px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;">
+              <i class="fa-solid fa-qrcode"></i> Nạp thêm qua VietQR
+            </button>
+          </div>
+
+          <ul class="portal-nav-list">
+            <li><button type="button" class="portal-nav-btn active" onclick="switchMemberTab('listings', this)"><span><i class="fa-solid fa-list-check"></i> Quản lý Tin đăng</span> <span style="font-size:11px;background:#fff3eb;color:var(--ctt-orange);padding:2px 7px;border-radius:99px;">5</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span style="font-size:11px;background:#ecfdf5;color:#059669;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('wallet', this)"><span><i class="fa-solid fa-receipt"></i> Lịch sử Ví & Hóa đơn</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('profile', this)"><span><i class="fa-regular fa-id-card"></i> Hồ sơ & Bảo mật</span></button></li>
+            <li style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
+              <button type="button" class="portal-nav-btn" onclick="navigateTo('/admin.html')" style="color:#0284c7;">
+                <span><i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> Chuyển sang Admin</span>
+                <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+              </button>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Right Main Content: Member Dashboard -->
+        <div>
+          <!-- 4 Member KPIs -->
+          <div class="portal-kpi-grid" class="tabular-nums">
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">TIN ĐANG HIỂN THỊ</small>
+              <div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">05 <span style="font-size:12px;color:#059669;font-weight:700;">(3 Tin VIP)</span></div>
+              <small style="color:#64748b;font-size:11px;">100% đã duyệt xác minh</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT XEM TIN (30 NGÀY)</small>
+              <div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">4.820 <span style="font-size:12px;color:#059669;font-weight:700;">+38%</span></div>
+              <small style="color:#64748b;font-size:11px;">Từ Bản đồ 3D & Spotlight</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT BẤM GỌI & ZALO</small>
+              <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);margin:4px 0;">142 <span style="font-size:12px;color:#059669;font-weight:700;">khách thật</span></div>
+              <small style="color:#64748b;font-size:11px;">Tỷ lệ chuyển đổi 9.4%</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">LẦN SỬA TIN MIỄN PHÍ</small>
+              <div style="font-size:26px;font-weight:900;color:#059669;margin:4px 0;">03 / 03</div>
+              <small style="color:#64748b;font-size:11px;">Quyền lợi thành viên VIP</small>
+            </div>
+          </div>
+
+          <div id="memberPortalMainContent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ROUTE 8: TRUNG TÂM QUẢN TRỊ HỆ THỐNG ADMIN (#view-admin -> /admin.html)
+       ======================================================================== -->
+  <section id="view-admin" class="app-route-view" style="display:none;">
+    <div class="portal-container">
+      <div class="portal-layout">
+        <!-- Left Sidebar: Admin Control Menu -->
+        <aside class="portal-sidebar" style="background:#0f172a;border-color:#1e293b;color:#fff;">
+          <div style="padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <span style="font-size:10px;font-weight:800;letter-spacing:1.2px;color:#ffd700;text-transform:uppercase;display:block;margin-bottom:4px;">SYSTEM CONTROL CENTER</span>
+            <h3 style="font-size:17px;font-weight:900;color:#fff;">CHOTHUETOT ADMIN</h3>
+            <small style="color:#94a3b8;font-size:11.5px;">Quản trị viên cấp cao • Toàn quyền</small>
+          </div>
+
+          <ul class="portal-nav-list">
+            <li><button type="button" class="portal-nav-btn active" style="color:#fff;" onclick="switchAdminTab('moderation', this)"><span><i class="fa-solid fa-shield-check" style="color:#ffd700;"></i> Duyệt tin & Kiểm duyệt AI</span> <span style="font-size:10.5px;background:#ef4444;color:#fff;padding:2px 7px;border-radius:99px;">4 chờ</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#38bdf8;"></i> Doanh thu VIP & Ví VietQR</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#34d399;"></i> Quản lý Chủ nhà & CCCD</span></button></li>
+            <li style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
+              <button type="button" class="portal-nav-btn" style="color:#ffd700;" onclick="navigateTo('/tai-khoan.html')">
+                <span><i class="fa-solid fa-user-check" style="color:#ffd700;"></i> Xem trang Thành viên</span>
+              </button>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Right Main Content: Admin Dashboard -->
+        <div>
+          <div class="portal-kpi-grid tabular-nums">
+            <div class="portal-kpi-card" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
+              <small style="color:#94a3b8;font-size:11px;font-weight:700;">DOANH THU GÓI VIP (THÁNG 11)</small>
+              <div style="font-size:24px;font-weight:900;color:#ffd700;margin:4px 0;">186.450.000đ</div>
+              <small style="color:#34d399;font-size:11.5px;font-weight:700;">▲ +24.8% so với tháng 10</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11px;font-weight:700;">TIN CHỜ DUYỆT (AI PRE-CHECK)</small>
+              <div style="font-size:24px;font-weight:900;color:#ef4444;margin:4px 0;">04 tin mới</div>
+              <small style="color:#64748b;font-size:11.5px;">Điểm AI trung bình: 96/100</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TIN VIP ĐANG CHẠY</small>
+              <div style="font-size:24px;font-weight:900;color:#0f172a;margin:4px 0;">342 tin</div>
+              <small style="color:#059669;font-size:11.5px;font-weight:700;">18 Banner Đặc Quyền • 94 Spotlight</small>
+            </div>
+            <div class="portal-kpi-card">
+              <small style="color:#64748b;font-size:11px;font-weight:700;">NẠP VÍ VIETQR TỰ ĐỘNG (24H)</small>
+              <div style="font-size:24px;font-weight:900;color:#0284c7;margin:4px 0;">42.800.000đ</div>
+              <small style="color:#64748b;font-size:11.5px;">Đã tặng +11% khuyến mãi</small>
+            </div>
+          </div>
+
+          <div id="adminPortalMainContent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SEO WARD LINKS MATRIX (.seo-links-section)
+       ======================================================================== -->
+  <section class="seo-links-section">
+    <div class="seo-container">
+      <div class="seo-col">
+        <h3 class="seo-title">Cho thuê Phòng trọ</h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Cầu Kiệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Hạnh Thông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Gia Định</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Tân Sơn Nhì</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Diên Hồng</a></li>
+        </ul>
+      </div>
+      <div class="seo-col">
+        <h3 class="seo-title">Cho thuê Nhà nguyên căn</h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. An Đông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Hạnh Thông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Phú Nhuận</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Cầu Ông Lãnh</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Phú Lâm</a></li>
+        </ul>
+      </div>
+      <div class="seo-col">
+        <h3 class="seo-title">Cho thuê Căn hộ, Studio</h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ Studio Phan Xích Long</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ P. Nhiêu Lộc</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ Xã Nhà Bè</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ P. Nghĩa Đô (Hà Nội)</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ dịch vụ Bình Thạnh</a></li>
+        </ul>
+      </div>
+      <div class="seo-col">
+        <h3 class="seo-title">Mặt bằng & Văn phòng</h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Mặt bằng P. Tân Sơn Nhất</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Shophouse P. Tân Phú</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Kiot kinh doanh Phú Nhuận</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Văn phòng đại diện Quận 1</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Mặt bằng dọc tuyến Metro</a></li>
+        </ul>
+      </div>
+      <div class="seo-col">
+        <h3 class="seo-title">Bãi đất & Kho xưởng</h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng P. Tân Hưng (Q.7)</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng P. Thới An (Q.12)</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng Âu Cơ Tân Bình</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho bãi P. Bình Trị Đông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng Xã Đông Thạnh</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       MAIN FOOTER (.main-footer)
+       ======================================================================== -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <img src="assets/logo.png" alt="ChoThueTot.vn Logo" class="footer-logo" onerror="this.src='https://chothuetot.vn/assets/images/logo/logo_cms_1782625511.png'">
+        <p style="font-size:13.5px;line-height:1.6;">Trang đăng tin bất động sản cho thuê uy tín, minh bạch hàng đầu tại Việt Nam. Công nghệ bản đồ định vị 3D & xác thực chính chủ.</p>
+        <div class="footer-socials">
+          <a href="https://facebook.com/Chothuetot.vn" target="_blank" rel="noopener" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://zalo.me/0906344877" target="_blank" rel="noopener" title="Zalo"><img src="assets/zalo.svg" alt="Zalo" class="social-img"></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="sitemap-title">Liên hệ với chúng tôi</h3>
+        <ul class="sitemap-links">
+          <li><i class="fa-solid fa-location-dot"></i> Nguyễn Văn Nghi, P. Hạnh Thông, TP. Hồ Chí Minh</li>
+          <li><i class="fa-solid fa-phone"></i> 0906 344 877</li>
+          <li><i class="fa-solid fa-envelope"></i> Chothuetot.vn@gmail.com</li>
+          <li><i class="fa-solid fa-globe"></i> www.chothuetot.vn</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="sitemap-title">Pháp lý & Quy định</h3>
+        <ul class="sitemap-links">
+          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Điều khoản sử dụng</a></li>
+          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Chính sách bảo mật</a></li>
+          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Quy định đăng tin</a></li>
+          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Giải quyết tranh chấp</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="sitemap-title">Hỗ trợ khách hàng</h3>
+        <ul class="sitemap-links">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/hop-tac.html')"><i class="fa-solid fa-chevron-right"></i> Về chúng tôi</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')"><i class="fa-solid fa-chevron-right"></i> Hướng dẫn tìm nhà</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bao-gia.html')"><i class="fa-solid fa-chevron-right"></i> Báo giá dịch vụ VIP</a></li>
+          <li><a href="javascript:void(0)" onclick="openWalletModal()"><i class="fa-solid fa-chevron-right"></i> Nạp Ví VietQR (+11%)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="sitemap-title">Nhận chương trình khuyến mãi</h3>
+        <form class="newsletter-form" onsubmit="event.preventDefault();alert('Cảm ơn bạn đã đăng ký nhận ưu đãi từ ChoThueTot.vn!');">
+          <input type="email" placeholder="Nhập địa chỉ email của bạn..." required>
+          <button type="submit"><i class="fa-solid fa-paper-plane"></i> Đăng ký nhận mã giảm giá</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-socket">
+      <div class="socket-container">
+        <p>© 2026 <span>CHOTHUETOT.VN</span> — Phiên bản nâng cấp công nghệ Luxury 3D.</p>
+        <ul class="footer-menu">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/')">TRANG CHỦ</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/bao-gia.html')">BẢNG GIÁ</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')">TIN TỨC</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/uu-dai.html')">ƯU ĐÃI</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       STICKY RIGHT CONTACT BAR (.sticky-contact-bar) — DECLUTTERED
+       ======================================================================== -->
+  <div class="sticky-contact-bar">
+    <a href="tel:0906344877" class="contact-btn phone-btn" title="Gọi ngay 0906 344 877">
+      <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
+      <span class="btn-label">Gọi điện</span>
+    </a>
+
+    <a href="https://zalo.me/0906344877" target="_blank" class="contact-btn zalo-btn-footer" title="Chat Zalo">
+      <div class="icon-circle"><img src="assets/zalo.svg" alt="Zalo"></div>
+      <span class="btn-label">Zalo</span>
+    </a>
+
+    <button type="button" class="contact-btn chat-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Lên đầu trang">
+      <div class="icon-circle"><i class="fa-solid fa-arrow-up"></i></div>
+      <span class="btn-label">Đầu trang</span>
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 1: ANIMATED 4-STEP WIZARD POST LISTING IN MODAL FRAME (#postModalBackdrop)
+       (Chuyển trang mượt mà ngay trong khung như localhost:4173 + Khớp 1:1 với Bài viết)
+       ======================================================================== -->
+  <div class="ctt-modal-backdrop" id="postModalBackdrop">
+    <div class="ctt-modal-dialog" style="max-width:1220px;">
+      <div class="ctt-modal-header" style="padding:14px 26px;background:#fff;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:10px;height:32px;border-radius:4px;background:var(--ctt-grad-brand);"></div>
+          <div>
+            <h3 style="font-size:17px;font-weight:900;color:#0f172a;">ĐĂNG TIN BẤT ĐỘNG SẢN MỚI — KHỚP 1:1 VỚI BÀI VIẾT</h3>
+            <small style="color:#64748b;font-size:11.5px;">Hiệu ứng chuyển bước mượt mà trong khung • Xem thử trực tiếp Thẻ tin, Banner VIP & Bài viết</small>
+          </div>
+        </div>
+
+        <!-- 4 Interactive Wizard Step Tabs inside Modal Header -->
+        <div class="post-stepper-pills" id="modalWizardTabs">
+          <button type="button" class="post-step-badge active" onclick="goToModalWizardStep(1)"><span class="num">1</span> Phân loại & Vị trí</button>
+          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(2)"><span class="num">2</span> Thông số & Chi phí</button>
+          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(3)"><span class="num">3</span> Tiện ích & 4 Ảnh</button>
+          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(4)"><span class="num">4</span> Gói VIP & Đăng</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:#fff3e6;color:#f37201;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:800;border:1px solid #ffd6be;cursor:pointer;" onclick="openWalletModal()">
+            <i class="fa-solid fa-wallet"></i> Ví: <span class="js-wallet-balance">550.000đ</span>
+          </div>
+          <button type="button" onclick="closePostModal()" style="width:34px;height:34px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:15px;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+
+      <div class="ctt-modal-body" style="padding:22px 26px;">
+        <div style="display:grid;grid-template-columns:1.32fr 1fr;gap:24px;align-items:start;">
+          <!-- LEFT PANE: 4 ANIMATED WIZARD SLIDES INSIDE FRAME -->
+          <div style="background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:22px 24px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
+
+            <!-- WIZARD SLIDE 1: PHÂN LOẠI & VỊ TRÍ -->
+            <div class="modal-wizard-slide active" id="modalWizardSlide1">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">1</span>
+                  <span>Bước 1/4: Chọn Loại hình BĐS & Địa chỉ chuẩn Phường/Xã mới</span>
+                </div>
+                <span style="font-size:11.5px;color:#059669;font-weight:700;"><i class="fa-solid fa-location-dot"></i> Tự động ghim Bản đồ 3D</span>
+              </div>
+
+              <div class="post-field-label"><span>Chọn loại hình cho thuê (1 chạm) *</span></div>
+              <div class="post-cat-selector">
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('phong-tro', 'Phòng trọ', this)"><i class="fa-solid fa-door-open"></i><span>Phòng trọ</span></button>
+                <button type="button" class="post-cat-btn active" onclick="selectStudioCategory('can-ho-chung-cu', 'Căn hộ, chung cư', this)"><i class="fa-solid fa-building"></i><span>Căn hộ, Studio</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('nha-o', 'Nhà ở', this)"><i class="fa-solid fa-house-chimney"></i><span>Nhà nguyên căn</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('mat-bang-van-phong', 'Mặt bằng, văn phòng', this)"><i class="fa-solid fa-shop"></i><span>Mặt bằng, VP</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('bai-dat-kho-xuong', 'Bãi, Đất, Kho, Xưởng', this)"><i class="fa-solid fa-warehouse"></i><span>Kho xưởng</span></button>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                <div>
+                  <div class="post-field-label"><span>Tỉnh / Thành phố *</span></div>
+                  <select id="postCitySelect" class="post-input" onchange="renderStudioPreview()">
+                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                    <option value="TP. Hà Nội">TP. Hà Nội</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Phường / Xã sáp nhập mới *</span></div>
+                  <select id="postWardSelect" class="post-input" onchange="renderStudioPreview()">
+                    <option value="P. Cầu Kiệu">Phường Cầu Kiệu (Phú Nhuận)</option>
+                    <option value="P. Hòa Hưng">Phường Hòa Hưng (Quận 10)</option>
+                    <option value="P. Nhiêu Lộc">Phường Nhiêu Lộc (Quận 3)</option>
+                    <option value="P. Hạnh Thông">Phường Hạnh Thông (Gò Vấp)</option>
+                    <option value="P. Gia Định">Phường Gia Định (Bình Thạnh)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-bottom:14px;">
+                <div class="post-field-label"><span>Số nhà, Tên đường hiển thị trên Bài viết *</span></div>
+                <input type="text" id="postAddressInput" class="post-input" value="142 Phan Xích Long, Phường Cầu Kiệu, TP. Hồ Chí Minh" oninput="renderStudioPreview()">
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div>
+                  <div class="post-field-label"><span>Tên người đăng / Chính chủ *</span></div>
+                  <input type="text" id="postHostInput" class="post-input" value="Chính chủ Minh Quân" oninput="renderStudioPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Số điện thoại nhận cuộc gọi & Zalo *</span></div>
+                  <input type="text" id="postPhoneInput" class="post-input tabular-nums" value="0906 344 877" oninput="renderStudioPreview()">
+                </div>
+              </div>
+            </div>
+
+            <!-- WIZARD SLIDE 2: THÔNG SỐ VÀNG & CHI PHÍ MINH BẠCH -->
+            <div class="modal-wizard-slide" id="modalWizardSlide2">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">2</span>
+                  <span>Bước 2/4: Thông số Vàng & Chi phí Điện/Nước minh bạch</span>
+                </div>
+                <span style="font-size:11.5px;color:#059669;font-weight:700;">Khớp 100% với Đáy thẻ & Bảng tính chi phí</span>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1.1fr 1fr 1.4fr;gap:12px;margin-bottom:16px;">
+                <div>
+                  <div class="post-field-label"><span>Giá thuê (Triệu/thg) *</span></div>
+                  <input type="number" step="0.1" id="postPriceInput" class="post-input tabular-nums" value="6.5" oninput="renderStudioPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Diện tích (m²) *</span></div>
+                  <input type="number" id="postAreaInput" class="post-input tabular-nums" value="35" oninput="renderStudioPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Tiền đặt cọc (1 chạm)</span></div>
+                  <div class="post-seg-group">
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('deposit', '0.5 tháng', this)">0.5 tháng</button>
+                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('deposit', '1 tháng', this)">1 tháng</button>
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('deposit', '2 tháng', this)">2 tháng</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+                <div>
+                  <div class="post-field-label"><span>Không gian ngủ (Số PN) *</span></div>
+                  <div class="post-seg-group">
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', 'Studio', this)">Studio</button>
+                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('beds', '1 PN', this)">1 PN</button>
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', '2 PN', this)">2 PN</button>
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', '3 PN', this)">3 PN</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Phòng vệ sinh (Số WC) *</span></div>
+                  <div class="post-seg-group">
+                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('baths', '1 WC', this)">1 WC</button>
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('baths', '2 WC', this)">2 WC</button>
+                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('baths', '3 WC', this)">3+ WC</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;">
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-bolt" style="color:var(--ctt-orange);"></i> Giá điện</span></div>
+                  <input type="text" id="postElecInput" class="post-input tabular-nums" value="3.5k/kWh" oninput="renderStudioPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:#0284c7;"></i> Giá nước</span></div>
+                  <input type="text" id="postWaterInput" class="post-input tabular-nums" value="100k/người" oninput="renderStudioPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:#059669;"></i> Phí DV / Giữ xe</span></div>
+                  <input type="text" id="postServiceInput" class="post-input tabular-nums" value="150.000đ/thg" oninput="renderStudioPreview()">
+                </div>
+              </div>
+            </div>
+
+            <!-- WIZARD SLIDE 3: TIÊU ĐỀ, CHIP TIỆN ÍCH 1 CHẠM & 4 ẢNH THỰC TẾ -->
+            <div class="modal-wizard-slide" id="modalWizardSlide3">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">3</span>
+                  <span>Bước 3/4: Tiêu đề, Tiện ích 1 chạm & Bộ 4 Ảnh thực tế</span>
+                </div>
+                <button type="button" onclick="generateStudioAISeo()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết tự động
+                </button>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Tiêu đề bài viết *</span></div>
+                <input type="text" id="postTitleInput" class="post-input" value="CĂN HỘ 1PN TÁCH BẾP BAN CÔNG THOÁNG MÁT NGAY PHAN XÍCH LONG CẦU KIỆU" oninput="renderStudioPreview()">
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Bấm chọn Tiện ích có sẵn (Tự động gắn vào bài viết):</span></div>
+                <div class="post-amenity-chips">
+                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Có ban công thoáng')"><i class="fa-solid fa-sun"></i> Ban công thoáng</span>
+                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Tách bếp riêng')"><i class="fa-solid fa-utensils"></i> Tách bếp</span>
+                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Full nội thất cao cấp')"><i class="fa-solid fa-couch"></i> Full nội thất</span>
+                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Khóa vân tay 24/24')"><i class="fa-solid fa-fingerprint"></i> Khóa vân tay</span>
+                  <span class="post-amenity-chip" onclick="toggleStudioAmenity(this, 'Thang máy tốc độ cao')"><i class="fa-solid fa-elevator"></i> Thang máy</span>
+                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Giờ giấc tự do, không chung chủ')"><i class="fa-solid fa-clock"></i> Giờ tự do</span>
+                  <span class="post-amenity-chip" onclick="toggleStudioAmenity(this, 'Cho nuôi thú cưng (Pet)')"><i class="fa-solid fa-paw"></i> Nuôi Pet</span>
+                </div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Bộ 4 Ảnh thực tế (Bấm vào ảnh để chọn làm Ảnh bìa chính):</span></div>
+                <div class="post-photo-manager" id="modalPhotoManager"></div>
+              </div>
+
+              <div>
+                <div class="post-field-label"><span>Mô tả chi tiết</span></div>
+                <textarea id="postDescInput" rows="2" class="post-input" oninput="renderStudioPreview()">Chính chủ cho thuê căn hộ 1PN tách bếp ban công thoáng mát tại 142 Phan Xích Long, P. Cầu Kiệu. Phòng mới 100%, full nội thất cao cấp, khóa vân tay 24/24.</textarea>
+              </div>
+            </div>
+
+            <!-- WIZARD SLIDE 4: CHỌN GÓI VIP (TÁCH 2 BƯỚC RÕ RÀNG) -->
+            <div class="modal-wizard-slide" id="modalWizardSlide4">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">4</span>
+                  <span>Bước 4/4: Chọn Khu vực hiển thị VIP & Số ngày</span>
+                </div>
+                <span style="font-size:11.5px;color:#ef4444;font-weight:800;">Ưu đãi giảm 5% - 10% - 20%</span>
+              </div>
+
+              <div class="post-field-label"><span>4A. Chọn 1 trong 6 Khu vực hiển thị:</span></div>
+              <div class="post-zone-clean-grid" id="modalZonePackagesGrid"></div>
+
+              <div class="post-field-label"><span>4B. Chọn số ngày hiển thị:</span></div>
+              <div class="post-duration-4grid" id="modalDuration4Grid"></div>
+
+              <div class="vip-roi-banner" id="vipRoiSocialProof"></div>
+            </div>
+
+            <!-- Bottom Step Navigation Bar inside Left Pane -->
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+              <button type="button" class="hsp-btn-reset" id="btnWizardPrev" onclick="stepModalWizard(-1)" style="visibility:hidden;">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại bước trước
+              </button>
+              <span style="font-size:12px;font-weight:700;color:#64748b;" id="wizardStepIndicatorText">Bước 1 / 4</span>
+              <button type="button" class="hsp-btn-apply" id="btnWizardNext" onclick="stepModalWizard(1)">
+                Tiếp theo: Thông số & Chi phí <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT PANE: LIVE 1:1 PREVIEW STUDIO (3 TABS: CARD / SV1 / ARTICLE) -->
+          <div style="background:#fff;padding:18px 20px;border-radius:18px;border:1px solid #e2e8f0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <strong style="font-size:13.5px;color:#0f172a;">
+                <i class="fa-solid fa-desktop" style="color:var(--ctt-orange);margin-right:6px;"></i>XEM THỬ BÀI VIẾT TRỰC TIẾP (1:1)
+              </strong>
+              <span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;padding:3px 8px;border-radius:99px;">Khớp 100%</span>
+            </div>
+
+            <div class="post-preview-tabs">
+              <button type="button" class="post-prev-tab active" onclick="switchStudioPreviewTab('card', this)">1. Thẻ tin (.lc-card)</button>
+              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('sv1', this)">2. Banner VIP (.sv1)</button>
+              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('detail', this)">3. Trang Bài viết</button>
+            </div>
+
+            <div id="postLiveCardPreview"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctt-modal-footer">
+        <div id="postModalSummaryText" style="font-size:14px;color:#334155;"></div>
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="hsp-btn-reset" onclick="closePostModal()">Đóng khung</button>
+          <button type="button" class="hsp-btn-apply" onclick="closePostModal();publishStudioListingNow()">
+            <i class="fa-solid fa-check-circle"></i> XÁC NHẬN ĐĂNG TIN & XEM BÀI VIẾT NGAY
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: VIETQR / MOMO INSTANT WALLET TOP-UP (+11% BONUS)
+       ======================================================================== -->
+  <div class="ctt-modal-backdrop" id="walletModalBackdrop">
+    <div class="ctt-modal-dialog modal-sm">
+      <div class="ctt-modal-header">
+        <h3 style="font-size:17px;font-weight:900;color:#0f172a;">
+          <i class="fa-solid fa-qrcode" style="color:var(--ctt-orange);margin-right:8px;"></i>NẠP VÍ TỰ ĐỘNG VIETQR (+11% THÁNG 11)
+        </h3>
+        <button type="button" onclick="closeWalletModal()" style="border:none;background:transparent;font-size:18px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ctt-modal-body" style="text-align:center;">
+        <div style="background:#fffaf5;border:1.5px solid #fed7aa;border-radius:14px;padding:12px;margin-bottom:16px;">
+          <span style="font-size:12px;color:#9a3412;font-weight:700;">Số dư Ví hiện tại:</span>
+          <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);" class="js-wallet-balance tabular-nums">550.000đ</div>
+        </div>
+
+        <p style="font-size:13px;color:#475569;margin-bottom:14px;">Chọn mệnh giá nạp nhanh (Tặng thêm <strong>+11%</strong> vào Ví khuyến mãi):</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;" class="tabular-nums">
+          <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(200000)">
+            <strong style="font-size:15px;color:#0f172a;">Nạp 200.000đ</strong>
+            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 222.000đ (+11%)</div>
+          </button>
+          <button type="button" class="zone-pkg-card selected" onclick="topUpWalletInstant(500000)">
+            <strong style="font-size:15px;color:#0f172a;">Nạp 500.000đ</strong>
+            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 555.000đ (+11%)</div>
+          </button>
+          <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(1000000)">
+            <strong style="font-size:15px;color:#0f172a;">Nạp 1.000.000đ</strong>
+            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 1.110.000đ (+11%)</div>
+          </button>
+          <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(2000000)">
+            <strong style="font-size:15px;color:#0f172a;">Nạp 2.000.000đ</strong>
+            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 2.220.000đ (+11%)</div>
+          </button>
+        </div>
+        <small style="color:#64748b;font-size:11.5px;">Hỗ trợ VietQR 45 Ngân hàng, Ví MoMo & VNPay tự động 24/7.</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: MULTI-ROLE AUTH LOGIN / REGISTER & DEMO PORTAL (#authModalBackdrop)
+       ======================================================================== -->
+  <div class="ctt-modal-backdrop" id="authModalBackdrop">
+    <div class="ctt-modal-dialog" style="max-width:780px;">
+      <div class="ctt-modal-header">
+        <div>
+          <h3 style="font-size:17px;font-weight:900;color:#0f172a;">CỔNG ĐĂNG NHẬP & QUẢN TRỊ TÀI KHOẢN CHOTHUETOT.VN</h3>
+          <small style="color:#64748b;font-size:12px;">Hỗ trợ Chủ nhà/Môi giới, Khách thuê & Quản trị viên hệ thống (Admin)</small>
+        </div>
+        <button type="button" onclick="closeAuthModal()" style="border:none;background:transparent;font-size:18px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ctt-modal-body" style="padding:24px;">
+        <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:22px;align-items:center;">
+          <!-- Left: 1-Click Presentation Demo Switcher -->
+          <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;padding:22px;border-radius:18px;">
+            <span style="font-size:10.5px;font-weight:800;color:#ffd700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">TRÌNH BÀY NHANH (1-CLICK DEMO)</span>
+            <h4 style="font-size:17px;font-weight:900;margin-bottom:10px;">Vào thẳng giao diện Hồ sơ & Admin</h4>
+            <p style="font-size:12px;color:#cbd5e1;line-height:1.55;margin-bottom:16px;">
+              Bấm chọn vai trò dưới đây để mở ngay giao diện quản lý tin đăng thành viên hoặc bảng điều khiển Admin:
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button type="button" onclick="closeAuthModal();navigateTo('/tai-khoan.html')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ffd700;background:rgba(255,215,0,0.14);color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+                <span><i class="fa-solid fa-user-check" style="margin-right:6px;"></i> 1. Vào Hồ sơ Thành viên VIP</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+              <button type="button" onclick="closeAuthModal();navigateTo('/admin.html')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #38bdf8;background:rgba(56,189,248,0.14);color:#38bdf8;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+                <span><i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i> 2. Vào Trung tâm Quản trị Admin</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Standard Login Form -->
+          <div style="background:#fff;padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
+            <strong style="font-size:14px;color:#0f172a;display:block;margin-bottom:12px;">Đăng nhập bằng Số điện thoại / Email</strong>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <input type="text" class="post-input" value="0906 344 877" placeholder="Số điện thoại hoặc Email">
+              <input type="password" class="post-input" value="••••••••••" placeholder="Mật khẩu">
+              <button type="button" class="hsp-btn-apply" style="width:100%;padding:12px;" onclick="closeAuthModal();navigateTo('/tai-khoan.html')">
+                ĐĂNG NHẬP VÀO HỒ SƠ THÀNH VIÊN
+              </button>
+              <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="closeAuthModal();navigateTo('/tai-khoan.html')">
+                <img src="assets/zalo.svg" alt="Zalo" style="width:18px;height:18px;"> Đăng nhập nhanh qua Zalo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       NEW UPGRADE: FLOATING COMPARE TRAY (#compareTray) & COMPARE MODAL
+       ======================================================================== -->
+  <div class="compare-floating-tray" id="compareTray" aria-label="Khay so sánh phòng">
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <span style="width:34px;height:34px;border-radius:10px;background:var(--ctt-grad-brand);display:flex;align-items:center;justify-content:center;font-size:14px;">
+        <i class="fa-solid fa-scale-balanced"></i>
+      </span>
+      <div>
+        <div style="font-size:12.5px;font-weight:800;color:#ffd700;">So sánh BĐS</div>
+        <small style="font-size:11px;color:#cbd5e1;" id="compareTrayCountText">Đã chọn 0/3 phòng</small>
+      </div>
+    </div>
+
+    <div class="compare-tray-items" id="compareTrayItems"></div>
+
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <button type="button" class="hsp-btn-apply" style="padding:9px 18px;font-size:12.5px;" onclick="openCompareModal()">
+        <i class="fa-solid fa-table-columns"></i> So sánh chi tiết ngay
+      </button>
+      <button type="button" onclick="clearCompareList()" style="background:rgba(255,255,255,0.1);border:none;color:#cbd5e1;padding:8px 12px;border-radius:99px;font-size:11.5px;cursor:pointer;">
+        Xóa
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: SIDE-BY-SIDE PROPERTY COMPARISON TABLE (#compareModalBackdrop) -->
+  <div class="ctt-modal-backdrop" id="compareModalBackdrop">
+    <div class="ctt-modal-dialog" style="max-width:1060px;">
+      <div class="ctt-modal-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <i class="fa-solid fa-scale-balanced" style="color:var(--ctt-orange);font-size:20px;"></i>
+          <div>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">SO SÁNH CHI TIẾT PHÒNG & TỔNG CHI PHÍ THỰC TẾ / THÁNG</h3>
+            <small style="color:#64748b;font-size:12px;">Giúp bạn chọn được nơi thuê tối ưu nhất về giá thuê, điện nước và vị trí</small>
+          </div>
+        </div>
+        <button type="button" onclick="closeCompareModal()" style="width:36px;height:36px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:16px;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ctt-modal-body" id="compareModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS & Master App Engine -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
