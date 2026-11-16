@@ -278,15 +278,16 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
     }
     .lc-vip-tag.tag-vip1 {
-      background: rgba(0, 0, 0, 0.70) !important;
-      border: 1px solid rgba(255, 157, 0, 0.35);
-      backdrop-filter: blur(4px);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%) !important;
+      color: #f97316 !important;
+      border: 1.5px solid #fb923c;
+      box-shadow: 0 3px 10px rgba(251, 146, 60, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.85);
     }
     .lc-vip-tag.tag-vip2 {
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%) !important;
       color: #1e293b !important;
-      border: 1.5px solid var(--ctt-orange);
-      box-shadow: 0 3px 10px rgba(241, 90, 34, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      border: 1.5px solid #fb923c;
+      box-shadow: 0 3px 10px rgba(251, 146, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.85);
     }
     .lc-vip-tag.tag-vip3 {
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%) !important;
@@ -713,7 +714,7 @@
   <script>
     const ZONES = [
       { id: 1, name: "Banner Đặc Quyền", badge: "✦ ĐẶC QUYỀN", badgeClass: "tag-dacquyen", useGradText: true, zoneClass: "zone-spotlight", rate: 50000, desc: "Top đầu trang chủ" },
-      { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-vip1", useGradText: true, zoneClass: "zone-spotlight", rate: 35000, desc: "Spotlight nổi bật" },
+      { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-vip1", useGradText: false, zoneClass: "zone-spotlight", rate: 35000, desc: "Spotlight nổi bật" },
       { id: 3, name: "TOP 2 Nổi Bật", badge: "• VIP 2", badgeClass: "tag-vip2", useGradText: false, zoneClass: "zone-featured", rate: 25000, desc: "Featured ưu tiên" },
       { id: 5, name: "TOP 3 Hiệu Quả", badge: "• VIP 3", badgeClass: "tag-vip3", useGradText: false, zoneClass: "zone-prime", rate: 15000, desc: "Prime tiết kiệm" },
       { id: 4, name: "Tin Cơ Bản", badge: "", badgeClass: "", useGradText: false, zoneClass: "", rate: 1000, desc: "Lên bản đồ chuẩn" },
@@ -1096,7 +1097,7 @@
       const z = ZONES.find((x) => x.id === D.selectedZoneId);
       const badgeText = z ? z.badge : "✦ VIP 1";
       const badgeClass = z ? z.badgeClass : "tag-vip1";
-      const useGradText = z ? z.useGradText : true;
+      const useGradText = z ? z.useGradText : false;
       const zoneClass = z ? z.zoneClass : "zone-spotlight";
       const badgeInner = useGradText ? `<span class="vip-grad-text">${badgeText}</span>` : badgeText;
 
