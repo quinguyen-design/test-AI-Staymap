@@ -1103,7 +1103,7 @@
 
       const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
       const stickerHTML = stObj
-        ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>`
+        ? `<span class="sticker-pill ${stObj.cls}" style="font-size:9px;padding:2px 7px;line-height:1.25;box-shadow:0 2px 6px rgba(15,23,42,0.14);"><i class="fa-solid ${stObj.icon}" style="font-size:8.5px;"></i> ${stObj.name}</span>`
         : "";
 
       let html = "";
@@ -1115,18 +1115,20 @@
                 ${coverPhoto
                   ? `<img src="${coverPhoto}" alt="${title}">`
                   : `<div style="width:100%;height:100%;min-height:190px;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;gap:6px;"><i class="fa-regular fa-image" style="font-size:26px;"></i><span>Chưa có hình ảnh</span></div>`}
-                <div class="lc-card-badges" style="display:flex;flex-direction:column;align-items:flex-start;gap:5px;">
+                <div class="lc-card-badges">
                   ${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeInner}</span>` : ""}
-                  ${stickerHTML}
                 </div>
                 <div class="lc-photo-count">
                   <i class="fa-regular fa-images"></i> ${D.photos.length}
                 </div>
               </div>
               <div class="lc-card-body">
-                <div class="lc-card-toprow">
+                <div class="lc-card-toprow" style="align-items:${stickerHTML ? "flex-end" : "center"};">
                   <div class="lc-card-price tabular-nums">${price} Triệu <span>| Tháng</span></div>
-                  <span class="lc-card-type">${D.cat}</span>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                    ${stickerHTML}
+                    <span class="lc-card-type">${D.cat}</span>
+                  </div>
                 </div>
                 <div class="lc-card-title">${title}</div>
                 <div class="lc-utility-bar">
