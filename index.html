@@ -37,30 +37,46 @@
       </a>
 
       <div class="shb-actions">
-        <!-- Upgraded Instant VietQR Wallet Pill -->
-        <button type="button" class="shb-wallet-pill" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR +11%">
+        <!-- Upgraded Instant VietQR Wallet Pill (Hidden until logged in) -->
+        <button type="button" id="headerWalletPill" class="shb-wallet-pill" style="display:none;" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR +11%">
           <i class="fa-solid fa-wallet" style="color:#ffd700;"></i>
           <span>Ví: <strong class="wallet-amount js-wallet-balance">550.000đ</strong></span>
           <span class="wallet-topup-tag">+11%</span>
         </button>
 
-        <!-- Member Account Portal Pill (Hidden until logged in) -->
-        <button type="button" id="headerBtnMember" class="shb-btn-auth" style="display:none;" onclick="navigateTo('/tai-khoan.html')" title="Trang Hồ sơ & Quản lý tin đăng Thành viên">
-          <i class="fa-solid fa-user-check" style="color:#059669;font-size:14px;"></i>
-          <span>HỒ SƠ THÀNH VIÊN</span>
-        </button>
-
-        <!-- Admin Control Center Pill (Hidden until logged in as Admin) -->
-        <button type="button" id="headerBtnAdmin" class="shb-btn-auth" style="display:none;" onclick="navigateTo('/admin.html')" title="Trang Quản trị Hệ thống Admin">
-          <i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);font-size:14px;"></i>
-          <span>ADMIN</span>
-        </button>
-
-        <!-- Auth Login / Logout Pill -->
-        <button type="button" id="headerBtnAuth" class="shb-btn-auth" onclick="handleHeaderAuthClick()">
+        <!-- Auth Login Button (Shown when logged out) -->
+        <button type="button" id="headerBtnAuth" class="shb-btn-auth" onclick="openAuthModal()">
           <i class="fa-regular fa-circle-user" style="color:var(--ctt-orange);font-size:15px;"></i>
           <span>ĐĂNG NHẬP</span>
         </button>
+
+        <!-- Logged-in User Account Dropdown (Shown when logged in) -->
+        <div class="header-account-wrap" id="headerAccountWrap" style="display:none;">
+          <button type="button" id="headerUserMenuBtn" class="header-user-pill" onclick="toggleHeaderUserDropdown(event)">
+            <span class="header-user-avatar" id="headerUserAvatar">MQ</span>
+            <span id="headerUserName" style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Thành viên</span>
+            <i class="fa-solid fa-chevron-down" style="font-size:10px;color:#94a3b8;"></i>
+          </button>
+          <div class="header-user-dropdown" id="headerUserDropdown">
+            <div class="header-user-dd-head">
+              <strong id="headerDropdownFullName" style="display:block;font-size:13px;color:#0f172a;">Thành viên</strong>
+              <small id="headerDropdownVerified" style="font-size:11px;color:#059669;font-weight:700;">Đã xác thực</small>
+            </div>
+            <button type="button" class="header-user-dd-item" onclick="closeHeaderUserDropdown();navigateTo('/tai-khoan.html')">
+              <i class="fa-solid fa-user-check" style="color:#059669;"></i> Hồ sơ & Quản lý tin đăng
+            </button>
+            <button type="button" class="header-user-dd-item" onclick="closeHeaderUserDropdown();openWalletModal()">
+              <i class="fa-solid fa-wallet" style="color:var(--ctt-orange);"></i> Ví đăng tin & Nạp VietQR (+11%)
+            </button>
+            <button type="button" id="dropdownAdminLink" class="header-user-dd-item" style="display:none;color:#0284c7;" onclick="closeHeaderUserDropdown();navigateTo('/admin.html')">
+              <i class="fa-solid fa-shield-halved" style="color:#0284c7;"></i> Trung tâm Quản trị Admin
+            </button>
+            <div style="height:1px;background:#f1f5f9;margin:4px 0;"></div>
+            <button type="button" class="header-user-dd-item" style="color:#dc2626;" onclick="closeHeaderUserDropdown();logoutAccount()">
+              <i class="fa-solid fa-right-from-bracket" style="color:#dc2626;"></i> Đăng xuất tài khoản
+            </button>
+          </div>
+        </div>
 
         <!-- Post Listing Pill (.shb-btn-post) -> Opens Animated Multi-Step Modal Frame -->
         <button type="button" class="shb-btn-post" onclick="openPostModal()">
@@ -662,14 +678,14 @@
         <!-- Left Sidebar: Member Profile & Navigation -->
         <aside class="portal-sidebar">
           <div style="text-align:center;padding-bottom:18px;border-bottom:1px solid #f1f5f9;">
-            <div style="width:72px;height:72px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 8px 20px rgba(241,90,34,0.28);">
+            <div id="memberSidebarAvatar" style="width:72px;height:72px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 8px 20px rgba(241,90,34,0.28);">
               MQ
             </div>
-            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">Chính chủ Minh Quân</h3>
-            <div style="font-size:12px;color:#059669;font-weight:700;margin-top:3px;">
+            <h3 id="memberSidebarName" style="font-size:16.5px;font-weight:900;color:#0f172a;">Chính chủ Minh Quân</h3>
+            <div id="memberSidebarBadge" style="font-size:12px;color:#059669;font-weight:700;margin-top:3px;">
               <i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & SĐT
             </div>
-            <div style="font-size:11.5px;color:#64748b;margin-top:4px;">ID Thành viên: #CTT-8829 • Hạng Vàng</div>
+            <div id="memberSidebarMeta" style="font-size:11.5px;color:#64748b;margin-top:4px;">ID Thành viên: #CTT-8829 • Hạng Vàng</div>
           </div>
 
           <!-- Wallet Box inside Sidebar -->
@@ -1257,24 +1273,32 @@
       </div>
       <div class="ctt-modal-body" style="padding:22px;">
         <div class="auth-portal-grid">
-          <!-- Left: 1-Click Presentation Demo Switcher -->
+          <!-- Left: Member Benefits & Security Trust -->
           <div class="auth-left-card">
             <div>
-              <span style="font-size:10.5px;font-weight:800;color:#ffd700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">TRÌNH BÀY NHANH (1-CLICK DEMO)</span>
-              <h4 style="font-size:17px;font-weight:900;margin-bottom:10px;">Vào thẳng giao diện Hồ sơ & Admin</h4>
-              <p style="font-size:12px;color:#cbd5e1;line-height:1.55;margin-bottom:16px;">
-                Bấm chọn vai trò dưới đây để mở ngay giao diện quản lý tin đăng thành viên hoặc bảng điều khiển Admin:
+              <span style="font-size:10.5px;font-weight:800;color:#ffd700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">THÀNH VIÊN CHOTHUETOT.VN</span>
+              <h4 style="font-size:18px;font-weight:900;margin-bottom:8px;line-height:1.3;">Quản lý tin đăng thông minh & Minh bạch</h4>
+              <p style="font-size:12px;color:#cbd5e1;line-height:1.55;margin-bottom:12px;">
+                Đăng nhập hoặc đăng ký xác thực để mở khóa đầy đủ công cụ cho Chủ nhà, Môi giới & Quản trị viên:
               </p>
               <div id="authModalNotice" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.5);color:#fde68a;font-size:12px;font-weight:700;"></div>
-              <div style="display:flex;flex-direction:column;gap:10px;">
-                <button type="button" onclick="loginAsRole('member')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ffd700;background:rgba(255,215,0,0.14);color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-                  <span><i class="fa-solid fa-user-check" style="margin-right:6px;"></i> 1. Đăng nhập Thành viên VIP</span>
-                  <i class="fa-solid fa-arrow-right"></i>
-                </button>
-                <button type="button" onclick="loginAsRole('admin')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #38bdf8;background:rgba(56,189,248,0.14);color:#38bdf8;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-                  <span><i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i> 2. Đăng nhập Quản trị Admin</span>
-                  <i class="fa-solid fa-arrow-right"></i>
-                </button>
+              <div class="auth-benefit-list">
+                <div class="auth-benefit-item">
+                  <span class="auth-benefit-icon"><i class="fa-solid fa-map-location-dot"></i></span>
+                  <span>Hiển thị tin VIP trên Bản đồ & 3 khu vực Spotlight, Featured, Prime.</span>
+                </div>
+                <div class="auth-benefit-item">
+                  <span class="auth-benefit-icon"><i class="fa-solid fa-shield-check"></i></span>
+                  <span>Xác thực chính chủ 2 lớp qua Zalo ZNS OTP hoặc Google OAuth 2.0.</span>
+                </div>
+                <div class="auth-benefit-item">
+                  <span class="auth-benefit-icon"><i class="fa-regular fa-calendar-check"></i></span>
+                  <span>Theo dõi lịch hẹn xem phòng Zalo & thống kê lượt bấm gọi thật.</span>
+                </div>
+                <div class="auth-benefit-item">
+                  <span class="auth-benefit-icon"><i class="fa-solid fa-wallet"></i></span>
+                  <span>Quản lý Ví đăng tin VietQR 24/7 — tặng ngay <strong>+11%</strong> giá trị nạp.</span>
+                </div>
               </div>
             </div>
             <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);">
@@ -1284,12 +1308,12 @@
                 <span class="auth-security-pill"><i class="fa-solid fa-lock" style="color:#38bdf8;"></i> 2FA Ready</span>
               </div>
               <p style="font-size:11.5px;color:#94a3b8;line-height:1.5;margin:0;">
-                Mọi tài khoản mới đều yêu cầu xác thực OTP Zalo hoặc liên kết Google để chống tin ảo & bảo vệ số điện thoại chính chủ.
+                Hệ thống bảo vệ phiên đăng nhập & chống đăng tin ảo trên toàn bộ nền tảng StayMap.vn.
               </p>
             </div>
           </div>
 
-          <!-- Right: Login / Secure Registration Tabs -->
+          <!-- Right: Login / Secure Registration / Forgot Password -->
           <div class="auth-right-card">
             <!-- Mode Switcher: Đăng nhập / Đăng ký -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f1f5f9;padding:4px;border-radius:12px;margin-bottom:16px;">
@@ -1303,23 +1327,80 @@
 
             <!-- PANEL 1: ĐĂNG NHẬP -->
             <div id="authPanelLogin">
-              <strong style="font-size:13.5px;color:#0f172a;display:block;margin-bottom:10px;">Đăng nhập bằng Số điện thoại / Email</strong>
-              <div style="display:flex;flex-direction:column;gap:11px;">
-                <input type="text" id="authLoginIdentity" class="post-input" value="0906 344 877" placeholder="Số điện thoại hoặc Email (nhập 'admin' cho Quản trị)">
-                <div class="auth-pwd-wrap">
-                  <input type="password" id="authLoginPassword" class="post-input" value="••••••••••" placeholder="Mật khẩu">
-                  <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('authLoginPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div>
+                  <label class="auth-field-label" for="authLoginIdentity"><i class="fa-solid fa-user"></i> Số điện thoại hoặc Email</label>
+                  <input type="text" id="authLoginIdentity" class="post-input" placeholder="Nhập SĐT (VD: 0906344877) hoặc Email đã đăng ký" onkeydown="if(event.key==='Enter') submitStandardLogin()">
                 </div>
+                <div>
+                  <label class="auth-field-label" for="authLoginPassword"><i class="fa-solid fa-lock"></i> Mật khẩu</label>
+                  <div class="auth-pwd-wrap">
+                    <input type="password" id="authLoginPassword" class="post-input" placeholder="Nhập mật khẩu tài khoản" onkeydown="if(event.key==='Enter') submitStandardLogin()">
+                    <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('authLoginPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+                  <label style="display:inline-flex;align-items:center;gap:6px;color:#475569;cursor:pointer;">
+                    <input type="checkbox" id="authRememberMe" checked>
+                    <span>Ghi nhớ đăng nhập</span>
+                  </label>
+                  <a href="javascript:void(0)" onclick="switchAuthMode('forgot')" style="color:var(--ctt-orange);font-weight:700;text-decoration:none;">Quên mật khẩu?</a>
+                </div>
+                <div id="authLoginError" class="auth-error-box"></div>
+                <div id="authLoginSuccess" class="auth-success-box"></div>
                 <button type="button" class="hsp-btn-apply" style="width:100%;padding:12px;" onclick="submitStandardLogin()">
                   ĐĂNG NHẬP VÀO TÀI KHOẢN
                 </button>
-                <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="loginAsRole('member')">
-                  <img src="assets/zalo.svg" alt="Zalo" style="width:18px;height:18px;"> Đăng nhập nhanh qua Zalo
-                </button>
-                <div style="text-align:center;font-size:12px;color:#64748b;margin-top:4px;">
+                <div class="auth-divider">hoặc đăng nhập nhanh</div>
+                <div class="auth-social-grid">
+                  <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;" onclick="loginWithZaloQuick()">
+                    <img src="assets/zalo.svg" alt="Zalo" style="width:17px;height:17px;"> Zalo
+                  </button>
+                  <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;" onclick="loginWithGoogleQuick()">
+                    <i class="fa-brands fa-google" style="color:#ea4335;font-size:15px;"></i> Google
+                  </button>
+                </div>
+                <div style="text-align:center;font-size:12px;color:#64748b;margin-top:2px;">
                   Chưa có tài khoản?
                   <a href="javascript:void(0)" onclick="switchAuthMode('register')" style="color:var(--ctt-orange);font-weight:800;text-decoration:none;">Đăng ký bảo mật ngay</a>
                 </div>
+              </div>
+            </div>
+
+            <!-- PANEL 1B: QUÊN MẬT KHẨU -->
+            <div id="authPanelForgot" style="display:none;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <strong style="font-size:14px;color:#0f172a;"><i class="fa-solid fa-key" style="color:var(--ctt-orange);margin-right:6px;"></i> Khôi phục mật khẩu</strong>
+                <button type="button" onclick="switchAuthMode('login')" style="border:none;background:transparent;color:#64748b;font-size:12px;font-weight:700;cursor:pointer;">
+                  <i class="fa-solid fa-arrow-left"></i> Quay lại
+                </button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <label class="auth-field-label" for="forgotIdentityInput"><i class="fa-solid fa-shield-halved"></i> SĐT Zalo hoặc Email đã đăng ký</label>
+                  <div style="display:flex;gap:8px;">
+                    <input type="text" id="forgotIdentityInput" class="post-input" style="flex:1;" placeholder="Nhập SĐT hoặc Email cần khôi phục">
+                    <button type="button" id="btnSendForgotOtp" onclick="sendForgotOtp()" style="padding:0 12px;border-radius:10px;border:none;background:#0f172a;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                      Gửi mã OTP
+                    </button>
+                  </div>
+                </div>
+                <div id="forgotOtpBanner" class="auth-success-box" style="font-weight:500;"></div>
+                <div>
+                  <label class="auth-field-label" for="forgotOtpInput"><i class="fa-solid fa-hashtag"></i> Mã xác minh 6 số</label>
+                  <input type="text" id="forgotOtpInput" class="post-input tabular-nums" maxlength="6" placeholder="Nhập mã OTP 6 số">
+                </div>
+                <div>
+                  <label class="auth-field-label" for="forgotNewPassword"><i class="fa-solid fa-lock"></i> Mật khẩu mới</label>
+                  <div class="auth-pwd-wrap">
+                    <input type="password" id="forgotNewPassword" class="post-input" placeholder="Mật khẩu mới (≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt)">
+                    <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('forgotNewPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
+                  </div>
+                </div>
+                <div id="forgotErrorBox" class="auth-error-box"></div>
+                <button type="button" class="hsp-btn-apply" style="width:100%;padding:11px;" onclick="submitForgotReset()">
+                  CẬP NHẬT MẬT KHẨU & ĐĂNG NHẬP
+                </button>
               </div>
             </div>
 
@@ -1336,18 +1417,28 @@
 
               <!-- CÁCH 1: ĐĂNG KÝ BẰNG SĐT + GỬI MÃ OTP QUA ZALO -->
               <div id="regPanelZalo" style="display:flex;flex-direction:column;gap:10px;">
-                <input type="text" id="regZaloName" class="post-input" placeholder="Họ và tên chính chủ (VD: Nguyễn Minh Quân)">
-                <div style="display:flex;gap:8px;">
-                  <input type="tel" id="regZaloPhone" class="post-input" style="flex:1;" placeholder="Số điện thoại Zalo (10 số, VD: 0906344877)">
-                  <button type="button" id="btnSendZaloOtp" onclick="sendZaloRegisterOtp()" style="padding:0 14px;border-radius:10px;border:none;background:#0284c7;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
-                    Gửi mã Zalo
-                  </button>
+                <div>
+                  <label class="auth-field-label" for="regZaloName"><i class="fa-solid fa-id-card"></i> Họ và tên chính chủ</label>
+                  <input type="text" id="regZaloName" class="post-input" placeholder="VD: Nguyễn Minh Quân">
+                </div>
+                <div>
+                  <label class="auth-field-label" for="regZaloPhone"><i class="fa-solid fa-phone"></i> Số điện thoại Zalo</label>
+                  <div style="display:flex;gap:8px;">
+                    <input type="tel" id="regZaloPhone" class="post-input" style="flex:1;" placeholder="10 số, VD: 0906344877">
+                    <button type="button" id="btnSendZaloOtp" onclick="sendZaloRegisterOtp()" style="padding:0 14px;border-radius:10px;border:none;background:#0284c7;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                      Gửi mã Zalo
+                    </button>
+                  </div>
                 </div>
                 <div id="regZaloOtpBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-size:11.5px;line-height:1.45;"></div>
-                <input type="text" id="regZaloOtpInput" class="post-input tabular-nums" maxlength="6" placeholder="Nhập mã OTP 6 số từ Zalo ZNS">
                 <div>
+                  <label class="auth-field-label" for="regZaloOtpInput"><i class="fa-solid fa-comment-sms"></i> Mã OTP 6 số từ Zalo ZNS</label>
+                  <input type="text" id="regZaloOtpInput" class="post-input tabular-nums" maxlength="6" placeholder="Nhập mã OTP 6 số">
+                </div>
+                <div>
+                  <label class="auth-field-label" for="regZaloPassword"><i class="fa-solid fa-lock"></i> Mật khẩu bảo mật</label>
                   <div class="auth-pwd-wrap">
-                    <input type="password" id="regZaloPassword" class="post-input" placeholder="Mật khẩu mạnh (≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt)" oninput="updateRegPasswordStrength(this.value, 'zalo')">
+                    <input type="password" id="regZaloPassword" class="post-input" placeholder="≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt" oninput="updateRegPasswordStrength(this.value, 'zalo')">
                     <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('regZaloPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
@@ -1361,7 +1452,7 @@
                   <input type="checkbox" id="regZaloAgree" checked style="margin-top:2px;">
                   <span>Tôi đồng ý xác thực SĐT chính chủ qua Zalo & Chính sách bảo mật ChoThueTot.vn</span>
                 </label>
-                <div id="regZaloError" style="display:none;font-size:11.5px;color:#dc2626;font-weight:700;"></div>
+                <div id="regZaloError" class="auth-error-box"></div>
                 <button type="button" class="hsp-btn-apply" style="width:100%;padding:11px;" onclick="submitZaloRegister()">
                   <i class="fa-solid fa-shield-check"></i> XÁC THỰC ZALO & HOÀN TẤT ĐĂNG KÝ
                 </button>
@@ -1369,24 +1460,30 @@
 
               <!-- CÁCH 2: ĐĂNG KÝ BẰNG EMAIL LIÊN KẾT GOOGLE -->
               <div id="regPanelGoogle" style="display:none;flex-direction:column;gap:10px;">
-                <button type="button" onclick="startGoogleOAuthLink()" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cbd5e1;background:#f8fafc;color:#0f172a;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-                  <i class="fa-brands fa-google" style="color:#ea4335;font-size:15px;"></i>
-                  <span>Liên kết nhanh tài khoản Google (OAuth 2.0)</span>
-                </button>
-                <div style="display:flex;gap:8px;">
-                  <input type="email" id="regGoogleEmail" class="post-input" style="flex:1;" placeholder="Email Gmail liên kết (VD: tenban@gmail.com)">
-                  <button type="button" id="btnSendGoogleCode" onclick="sendGoogleEmailCode()" style="padding:0 12px;border-radius:10px;border:none;background:#0f172a;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
-                    Gửi mã Gmail
-                  </button>
+                <div>
+                  <label class="auth-field-label" for="regGoogleEmail"><i class="fa-brands fa-google"></i> Email Google (Gmail)</label>
+                  <div style="display:flex;gap:8px;">
+                    <input type="email" id="regGoogleEmail" class="post-input" style="flex:1;" placeholder="Nhập Gmail của bạn (VD: tenban@gmail.com)">
+                    <button type="button" id="btnSendGoogleCode" onclick="sendGoogleEmailCode()" style="padding:0 12px;border-radius:10px;border:none;background:#0f172a;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                      Gửi mã Gmail
+                    </button>
+                  </div>
                 </div>
                 <div id="regGoogleCodeBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:11.5px;line-height:1.45;"></div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                  <input type="text" id="regGoogleName" class="post-input" placeholder="Họ và tên hiển thị">
-                  <input type="text" id="regGoogleCodeInput" class="post-input tabular-nums" maxlength="6" placeholder="Mã xác minh 6 số">
+                  <div>
+                    <label class="auth-field-label" for="regGoogleName"><i class="fa-solid fa-user"></i> Họ và tên</label>
+                    <input type="text" id="regGoogleName" class="post-input" placeholder="Tên hiển thị">
+                  </div>
+                  <div>
+                    <label class="auth-field-label" for="regGoogleCodeInput"><i class="fa-solid fa-hashtag"></i> Mã xác minh 6 số</label>
+                    <input type="text" id="regGoogleCodeInput" class="post-input tabular-nums" maxlength="6" placeholder="Mã 6 số">
+                  </div>
                 </div>
                 <div>
+                  <label class="auth-field-label" for="regGooglePassword"><i class="fa-solid fa-lock"></i> Mật khẩu bảo vệ</label>
                   <div class="auth-pwd-wrap">
-                    <input type="password" id="regGooglePassword" class="post-input" placeholder="Đặt mật khẩu bảo vệ (≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt)" oninput="updateRegPasswordStrength(this.value, 'google')">
+                    <input type="password" id="regGooglePassword" class="post-input" placeholder="≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt" oninput="updateRegPasswordStrength(this.value, 'google')">
                     <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('regGooglePassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
@@ -1400,7 +1497,7 @@
                   <input type="checkbox" id="regGoogleAgree" checked style="margin-top:2px;">
                   <span>Tôi đồng ý liên kết Google OAuth 2.0 & kích hoạt bảo mật 2 lớp (2FA)</span>
                 </label>
-                <div id="regGoogleError" style="display:none;font-size:11.5px;color:#dc2626;font-weight:700;"></div>
+                <div id="regGoogleError" class="auth-error-box"></div>
                 <button type="button" class="hsp-btn-apply" style="width:100%;padding:11px;" onclick="submitGoogleRegister()">
                   <i class="fa-brands fa-google"></i> XÁC NHẬN GOOGLE & TẠO TÀI KHOẢN
                 </button>

@@ -885,9 +885,13 @@ const STATE = {
   auth: {
     isLoggedIn: false,
     role: null, // "member" | "admin"
-    displayName: ""
+    displayName: "",
+    identity: "",
+    verifiedVia: ""
   },
-  pendingAuthRoute: null
+  pendingAuthRoute: null,
+  pendingPostModal: false,
+  pendingPostZoneId: null
 };
 
 let heroMapInstance = null;
@@ -2388,9 +2392,68 @@ function topUpWalletInstant(amount) {
   closeWalletModal();
 }
 
+const DEFAULT_ACCOUNTS = [
+  {
+    identity: "0906344877",
+    password: "MinhQuan@2026",
+    role: "member",
+    displayName: "Chính chủ Minh Quân",
+    verifiedVia: "Zalo ZNS & CCCD",
+    memberCode: "#CTT-8829"
+  },
+  {
+    identity: "admin@staymap.vn",
+    password: "StayMapAdmin@2026",
+    role: "admin",
+    displayName: "Quản trị viên StayMap",
+    verifiedVia: "Admin 2FA",
+    memberCode: "#ADM-0001"
+  }
+];
+
+function normalizeAuthIdentity(val) {
+  const trimmed = (val || "").trim();
+  if (!trimmed) return "";
+  return trimmed.includes("@") ? trimmed.toLowerCase() : trimmed.replace(/\s+/g, "");
+}
+
+function getAccountsStore() {
+  try {
+    const raw = localStorage.getItem("ctt_accounts_v1");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (_) {}
+  return DEFAULT_ACCOUNTS.slice();
+}
+
+function saveAccountsStore(list) {
+  try {
+    localStorage.setItem("ctt_accounts_v1", JSON.stringify(list));
+  } catch (_) {}
+}
+
+function upsertAccountRecord(record) {
+  const list = getAccountsStore();
+  const normId = normalizeAuthIdentity(record.identity);
+  const idx = list.findIndex((a) => normalizeAuthIdentity(a.identity) === normId);
+  const next = { ...record, identity: normId };
+  if (idx >= 0) list[idx] = next;
+  else list.push(next);
+  saveAccountsStore(list);
+}
+
+function getInitials(name) {
+  const parts = (name || "TV").replace(/\(.*?\)/g, "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "TV";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 function restoreAuthSession() {
   try {
-    const raw = sessionStorage.getItem("ctt_auth_session");
+    const raw = localStorage.getItem("ctt_auth_session") || sessionStorage.getItem("ctt_auth_session");
     if (!raw) return;
     const parsed = JSON.parse(raw);
     if (parsed && parsed.isLoggedIn && (parsed.role === "member" || parsed.role === "admin")) {
@@ -2399,11 +2462,19 @@ function restoreAuthSession() {
   } catch (_) {}
 }
 
-function persistAuthSession() {
+function persistAuthSession(remember = true) {
   try {
     if (STATE.auth.isLoggedIn) {
-      sessionStorage.setItem("ctt_auth_session", JSON.stringify(STATE.auth));
+      const payload = JSON.stringify(STATE.auth);
+      if (remember) {
+        localStorage.setItem("ctt_auth_session", payload);
+        sessionStorage.removeItem("ctt_auth_session");
+      } else {
+        sessionStorage.setItem("ctt_auth_session", payload);
+        localStorage.removeItem("ctt_auth_session");
+      }
     } else {
+      localStorage.removeItem("ctt_auth_session");
       sessionStorage.removeItem("ctt_auth_session");
     }
   } catch (_) {}
@@ -2412,40 +2483,74 @@ function persistAuthSession() {
 function updateAuthUI() {
   const isLoggedIn = STATE.auth.isLoggedIn;
   const isAdmin = isLoggedIn && STATE.auth.role === "admin";
+  const displayName = STATE.auth.displayName || "Thành viên";
+  const initials = getInitials(displayName);
+  const verifiedText = STATE.auth.verifiedVia
+    ? `Đã xác thực ${STATE.auth.verifiedVia}`
+    : "Đã xác thực tài khoản";
 
-  const btnMember = document.getElementById("headerBtnMember");
-  const btnAdmin = document.getElementById("headerBtnAdmin");
+  const walletPill = document.getElementById("headerWalletPill");
   const btnAuth = document.getElementById("headerBtnAuth");
+  const accountWrap = document.getElementById("headerAccountWrap");
+  const dropdownAdminLink = document.getElementById("dropdownAdminLink");
   const navMember = document.getElementById("nav-member");
   const navAdmin = document.getElementById("nav-admin");
   const switchAdminItem = document.getElementById("memberSwitchAdminItem");
 
-  if (btnMember) btnMember.style.display = isLoggedIn ? "inline-flex" : "none";
+  if (walletPill) walletPill.style.display = isLoggedIn ? "inline-flex" : "none";
+  if (btnAuth) btnAuth.style.display = isLoggedIn ? "none" : "inline-flex";
+  if (accountWrap) accountWrap.style.display = isLoggedIn ? "inline-flex" : "none";
+  if (dropdownAdminLink) dropdownAdminLink.style.display = isAdmin ? "flex" : "none";
   if (navMember) navMember.style.display = isLoggedIn ? "" : "none";
-  if (btnAdmin) btnAdmin.style.display = isAdmin ? "inline-flex" : "none";
   if (navAdmin) navAdmin.style.display = isAdmin ? "" : "none";
   if (switchAdminItem) switchAdminItem.style.display = isAdmin ? "" : "none";
 
-  if (btnAuth) {
-    if (isLoggedIn) {
-      btnAuth.innerHTML = `<i class="fa-solid fa-right-from-bracket" style="color:#dc2626;font-size:14px;"></i><span>ĐĂNG XUẤT</span>`;
-      btnAuth.title = `Đang đăng nhập: ${STATE.auth.displayName} (Bấm để đăng xuất)`;
-    } else {
-      btnAuth.innerHTML = `<i class="fa-regular fa-circle-user" style="color:var(--ctt-orange);font-size:15px;"></i><span>ĐĂNG NHẬP</span>`;
-      btnAuth.title = "Đăng nhập Tài khoản Thành viên / Admin";
-    }
+  const avatarEl = document.getElementById("headerUserAvatar");
+  const nameEl = document.getElementById("headerUserName");
+  const ddNameEl = document.getElementById("headerDropdownFullName");
+  const ddVerEl = document.getElementById("headerDropdownVerified");
+  if (avatarEl) avatarEl.textContent = initials;
+  if (nameEl) nameEl.textContent = displayName;
+  if (ddNameEl) ddNameEl.textContent = displayName;
+  if (ddVerEl) ddVerEl.textContent = verifiedText;
+
+  // Sync Member Portal sidebar dynamically
+  const mAvatar = document.getElementById("memberSidebarAvatar");
+  const mName = document.getElementById("memberSidebarName");
+  const mBadge = document.getElementById("memberSidebarBadge");
+  const mMeta = document.getElementById("memberSidebarMeta");
+  if (mAvatar) mAvatar.textContent = initials;
+  if (mName) mName.textContent = displayName;
+  if (mBadge) mBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${verifiedText}`;
+  if (mMeta && STATE.auth.identity) {
+    mMeta.textContent = `Tài khoản: ${STATE.auth.identity} • ${isAdmin ? "Quản trị viên" : "Hạng Vàng"}`;
   }
 }
 
-function handleHeaderAuthClick() {
-  if (STATE.auth.isLoggedIn) {
-    logoutAccount();
-  } else {
-    openAuthModal();
-  }
+function toggleHeaderUserDropdown(e) {
+  if (e) e.stopPropagation();
+  document.getElementById("headerUserDropdown")?.classList.toggle("is-open");
 }
 
-function openAuthModal(noticeText = "") {
+function closeHeaderUserDropdown() {
+  document.getElementById("headerUserDropdown")?.classList.remove("is-open");
+}
+
+document.addEventListener("click", (e) => {
+  const wrap = document.getElementById("headerAccountWrap");
+  if (wrap && !wrap.contains(e.target)) {
+    closeHeaderUserDropdown();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeAuthModal();
+    closeHeaderUserDropdown();
+  }
+});
+
+function openAuthModal(noticeText = "", mode = "login") {
   const noticeEl = document.getElementById("authModalNotice");
   if (noticeEl) {
     if (noticeText) {
@@ -2456,6 +2561,9 @@ function openAuthModal(noticeText = "") {
       noticeEl.style.display = "none";
     }
   }
+  showRegError("authLoginError", "");
+  showRegError("authLoginSuccess", "");
+  switchAuthMode(mode);
   document.getElementById("authModalBackdrop")?.classList.add("is-open");
 }
 
@@ -2463,37 +2571,102 @@ function closeAuthModal() {
   document.getElementById("authModalBackdrop")?.classList.remove("is-open");
 }
 
-function loginAsRole(role) {
-  const targetRole = role === "admin" ? "admin" : "member";
+function completeAuthSession(authData, remember = true) {
   STATE.auth = {
     isLoggedIn: true,
-    role: targetRole,
-    displayName: targetRole === "admin" ? "Quản trị viên Admin" : "Chính chủ Minh Quân"
+    role: authData.role || "member",
+    displayName: authData.displayName || "Thành viên ChoThueTot",
+    identity: authData.identity || "",
+    verifiedVia: authData.verifiedVia || "Zalo ZNS"
   };
-  persistAuthSession();
+  REG_STATE.loginAttempts = 0;
+  persistAuthSession(remember);
   updateAuthUI();
   closeAuthModal();
+
+  if (STATE.pendingPostModal) {
+    const zId = STATE.pendingPostZoneId;
+    STATE.pendingPostModal = false;
+    STATE.pendingPostZoneId = null;
+    if (zId) openPostModalWithZone(zId);
+    else openPostModal();
+    return;
+  }
 
   let nextRoute = STATE.pendingAuthRoute;
   STATE.pendingAuthRoute = null;
   if (!nextRoute) {
-    nextRoute = targetRole === "admin" ? "/admin.html" : "/tai-khoan.html";
-  } else if (nextRoute.includes("admin") && targetRole !== "admin") {
+    nextRoute = STATE.auth.role === "admin" ? "/admin.html" : "/tai-khoan.html";
+  } else if (nextRoute.includes("admin") && STATE.auth.role !== "admin") {
     nextRoute = "/tai-khoan.html";
   }
   navigateTo(nextRoute);
 }
 
 function submitStandardLogin() {
-  const idVal = (document.getElementById("authLoginIdentity")?.value || "").trim().toLowerCase();
-  const role = idVal.includes("admin") ? "admin" : "member";
-  loginAsRole(role);
+  showRegError("authLoginError", "");
+  showRegError("authLoginSuccess", "");
+
+  if (REG_STATE.loginAttempts >= 5) {
+    showRegError("authLoginError", "Bạn đã nhập sai quá 5 lần. Vui lòng dùng 'Quên mật khẩu?' để đặt lại mật khẩu an toàn.");
+    return;
+  }
+
+  const rawId = document.getElementById("authLoginIdentity")?.value || "";
+  const pwd = document.getElementById("authLoginPassword")?.value || "";
+  const remember = document.getElementById("authRememberMe")?.checked !== false;
+  const normId = normalizeAuthIdentity(rawId);
+
+  if (!normId) {
+    showRegError("authLoginError", "Vui lòng nhập Số điện thoại hoặc Email đã đăng ký.");
+    return;
+  }
+  if (!pwd) {
+    showRegError("authLoginError", "Vui lòng nhập mật khẩu tài khoản.");
+    return;
+  }
+
+  const accounts = getAccountsStore();
+  const matched = accounts.find((a) => normalizeAuthIdentity(a.identity) === normId);
+  if (!matched || matched.password !== pwd) {
+    REG_STATE.loginAttempts += 1;
+    showRegError(
+      "authLoginError",
+      `Thông tin đăng nhập hoặc mật khẩu chưa chính xác (${REG_STATE.loginAttempts}/5 lần thử).`
+    );
+    return;
+  }
+
+  completeAuthSession(matched, remember);
+}
+
+function loginWithZaloQuick() {
+  switchAuthMode("register");
+  switchRegisterMethod("zalo");
+  const noticeEl = document.getElementById("authModalNotice");
+  if (noticeEl) {
+    noticeEl.textContent = "Xác thực nhanh bằng SĐT Zalo OTP để bảo vệ tài khoản chính chủ.";
+    noticeEl.style.display = "block";
+  }
+}
+
+function loginWithGoogleQuick() {
+  switchAuthMode("register");
+  switchRegisterMethod("google");
+  const noticeEl = document.getElementById("authModalNotice");
+  if (noticeEl) {
+    noticeEl.textContent = "Liên kết & xác thực Gmail qua Google OAuth 2.0 để đăng nhập an toàn.";
+    noticeEl.style.display = "block";
+  }
 }
 
 function logoutAccount() {
-  STATE.auth = { isLoggedIn: false, role: null, displayName: "" };
+  STATE.auth = { isLoggedIn: false, role: null, displayName: "", identity: "", verifiedVia: "" };
   STATE.pendingAuthRoute = null;
-  persistAuthSession();
+  STATE.pendingPostModal = false;
+  STATE.pendingPostZoneId = null;
+  persistAuthSession(true);
+  closeHeaderUserDropdown();
   updateAuthUI();
   navigateTo("/");
 }
@@ -2505,29 +2678,90 @@ const REG_STATE = {
   googleCode: "",
   googleEmail: "",
   googleCooldown: null,
-  otpAttempts: 0
+  forgotOtp: "",
+  forgotIdentity: "",
+  forgotCooldown: null,
+  otpAttempts: 0,
+  loginAttempts: 0
 };
 
 function switchAuthMode(mode) {
-  const isReg = mode === "register";
   const tabLogin = document.getElementById("authTabLogin");
   const tabReg = document.getElementById("authTabRegister");
   const panelLogin = document.getElementById("authPanelLogin");
   const panelReg = document.getElementById("authPanelRegister");
+  const panelForgot = document.getElementById("authPanelForgot");
 
-  if (panelLogin) panelLogin.style.display = isReg ? "none" : "block";
-  if (panelReg) panelReg.style.display = isReg ? "block" : "none";
+  if (panelLogin) panelLogin.style.display = mode === "login" ? "block" : "none";
+  if (panelReg) panelReg.style.display = mode === "register" ? "block" : "none";
+  if (panelForgot) panelForgot.style.display = mode === "forgot" ? "block" : "none";
 
+  const isReg = mode === "register";
   if (tabLogin) {
-    tabLogin.style.background = isReg ? "transparent" : "#fff";
-    tabLogin.style.color = isReg ? "#64748b" : "#0f172a";
-    tabLogin.style.boxShadow = isReg ? "none" : "0 2px 6px rgba(15,23,42,0.08)";
+    tabLogin.style.background = !isReg ? "#fff" : "transparent";
+    tabLogin.style.color = !isReg ? "#0f172a" : "#64748b";
+    tabLogin.style.boxShadow = !isReg ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
   }
   if (tabReg) {
     tabReg.style.background = isReg ? "#fff" : "transparent";
     tabReg.style.color = isReg ? "#0f172a" : "#64748b";
     tabReg.style.boxShadow = isReg ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
   }
+}
+
+function sendForgotOtp() {
+  showRegError("forgotErrorBox", "");
+  const normId = normalizeAuthIdentity(document.getElementById("forgotIdentityInput")?.value || "");
+  if (!normId) {
+    showRegError("forgotErrorBox", "Vui lòng nhập Số điện thoại Zalo hoặc Email đã đăng ký.");
+    return;
+  }
+  const matched = getAccountsStore().find((a) => normalizeAuthIdentity(a.identity) === normId);
+  if (!matched) {
+    showRegError("forgotErrorBox", "Không tìm thấy tài khoản khớp với SĐT/Email này.");
+    return;
+  }
+  const otp = String(Math.floor(100000 + Math.random() * 900000));
+  REG_STATE.forgotOtp = otp;
+  REG_STATE.forgotIdentity = normId;
+  const banner = document.getElementById("forgotOtpBanner");
+  if (banner) {
+    banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã gửi mã khôi phục 6 số tới <strong>${normId}</strong>.<br><span>Mã kiểm thử khôi phục: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${otp}</strong></span>`;
+    banner.style.display = "block";
+  }
+  startOtpButtonCooldown(document.getElementById("btnSendForgotOtp"), "Gửi mã OTP", "forgotCooldown");
+}
+
+function submitForgotReset() {
+  showRegError("forgotErrorBox", "");
+  const normId = normalizeAuthIdentity(document.getElementById("forgotIdentityInput")?.value || "");
+  const otpInput = (document.getElementById("forgotOtpInput")?.value || "").trim();
+  const newPwd = document.getElementById("forgotNewPassword")?.value || "";
+
+  if (!REG_STATE.forgotOtp || normId !== REG_STATE.forgotIdentity) {
+    showRegError("forgotErrorBox", "Vui lòng bấm 'Gửi mã OTP' trước khi đặt lại mật khẩu.");
+    return;
+  }
+  if (otpInput !== REG_STATE.forgotOtp) {
+    showRegError("forgotErrorBox", "Mã xác minh 6 số chưa chính xác.");
+    return;
+  }
+  if (!evaluatePasswordStrength(newPwd).isStrong) {
+    showRegError("forgotErrorBox", "Mật khẩu mới cần ≥ 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt.");
+    return;
+  }
+
+  const accounts = getAccountsStore();
+  const idx = accounts.findIndex((a) => normalizeAuthIdentity(a.identity) === normId);
+  if (idx >= 0) {
+    accounts[idx].password = newPwd;
+    saveAccountsStore(accounts);
+  }
+  REG_STATE.loginAttempts = 0;
+  switchAuthMode("login");
+  const idInput = document.getElementById("authLoginIdentity");
+  if (idInput) idInput.value = normId;
+  showRegError("authLoginSuccess", "Đã cập nhật mật khẩu mới thành công! Bạn có thể đăng nhập ngay.");
 }
 
 function switchRegisterMethod(method) {
@@ -2688,31 +2922,18 @@ function submitZaloRegister() {
     return;
   }
 
-  STATE.auth = {
-    isLoggedIn: true,
+  const newAccount = {
+    identity: phoneRaw,
+    password: pwd,
     role: "member",
-    displayName: `${name} (Zalo Verified)`
+    displayName: name,
+    verifiedVia: "Zalo ZNS OTP"
   };
-  persistAuthSession();
-  updateAuthUI();
-  closeAuthModal();
-  navigateTo("/tai-khoan.html");
+  upsertAccountRecord(newAccount);
+  completeAuthSession(newAccount, true);
 }
 
-function startGoogleOAuthLink() {
-  showRegError("regGoogleError", "");
-  const emailEl = document.getElementById("regGoogleEmail");
-  const nameEl = document.getElementById("regGoogleName");
-  if (emailEl && !emailEl.value.trim()) {
-    emailEl.value = "quinguyen.designer@gmail.com";
-  }
-  if (nameEl && !nameEl.value.trim()) {
-    nameEl.value = "Quí Nguyễn";
-  }
-  sendGoogleEmailCode(true);
-}
-
-function sendGoogleEmailCode(fromOAuth = false) {
+function sendGoogleEmailCode() {
   showRegError("regGoogleError", "");
   const email = (document.getElementById("regGoogleEmail")?.value || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -2726,7 +2947,7 @@ function sendGoogleEmailCode(fromOAuth = false) {
 
   const banner = document.getElementById("regGoogleCodeBanner");
   if (banner) {
-    banner.innerHTML = `<i class="fa-brands fa-google"></i> ${fromOAuth ? "Đã liên kết Google OAuth 2.0 & " : ""}Đã gửi mã xác minh 6 số tới <strong>${email}</strong>.<br><span>Mã kiểm thử Gmail: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${code}</strong></span>`;
+    banner.innerHTML = `<i class="fa-brands fa-google"></i> Đã liên kết Google OAuth 2.0 & gửi mã xác minh 6 số tới <strong>${email}</strong>.<br><span>Mã kiểm thử Gmail: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${code}</strong></span>`;
     banner.style.display = "block";
   }
   startOtpButtonCooldown(document.getElementById("btnSendGoogleCode"), "Gửi mã Gmail", "googleCooldown");
@@ -2741,7 +2962,7 @@ function submitGoogleRegister() {
   const agreed = document.getElementById("regGoogleAgree")?.checked;
 
   if (!REG_STATE.googleCode || email !== REG_STATE.googleEmail) {
-    showRegError("regGoogleError", "Vui lòng bấm 'Liên kết Google' hoặc 'Gửi mã Gmail' để xác minh Email.");
+    showRegError("regGoogleError", "Vui lòng bấm 'Gửi mã Gmail' để xác minh Email Google của bạn.");
     return;
   }
   if (name.length < 2) {
@@ -2762,15 +2983,15 @@ function submitGoogleRegister() {
     return;
   }
 
-  STATE.auth = {
-    isLoggedIn: true,
+  const newAccount = {
+    identity: email,
+    password: pwd,
     role: "member",
-    displayName: `${name} (Google Verified)`
+    displayName: name,
+    verifiedVia: "Google OAuth 2.0"
   };
-  persistAuthSession();
-  updateAuthUI();
-  closeAuthModal();
-  navigateTo("/tai-khoan.html");
+  upsertAccountRecord(newAccount);
+  completeAuthSession(newAccount, true);
 }
 
 // ==========================================================================
@@ -2802,14 +3023,26 @@ const STUDIO_STATE = {
   previewTab: "card" // card | sv1 | detail
 };
 
-// Open Post Listing inside the Centered Multi-Step Animated Modal Frame (like localhost:4173)
+// Open Post Listing inside the Centered Multi-Step Animated Modal Frame (requires login)
 openPostModal = function () {
+  if (!STATE.auth.isLoggedIn) {
+    STATE.pendingPostModal = true;
+    STATE.pendingPostZoneId = null;
+    openAuthModal("Vui lòng đăng nhập hoặc đăng ký tài khoản để đăng tin & lưu vào Hồ sơ Thành viên.");
+    return;
+  }
   document.getElementById("postModalBackdrop")?.classList.add("is-open");
   initStudioPostListing();
   goToModalWizardStep(1);
 };
 
 openPostModalWithZone = function (zoneId) {
+  if (!STATE.auth.isLoggedIn) {
+    STATE.pendingPostModal = true;
+    STATE.pendingPostZoneId = zoneId;
+    openAuthModal("Vui lòng đăng nhập hoặc đăng ký tài khoản để chọn gói tin & đăng bài.");
+    return;
+  }
   STATE.selectedZoneId = zoneId;
   STATE.selectedPkgIndex = 0;
   document.getElementById("postModalBackdrop")?.classList.add("is-open");
