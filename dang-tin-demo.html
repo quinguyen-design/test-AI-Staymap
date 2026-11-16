@@ -1,0 +1,1185 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mẫu Khung Đăng Tin (Chờ Duyệt) — ChoThueTot.vn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #0f172a;
+      min-height: 100vh;
+    }
+    /* Subtle, low-profile 4-step pills aligned on one single row with Wallet */
+    .demo-header-row {
+      padding: 12px 24px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      flex-wrap: nowrap;
+    }
+    .demo-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .demo-header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+      margin-left: auto;
+    }
+    .subtle-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f8fafc;
+      padding: 3px;
+      border-radius: 99px;
+      border: 1px solid #e2e8f0;
+    }
+    .subtle-step-btn {
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 99px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .subtle-step-btn:hover {
+      color: #0f172a;
+      background: #f1f5f9;
+    }
+    .subtle-step-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+    }
+    .subtle-step-btn .snum {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 10px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .subtle-step-btn.active .snum {
+      background: var(--ctt-orange);
+      color: #fff;
+    }
+    .demo-wallet-pill {
+      background: #fff3e6;
+      color: #f37201;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid #ffd6be;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .duration-reveal-box {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+      animation: fadeSlideDown 0.22s ease;
+    }
+    .duration-reveal-box.is-visible {
+      display: block;
+    }
+    .zone-hint-banner {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      color: #64748b;
+      font-size: 12px;
+      text-align: center;
+    }
+    .util-unit {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #64748b;
+      margin-left: 2px;
+    }
+    .util-k-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .util-k-wrap .post-input {
+      padding-right: 28px;
+    }
+    .util-k-suffix {
+      position: absolute;
+      right: 11px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--ctt-orange);
+      pointer-events: none;
+    }
+    .check-section-box {
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 12px;
+    }
+    .check-list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 14px;
+    }
+    .check-list-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check-list-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--ctt-orange);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .req-star {
+      color: #ef4444;
+      font-weight: 900;
+      margin-left: 2px;
+    }
+    .post-input::placeholder {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .addr-composite-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: text;
+    }
+    .addr-composite-box:focus-within {
+      border-color: var(--ctt-orange);
+      box-shadow: 0 0 0 3px rgba(241, 90, 34, 0.14);
+    }
+    .addr-composite-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 10px 0;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: #0f172a;
+      flex: 1;
+      min-width: 70px;
+    }
+    .addr-locked-suffix {
+      font-size: 13px;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: none;
+      pointer-events: none;
+      flex-shrink: 1;
+    }
+    .addr-locked-suffix.has-prefix {
+      color: #334155;
+      font-weight: 500;
+    }
+    /* Luxury Nhãn Dán Selector & Card Badges */
+    .sticker-3grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .sticker-card {
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.16s ease;
+    }
+    .sticker-card:hover { border-color: #cbd5e1; transform: translateY(-1px); }
+    .sticker-card.selected {
+      border-color: var(--ctt-orange);
+      background: #fffaf5;
+      box-shadow: 0 6px 14px rgba(241, 90, 34, 0.12);
+    }
+    .sticker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
+    }
+    .sticker-urgent {
+      background: linear-gradient(135deg, #881337 0%, #be123c 100%);
+      color: #fef3c7;
+      border: 1px solid rgba(253, 230, 138, 0.45);
+    }
+    .sticker-hot {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.5);
+    }
+    .sticker-promo {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      color: #ecfdf5;
+      border: 1px solid rgba(167, 243, 208, 0.5);
+    }
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1080px) {
+      .demo-header-row { flex-wrap: wrap; }
+      .demo-header-right { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ctt-modal-backdrop is-open" id="postModalBackdrop" style="position:relative;min-height:100vh;padding:24px 16px;">
+    <div class="ctt-modal-dialog" style="max-width:1200px;margin:0 auto;">
+
+      <!-- HEADER: Only "Đăng Tin Bất Động Sản Mới" + 4 subtle steps aligned on same row with Wallet -->
+      <div class="demo-header-row">
+        <div class="demo-title-wrap">
+          <div style="width:8px;height:26px;border-radius:4px;background:var(--ctt-grad-brand);"></div>
+          <h3 style="font-size:17px;font-weight:900;color:#0f172a;margin:0;white-space:nowrap;">Đăng Tin Bất Động Sản Mới</h3>
+        </div>
+
+        <div class="demo-header-right">
+          <div class="subtle-stepper" id="modalWizardTabs">
+            <button type="button" class="subtle-step-btn active" onclick="goStep(1)"><span class="snum">1</span> Vị Trí</button>
+            <button type="button" class="subtle-step-btn" onclick="goStep(2)"><span class="snum">2</span> Thông Số</button>
+            <button type="button" class="subtle-step-btn" onclick="goStep(3)"><span class="snum">3</span> Nội Dung & Ảnh</button>
+            <button type="button" class="subtle-step-btn" onclick="goStep(4)"><span class="snum">4</span> Gói Tin</button>
+          </div>
+
+          <div class="demo-wallet-pill tabular-nums">
+            <i class="fa-solid fa-wallet"></i> Ví: <span>550.000đ</span>
+          </div>
+
+          <a href="index.html" title="Quay về trang chính" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;color:#475569;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;">
+            <i class="fa-solid fa-xmark"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="ctt-modal-body" style="padding:20px 24px;">
+        <div style="display:grid;grid-template-columns:1.32fr 1fr;gap:22px;align-items:start;">
+          <!-- LEFT PANE: 4 CONCISE STEPS -->
+          <div style="background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:20px 22px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
+
+            <!-- STEP 1: VỊ TRÍ (TINH GỌN) -->
+            <div class="modal-wizard-slide active" id="slide1">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">1</span>
+                  <span>Loại Hình & Vị Trí</span>
+                </div>
+                <span style="font-size:11.5px;color:#059669;font-weight:700;"><i class="fa-solid fa-location-dot"></i> Nhập Chuẩn Vị Trí – Bản Đồ Ghim Đúng Ý.</span>
+              </div>
+
+              <div class="post-field-label"><span>Loại Hình <span class="req-star">*</span></span></div>
+              <div class="post-cat-selector">
+                <button type="button" class="post-cat-btn active" onclick="pickCat('Phòng Trọ / CHDV', this)"><i class="fa-solid fa-door-open"></i><span style="line-height:1.25;">Phòng Trọ<br>CHDV</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Nhà Nguyên Căn', this)"><i class="fa-solid fa-house-chimney"></i><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Căn Hộ Chung Cư', this)"><i class="fa-solid fa-building"></i><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Mặt Bằng Văn Phòng', this)"><i class="fa-solid fa-shop"></i><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Đất - Xưởng, Kho - Bãi', this)"><i class="fa-solid fa-warehouse"></i><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+                <div>
+                  <div class="post-field-label"><span>Tỉnh / Thành <span class="req-star">*</span></span></div>
+                  <select id="dCity" class="post-input" onchange="onLocationChange()">
+                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                    <option value="TP. Hà Nội">TP. Hà Nội</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Phường / Xã <span class="req-star">*</span></span></div>
+                  <select id="dWard" class="post-input" onchange="onLocationChange(true)">
+                    <option value="P. Cầu Kiệu">P. Cầu Kiệu (Phú Nhuận)</option>
+                    <option value="P. Hòa Hưng">P. Hòa Hưng (Quận 10)</option>
+                    <option value="P. Nhiêu Lộc">P. Nhiêu Lộc (Quận 3)</option>
+                    <option value="P. Gia Định">P. Gia Định (Bình Thạnh)</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Tên Đường <span class="req-star">*</span></span></div>
+                  <select id="dStreet" class="post-input" onchange="onLocationChange()">
+                    <option value="">-- Chọn tên đường --</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Dự Án</span></div>
+                  <select id="dProject" class="post-input" onchange="onLocationChange()">
+                    <option value="">-- Không thuộc dự án --</option>
+                    <option value="Vinhomes Central Park">Vinhomes Central Park</option>
+                    <option value="Vinhomes Grand Park">Vinhomes Grand Park</option>
+                    <option value="The Sun Avenue">The Sun Avenue</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label">
+                  <span>Địa Chỉ Chi Tiết <span class="req-star">*</span></span>
+                </div>
+                <div class="addr-composite-box" onclick="document.getElementById('dAddress').focus()">
+                  <input type="text" id="dAddress" value="" onfocus="onAddressFocus()" oninput="onAddressInput(this.value)" onblur="onAddressBlur()">
+                  <span id="dAddressSuffix" class="addr-locked-suffix"></span>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <div class="post-field-label"><span>Người Liên Hệ <span class="req-star">*</span></span></div>
+                  <input type="text" id="dHost" class="post-input" value="" oninput="renderPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Số Điện Thoại / Zalo <span class="req-star">*</span></span></div>
+                  <input type="text" id="dPhone" class="post-input tabular-nums" value="" oninput="renderPreview()">
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: THÔNG SỐ (TINH GỌN) -->
+            <div class="modal-wizard-slide" id="slide2">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">2</span>
+                  <span>Thông Số & Chi Phí</span>
+                </div>
+                <span style="font-size:11.5px;color:#059669;font-weight:700;"><i class="fa-solid fa-calculator"></i> Đúng Thông Số - Chuẩn Bảng Tính</span>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:12px;margin-bottom:14px;">
+                <div>
+                  <div class="post-field-label"><span>Giá Thuê (Triệu/Th) <span class="req-star">*</span></span></div>
+                  <input type="number" step="0.1" id="dPrice" class="post-input tabular-nums" value="" oninput="renderPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Diện Tích (m²) <span class="req-star">*</span></span></div>
+                  <input type="number" id="dArea" class="post-input tabular-nums" value="" oninput="renderPreview()">
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Tiền Cọc</span></div>
+                  <div class="post-seg-group" id="depositSegGroup">
+                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('1 tháng', this)">1th</button>
+                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('2 tháng', this)">2th</button>
+                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('3 tháng', this)">3th</button>
+                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('Thỏa thuận', this)">Thỏa thuận</button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+                <div>
+                  <div class="post-field-label"><span>Phòng Ngủ</span></div>
+                  <select id="dBeds" class="post-input tabular-nums" onchange="D.beds=this.value;renderPreview()">
+                    <option value="1 PN" selected>1 Phòng Ngủ</option>
+                    <option value="2 PN">2 Phòng Ngủ</option>
+                    <option value="3 PN">3 Phòng Ngủ</option>
+                    <option value="4 PN">4 Phòng Ngủ</option>
+                    <option value="5 PN">5 Phòng Ngủ</option>
+                    <option value="6+ PN">6+ Phòng Ngủ</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Nhà Vệ Sinh</span></div>
+                  <select id="dBaths" class="post-input tabular-nums" onchange="D.baths=this.value;renderPreview()">
+                    <option value="1 WC" selected>1 Nhà Vệ Sinh</option>
+                    <option value="2 WC">2 Nhà Vệ Sinh</option>
+                    <option value="3 WC">3 Nhà Vệ Sinh</option>
+                    <option value="4 WC">4 Nhà Vệ Sinh</option>
+                    <option value="5 WC">5 Nhà Vệ Sinh</option>
+                    <option value="6+ WC">6+ Nhà Vệ Sinh</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-bolt" style="color:var(--ctt-orange);"></i> Điện <small class="util-unit">(kWh)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dElec" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:#0284c7;"></i> Nước <small class="util-unit">(người)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:#059669;"></i> Chi Phí Khác</span></div>
+                  <input type="text" inputmode="decimal" id="dOtherCost" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:#6366f1;"></i> Internet <small class="util-unit">(phòng)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dInternet" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-shirt" style="color:#ec4899;"></i> Giặt Sấy <small class="util-unit">(người)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dLaundry" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:#64748b;"></i> Thu Rác <small class="util-unit">(phòng)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: TIÊU ĐỀ -> MÔ TẢ NGAY BÊN DƯỚI -> TIỆN ÍCH -> ẢNH -->
+            <div class="modal-wizard-slide" id="slide3">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">3</span>
+                  <span>Tiêu Đề, Mô Tả & Hình Ảnh</span>
+                </div>
+                <button type="button" onclick="aiWrite()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết Tự Động
+                </button>
+              </div>
+
+              <div style="margin-bottom:10px;">
+                <div class="post-field-label"><span>Tiêu Đề <span class="req-star">*</span></span></div>
+                <input type="text" id="dTitle" class="post-input" value="" oninput="renderPreview()">
+              </div>
+
+              <!-- MÔ TẢ ĐẶT NGAY PHÍA DƯỚI TIÊU ĐỀ -->
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Mô Tả Chi Tiết <span class="req-star">*</span></span></div>
+                <textarea id="dDesc" rows="3" class="post-input" oninput="renderPreview()"></textarea>
+              </div>
+
+              <!-- 5 THÔNG SỐ BỔ SUNG: NỘI THẤT, SỐ TẦNG, HƯỚNG NHÀ, ĐƯỜNG VÀO, LỘ GIỚI -->
+              <div style="padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:12px;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
+                  <div>
+                    <div class="post-field-label"><span>Nội Thất</span></div>
+                    <select id="dFurniture" class="post-input" onchange="D.furniture=this.value;renderPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="Không Có">Không Có</option>
+                      <option value="Cơ Bản">Cơ Bản</option>
+                      <option value="Đầy Đủ">Đầy Đủ</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Số Tầng</span></div>
+                    <select id="dFloors" class="post-input tabular-nums" onchange="renderPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="1 Tầng">1 Tầng</option>
+                      <option value="2 Tầng">2 Tầng</option>
+                      <option value="3 Tầng">3 Tầng</option>
+                      <option value="4 Tầng">4 Tầng</option>
+                      <option value="5 Tầng">5 Tầng</option>
+                      <option value="6+ Tầng">6+ Tầng</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Hướng Nhà</span></div>
+                    <select id="dDirection" class="post-input" onchange="renderPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="Đông">Đông</option>
+                      <option value="Tây">Tây</option>
+                      <option value="Nam">Nam</option>
+                      <option value="Bắc">Bắc</option>
+                      <option value="Đông Bắc">Đông Bắc</option>
+                      <option value="Đông Nam">Đông Nam</option>
+                      <option value="Tây Bắc">Tây Bắc</option>
+                      <option value="Tây Nam">Tây Nam</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div>
+                    <div class="post-field-label"><span>Mặt Tiền - Lộ Giới Hiện Hữu <small class="util-unit">(m)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dFrontageRoad" class="post-input tabular-nums" value="" oninput="sanitizeNumericUnit(this, 'm')">
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Đường Vào Nhà <small class="util-unit">(m)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dRoadAccess" class="post-input tabular-nums" value="" oninput="sanitizeNumericUnit(this, 'm')">
+                  </div>
+                </div>
+              </div>
+
+              <!-- HÌNH ẢNH (TỐI THIỂU 4 - TỐI ĐA 9 HÌNH) & VIDEO (KHÔNG BẮT BUỘC) -->
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                  <span>Hình Ảnh <span class="req-star">*</span></span>
+                  <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
+                </div>
+                <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+                  <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:16px;"></i>
+                  <span>Tải Ảnh Thực Tế Từ Máy (Bấm Chọn Ảnh Bìa)</span>
+                  <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleDemoPhotoUpload(this)">
+                </label>
+                <div class="post-photo-manager" id="demoPhotos"></div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Video Thực Tế <small class="util-unit">(Không Bắt Buộc)</small></span></div>
+                <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;">
+                  <i class="fa-solid fa-video" style="color:#0284c7;font-size:15px;"></i>
+                  <span id="demoVideoLabel">Tải Video Ngắn Từ Máy (MP4, MOV)</span>
+                  <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleDemoVideoUpload(this)">
+                </label>
+              </div>
+
+              <!-- TIỆN ÍCH (CHECKBOX LIST) -->
+              <div class="check-section-box">
+                <div class="post-field-label" style="margin-bottom:8px;"><span>Tiện Ích</span></div>
+                <div class="check-list-grid">
+                  <div>
+                    <label class="check-list-item">
+                      <input type="checkbox" id="chkSchool" onchange="toggleSchoolCode(this.checked)">
+                      <span>Trường Học <small class="util-unit">(Ghi Mã/Ký Hiệu Trường)</small></span>
+                    </label>
+                    <div id="schoolCodeWrap" style="display:none;margin-top:6px;padding-left:24px;">
+                      <input type="text" id="dSchoolCode" class="post-input" style="padding:7px 10px;font-size:12.5px;" placeholder="Nhập Mã / Ký Hiệu Trường..." oninput="renderPreview()">
+                    </div>
+                  </div>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderPreview()"><span>Chợ / Siêu Thị</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderPreview()"><span>Bệnh Viện / Y Tế</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderPreview()"><span>Công Viên</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderPreview()"><span>Xe Bus</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderPreview()"><span>Bank / ATM</span></label>
+                </div>
+              </div>
+
+              <!-- DỊCH VỤ (CHECKBOX LIST) -->
+              <div class="check-section-box" style="margin-bottom:0;">
+                <div class="post-field-label" style="margin-bottom:8px;"><span>Dịch Vụ</span></div>
+                <div class="check-list-grid">
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderPreview()"><span>Nhà Xe / Hầm Xe Rộng</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderPreview()"><span>Khu Giặt / Phơi / Sấy</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderPreview()"><span>Bảo Vệ / Camera An Ninh</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderPreview()"><span>Hệ Thống PCCC</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderPreview()"><span>Thang Máy</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderPreview()"><span>Quản Lý / Kiểm Tra Khu Vực Chung</span></label>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 4: CHỌN 1/6 KHU VỰC -> MỚI HIỂN THỊ CHỌN SỐ NGÀY -->
+            <div class="modal-wizard-slide" id="slide4">
+              <div class="post-step-head">
+                <div class="post-step-title">
+                  <span class="step-circle">4</span>
+                  <span>Chọn Gói Hiển Thị</span>
+                </div>
+                <span style="font-size:11.5px;color:#ef4444;font-weight:800;">Giảm 5% – 10% – 20%</span>
+              </div>
+
+              <div class="post-field-label"><span>Chọn 1 Trong 6 Khu Vực <span class="req-star">*</span></span></div>
+              <div class="post-zone-clean-grid" id="demoZonesGrid"></div>
+
+              <div id="zonePickHint" class="zone-hint-banner">
+                <i class="fa-regular fa-hand-pointer"></i> Bấm chọn 1 trong 6 khu vực phía trên để hiện tùy chọn số ngày hiển thị.
+              </div>
+
+              <!-- HIDDEN UNTIL USER CLICKS 1 OF 6 ZONES -->
+              <div id="durationSectionWrap" class="duration-reveal-box">
+                <div class="post-field-label"><span>Chọn Số Ngày Hiển Thị <span class="req-star">*</span></span></div>
+                <div class="post-duration-4grid" id="demoDurationGrid"></div>
+
+                <div style="margin-top:14px;">
+                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Nhãn Dán <small class="util-unit">(Không Bắt Buộc • 1.000đ/ngày)</small></span>
+                    <small id="stickerPriceHint" class="tabular-nums" style="color:var(--ctt-orange);font-weight:700;"></small>
+                  </div>
+                  <div class="sticker-3grid" id="demoStickerGrid"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+              <button type="button" class="hsp-btn-reset" id="btnPrev" onclick="stepMove(-1)" style="visibility:hidden;">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
+              </button>
+              <span style="font-size:12px;font-weight:700;color:#64748b;" id="stepCounter">Bước 1 / 4</span>
+              <button type="button" class="hsp-btn-apply" id="btnNext" onclick="stepMove(1)">
+                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- RIGHT PANE: EXACT 1:1 LIVE PREVIEW STUDIO (3 TABS: CARD / SV1 / ARTICLE) -->
+          <div style="background:#fff;padding:18px 20px;border-radius:18px;border:1px solid #e2e8f0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <strong style="font-size:13.5px;color:#0f172a;">
+                <i class="fa-solid fa-desktop" style="color:var(--ctt-orange);margin-right:6px;"></i>XEM THỬ BÀI VIẾT TRỰC TIẾP (1:1)
+              </strong>
+              <span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;padding:3px 8px;border-radius:99px;">Khớp 100%</span>
+            </div>
+
+            <div class="post-preview-tabs">
+              <button type="button" class="post-prev-tab active" onclick="switchPrevTab('card', this)">1. Thẻ tin (.lc-card)</button>
+              <button type="button" class="post-prev-tab" onclick="switchPrevTab('sv1', this)">2. Banner VIP (.sv1)</button>
+              <button type="button" class="post-prev-tab" onclick="switchPrevTab('detail', this)">3. Trang Bài viết</button>
+            </div>
+
+            <div id="demoLivePreviewBox"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctt-modal-footer">
+        <div id="demoSummaryText" style="font-size:13.5px;color:#334155;">Chưa chọn gói hiển thị (Vui lòng chọn ở Bước 4)</div>
+        <div style="display:flex;gap:10px;">
+          <a href="index.html" class="hsp-btn-reset" style="text-decoration:none;display:inline-flex;align-items:center;">Đóng</a>
+          <button type="button" class="hsp-btn-apply" onclick="alert('Đây là bản mẫu chờ duyệt! Khi bạn duyệt tôi sẽ áp dụng vào trang chính.')">
+            <i class="fa-solid fa-check-circle"></i> Xác nhận đăng tin
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ZONES = [
+      { id: 1, name: "Banner Đặc Quyền", badge: "✦ ĐẶC QUYỀN", badgeClass: "tag-top1", zoneClass: "zone-spotlight", rate: 50000, desc: "Top đầu trang chủ" },
+      { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-top1", zoneClass: "zone-spotlight", rate: 35000, desc: "Spotlight nổi bật" },
+      { id: 3, name: "TOP 2 Nổi Bật", badge: "• VIP 2", badgeClass: "tag-top2", zoneClass: "zone-featured", rate: 25000, desc: "Featured ưu tiên" },
+      { id: 5, name: "TOP 3 Hiệu Quả", badge: "• VIP 3", badgeClass: "tag-top3", zoneClass: "zone-prime", rate: 15000, desc: "Prime tiết kiệm" },
+      { id: 4, name: "Tin Cơ Bản", badge: "TIN CƠ BẢN", badgeClass: "tag-top3", zoneClass: "", rate: 1000, desc: "Lên bản đồ chuẩn" },
+      { id: 13, name: "Đăng Tin Miễn Phí", badge: "MIỄN PHÍ", badgeClass: "tag-top3", zoneClass: "", rate: 0, desc: "Không lên bản đồ" }
+    ];
+    const DURATIONS = [
+      { days: 3, label: "3 ngày", off: 0 },
+      { days: 7, label: "7 ngày", off: 5 },
+      { days: 15, label: "15 ngày", off: 10 },
+      { days: 30, label: "30 ngày", off: 20 }
+    ];
+    const D = {
+      step: 1,
+      previewTab: "card",
+      cat: "Phòng Trọ / CHDV",
+      beds: "1 PN",
+      baths: "1 WC",
+      deposit: "",
+      furniture: "",
+      houseNumber: "",
+      isEditingAddress: false,
+      selectedZoneId: null,
+      selectedDays: 7,
+      selectedSticker: null, // "urgent" | "hot" | "promo" | null
+      coverIdx: 0,
+      photos: []
+    };
+
+    function goStep(n) {
+      D.step = Math.max(1, Math.min(4, n));
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("slide" + i)?.classList.toggle("active", i === D.step);
+      }
+      document.querySelectorAll("#modalWizardTabs .subtle-step-btn").forEach((b, idx) => {
+        b.classList.toggle("active", idx + 1 === D.step);
+      });
+      document.getElementById("btnPrev").style.visibility = D.step === 1 ? "hidden" : "visible";
+      document.getElementById("stepCounter").textContent = `Bước ${D.step} / 4`;
+      const nextBtn = document.getElementById("btnNext");
+      nextBtn.innerHTML = D.step < 4
+        ? `Tiếp theo <i class="fa-solid fa-arrow-right"></i>`
+        : `<i class="fa-solid fa-check"></i> Hoàn tất`;
+    }
+
+    function stepMove(dir) {
+      if (dir > 0 && D.step === 3 && D.photos.length < 4) {
+        alert(`Vui lòng tải lên tối thiểu 4 hình ảnh thực tế (hiện có ${D.photos.length}/9 hình).`);
+        return;
+      }
+      if (dir > 0 && D.step === 4) {
+        alert("Đây là bản mẫu chờ duyệt! Khi bạn duyệt tôi sẽ áp dụng vào trang chính.");
+        return;
+      }
+      goStep(D.step + dir);
+    }
+
+    const STREETS_BY_WARD = {
+      "P. Cầu Kiệu": ["Phan Xích Long", "Hoa Sứ", "Hoa Phượng", "Trường Sa", "Phan Đăng Lưu"],
+      "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái"],
+      "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Lý Chính Thắng"],
+      "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"]
+    };
+
+    function populateStreets() {
+      const ward = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
+      const streetEl = document.getElementById("dStreet");
+      if (!streetEl) return;
+      const list = STREETS_BY_WARD[ward] || ["Phan Xích Long", "Lê Văn Sỹ"];
+      const prev = streetEl.value;
+      streetEl.innerHTML = `<option value="">-- Chọn tên đường --</option>` +
+        list.map((s) => `<option value="${s}">${s}</option>`).join("");
+      if (list.includes(prev)) streetEl.value = prev;
+    }
+
+    function getLockedSuffix() {
+      const city = document.getElementById("dCity")?.value || "";
+      const ward = document.getElementById("dWard")?.value || "";
+      const street = document.getElementById("dStreet")?.value || "";
+      const project = document.getElementById("dProject")?.value || "";
+      const parts = [];
+      if (street) parts.push(street);
+      if (project) parts.push(project);
+      if (ward) parts.push(ward);
+      if (city) parts.push(city);
+      return parts.join(", ");
+    }
+
+    function buildFullAddress() {
+      const prefix = (D.houseNumber || "").trim();
+      const street = document.getElementById("dStreet")?.value || "";
+      const project = document.getElementById("dProject")?.value || "";
+      const ward = document.getElementById("dWard")?.value || "";
+      const city = document.getElementById("dCity")?.value || "";
+
+      const front = [prefix, street].filter(Boolean).join(" ");
+      const tail = [project, ward, city].filter(Boolean).join(", ");
+      if (front && tail) return `${front}, ${tail}`;
+      return front || tail;
+    }
+
+    function mergeFullAddressNow() {
+      const addrEl = document.getElementById("dAddress");
+      const suffixEl = document.getElementById("dAddressSuffix");
+      const hasPrefix = Boolean((D.houseNumber || "").trim());
+      if (hasPrefix && addrEl) {
+        addrEl.value = buildFullAddress();
+        if (suffixEl) suffixEl.textContent = "";
+      }
+      renderPreview();
+    }
+
+    function syncAddressDisplay() {
+      const addrEl = document.getElementById("dAddress");
+      const suffixEl = document.getElementById("dAddressSuffix");
+      const suffix = getLockedSuffix();
+      const hasPrefix = Boolean((D.houseNumber || "").trim());
+      if (!D.isEditingAddress && hasPrefix && addrEl) {
+        addrEl.value = buildFullAddress();
+        if (suffixEl) suffixEl.textContent = "";
+      } else if (suffixEl) {
+        suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
+        suffixEl.classList.toggle("has-prefix", hasPrefix);
+      }
+      renderPreview();
+    }
+
+    function onLocationChange(wardChanged = false) {
+      if (wardChanged) populateStreets();
+      syncAddressDisplay();
+    }
+
+    function onAddressFocus() {
+      clearTimeout(D.addrMergeTimer);
+      D.isEditingAddress = true;
+      const addrEl = document.getElementById("dAddress");
+      if (addrEl) addrEl.value = D.houseNumber || "";
+      syncAddressDisplay();
+    }
+
+    function onAddressInput(val) {
+      D.isEditingAddress = true;
+      D.houseNumber = val;
+      syncAddressDisplay();
+      clearTimeout(D.addrMergeTimer);
+      if ((val || "").trim()) {
+        D.addrMergeTimer = setTimeout(() => {
+          D.isEditingAddress = false;
+          mergeFullAddressNow();
+        }, 1500);
+      }
+    }
+
+    function onAddressBlur() {
+      clearTimeout(D.addrMergeTimer);
+      D.isEditingAddress = false;
+      syncAddressDisplay();
+    }
+
+    function pickCat(val, btn) {
+      D.cat = val;
+      btn.parentElement.querySelectorAll(".post-cat-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderPreview();
+    }
+
+    function toggleDeposit(val, btn) {
+      const wasActive = btn.classList.contains("active");
+      btn.parentElement.querySelectorAll(".post-seg-btn").forEach((b) => b.classList.remove("active"));
+      if (wasActive) {
+        D.deposit = "";
+      } else {
+        btn.classList.add("active");
+        D.deposit = val;
+      }
+      renderPreview();
+    }
+
+    function renderPhotos() {
+      const el = document.getElementById("demoPhotos");
+      const countLbl = document.getElementById("demoPhotoCountLabel");
+      if (countLbl) {
+        countLbl.textContent = `${D.photos.length}/9 hình`;
+      }
+      if (!D.photos.length) {
+        el.innerHTML = `<div style="grid-column:1/-1;font-size:11.5px;color:#94a3b8;text-align:center;padding:6px 0;">Chưa có hình ảnh nào được tải lên.</div>`;
+        return;
+      }
+      el.innerHTML = D.photos.map((src, i) => `
+        <div onclick="D.coverIdx=${i};renderPhotos();renderPreview();" style="position:relative;border-radius:10px;overflow:hidden;height:68px;cursor:pointer;border:2px solid ${i===D.coverIdx?'var(--ctt-orange)':'#e2e8f0'};">
+          <img src="${src}" style="width:100%;height:100%;object-fit:cover;">
+          ${i===D.coverIdx?'<span style="position:absolute;bottom:3px;left:3px;background:var(--ctt-orange);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px;">Bìa</span>':''}
+          <button type="button" onclick="removeDemoPhoto(${i}, event)" title="Xóa ảnh" style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(15,23,42,0.75);color:#fff;font-size:10px;line-height:1;cursor:pointer;">×</button>
+        </div>
+      `).join("");
+    }
+
+    function removeDemoPhoto(idx, e) {
+      if (e) e.stopPropagation();
+      D.photos.splice(idx, 1);
+      if (D.coverIdx >= D.photos.length) D.coverIdx = Math.max(0, D.photos.length - 1);
+      renderPhotos();
+      renderPreview();
+    }
+
+    function handleDemoVideoUpload(input) {
+      const file = input.files && input.files[0];
+      const lbl = document.getElementById("demoVideoLabel");
+      if (lbl) {
+        lbl.textContent = file ? `Đã chọn video: ${file.name}` : "Tải Video Ngắn Từ Máy (MP4, MOV)";
+      }
+    }
+
+    function handleDemoPhotoUpload(input) {
+      const files = Array.from(input.files || []);
+      if (!files.length) return;
+      const remaining = Math.max(0, 9 - D.photos.length);
+      if (remaining === 0) {
+        alert("Chỉ được tải tối đa 9 hình ảnh.");
+        input.value = "";
+        return;
+      }
+      files.slice(0, remaining).forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (D.photos.length < 9) {
+            D.photos.push(e.target.result);
+            renderPhotos();
+            renderPreview();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+      input.value = "";
+    }
+
+    function aiWrite() {
+      const ward = document.getElementById("dWard").value;
+      const area = document.getElementById("dArea").value || "35";
+      const price = document.getElementById("dPrice").value || "6.5";
+      document.getElementById("dTitle").value = `${D.cat.toUpperCase()} ${D.beds} ${area}M² THOÁNG MÁT NGAY ${ward.toUpperCase()}`;
+      document.getElementById("dDesc").value = `Chính chủ cho thuê ${D.cat.toLowerCase()} ${D.beds}, diện tích ${area}m², giá ${price} triệu/tháng tại ${ward}. Full nội thất, khóa vân tay, giờ tự do.`;
+      renderPreview();
+    }
+
+    function renderZones() {
+      document.getElementById("demoZonesGrid").innerHTML = ZONES.map((z) => `
+        <button type="button" class="zone-pkg-card ${D.selectedZoneId === z.id ? "selected" : ""}" onclick="pickZone(${z.id})" style="text-align:left;">
+          <strong style="font-size:12.5px;color:#0f172a;display:block;">${z.name}</strong>
+          <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${z.rate === 0 ? "0đ (Miễn phí)" : new Intl.NumberFormat("vi-VN").format(z.rate) + "đ/ngày"}</div>
+          <small style="font-size:10.5px;color:#64748b;">${z.desc}</small>
+        </button>
+      `).join("");
+    }
+
+    const STICKERS = [
+      { id: "urgent", name: "Cho Thuê Gấp", cls: "sticker-urgent", icon: "fa-bolt" },
+      { id: "hot", name: "Tin HOT", cls: "sticker-hot", icon: "fa-fire" },
+      { id: "promo", name: "Siêu Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+    ];
+
+    function pickZone(id) {
+      D.selectedZoneId = id;
+      renderZones();
+      document.getElementById("zonePickHint").style.display = "none";
+      document.getElementById("durationSectionWrap").classList.add("is-visible");
+      renderDurations();
+      renderStickers();
+      renderPreview();
+    }
+
+    function pickSticker(id) {
+      D.selectedSticker = D.selectedSticker === id ? null : id;
+      renderStickers();
+      renderPreview();
+    }
+
+    function renderStickers() {
+      const totalSticker = D.selectedDays * 1000;
+      const hint = document.getElementById("stickerPriceHint");
+      if (hint) {
+        hint.textContent = D.selectedSticker
+          ? `+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ (${D.selectedDays} ngày)`
+          : `${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ / ${D.selectedDays} ngày`;
+      }
+      const grid = document.getElementById("demoStickerGrid");
+      if (!grid) return;
+      grid.innerHTML = STICKERS.map((st) => `
+        <button type="button" class="sticker-card ${D.selectedSticker === st.id ? "selected" : ""}" onclick="pickSticker('${st.id}')">
+          <span class="sticker-pill ${st.cls}" style="margin-bottom:6px;"><i class="fa-solid ${st.icon}"></i> ${st.name}</span>
+          <div class="tabular-nums" style="font-size:11.5px;font-weight:700;color:#475569;">+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ <small style="font-weight:500;color:#94a3b8;">(1k/ngày)</small></div>
+        </button>
+      `).join("");
+    }
+
+    function renderDurations() {
+      const z = ZONES.find((x) => x.id === D.selectedZoneId);
+      if (!z) return;
+      document.getElementById("demoDurationGrid").innerHTML = DURATIONS.map((dur) => {
+        const total = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+        return `
+          <button type="button" class="zone-pkg-card ${D.selectedDays === dur.days ? "selected" : ""}" onclick="D.selectedDays=${dur.days};renderDurations();renderStickers();renderPreview();" style="text-align:left;">
+            <strong style="font-size:12.5px;color:#0f172a;display:block;">${dur.label} ${dur.off ? `<span style="color:#059669;font-size:10.5px;">(-${dur.off}%)</span>` : ""}</strong>
+            <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</div>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function toggleSchoolCode(isChecked) {
+      const wrap = document.getElementById("schoolCodeWrap");
+      if (wrap) wrap.style.display = isChecked ? "block" : "none";
+      if (isChecked) document.getElementById("dSchoolCode")?.focus();
+      renderPreview();
+    }
+
+    function toggleSegSingle(key, val, btn) {
+      const wasActive = btn.classList.contains("active");
+      btn.parentElement.querySelectorAll(".post-seg-btn").forEach((b) => b.classList.remove("active"));
+      D[key] = wasActive ? "" : val;
+      if (!wasActive) btn.classList.add("active");
+      renderPreview();
+    }
+
+    function sanitizeNumericUnit(inputEl, unit) {
+      const re = new RegExp(unit, "gi");
+      const clean = inputEl.value.replace(re, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+      inputEl.value = clean ? `${clean}${unit}` : "";
+      if (clean && document.activeElement === inputEl) {
+        const pos = clean.length;
+        inputEl.setSelectionRange(pos, pos);
+      }
+      renderPreview();
+    }
+
+    function sanitizeNumericK(inputEl) {
+      const clean = inputEl.value.replace(/k/gi, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+      inputEl.value = clean ? `${clean}k` : "";
+      if (clean && document.activeElement === inputEl) {
+        const pos = clean.length;
+        inputEl.setSelectionRange(pos, pos);
+      }
+      renderPreview();
+    }
+
+    function switchPrevTab(tab, btn) {
+      D.previewTab = tab;
+      document.querySelectorAll(".post-prev-tab").forEach((b) => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderPreview();
+    }
+
+    function renderPreview() {
+      const city = document.getElementById("dCity").value;
+      const ward = document.getElementById("dWard").value;
+      const fullAddr = document.getElementById("dAddress").value.trim() || `${ward}, ${city}`;
+      const price = document.getElementById("dPrice").value.trim() || "--";
+      const area = document.getElementById("dArea").value.trim() || "--";
+      const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
+      const waterRaw = (document.getElementById("dWater")?.value || "").replace(/k/gi, "").trim();
+      const otherRaw = (document.getElementById("dOtherCost")?.value || "").replace(/k/gi, "").trim();
+      const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
+      const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
+      const otherCost = otherRaw ? `${otherRaw}k` : "--";
+      const title = document.getElementById("dTitle").value.trim() || "Chưa nhập tiêu đề tin đăng";
+      const desc = document.getElementById("dDesc").value.trim() || "Chưa nhập mô tả chi tiết...";
+      const phone = document.getElementById("dPhone").value.trim() || "Chưa nhập SĐT";
+      const coverPhoto = D.photos[D.coverIdx] || D.photos[0];
+      const z = ZONES.find((x) => x.id === D.selectedZoneId);
+      const badgeText = z ? z.badge : "✦ VIP 1";
+      const badgeClass = z ? z.badgeClass : "tag-top1";
+      const zoneClass = z ? z.zoneClass : "zone-spotlight";
+
+      const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
+      const stickerHTML = stObj
+        ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>`
+        : "";
+
+      let html = "";
+      if (D.previewTab === "card") {
+        html = `
+          <div style="max-width:350px;margin:0 auto;">
+            <div class="lc-card ${zoneClass}" style="cursor:default;">
+              <div class="lc-card-img">
+                ${coverPhoto
+                  ? `<img src="${coverPhoto}" alt="${title}">`
+                  : `<div style="width:100%;height:100%;min-height:190px;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;gap:6px;"><i class="fa-regular fa-image" style="font-size:26px;"></i><span>Chưa có hình ảnh</span></div>`}
+                <div class="lc-card-badges" style="display:flex;flex-direction:column;align-items:flex-start;gap:5px;">
+                  <span class="lc-vip-tag ${badgeClass}">${badgeText}</span>
+                  ${stickerHTML}
+                </div>
+                <div class="lc-photo-count">
+                  <i class="fa-regular fa-images"></i> ${D.photos.length}
+                </div>
+              </div>
+              <div class="lc-card-body">
+                <div class="lc-card-toprow">
+                  <div class="lc-card-price tabular-nums">${price} Triệu <span>| Tháng</span></div>
+                  <span class="lc-card-type">${D.cat}</span>
+                </div>
+                <div class="lc-card-title">${title}</div>
+                <div class="lc-utility-bar">
+                  <span><i class="fa-solid fa-bolt"></i> Điện: ${elec}</span>
+                  <span><i class="fa-solid fa-droplet"></i> Nước: ${water}</span>
+                  <span><i class="fa-solid fa-receipt"></i> Chi phí khác: ${otherCost}</span>
+                </div>
+                <div class="lc-card-footer">
+                  <div class="lc-card-addr">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div class="lc-card-addr-text">
+                      <span class="lc-addr-ward">${ward}</span>
+                      <span class="lc-addr-city">${city}</span>
+                    </div>
+                  </div>
+                  <div class="lc-card-specs">
+                    <span><i class="fa-solid fa-maximize"></i> ${area}&nbsp;m²</span>
+                    <span><i class="fa-solid fa-bed"></i> ${D.beds}</span>
+                    <span><i class="fa-solid fa-bath"></i> ${D.baths}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (D.previewTab === "sv1") {
+        html = `
+          <div style="background:#fffaf5;border:1.5px solid #fed7aa;border-radius:18px;padding:16px;">
+            <div style="display:flex;gap:6px;margin-bottom:6px;">
+              <span class="sv1-badge-vip" style="font-size:10px;padding:3px 9px;"><i class="fa-solid fa-crown"></i> ĐẶC QUYỀN VIP</span>
+              <span class="sv1-badge-verified" style="font-size:10px;padding:3px 9px;">ĐÃ XÁC MINH</span>
+            </div>
+            <div style="font-size:11.5px;font-weight:700;color:#64748b;margin-bottom:4px;">
+              <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> ${fullAddr}
+            </div>
+            <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);line-height:1.1;margin-bottom:6px;" class="tabular-nums">
+              ${price} Triệu <span style="font-size:13px;color:#64748b;font-weight:600;">| Tháng</span>
+            </div>
+            <div style="font-size:14.5px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:6px;">${title}</div>
+            <p style="font-size:11.5px;color:#475569;line-height:1.45;margin-bottom:10px;">${desc}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" class="tabular-nums">
+              <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-maximize"></i> ${area} m²</span>
+              <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bed"></i> ${D.beds}</span>
+              <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bath"></i> ${D.baths}</span>
+            </div>
+            <div style="position:relative;border-radius:14px;overflow:hidden;height:175px;border:2px solid #fff;box-shadow:0 10px 24px rgba(0,0,0,0.15);background:#f1f5f9;">
+              ${coverPhoto
+                ? `<img src="${coverPhoto}" alt="${title}" style="width:100%;height:100%;object-fit:cover;">`
+                : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;">Chưa có hình ảnh</div>`}
+              <div style="position:absolute;bottom:8px;left:8px;background:#0f172a;color:#fff;padding:5px 12px;border-radius:99px;font-size:11.5px;font-weight:800;border:1px solid #ffd700;">
+                <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i> ${phone}
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        html = `
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;">
+            <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Trang chủ › ${D.cat} › ${ward}</div>
+            <h4 style="font-size:15px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:8px;">${title}</h4>
+            <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:6px;margin-bottom:10px;">
+              ${coverPhoto
+                ? `<img src="${coverPhoto}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;">`
+                : `<div style="width:100%;height:120px;background:#e2e8f0;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:11.5px;">Chưa có ảnh</div>`}
+              <div style="display:grid;grid-template-rows:1fr 1fr;gap:6px;">
+                ${D.photos[1] ? `<img src="${D.photos[1]}" style="width:100%;height:57px;object-fit:cover;border-radius:8px;">` : `<div style="background:#e2e8f0;border-radius:8px;"></div>`}
+                ${D.photos[2] ? `<img src="${D.photos[2]}" style="width:100%;height:57px;object-fit:cover;border-radius:8px;">` : `<div style="background:#e2e8f0;border-radius:8px;"></div>`}
+              </div>
+            </div>
+            <div style="background:#fff;border-radius:10px;padding:10px;border:1px solid #e2e8f0;font-size:12px;color:#334155;">
+              <strong style="color:var(--ctt-orange);font-size:16px;">${price} Triệu/tháng</strong> • ${area} m² • ${D.beds} • ${D.baths}
+              <div style="margin-top:4px;color:#64748b;">${desc}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById("demoLivePreviewBox").innerHTML = html;
+
+      const sumEl = document.getElementById("demoSummaryText");
+      if (!z) {
+        sumEl.textContent = "Chưa chọn gói hiển thị (Chọn khu vực ở Bước 4)";
+      } else {
+        const dur = DURATIONS.find((x) => x.days === D.selectedDays) || DURATIONS[1];
+        const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+        const stickerTotal = stObj ? dur.days * 1000 : 0;
+        const grandTotal = pkgTotal + stickerTotal;
+        const stickerNote = stObj ? ` + Nhãn <strong>${stObj.name}</strong> (${new Intl.NumberFormat("vi-VN").format(stickerTotal)}đ)` : "";
+        sumEl.innerHTML = `Gói: <strong>${z.name}</strong> (${dur.label})${stickerNote} • Tổng: <strong style="color:var(--ctt-orange);" class="tabular-nums">${grandTotal === 0 ? "0đ (Miễn phí)" : new Intl.NumberFormat("vi-VN").format(grandTotal) + "đ"}</strong>`;
+      }
+    }
+
+    populateStreets();
+    syncAddressDisplay();
+    renderPhotos();
+    renderZones();
+    renderPreview();
+  </script>
+</body>
+</html>
