@@ -627,7 +627,7 @@
                 <div class="post-field-label"><span>Chọn Số Ngày Hiển Thị <span class="req-star">*</span></span></div>
                 <div class="post-duration-4grid" id="demoDurationGrid"></div>
 
-                <div style="margin-top:14px;">
+                <div id="stickerSectionWrap" style="margin-top:14px;">
                   <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
                     <span>Nhãn Dán <small class="util-unit">(Không Bắt Buộc • 1.000đ/ngày)</small></span>
                     <small id="stickerPriceHint" class="tabular-nums" style="color:var(--ctt-orange);font-weight:700;"></small>
@@ -947,6 +947,10 @@
 
     function pickZone(id) {
       D.selectedZoneId = id;
+      if (id === 13) {
+        D.selectedDays = 3;
+        D.selectedSticker = null;
+      }
       renderZones();
       document.getElementById("zonePickHint").style.display = "none";
       document.getElementById("durationSectionWrap").classList.add("is-visible");
@@ -956,12 +960,17 @@
     }
 
     function pickSticker(id) {
+      if (D.selectedZoneId === 13) return;
       D.selectedSticker = D.selectedSticker === id ? null : id;
       renderStickers();
       renderPreview();
     }
 
     function renderStickers() {
+      const wrap = document.getElementById("stickerSectionWrap");
+      if (wrap) wrap.style.display = D.selectedZoneId === 13 ? "none" : "block";
+      if (D.selectedZoneId === 13) return;
+
       const totalSticker = D.selectedDays * 1000;
       const hint = document.getElementById("stickerPriceHint");
       if (hint) {
@@ -982,12 +991,14 @@
     function renderDurations() {
       const z = ZONES.find((x) => x.id === D.selectedZoneId);
       if (!z) return;
-      document.getElementById("demoDurationGrid").innerHTML = DURATIONS.map((dur) => {
+      const availableDurations = z.id === 13 ? DURATIONS.filter((d) => d.days === 3) : DURATIONS;
+      if (z.id === 13) D.selectedDays = 3;
+      document.getElementById("demoDurationGrid").innerHTML = availableDurations.map((dur) => {
         const total = Math.round(z.rate * dur.days * (1 - dur.off / 100));
         return `
           <button type="button" class="zone-pkg-card ${D.selectedDays === dur.days ? "selected" : ""}" onclick="D.selectedDays=${dur.days};renderDurations();renderStickers();renderPreview();" style="text-align:left;">
             <strong style="font-size:12.5px;color:#0f172a;display:block;">${dur.label} ${dur.off ? `<span style="color:#059669;font-size:10.5px;">(-${dur.off}%)</span>` : ""}</strong>
-            <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</div>
+            <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ (Mặc định 3 ngày)" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</div>
           </button>
         `;
       }).join("");
