@@ -949,6 +949,8 @@
       D.selectedZoneId = id;
       if (id === 13) {
         D.selectedDays = 3;
+      }
+      if (id === 4 || id === 13) {
         D.selectedSticker = null;
       }
       renderZones();
@@ -960,16 +962,17 @@
     }
 
     function pickSticker(id) {
-      if (D.selectedZoneId === 13) return;
+      if (D.selectedZoneId === 4 || D.selectedZoneId === 13) return;
       D.selectedSticker = D.selectedSticker === id ? null : id;
       renderStickers();
       renderPreview();
     }
 
     function renderStickers() {
+      const noSticker = D.selectedZoneId === 4 || D.selectedZoneId === 13;
       const wrap = document.getElementById("stickerSectionWrap");
-      if (wrap) wrap.style.display = D.selectedZoneId === 13 ? "none" : "block";
-      if (D.selectedZoneId === 13) return;
+      if (wrap) wrap.style.display = noSticker ? "none" : "block";
+      if (noSticker) return;
 
       const totalSticker = D.selectedDays * 1000;
       const hint = document.getElementById("stickerPriceHint");
