@@ -881,7 +881,13 @@ const STATE = {
     ward: "all",
     maxPrice: 50,
     minArea: 15
-  }
+  },
+  auth: {
+    isLoggedIn: false,
+    role: null, // "member" | "admin"
+    displayName: ""
+  },
+  pendingAuthRoute: null
 };
 
 let heroMapInstance = null;
@@ -901,6 +907,8 @@ const LANDMARKS = {
 // INITIALIZATION & ROUTER
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
+  restoreAuthSession();
+  updateAuthUI();
   initHeroMap();
   updateMapFilterChipCounts();
   initStickyNav();
@@ -983,11 +991,29 @@ function navigateTo(route, pushHistory = true) {
     document.getElementById("view-partner").style.display = "block";
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("tai-khoan")) {
+    if (!STATE.auth.isLoggedIn) {
+      STATE.pendingAuthRoute = "/tai-khoan.html";
+      heroEl.classList.remove("is-compact");
+      document.getElementById("view-home").style.display = "block";
+      updateMapPins("all");
+      if (pushHistory) window.history.replaceState({ route: "/" }, "", "#/");
+      openAuthModal("Vui lòng đăng nhập để truy cập trang Hồ sơ Thành viên.");
+      return;
+    }
     heroEl.classList.add("is-compact");
     document.getElementById("view-member").style.display = "block";
     switchMemberTab("listings");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("admin")) {
+    if (!STATE.auth.isLoggedIn || STATE.auth.role !== "admin") {
+      STATE.pendingAuthRoute = "/admin.html";
+      heroEl.classList.remove("is-compact");
+      document.getElementById("view-home").style.display = "block";
+      updateMapPins("all");
+      if (pushHistory) window.history.replaceState({ route: "/" }, "", "#/");
+      openAuthModal("Khu vực nội bộ: Vui lòng đăng nhập bằng tài khoản Quản trị viên (Admin).");
+      return;
+    }
     heroEl.classList.add("is-compact");
     document.getElementById("view-admin").style.display = "block";
     switchAdminTab("moderation");
@@ -2362,12 +2388,114 @@ function topUpWalletInstant(amount) {
   closeWalletModal();
 }
 
-function openAuthModal() {
+function restoreAuthSession() {
+  try {
+    const raw = sessionStorage.getItem("ctt_auth_session");
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.isLoggedIn && (parsed.role === "member" || parsed.role === "admin")) {
+      STATE.auth = parsed;
+    }
+  } catch (_) {}
+}
+
+function persistAuthSession() {
+  try {
+    if (STATE.auth.isLoggedIn) {
+      sessionStorage.setItem("ctt_auth_session", JSON.stringify(STATE.auth));
+    } else {
+      sessionStorage.removeItem("ctt_auth_session");
+    }
+  } catch (_) {}
+}
+
+function updateAuthUI() {
+  const isLoggedIn = STATE.auth.isLoggedIn;
+  const isAdmin = isLoggedIn && STATE.auth.role === "admin";
+
+  const btnMember = document.getElementById("headerBtnMember");
+  const btnAdmin = document.getElementById("headerBtnAdmin");
+  const btnAuth = document.getElementById("headerBtnAuth");
+  const navMember = document.getElementById("nav-member");
+  const navAdmin = document.getElementById("nav-admin");
+  const switchAdminItem = document.getElementById("memberSwitchAdminItem");
+
+  if (btnMember) btnMember.style.display = isLoggedIn ? "inline-flex" : "none";
+  if (navMember) navMember.style.display = isLoggedIn ? "" : "none";
+  if (btnAdmin) btnAdmin.style.display = isAdmin ? "inline-flex" : "none";
+  if (navAdmin) navAdmin.style.display = isAdmin ? "" : "none";
+  if (switchAdminItem) switchAdminItem.style.display = isAdmin ? "" : "none";
+
+  if (btnAuth) {
+    if (isLoggedIn) {
+      btnAuth.innerHTML = `<i class="fa-solid fa-right-from-bracket" style="color:#dc2626;font-size:14px;"></i><span>ĐĂNG XUẤT</span>`;
+      btnAuth.title = `Đang đăng nhập: ${STATE.auth.displayName} (Bấm để đăng xuất)`;
+    } else {
+      btnAuth.innerHTML = `<i class="fa-regular fa-circle-user" style="color:var(--ctt-orange);font-size:15px;"></i><span>ĐĂNG NHẬP</span>`;
+      btnAuth.title = "Đăng nhập Tài khoản Thành viên / Admin";
+    }
+  }
+}
+
+function handleHeaderAuthClick() {
+  if (STATE.auth.isLoggedIn) {
+    logoutAccount();
+  } else {
+    openAuthModal();
+  }
+}
+
+function openAuthModal(noticeText = "") {
+  const noticeEl = document.getElementById("authModalNotice");
+  if (noticeEl) {
+    if (noticeText) {
+      noticeEl.textContent = noticeText;
+      noticeEl.style.display = "block";
+    } else {
+      noticeEl.textContent = "";
+      noticeEl.style.display = "none";
+    }
+  }
   document.getElementById("authModalBackdrop")?.classList.add("is-open");
 }
 
 function closeAuthModal() {
   document.getElementById("authModalBackdrop")?.classList.remove("is-open");
+}
+
+function loginAsRole(role) {
+  const targetRole = role === "admin" ? "admin" : "member";
+  STATE.auth = {
+    isLoggedIn: true,
+    role: targetRole,
+    displayName: targetRole === "admin" ? "Quản trị viên Admin" : "Chính chủ Minh Quân"
+  };
+  persistAuthSession();
+  updateAuthUI();
+  closeAuthModal();
+
+  let nextRoute = STATE.pendingAuthRoute;
+  STATE.pendingAuthRoute = null;
+  if (!nextRoute) {
+    nextRoute = targetRole === "admin" ? "/admin.html" : "/tai-khoan.html";
+  } else if (nextRoute.includes("admin") && targetRole !== "admin") {
+    nextRoute = "/tai-khoan.html";
+  }
+  navigateTo(nextRoute);
+}
+
+function submitStandardLogin() {
+  const idVal = (document.getElementById("authLoginIdentity")?.value || "").trim().toLowerCase();
+  const role = idVal.includes("admin") ? "admin" : "member";
+  loginAsRole(role);
+}
+
+function logoutAccount() {
+  STATE.auth = { isLoggedIn: false, role: null, displayName: "" };
+  STATE.pendingAuthRoute = null;
+  persistAuthSession();
+  updateAuthUI();
+  navigateTo("/");
 }
 
 // ==========================================================================

@@ -44,20 +44,20 @@
           <span class="wallet-topup-tag">+11%</span>
         </button>
 
-        <!-- Member Account Portal Pill -->
-        <button type="button" class="shb-btn-auth" onclick="navigateTo('/tai-khoan.html')" title="Trang Hồ sơ & Quản lý tin đăng Thành viên">
+        <!-- Member Account Portal Pill (Hidden until logged in) -->
+        <button type="button" id="headerBtnMember" class="shb-btn-auth" style="display:none;" onclick="navigateTo('/tai-khoan.html')" title="Trang Hồ sơ & Quản lý tin đăng Thành viên">
           <i class="fa-solid fa-user-check" style="color:#059669;font-size:14px;"></i>
           <span>HỒ SƠ THÀNH VIÊN</span>
         </button>
 
-        <!-- Admin Control Center Pill -->
-        <button type="button" class="shb-btn-auth" onclick="navigateTo('/admin.html')" title="Trang Quản trị Hệ thống Admin">
+        <!-- Admin Control Center Pill (Hidden until logged in as Admin) -->
+        <button type="button" id="headerBtnAdmin" class="shb-btn-auth" style="display:none;" onclick="navigateTo('/admin.html')" title="Trang Quản trị Hệ thống Admin">
           <i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);font-size:14px;"></i>
           <span>ADMIN</span>
         </button>
 
-        <!-- Auth Login / Register Pill -->
-        <button type="button" class="shb-btn-auth" onclick="openAuthModal()">
+        <!-- Auth Login / Logout Pill -->
+        <button type="button" id="headerBtnAuth" class="shb-btn-auth" onclick="handleHeaderAuthClick()">
           <i class="fa-regular fa-circle-user" style="color:var(--ctt-orange);font-size:15px;"></i>
           <span>ĐĂNG NHẬP</span>
         </button>
@@ -300,8 +300,8 @@
           </ul>
         </li>
         <li id="nav-promo"><a href="javascript:void(0)" onclick="navigateTo('/uu-dai.html')">ƯU ĐÃI</a></li>
-        <li id="nav-member"><a href="javascript:void(0)" onclick="navigateTo('/tai-khoan.html')">THÀNH VIÊN</a></li>
-        <li id="nav-admin"><a href="javascript:void(0)" onclick="navigateTo('/admin.html')">ADMIN</a></li>
+        <li id="nav-member" style="display:none;"><a href="javascript:void(0)" onclick="navigateTo('/tai-khoan.html')">THÀNH VIÊN</a></li>
+        <li id="nav-admin" style="display:none;"><a href="javascript:void(0)" onclick="navigateTo('/admin.html')">ADMIN</a></li>
       </ul>
     </div>
   </nav>
@@ -689,10 +689,15 @@
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span style="font-size:11px;background:#ecfdf5;color:#059669;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('wallet', this)"><span><i class="fa-solid fa-receipt"></i> Lịch sử Ví & Hóa đơn</span></button></li>
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('profile', this)"><span><i class="fa-regular fa-id-card"></i> Hồ sơ & Bảo mật</span></button></li>
-            <li style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
+            <li id="memberSwitchAdminItem" style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;display:none;">
               <button type="button" class="portal-nav-btn" onclick="navigateTo('/admin.html')" style="color:#0284c7;">
                 <span><i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> Chuyển sang Admin</span>
                 <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+              </button>
+            </li>
+            <li style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
+              <button type="button" class="portal-nav-btn" onclick="logoutAccount()" style="color:#dc2626;">
+                <span><i class="fa-solid fa-right-from-bracket" style="color:#dc2626;"></i> Đăng xuất tài khoản</span>
               </button>
             </li>
           </ul>
@@ -751,6 +756,11 @@
             <li style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
               <button type="button" class="portal-nav-btn" style="color:#ffd700;" onclick="navigateTo('/tai-khoan.html')">
                 <span><i class="fa-solid fa-user-check" style="color:#ffd700;"></i> Xem trang Thành viên</span>
+              </button>
+            </li>
+            <li style="margin-top:6px;">
+              <button type="button" class="portal-nav-btn" style="color:#f87171;" onclick="logoutAccount()">
+                <span><i class="fa-solid fa-right-from-bracket" style="color:#f87171;"></i> Đăng xuất Admin</span>
               </button>
             </li>
           </ul>
@@ -1254,13 +1264,14 @@
             <p style="font-size:12px;color:#cbd5e1;line-height:1.55;margin-bottom:16px;">
               Bấm chọn vai trò dưới đây để mở ngay giao diện quản lý tin đăng thành viên hoặc bảng điều khiển Admin:
             </p>
+            <div id="authModalNotice" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.5);color:#fde68a;font-size:12px;font-weight:700;"></div>
             <div style="display:flex;flex-direction:column;gap:10px;">
-              <button type="button" onclick="closeAuthModal();navigateTo('/tai-khoan.html')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ffd700;background:rgba(255,215,0,0.14);color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-                <span><i class="fa-solid fa-user-check" style="margin-right:6px;"></i> 1. Vào Hồ sơ Thành viên VIP</span>
+              <button type="button" onclick="loginAsRole('member')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ffd700;background:rgba(255,215,0,0.14);color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+                <span><i class="fa-solid fa-user-check" style="margin-right:6px;"></i> 1. Đăng nhập Thành viên VIP</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
-              <button type="button" onclick="closeAuthModal();navigateTo('/admin.html')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #38bdf8;background:rgba(56,189,248,0.14);color:#38bdf8;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-                <span><i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i> 2. Vào Trung tâm Quản trị Admin</span>
+              <button type="button" onclick="loginAsRole('admin')" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid #38bdf8;background:rgba(56,189,248,0.14);color:#38bdf8;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+                <span><i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i> 2. Đăng nhập Quản trị Admin</span>
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
@@ -1270,12 +1281,12 @@
           <div style="background:#fff;padding:20px;border-radius:16px;border:1px solid #e2e8f0;">
             <strong style="font-size:14px;color:#0f172a;display:block;margin-bottom:12px;">Đăng nhập bằng Số điện thoại / Email</strong>
             <div style="display:flex;flex-direction:column;gap:12px;">
-              <input type="text" class="post-input" value="0906 344 877" placeholder="Số điện thoại hoặc Email">
-              <input type="password" class="post-input" value="••••••••••" placeholder="Mật khẩu">
-              <button type="button" class="hsp-btn-apply" style="width:100%;padding:12px;" onclick="closeAuthModal();navigateTo('/tai-khoan.html')">
-                ĐĂNG NHẬP VÀO HỒ SƠ THÀNH VIÊN
+              <input type="text" id="authLoginIdentity" class="post-input" value="0906 344 877" placeholder="Số điện thoại hoặc Email (nhập 'admin' cho Quản trị)">
+              <input type="password" id="authLoginPassword" class="post-input" value="••••••••••" placeholder="Mật khẩu">
+              <button type="button" class="hsp-btn-apply" style="width:100%;padding:12px;" onclick="submitStandardLogin()">
+                ĐĂNG NHẬP VÀO TÀI KHOẢN
               </button>
-              <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="closeAuthModal();navigateTo('/tai-khoan.html')">
+              <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="loginAsRole('member')">
                 <img src="assets/zalo.svg" alt="Zalo" style="width:18px;height:18px;"> Đăng nhập nhanh qua Zalo
               </button>
             </div>
