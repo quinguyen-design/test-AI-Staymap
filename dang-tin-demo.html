@@ -541,13 +541,14 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Tiền Cọc</span></div>
-                  <div class="deposit-5pills" id="depositSegGroup">
-                    <button type="button" class="deposit-pill" onclick="toggleDeposit('Miễn Cọc', this)">Miễn Cọc</button>
-                    <button type="button" class="deposit-pill" onclick="toggleDeposit('1 Tháng', this)">1 Tháng</button>
-                    <button type="button" class="deposit-pill" onclick="toggleDeposit('2 Tháng', this)">2 Tháng</button>
-                    <button type="button" class="deposit-pill" onclick="toggleDeposit('3 Tháng', this)">3 Tháng</button>
-                    <button type="button" class="deposit-pill" onclick="toggleDeposit('Thỏa Thuận', this)">Thỏa Thuận</button>
-                  </div>
+                  <select id="dDeposit" class="post-input" onchange="D.deposit=this.value;renderPreview()">
+                    <option value="" selected hidden></option>
+                    <option value="Miễn Cọc">Miễn Cọc</option>
+                    <option value="1 Tháng">1 Tháng</option>
+                    <option value="2 Tháng">2 Tháng</option>
+                    <option value="3 Tháng">3 Tháng</option>
+                    <option value="Thỏa Thuận">Thỏa Thuận</option>
+                  </select>
                 </div>
               </div>
 
