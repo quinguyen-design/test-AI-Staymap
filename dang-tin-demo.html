@@ -256,21 +256,17 @@
       letter-spacing: 0.3px;
       box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
     }
-    .sticker-urgent {
-      background: linear-gradient(135deg, #881337 0%, #be123c 100%);
-      color: #fef3c7;
-      border: 1px solid rgba(253, 230, 138, 0.45);
-    }
-    .sticker-hot {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #ffd700;
-      border: 1px solid rgba(255, 215, 0, 0.5);
-    }
+    .sticker-urgent,
+    .sticker-hot,
     .sticker-promo {
-      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
-      color: #ecfdf5;
-      border: 1px solid rgba(167, 243, 208, 0.5);
+      background: rgba(15, 23, 42, 0.74);
+      backdrop-filter: blur(6px);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.22);
     }
+    .sticker-urgent i { color: #fb923c; }
+    .sticker-hot i { color: #fbbf24; }
+    .sticker-promo i { color: #e2e8f0; }
     /* 4-Tier VIP Icon Hierarchy */
     .lc-vip-tag.tag-dacquyen {
       background: #000000 !important;
