@@ -2421,6 +2421,14 @@ const DEFAULT_ACCOUNTS = [
     displayName: "Admin Qui Nguyen",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0002"
+  },
+  {
+    identity: "DuyQuang",
+    password: "123123",
+    role: "member",
+    displayName: "Duy Quang",
+    verifiedVia: "Thành viên xác thực",
+    memberCode: "#CTT-8830"
   }
 ];
 
