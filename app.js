@@ -2435,7 +2435,7 @@ const DEFAULT_ACCOUNTS = [
 function normalizeAuthIdentity(val) {
   const trimmed = (val || "").trim();
   if (!trimmed) return "";
-  return trimmed.includes("@") ? trimmed.toLowerCase() : trimmed.replace(/\s+/g, "");
+  return trimmed.replace(/\s+/g, "").toLowerCase();
 }
 
 function getAccountsStore() {
