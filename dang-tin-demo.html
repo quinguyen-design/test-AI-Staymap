@@ -1005,9 +1005,9 @@
     }
 
     const STICKERS = [
-      { id: "urgent", name: "Giảm Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
-      { id: "hot", name: "HOT", cls: "sticker-hot", icon: "fa-fire" },
-      { id: "promo", name: "Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+      { id: "urgent", name: "Giảm Sâu", labelHtml: "Giảm<br>Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
+      { id: "hot", name: "HOT", labelHtml: "HOT", cls: "sticker-hot", icon: "fa-fire" },
+      { id: "promo", name: "Ưu Đãi", labelHtml: "Ưu<br>Đãi", cls: "sticker-promo", icon: "fa-gift" }
     ];
 
     function pickZone(id) {
@@ -1150,7 +1150,7 @@
 
       const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
       const stickerHTML = stObj
-        ? `<span class="sticker-pill ${stObj.cls}" style="border-radius:999px;font-size:9px;padding:2px 7px;line-height:1.25;box-shadow:0 2px 5px rgba(15,23,42,0.16);white-space:nowrap;"><i class="fa-solid ${stObj.icon}" style="font-size:8.5px;"></i> ${stObj.name}</span>`
+        ? `<span class="sticker-pill ${stObj.cls}" style="position:absolute;top:-15px;right:-30px;width:32px;height:32px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;font-size:8px;font-weight:900;line-height:1.1;transform:rotate(45deg);box-shadow:0 3px 8px rgba(15,23,42,0.22);pointer-events:none;z-index:2;">${stObj.labelHtml}</span>`
         : "";
 
       let html = "";
@@ -1171,10 +1171,7 @@
               </div>
               <div class="lc-card-body">
                 <div class="lc-card-toprow">
-                  <div style="display:flex;align-items:center;gap:6px;min-width:0;">
-                    <div class="lc-card-price tabular-nums" style="white-space:nowrap;">${price} Triệu <span>| Tháng</span></div>
-                    ${stickerHTML}
-                  </div>
+                  <div class="lc-card-price tabular-nums">${price} Triệu <span style="position:relative;display:inline-block;">| Tháng${stickerHTML}</span></div>
                   <span class="lc-card-type">${D.cat}</span>
                 </div>
                 <div class="lc-card-title">${title}</div>
