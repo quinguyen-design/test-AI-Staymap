@@ -505,7 +505,7 @@
                   <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:#059669;"></i> Chi Phí Khác</span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:#059669;"></i> Trọn Gói Chi Phí Khác</span></div>
                   <input type="text" inputmode="decimal" id="dOtherCost" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
@@ -519,6 +519,16 @@
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:#64748b;"></i> Thu Rác <small class="util-unit">(phòng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                </div>
+                <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div>
+                    <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:#0284c7;"></i> Gửi Xe <small class="util-unit">(1 Xe / tháng)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn Người <small class="util-unit">(Từ 2 người trở lên có phụ thu)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dExtraPerson" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                  </div>
                 </div>
               </div>
             </div>
