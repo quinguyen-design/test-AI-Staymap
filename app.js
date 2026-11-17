@@ -2413,6 +2413,14 @@ const DEFAULT_ACCOUNTS = [
     displayName: "Quản trị viên StayMap",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0001"
+  },
+  {
+    identity: "quinguyen.designer@gmail.com",
+    password: "Qui@1707",
+    role: "admin",
+    displayName: "Admin Qui Nguyen",
+    verifiedVia: "Admin 2FA",
+    memberCode: "#ADM-0002"
   }
 ];
 
@@ -2427,7 +2435,16 @@ function getAccountsStore() {
     const raw = localStorage.getItem("ctt_accounts_v1");
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const merged = parsed.slice();
+        DEFAULT_ACCOUNTS.forEach((def) => {
+          const defId = normalizeAuthIdentity(def.identity);
+          if (!merged.some((a) => normalizeAuthIdentity(a.identity) === defId)) {
+            merged.push(def);
+          }
+        });
+        return merged;
+      }
     }
   } catch (_) {}
   return DEFAULT_ACCOUNTS.slice();
