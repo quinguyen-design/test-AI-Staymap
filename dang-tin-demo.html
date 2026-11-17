@@ -254,7 +254,6 @@
       font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.3px;
-      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
     }
     .sticker-urgent,
     .sticker-hot,
@@ -1150,7 +1149,7 @@
 
       const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
       const stickerHTML = stObj
-        ? `<span class="sticker-pill ${stObj.cls}" style="position:absolute;bottom:calc(100% + 3px);right:0;font-size:9px;padding:1.5px 7px;line-height:1.25;border-radius:999px;white-space:nowrap;box-shadow:0 2px 5px rgba(15,23,42,0.16);pointer-events:none;z-index:2;"><i class="fa-solid ${stObj.icon}" style="font-size:8px;"></i> ${stObj.name}</span>`
+        ? `<span class="sticker-pill ${stObj.cls}" style="position:absolute;bottom:calc(100% + 3px);right:0;font-size:9px;padding:1.5px 7px;line-height:1.25;border-radius:999px;white-space:nowrap;box-shadow:none;pointer-events:none;z-index:2;"><i class="fa-solid ${stObj.icon}" style="font-size:8px;"></i> ${stObj.name}</span>`
         : "";
 
       let html = "";
