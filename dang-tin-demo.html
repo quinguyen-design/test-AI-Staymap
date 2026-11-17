@@ -998,43 +998,78 @@
       const dir = document.getElementById("dDirection")?.value || "";
       const frontage = (document.getElementById("dFrontageRoad")?.value || "").trim();
       const road = (document.getElementById("dRoadAccess")?.value || "").trim();
+      const host = (document.getElementById("dHost")?.value || "").trim();
+      const phone = (document.getElementById("dPhone")?.value || "").trim();
+
+      const elec = (document.getElementById("dElec")?.value || "").trim();
+      const water = (document.getElementById("dWater")?.value || "").trim();
+      const otherCost = (document.getElementById("dOtherCost")?.value || "").trim();
+      const internet = (document.getElementById("dInternet")?.value || "").trim();
+      const laundry = (document.getElementById("dLaundry")?.value || "").trim();
+      const trash = (document.getElementById("dTrash")?.value || "").trim();
+      const parking = (document.getElementById("dParking")?.value || "").trim();
+      const maxPeople = document.getElementById("dMaxPeople")?.value || "";
+      const extraPerson = (document.getElementById("dExtraPerson")?.value || "").trim();
 
       const utils = Array.from(document.querySelectorAll(".util-chk:checked")).map((c) => c.value);
       if (document.getElementById("chkSchool")?.checked) {
         const sc = (document.getElementById("dSchoolCode")?.value || "").trim();
-        utils.unshift(sc ? `Gần Trường Học (${sc})` : "Gần Trường Học");
+        utils.unshift(sc ? `gần Trường học (${sc})` : "gần Trường học");
       }
       const svcs = Array.from(document.querySelectorAll(".svc-chk:checked")).map((c) => c.value);
 
-      const titleParts = [
-        D.cat.toUpperCase(),
-        D.beds,
-        area ? `${area}M²` : "",
-        furn ? furn.toUpperCase() : "",
-        street ? `NGAY ${street.toUpperCase()}` : (ward ? `TẠI ${ward.toUpperCase()}` : "")
-      ].filter(Boolean);
-      document.getElementById("dTitle").value = titleParts.join(" - ");
+      // 1. Tiêu đề chuẩn SEO tự nhiên, giàu từ khóa địa phương & thông số
+      const locFocus = project || (street ? `Đường ${street}` : ward);
+      const seoTitle = [
+        `Cho Thuê ${D.cat}`,
+        locFocus ? `${locFocus}, ${ward}` : ward,
+        area ? `${area}m²` : "",
+        furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
+        price ? `Chỉ ${price} Triệu/Tháng` : ""
+      ].filter(Boolean).join(" - ");
+      document.getElementById("dTitle").value = seoTitle.slice(0, 99);
 
+      // 2. Mô tả chuẩn SEO đầy đủ theo từng thành phần khách đã chọn
       const lines = [];
-      const intro = [
-        `Cho thuê ${D.cat.toLowerCase()}`,
-        area ? `diện tích ${area}m²` : "",
-        `(${D.beds}, ${D.baths})`,
-        price ? `giá ${price} triệu/tháng` : "",
-        fullAddr ? `tại ${fullAddr}` : ""
-      ].filter(Boolean).join(" ");
-      lines.push(intro + ".");
+      lines.push(
+        `Cho thuê ${D.cat.toLowerCase()} vị trí đẹp tại ${fullAddr || "khu vực trung tâm"}. ` +
+        `Không gian ${D.beds}, ${D.baths}${area ? `, diện tích sử dụng ${area}m²` : ""}` +
+        `${price ? `, giá thuê hợp lý ${price} triệu/tháng` : ""}${D.deposit ? ` (cọc ${D.deposit.toLowerCase()})` : ""}.`
+      );
 
       const specBits = [
         furn ? `Nội thất: ${furn}` : "",
-        floors ? `Kết cấu: ${floors}` : "",
-        dir ? `Hướng: ${dir}` : "",
-        frontage ? `Mặt tiền: ${frontage}` : "",
-        road ? `Đường vào: ${road}` : ""
+        floors ? `Quy mô: ${floors}` : "",
+        dir ? `Hướng ${dir}` : "",
+        frontage ? `Mặt tiền - lộ giới ${frontage}` : "",
+        road ? `Đường vào nhà rộng ${road}` : "",
+        maxPeople ? `Giới hạn ${maxPeople} người/phòng${extraPerson ? ` (phụ thu từ người thứ ${maxPeople}: ${extraPerson})` : ""}` : ""
       ].filter(Boolean);
-      if (specBits.length) lines.push(`• ${specBits.join(" | ")}.`);
-      if (utils.length) lines.push(`• Tiện ích lân cận: ${utils.join(", ")}.`);
-      if (svcs.length) lines.push(`• Dịch vụ & An ninh: ${svcs.join(", ")}.`);
+      if (specBits.length) {
+        lines.push(`• Thông số & Thiết kế: ${specBits.join(", ")}.`);
+      }
+
+      const costBits = [
+        `Điện: ${elec || "Giá nhà nước"}`,
+        `Nước: ${water || "Giá nhà nước"}`,
+        otherCost ? `Trọn gói chi phí khác: ${otherCost}` : "",
+        internet ? `Internet: ${internet}` : "",
+        laundry ? `Giặt sấy: ${laundry}` : "",
+        trash ? `Thu rác: ${trash}` : "",
+        parking ? `Phí xe: ${parking}` : ""
+      ].filter(Boolean);
+      lines.push(`• Chi phí sinh hoạt minh bạch: ${costBits.join(" | ")}.`);
+
+      if (utils.length) {
+        lines.push(`• Tiện ích xung quanh: Kết nối nhanh tới ${utils.join(", ")}.`);
+      }
+      if (svcs.length) {
+        lines.push(`• Dịch vụ & An ninh: Trang bị ${svcs.join(", ")}.`);
+      }
+
+      if (host || phone) {
+        lines.push(`• Liên hệ xem thực tế: ${[host, phone].filter(Boolean).join(" - ")} (hỗ trợ tư vấn & giữ căn nhanh).`);
+      }
 
       document.getElementById("dDesc").value = lines.join("\n");
     }
