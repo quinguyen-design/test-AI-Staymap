@@ -547,8 +547,8 @@
                   <span class="step-circle">3</span>
                   <span>Tiêu Đề, Mô Tả & Hình Ảnh</span>
                 </div>
-                <button type="button" id="btnAiAutoWrite" onclick="aiWrite()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết Tự Động
+                <button type="button" id="btnAiAutoWrite" onclick="aiWrite()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Viết Ngay</span>
                 </button>
               </div>
 
@@ -1063,35 +1063,51 @@
       }
       const svcs = Array.from(document.querySelectorAll(".svc-chk:checked")).map((c) => c.value);
 
-      // 1. Tiêu đề chuẩn SEO tự nhiên, giàu từ khóa địa phương & thông số
+      // 1. Tiêu đề chuẩn SEO thu hút click (giàu từ khóa địa phương & điểm nhấn giá trị)
       const locFocus = project || (street ? `Đường ${street}` : ward);
+      const highlightSpec = [
+        area ? `${area}m²` : "",
+        furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
+        D.beds !== "1 PN" ? D.beds : ""
+      ].filter(Boolean).join(" ");
       const seoTitle = [
         `Cho Thuê ${D.cat}`,
         locFocus ? `${locFocus}, ${ward}` : ward,
-        area ? `${area}m²` : "",
-        furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
-        price ? `Chỉ ${price} Triệu/Tháng` : ""
-      ].filter(Boolean).join(" - ");
+        highlightSpec,
+        price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"
+      ].filter(Boolean).join(" • ");
       document.getElementById("dTitle").value = seoTitle.slice(0, 99);
 
-      // 2. Mô tả chuẩn SEO đầy đủ theo từng thành phần khách đã chọn
+      // 2. Mô tả chuẩn SEO thuyết phục, phân đoạn rõ ràng theo từng lựa chọn của khách
       const lines = [];
+      const hookByCat = {
+        "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ, dọn vào ở ngay",
+        "Nhà Nguyên Căn": "không gian rộng rãi, riêng tư tuyệt đối, phù hợp gia đình hoặc làm văn phòng",
+        "Căn Hộ Chung Cư": "thiết kế hiện đại, thoáng sáng tự nhiên, tiện nghi chuẩn sống xanh",
+        "Mặt Bằng Văn Phòng": "vị trí đắc địa, mặt bằng vuông vức, tối ưu nhận diện thương hiệu",
+        "Đất - Xưởng, Kho - Bãi": "mặt bằng thông thoáng, giao thông thuận tiện, sẵn sàng vận hành ngay"
+      };
+      const catHook = hookByCat[D.cat] || "vị trí thuận tiện, sẵn sàng bàn giao ngay";
+
       lines.push(
-        `Cho thuê ${D.cat.toLowerCase()} vị trí đẹp tại ${fullAddr || "khu vực trung tâm"}. ` +
-        `Không gian ${D.beds}, ${D.baths}${area ? `, diện tích sử dụng ${area}m²` : ""}` +
-        `${price ? `, giá thuê hợp lý ${price} triệu/tháng` : ""}${D.deposit ? ` (cọc ${D.deposit.toLowerCase()})` : ""}.`
+        `🔥 CHÍNH CHỦ CHO THUÊ ${D.cat.toUpperCase()} TẠI ${fullAddr ? fullAddr.toUpperCase() : "TRUNG TÂM"} — ${catHook}!`
+      );
+      lines.push(
+        `• Diện tích & Bố trí: ${area ? `${area}m²` : "Rộng thoáng"} (${D.beds}, ${D.baths})` +
+        `${price ? ` | Giá thuê chỉ ${price} triệu/tháng` : ""}` +
+        `${D.deposit ? ` | Cọc ${D.deposit.toLowerCase()}` : ""}.`
       );
 
       const specBits = [
-        furn ? `Nội thất: ${furn}` : "",
-        floors ? `Quy mô: ${floors}` : "",
+        furn ? `Nội thất ${furn.toLowerCase()}` : "",
+        floors ? `Kết cấu ${floors.toLowerCase()}` : "",
         dir ? `Hướng ${dir}` : "",
         frontage ? `Mặt tiền - lộ giới ${frontage}` : "",
-        road ? `Đường vào nhà rộng ${road}` : "",
+        road ? `Đường vào ${road}` : "",
         maxPeople ? `Giới hạn ${maxPeople} người/phòng${extraPerson ? ` (phụ thu từ người thứ ${maxPeople}: ${extraPerson})` : ""}` : ""
       ].filter(Boolean);
       if (specBits.length) {
-        lines.push(`• Thông số & Thiết kế: ${specBits.join(", ")}.`);
+        lines.push(`• Điểm nổi bật: ${specBits.join(" • ")}.`);
       }
 
       const costBits = [
@@ -1103,18 +1119,18 @@
         trash ? `Thu rác: ${trash}` : "",
         parking ? `Phí xe: ${parking}` : ""
       ].filter(Boolean);
-      lines.push(`• Chi phí sinh hoạt minh bạch: ${costBits.join(" | ")}.`);
+      lines.push(`• Chi phí minh bạch: ${costBits.join(" | ")}.`);
 
       if (utils.length) {
-        lines.push(`• Tiện ích xung quanh: Kết nối nhanh tới ${utils.join(", ")}.`);
+        lines.push(`• Tiện ích kết nối nhanh: ${utils.join(", ")}.`);
       }
       if (svcs.length) {
-        lines.push(`• Dịch vụ & An ninh: Trang bị ${svcs.join(", ")}.`);
+        lines.push(`• Dịch vụ & An ninh: ${svcs.join(", ")}.`);
       }
 
-      if (host || phone) {
-        lines.push(`• Liên hệ xem thực tế: ${[host, phone].filter(Boolean).join(" - ")} (hỗ trợ tư vấn & giữ căn nhanh).`);
-      }
+      lines.push(
+        `📞 Liên hệ ngay${host ? ` ${host}` : ""}${phone ? ` (${phone})` : ""} để xem thực tế và chốt giá tốt nhất hôm nay!`
+      );
 
       document.getElementById("dDesc").value = lines.join("\n");
     }
@@ -1123,12 +1139,12 @@
       const btn = document.getElementById("btnAiAutoWrite");
       if (!btn) return;
       if (D.aiAutoSync) {
-        btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> AI Đang Tự Cập Nhật`;
+        btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>AI Viết Ngay • Tự Cập Nhật</span>`;
         btn.style.background = "#ecfdf5";
         btn.style.borderColor = "#059669";
         btn.style.color = "#059669";
       } else {
-        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết Tự Động`;
+        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>AI Viết Ngay</span>`;
         btn.style.background = "var(--ctt-orange-soft)";
         btn.style.borderColor = "var(--ctt-orange)";
         btn.style.color = "var(--ctt-orange)";
