@@ -316,7 +316,7 @@
     .demo-utility-bar > span:not(:last-child) {
       border-right: 1px solid #cbd5e1;
     }
-    /* Polished Step 1 Category Cards (Hướng A: Thẻ ngang tinh gọn 3 + 2) */
+    /* Polished Step 1 Category Cards (Phương án B: 6 thẻ 3x2 thanh thoát, bỏ vòng tròn bọc icon) */
     .post-cat-selector {
       display: grid !important;
       grid-template-columns: repeat(3, 1fr) !important;
@@ -332,67 +332,60 @@
       text-align: left !important;
       gap: 10px !important;
       border-radius: 12px !important;
-      padding: 9px 12px !important;
+      padding: 10px 13px !important;
       border: 1.5px solid #e2e8f0 !important;
       background: #ffffff !important;
-      color: #334155 !important;
+      color: #475569 !important;
       font-size: 12.5px !important;
       font-weight: 700 !important;
-      transition: all 0.18s ease !important;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+      transition: all 0.16s ease !important;
+      box-shadow: none !important;
     }
     .post-cat-btn:hover {
       border-color: #fdba74 !important;
+      background: #fffaf5 !important;
       transform: translateY(-1px);
-      box-shadow: 0 5px 12px rgba(241, 90, 34, 0.10);
     }
     .post-cat-btn.active {
-      background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%) !important;
+      background: #fffaf5 !important;
       border-color: var(--ctt-orange) !important;
       color: #0f172a !important;
-      box-shadow: 0 5px 14px rgba(241, 90, 34, 0.14);
+      box-shadow: 0 4px 12px rgba(241, 90, 34, 0.12) !important;
     }
     .post-cat-btn.active::after {
       content: "✓";
       position: absolute;
       top: 6px;
       right: 8px;
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
       background: var(--ctt-orange);
       color: #ffffff;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 900;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
     .cat-icon-circle {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      width: 24px;
       flex-shrink: 0;
-      color: var(--ctt-orange);
-      font-size: 15px;
-      transition: all 0.18s ease;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
     }
     .cat-icon-circle i {
-      color: var(--ctt-orange) !important;
-      font-size: 15px !important;
+      color: #64748b !important;
+      font-size: 17px !important;
+      transition: color 0.16s ease;
     }
-    .post-cat-btn.active .cat-icon-circle {
-      background: var(--ctt-grad-brand);
-      border-color: transparent;
-      box-shadow: 0 4px 10px rgba(241, 90, 34, 0.28);
-    }
+    .post-cat-btn:hover .cat-icon-circle i,
     .post-cat-btn.active .cat-icon-circle i {
-      color: #ffffff !important;
+      color: var(--ctt-orange) !important;
     }
     /* Deposit 5 compact click pills inside equal 3-col grid */
     .deposit-5pills {
@@ -495,6 +488,7 @@
                 <button type="button" class="post-cat-btn" onclick="pickCat('Căn Hộ Chung Cư', this)"><span class="cat-icon-circle"><i class="fa-solid fa-building"></i></span><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
                 <button type="button" class="post-cat-btn" onclick="pickCat('Mặt Bằng Văn Phòng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-shop"></i></span><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
                 <button type="button" class="post-cat-btn" onclick="pickCat('Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Homestay / Nghỉ Dưỡng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-umbrella-beach"></i></span><span style="line-height:1.25;">Homestay<br>Nghỉ Dưỡng</span></button>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
