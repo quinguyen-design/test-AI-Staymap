@@ -316,27 +316,57 @@
     .demo-utility-bar > span:not(:last-child) {
       border-right: 1px solid #cbd5e1;
     }
-    /* Polished Step 1 Category Cards */
+    /* Polished Step 1 Category Cards (Hướng A: Thẻ ngang tinh gọn 3 + 2) */
     .post-cat-selector {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
       gap: 10px !important;
+      margin-bottom: 14px !important;
     }
     .post-cat-btn {
-      border-radius: 14px !important;
-      padding: 12px 8px !important;
+      position: relative;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      text-align: left !important;
+      gap: 10px !important;
+      border-radius: 12px !important;
+      padding: 9px 12px !important;
       border: 1.5px solid #e2e8f0 !important;
       background: #ffffff !important;
+      color: #334155 !important;
+      font-size: 12.5px !important;
+      font-weight: 700 !important;
       transition: all 0.18s ease !important;
       box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
     }
     .post-cat-btn:hover {
       border-color: #fdba74 !important;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(241, 90, 34, 0.10);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(241, 90, 34, 0.10);
     }
     .post-cat-btn.active {
       background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%) !important;
       border-color: var(--ctt-orange) !important;
-      box-shadow: 0 6px 16px rgba(241, 90, 34, 0.16);
+      color: #0f172a !important;
+      box-shadow: 0 5px 14px rgba(241, 90, 34, 0.14);
+    }
+    .post-cat-btn.active::after {
+      content: "✓";
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--ctt-orange);
+      color: #ffffff;
+      font-size: 9.5px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .cat-icon-circle {
       width: 34px;
@@ -347,16 +377,22 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 6px;
+      flex-shrink: 0;
       color: var(--ctt-orange);
       font-size: 15px;
       transition: all 0.18s ease;
     }
+    .cat-icon-circle i {
+      color: var(--ctt-orange) !important;
+      font-size: 15px !important;
+    }
     .post-cat-btn.active .cat-icon-circle {
       background: var(--ctt-grad-brand);
       border-color: transparent;
-      color: #ffffff;
       box-shadow: 0 4px 10px rgba(241, 90, 34, 0.28);
+    }
+    .post-cat-btn.active .cat-icon-circle i {
+      color: #ffffff !important;
     }
     /* Deposit 5 compact click pills inside equal 3-col grid */
     .deposit-5pills {
