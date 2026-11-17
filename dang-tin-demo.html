@@ -735,17 +735,28 @@
             </div>
 
             <div id="demoLivePreviewBox"></div>
-            <div style="margin-top:16px;text-align:center;">
-              <button type="button" class="hsp-btn-apply" style="padding:11px 28px;font-weight:900;letter-spacing:0.4px;" onclick="alert('Đây là bản mẫu chờ duyệt! Khi bạn duyệt tôi sẽ áp dụng vào trang chính.')">
-                <i class="fa-solid fa-check-circle"></i> XÁC NHẬN TIN ĐĂNG
-              </button>
+
+            <!-- TỔNG TIỀN & XÁC NHẬN ĐIỀU KHOẢN NGAY DƯỚI KHUNG XEM THỬ -->
+            <div id="previewCheckoutBox" style="margin-top:14px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;">
+              <div id="previewPriceBreakdown" style="font-size:12.5px;color:#475569;line-height:1.6;">
+                Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4)
+              </div>
+              <label style="display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#334155;cursor:pointer;">
+                <input type="checkbox" id="agreePostTerms" style="margin-top:2px;width:15px;height:15px;accent-color:var(--ctt-orange);cursor:pointer;">
+                <span>Tôi đã kiểm tra thông tin & đồng ý với <strong>Điều khoản đăng tin</strong> của ChoThueTot.vn</span>
+              </label>
+              <div style="margin-top:12px;text-align:center;">
+                <button type="button" class="hsp-btn-apply" style="padding:11px 28px;font-weight:900;letter-spacing:0.4px;" onclick="confirmSubmitDemoPost()">
+                  <i class="fa-solid fa-check-circle"></i> XÁC NHẬN TIN ĐĂNG
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="ctt-modal-footer">
-        <div id="demoSummaryText" style="font-size:13.5px;color:#334155;">Chưa chọn gói hiển thị (Vui lòng chọn ở Bước 4)</div>
+        <div id="demoSummaryText" style="font-size:12.5px;color:#64748b;">Xem thử trực tiếp 1:1 trước khi xác nhận đăng tin</div>
         <div style="display:flex;gap:10px;">
           <a href="index.html" class="hsp-btn-reset" style="text-decoration:none;display:inline-flex;align-items:center;">Đóng</a>
         </div>
@@ -1436,17 +1447,52 @@
 
       document.getElementById("demoLivePreviewBox").innerHTML = html;
 
-      const sumEl = document.getElementById("demoSummaryText");
-      if (!z) {
-        sumEl.textContent = "Chưa chọn gói hiển thị (Chọn khu vực ở Bước 4)";
-      } else {
-        const dur = DURATIONS.find((x) => x.days === D.selectedDays) || DURATIONS[1];
-        const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
-        const stickerTotal = stObj ? dur.days * 1000 : 0;
-        const grandTotal = pkgTotal + stickerTotal;
-        const stickerNote = stObj ? ` + Nhãn <strong>${stObj.name}</strong> (${new Intl.NumberFormat("vi-VN").format(stickerTotal)}đ)` : "";
-        sumEl.innerHTML = `Gói: <strong>${z.name}</strong> (${dur.label})${stickerNote} • Tổng: <strong style="color:var(--ctt-orange);" class="tabular-nums">${grandTotal === 0 ? "0đ (Miễn phí)" : new Intl.NumberFormat("vi-VN").format(grandTotal) + "đ"}</strong>`;
+      const breakdownEl = document.getElementById("previewPriceBreakdown");
+      if (breakdownEl) {
+        if (!z) {
+          breakdownEl.innerHTML = `<span style="color:#64748b;">Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4).</span>`;
+        } else {
+          const dur = DURATIONS.find((x) => x.days === D.selectedDays) || DURATIONS[1];
+          const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+          const stickerTotal = stObj ? dur.days * 1000 : 0;
+          const grandTotal = pkgTotal + stickerTotal;
+          const fmt = (n) => (n === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(n) + "đ");
+          breakdownEl.innerHTML = `
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span>Gói hiển thị: <strong>${z.name}</strong> (${dur.label})</span>
+              <strong class="tabular-nums">${fmt(pkgTotal)}</strong>
+            </div>
+            ${stObj ? `
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span>Nhãn Dán: <strong>${stObj.name}</strong> (${dur.label} × 1k)</span>
+              <strong class="tabular-nums">+${fmt(stickerTotal)}</strong>
+            </div>` : ""}
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-size:14px;">
+              <strong style="color:#0f172a;">Tổng thanh toán:</strong>
+              <strong class="tabular-nums" style="font-size:17px;color:var(--ctt-orange);">${grandTotal === 0 ? "0đ (Miễn phí)" : fmt(grandTotal)}</strong>
+            </div>
+          `;
+        }
       }
+    }
+
+    function confirmSubmitDemoPost() {
+      const z = ZONES.find((x) => x.id === D.selectedZoneId);
+      if (!z) {
+        alert("Vui lòng chọn 1 trong 6 khu vực hiển thị ở Bước 4 trước khi xác nhận.");
+        goStep(4);
+        return;
+      }
+      if (D.photos.length < 4) {
+        alert(`Vui lòng tải lên tối thiểu 4 hình ảnh thực tế (hiện có ${D.photos.length}/9 hình).`);
+        goStep(3);
+        return;
+      }
+      if (!document.getElementById("agreePostTerms")?.checked) {
+        alert("Vui lòng tick xác nhận đồng ý với Điều khoản đăng tin của ChoThueTot.vn.");
+        return;
+      }
+      alert("Đây là bản mẫu chờ duyệt! Khi bạn duyệt tôi sẽ áp dụng vào trang chính.");
     }
 
     initContactFromAccount();
