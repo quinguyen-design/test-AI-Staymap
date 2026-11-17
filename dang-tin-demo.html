@@ -526,8 +526,19 @@
                     <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                   </div>
                   <div>
-                    <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn Người <small class="util-unit">(Từ 2 người trở lên có phụ thu)</small></span></div>
-                    <input type="text" inputmode="decimal" id="dExtraPerson" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                    <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn Người</span></div>
+                    <select id="dMaxPeople" class="post-input" onchange="onMaxPeopleChange(this.value)">
+                      <option value="">-- Chọn --</option>
+                      <option value="1">1 người</option>
+                      <option value="2">2 người</option>
+                      <option value="3">3 người</option>
+                      <option value="4">4 người</option>
+                      <option value="5">5 người</option>
+                    </select>
+                    <div id="extraPersonFeeWrap" style="display:none;margin-top:8px;">
+                      <div class="post-field-label"><span>Phụ Thu <small class="util-unit">(người)</small></span></div>
+                      <input type="text" inputmode="decimal" id="dExtraPerson" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1063,6 +1074,15 @@
           </button>
         `;
       }).join("");
+    }
+
+    function onMaxPeopleChange(val) {
+      const wrap = document.getElementById("extraPersonFeeWrap");
+      const feeEl = document.getElementById("dExtraPerson");
+      const showFee = parseInt(val, 10) >= 2;
+      if (wrap) wrap.style.display = showFee ? "block" : "none";
+      if (!showFee && feeEl) feeEl.value = "";
+      renderPreview();
     }
 
     function toggleSchoolCode(isChecked) {
