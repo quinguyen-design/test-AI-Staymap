@@ -263,9 +263,9 @@
       color: #f8fafc;
       border: 1px solid rgba(255, 255, 255, 0.22);
     }
-    .sticker-urgent i { color: #fb923c; }
-    .sticker-hot i { color: #fbbf24; }
-    .sticker-promo i { color: #e2e8f0; }
+    .sticker-urgent i { color: var(--ctt-orange); }
+    .sticker-hot i { color: var(--ctt-orange); }
+    .sticker-promo i { color: var(--ctt-orange); }
     /* 4-Tier VIP Icon Hierarchy */
     .lc-vip-tag.tag-dacquyen {
       background: #000000 !important;
@@ -499,31 +499,31 @@
                   <input type="text" inputmode="decimal" id="dElec" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:#0284c7;"></i> Nước <small class="util-unit">(Người)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:var(--ctt-orange);"></i> Nước <small class="util-unit">(Người)</small></span></div>
                   <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:#059669;"></i> Trọn Gói Chi Phí Khác</span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:var(--ctt-orange);"></i> Trọn Gói Chi Phí Khác</span></div>
                   <input type="text" inputmode="decimal" id="dOtherCost" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:#6366f1;"></i> Internet <small class="util-unit">(Phòng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:var(--ctt-orange);"></i> Internet <small class="util-unit">(Phòng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dInternet" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-shirt" style="color:#ec4899;"></i> Giặt Sấy <small class="util-unit">(Người)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-shirt" style="color:var(--ctt-orange);"></i> Giặt Sấy <small class="util-unit">(Người)</small></span></div>
                   <input type="text" inputmode="decimal" id="dLaundry" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:#64748b;"></i> Thu Rác <small class="util-unit">(Phòng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Thu Rác <small class="util-unit">(Phòng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:#0284c7;"></i> Phí Xe <small class="util-unit">(SLXe / Tháng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(SLXe / Tháng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn <small class="util-unit">(Người / Phòng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:var(--ctt-orange);"></i> Giới Hạn <small class="util-unit">(Người / Phòng)</small></span></div>
                   <select id="dMaxPeople" class="post-input" onchange="onMaxPeopleChange(this.value)">
                     <option value="" selected hidden></option>
                     <option value="1">1 Người</option>
@@ -634,7 +634,7 @@
               <div style="margin-bottom:12px;">
                 <div class="post-field-label"><span>Video Thực Tế <small class="util-unit">(Không Bắt Buộc)</small></span></div>
                 <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;">
-                  <i class="fa-solid fa-video" style="color:#0284c7;font-size:15px;"></i>
+                  <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:15px;"></i>
                   <span id="demoVideoLabel">Tải Video Ngắn Từ Máy (MP4, MOV)</span>
                   <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleDemoVideoUpload(this)">
                 </label>
