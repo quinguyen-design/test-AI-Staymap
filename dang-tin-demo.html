@@ -316,6 +316,88 @@
     .demo-utility-bar > span:not(:last-child) {
       border-right: 1px solid #cbd5e1;
     }
+    /* Polished Step 1 Category Cards */
+    .post-cat-selector {
+      gap: 10px !important;
+    }
+    .post-cat-btn {
+      border-radius: 14px !important;
+      padding: 12px 8px !important;
+      border: 1.5px solid #e2e8f0 !important;
+      background: #ffffff !important;
+      transition: all 0.18s ease !important;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    }
+    .post-cat-btn:hover {
+      border-color: #fdba74 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(241, 90, 34, 0.10);
+    }
+    .post-cat-btn.active {
+      background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%) !important;
+      border-color: var(--ctt-orange) !important;
+      box-shadow: 0 6px 16px rgba(241, 90, 34, 0.16);
+    }
+    .cat-icon-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      color: var(--ctt-orange);
+      font-size: 15px;
+      transition: all 0.18s ease;
+    }
+    .post-cat-btn.active .cat-icon-circle {
+      background: var(--ctt-grad-brand);
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(241, 90, 34, 0.28);
+    }
+    /* Deposit 5 compact click pills inside equal 3-col grid */
+    .deposit-5pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .deposit-pill {
+      padding: 5px 8px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.14s ease;
+      line-height: 1.2;
+    }
+    .deposit-pill:hover { border-color: var(--ctt-orange); color: var(--ctt-orange); }
+    .deposit-pill.active {
+      background: var(--ctt-orange-soft);
+      border-color: var(--ctt-orange);
+      color: var(--ctt-orange);
+    }
+    /* Brand orange spec icons on Live Preview */
+    .lc-card-specs i,
+    .sv1-spec-pill i {
+      color: var(--ctt-orange) !important;
+    }
+    .step-inline-error {
+      display: none;
+      margin-top: 12px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 700;
+    }
     @keyframes fadeSlideDown {
       from { opacity: 0; transform: translateY(-6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -372,11 +454,11 @@
 
               <div class="post-field-label"><span>Loại Hình <span class="req-star">*</span></span></div>
               <div class="post-cat-selector">
-                <button type="button" class="post-cat-btn active" onclick="pickCat('Phòng Trọ / CHDV', this)"><i class="fa-solid fa-door-open"></i><span style="line-height:1.25;">Phòng Trọ<br>CHDV</span></button>
-                <button type="button" class="post-cat-btn" onclick="pickCat('Nhà Nguyên Căn', this)"><i class="fa-solid fa-house-chimney"></i><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
-                <button type="button" class="post-cat-btn" onclick="pickCat('Căn Hộ Chung Cư', this)"><i class="fa-solid fa-building"></i><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
-                <button type="button" class="post-cat-btn" onclick="pickCat('Mặt Bằng Văn Phòng', this)"><i class="fa-solid fa-shop"></i><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
-                <button type="button" class="post-cat-btn" onclick="pickCat('Đất - Xưởng, Kho - Bãi', this)"><i class="fa-solid fa-warehouse"></i><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
+                <button type="button" class="post-cat-btn active" onclick="pickCat('Phòng Trọ / CHDV', this)"><span class="cat-icon-circle"><i class="fa-solid fa-door-open"></i></span><span style="line-height:1.25;">Phòng Trọ<br>CHDV</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Nhà Nguyên Căn', this)"><span class="cat-icon-circle"><i class="fa-solid fa-house-chimney"></i></span><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Căn Hộ Chung Cư', this)"><span class="cat-icon-circle"><i class="fa-solid fa-building"></i></span><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Mặt Bằng Văn Phòng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-shop"></i></span><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
+                <button type="button" class="post-cat-btn" onclick="pickCat('Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
@@ -448,7 +530,7 @@
                 <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Đúng Thông Số - Chuẩn Bảng Tính</span>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:12px;margin-bottom:14px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;align-items:start;">
                 <div>
                   <div class="post-field-label"><span>Giá Thuê (Triệu/Th) <span class="req-star">*</span></span></div>
                   <input type="number" step="0.1" id="dPrice" class="post-input tabular-nums" value="" oninput="renderPreview()">
@@ -459,11 +541,12 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Tiền Cọc</span></div>
-                  <div class="post-seg-group" id="depositSegGroup">
-                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('1 tháng', this)">1th</button>
-                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('2 tháng', this)">2th</button>
-                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('3 tháng', this)">3th</button>
-                    <button type="button" class="post-seg-btn" onclick="toggleDeposit('Thỏa thuận', this)">Thỏa thuận</button>
+                  <div class="deposit-5pills" id="depositSegGroup">
+                    <button type="button" class="deposit-pill" onclick="toggleDeposit('Miễn Cọc', this)">Miễn Cọc</button>
+                    <button type="button" class="deposit-pill" onclick="toggleDeposit('1 Tháng', this)">1 Tháng</button>
+                    <button type="button" class="deposit-pill" onclick="toggleDeposit('2 Tháng', this)">2 Tháng</button>
+                    <button type="button" class="deposit-pill" onclick="toggleDeposit('3 Tháng', this)">3 Tháng</button>
+                    <button type="button" class="deposit-pill" onclick="toggleDeposit('Thỏa Thuận', this)">Thỏa Thuận</button>
                   </div>
                 </div>
               </div>
@@ -549,8 +632,8 @@
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                   <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Click Chọn Thông Minh, AI Viết Cực Đỉnh</span>
-                  <button type="button" id="btnAiAutoWrite" onclick="aiWrite()" style="padding:4px 11px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-grad-brand);color:#0f172a;font-size:11px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click ngay</span>
+                  <button type="button" id="btnAiAutoWrite" onclick="aiWrite()" style="padding:4px 11px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-grad-brand);color:#ffffff;font-size:11px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>
                   </button>
                 </div>
               </div>
@@ -707,6 +790,9 @@
               </div>
             </div>
 
+            <!-- Inline Validation Banner -->
+            <div id="stepValidationError" class="step-inline-error"></div>
+
             <!-- Bottom Navigation -->
             <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
               <button type="button" class="hsp-btn-reset" id="btnPrev" onclick="stepMove(-1)" style="visibility:hidden;">
@@ -729,9 +815,9 @@
             </div>
 
             <div class="post-preview-tabs">
-              <button type="button" class="post-prev-tab active" onclick="switchPrevTab('card', this)">1. Thẻ tin (.lc-card)</button>
-              <button type="button" class="post-prev-tab" onclick="switchPrevTab('sv1', this)">2. Banner VIP (.sv1)</button>
-              <button type="button" class="post-prev-tab" onclick="switchPrevTab('detail', this)">3. Trang Bài viết</button>
+              <button type="button" class="post-prev-tab active" onclick="switchPrevTab('card', this)">1. Thẻ Tin</button>
+              <button type="button" class="post-prev-tab" onclick="switchPrevTab('sv1', this)">2. Banner VIP</button>
+              <button type="button" class="post-prev-tab" onclick="switchPrevTab('detail', this)">3. Trang Bài Viết</button>
             </div>
 
             <div id="demoLivePreviewBox"></div>
@@ -797,8 +883,95 @@
       photos: []
     };
 
+    function showStepError(msg) {
+      const box = document.getElementById("stepValidationError");
+      if (!box) return;
+      if (msg) {
+        box.textContent = msg;
+        box.style.display = "block";
+      } else {
+        box.textContent = "";
+        box.style.display = "none";
+      }
+    }
+
+    function validateStepBeforeNext(stepNum) {
+      if (stepNum === 1) {
+        const street = (document.getElementById("dStreet")?.value || "").trim();
+        const house = (D.houseNumber || "").trim();
+        const host = (document.getElementById("dHost")?.value || "").trim();
+        const phone = (document.getElementById("dPhone")?.value || "").trim();
+        if (!street) {
+          showStepError("Vui lòng chọn Tên Đường trước khi qua Bước 2.");
+          document.getElementById("dStreet")?.focus();
+          return false;
+        }
+        if (!house) {
+          showStepError("Vui lòng nhập Địa Chỉ Chi Tiết (số nhà) trước khi qua Bước 2.");
+          document.getElementById("dAddress")?.focus();
+          return false;
+        }
+        if (!host) {
+          showStepError("Vui lòng nhập Tên Người Liên Hệ.");
+          document.getElementById("dHost")?.focus();
+          return false;
+        }
+        if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
+          showStepError("Vui lòng nhập đúng Số Điện Thoại / Zalo Việt Nam (10 số, bắt đầu 03/05/07/08/09).");
+          document.getElementById("dPhone")?.focus();
+          return false;
+        }
+      } else if (stepNum === 2) {
+        const price = parseFloat(document.getElementById("dPrice")?.value || "0");
+        const area = parseFloat(document.getElementById("dArea")?.value || "0");
+        if (!price || price <= 0) {
+          showStepError("Vui lòng nhập Giá Thuê (Triệu/Tháng) hợp lệ trước khi qua Bước 3.");
+          document.getElementById("dPrice")?.focus();
+          return false;
+        }
+        if (!area || area < 5) {
+          showStepError("Vui lòng nhập Diện Tích (≥ 5 m²) trước khi qua Bước 3.");
+          document.getElementById("dArea")?.focus();
+          return false;
+        }
+      } else if (stepNum === 3) {
+        const title = (document.getElementById("dTitle")?.value || "").trim();
+        const desc = (document.getElementById("dDesc")?.value || "").trim();
+        if (title.length < 10) {
+          showStepError("Vui lòng nhập Tiêu Đề (hoặc bấm 'Click Ngay' để AI viết) trước khi qua Bước 4.");
+          document.getElementById("dTitle")?.focus();
+          return false;
+        }
+        if (desc.length < 15) {
+          showStepError("Vui lòng nhập Mô Tả Chi Tiết (hoặc bấm 'Click Ngay') trước khi qua Bước 4.");
+          document.getElementById("dDesc")?.focus();
+          return false;
+        }
+        if (D.photos.length < 4) {
+          showStepError(`Vui lòng tải lên tối thiểu 4 hình ảnh thực tế (hiện có ${D.photos.length}/9 hình).`);
+          return false;
+        }
+      }
+      showStepError("");
+      return true;
+    }
+
     function goStep(n) {
-      D.step = Math.max(1, Math.min(4, n));
+      const target = Math.max(1, Math.min(4, n));
+      if (target > D.step) {
+        for (let s = D.step; s < target; s++) {
+          if (!validateStepBeforeNext(s)) {
+            if (s !== D.step) {
+              D.step = s;
+              break;
+            }
+            return;
+          }
+        }
+      } else {
+        showStepError("");
+      }
+      D.step = target;
       for (let i = 1; i <= 4; i++) {
         document.getElementById("slide" + i)?.classList.toggle("active", i === D.step);
       }
@@ -847,22 +1020,6 @@
     }
 
     function stepMove(dir) {
-      if (dir > 0 && D.step === 1) {
-        const phoneVal = (document.getElementById("dPhone")?.value || "").trim();
-        if (phoneVal && !/^0(3|5|7|8|9)\d{8}$/.test(phoneVal)) {
-          alert("Số Điện Thoại / Zalo chưa đúng quy chuẩn Việt Nam (10 chữ số, bắt đầu bằng 03, 05, 07, 08 hoặc 09).");
-          document.getElementById("dPhone")?.focus();
-          return;
-        }
-      }
-      if (dir > 0 && D.step === 3 && D.photos.length < 4) {
-        alert(`Vui lòng tải lên tối thiểu 4 hình ảnh thực tế (hiện có ${D.photos.length}/9 hình).`);
-        return;
-      }
-      if (dir > 0 && D.step === 4) {
-        alert("Đây là bản mẫu chờ duyệt! Khi bạn duyệt tôi sẽ áp dụng vào trang chính.");
-        return;
-      }
       goStep(D.step + dir);
     }
 
@@ -977,7 +1134,7 @@
 
     function toggleDeposit(val, btn) {
       const wasActive = btn.classList.contains("active");
-      btn.parentElement.querySelectorAll(".post-seg-btn").forEach((b) => b.classList.remove("active"));
+      btn.parentElement.querySelectorAll(".deposit-pill").forEach((b) => b.classList.remove("active"));
       if (wasActive) {
         D.deposit = "";
       } else {
@@ -1154,15 +1311,15 @@
       const btn = document.getElementById("btnAiAutoWrite");
       if (!btn) return;
       if (D.aiAutoSync) {
-        btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đang tự cập nhật</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đang Tự Cập Nhật</span>`;
         btn.style.background = "var(--ctt-grad-brand)";
         btn.style.borderColor = "var(--ctt-orange)";
-        btn.style.color = "#0f172a";
+        btn.style.color = "#ffffff";
       } else {
-        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click ngay</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>`;
         btn.style.background = "var(--ctt-grad-brand)";
         btn.style.borderColor = "var(--ctt-orange)";
-        btn.style.color = "#0f172a";
+        btn.style.color = "#ffffff";
       }
     }
 
@@ -1454,7 +1611,9 @@
           const dur = DURATIONS.find((x) => x.days === D.selectedDays) || DURATIONS[1];
           const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
           const stickerTotal = stObj ? dur.days * 1000 : 0;
-          const grandTotal = pkgTotal + stickerTotal;
+          const subtotal = pkgTotal + stickerTotal;
+          const vatTotal = Math.round(subtotal * 0.08);
+          const grandTotal = subtotal + vatTotal;
           const fmt = (n) => (n === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(n) + "đ");
           breakdownEl.innerHTML = `
             <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
@@ -1466,6 +1625,10 @@
               <span>Nhãn Dán: <strong>${stObj.name}</strong> (${dur.label} × 1k)</span>
               <strong class="tabular-nums">+${fmt(stickerTotal)}</strong>
             </div>` : ""}
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span>Thuế VAT (8%):</span>
+              <strong class="tabular-nums">${fmt(vatTotal)}</strong>
+            </div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-size:14px;">
               <strong style="color:#0f172a;">Tổng thanh toán:</strong>
               <strong class="tabular-nums" style="font-size:17px;color:var(--ctt-orange);">${grandTotal === 0 ? "0đ (Miễn phí)" : fmt(grandTotal)}</strong>
