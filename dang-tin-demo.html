@@ -544,20 +544,20 @@
                   <span class="step-circle">3</span>
                   <span>Tiêu Đề, Mô Tả & Hình Ảnh</span>
                 </div>
-                <button type="button" onclick="aiWrite()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
+                <button type="button" id="btnAiAutoWrite" onclick="aiWrite()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
                   <i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết Tự Động
                 </button>
               </div>
 
               <div style="margin-bottom:10px;">
                 <div class="post-field-label"><span>Tiêu Đề <span class="req-star">*</span></span></div>
-                <input type="text" id="dTitle" class="post-input" value="" oninput="renderPreview()">
+                <input type="text" id="dTitle" class="post-input" value="" oninput="onManualContentEdit()">
               </div>
 
               <!-- MÔ TẢ ĐẶT NGAY PHÍA DƯỚI TIÊU ĐỀ -->
               <div style="margin-bottom:12px;">
                 <div class="post-field-label"><span>Mô Tả Chi Tiết <span class="req-star">*</span></span></div>
-                <textarea id="dDesc" rows="3" class="post-input" oninput="renderPreview()"></textarea>
+                <textarea id="dDesc" rows="3" class="post-input" oninput="onManualContentEdit()"></textarea>
               </div>
 
               <!-- 5 THÔNG SỐ BỔ SUNG: NỘI THẤT, SỐ TẦNG, HƯỚNG NHÀ, ĐƯỜNG VÀO, LỘ GIỚI -->
@@ -772,6 +772,7 @@
       isEditingAddress: false,
       selectedZoneId: null,
       selectedDays: 7,
+      aiAutoSync: false,
       selectedSticker: null, // "urgent" | "hot" | "promo" | null
       coverIdx: 0,
       photos: []
@@ -984,12 +985,88 @@
       input.value = "";
     }
 
+    function buildAiDraft() {
+      const city = document.getElementById("dCity")?.value || "";
+      const ward = document.getElementById("dWard")?.value || "";
+      const street = document.getElementById("dStreet")?.value || "";
+      const project = document.getElementById("dProject")?.value || "";
+      const fullAddr = buildFullAddress() || [street, project, ward, city].filter(Boolean).join(", ");
+      const area = (document.getElementById("dArea")?.value || "").trim();
+      const price = (document.getElementById("dPrice")?.value || "").trim();
+      const furn = document.getElementById("dFurniture")?.value || "";
+      const floors = document.getElementById("dFloors")?.value || "";
+      const dir = document.getElementById("dDirection")?.value || "";
+      const frontage = (document.getElementById("dFrontageRoad")?.value || "").trim();
+      const road = (document.getElementById("dRoadAccess")?.value || "").trim();
+
+      const utils = Array.from(document.querySelectorAll(".util-chk:checked")).map((c) => c.value);
+      if (document.getElementById("chkSchool")?.checked) {
+        const sc = (document.getElementById("dSchoolCode")?.value || "").trim();
+        utils.unshift(sc ? `Gần Trường Học (${sc})` : "Gần Trường Học");
+      }
+      const svcs = Array.from(document.querySelectorAll(".svc-chk:checked")).map((c) => c.value);
+
+      const titleParts = [
+        D.cat.toUpperCase(),
+        D.beds,
+        area ? `${area}M²` : "",
+        furn ? furn.toUpperCase() : "",
+        street ? `NGAY ${street.toUpperCase()}` : (ward ? `TẠI ${ward.toUpperCase()}` : "")
+      ].filter(Boolean);
+      document.getElementById("dTitle").value = titleParts.join(" - ");
+
+      const lines = [];
+      const intro = [
+        `Cho thuê ${D.cat.toLowerCase()}`,
+        area ? `diện tích ${area}m²` : "",
+        `(${D.beds}, ${D.baths})`,
+        price ? `giá ${price} triệu/tháng` : "",
+        fullAddr ? `tại ${fullAddr}` : ""
+      ].filter(Boolean).join(" ");
+      lines.push(intro + ".");
+
+      const specBits = [
+        furn ? `Nội thất: ${furn}` : "",
+        floors ? `Kết cấu: ${floors}` : "",
+        dir ? `Hướng: ${dir}` : "",
+        frontage ? `Mặt tiền: ${frontage}` : "",
+        road ? `Đường vào: ${road}` : ""
+      ].filter(Boolean);
+      if (specBits.length) lines.push(`• ${specBits.join(" | ")}.`);
+      if (utils.length) lines.push(`• Tiện ích lân cận: ${utils.join(", ")}.`);
+      if (svcs.length) lines.push(`• Dịch vụ & An ninh: ${svcs.join(", ")}.`);
+
+      document.getElementById("dDesc").value = lines.join("\n");
+    }
+
+    function updateAiButtonUI() {
+      const btn = document.getElementById("btnAiAutoWrite");
+      if (!btn) return;
+      if (D.aiAutoSync) {
+        btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> AI Đang Tự Cập Nhật`;
+        btn.style.background = "#ecfdf5";
+        btn.style.borderColor = "#059669";
+        btn.style.color = "#059669";
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết Tự Động`;
+        btn.style.background = "var(--ctt-orange-soft)";
+        btn.style.borderColor = "var(--ctt-orange)";
+        btn.style.color = "var(--ctt-orange)";
+      }
+    }
+
     function aiWrite() {
-      const ward = document.getElementById("dWard").value;
-      const area = document.getElementById("dArea").value || "35";
-      const price = document.getElementById("dPrice").value || "6.5";
-      document.getElementById("dTitle").value = `${D.cat.toUpperCase()} ${D.beds} ${area}M² THOÁNG MÁT NGAY ${ward.toUpperCase()}`;
-      document.getElementById("dDesc").value = `Chính chủ cho thuê ${D.cat.toLowerCase()} ${D.beds}, diện tích ${area}m², giá ${price} triệu/tháng tại ${ward}. Full nội thất, khóa vân tay, giờ tự do.`;
+      D.aiAutoSync = true;
+      updateAiButtonUI();
+      buildAiDraft();
+      renderPreview();
+    }
+
+    function onManualContentEdit() {
+      if (D.aiAutoSync) {
+        D.aiAutoSync = false;
+        updateAiButtonUI();
+      }
       renderPreview();
     }
 
@@ -1126,6 +1203,9 @@
     }
 
     function renderPreview() {
+      if (D.aiAutoSync) {
+        buildAiDraft();
+      }
       const city = document.getElementById("dCity").value;
       const ward = document.getElementById("dWard").value;
       const fullAddr = document.getElementById("dAddress").value.trim() || `${ward}, ${city}`;
