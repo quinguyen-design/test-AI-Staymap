@@ -520,23 +520,25 @@
                   <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:#64748b;"></i> Thu Rác <small class="util-unit">(phòng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
-                <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;">
                   <div>
-                    <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:#0284c7;"></i> Gửi Xe <small class="util-unit">(1 Xe / tháng)</small></span></div>
+                    <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:#0284c7;"></i> Phí Gửi Xe <small class="util-unit">(1 Xe / tháng)</small></span></div>
                     <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                   </div>
-                  <div>
-                    <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn Người</span></div>
-                    <select id="dMaxPeople" class="post-input" onchange="onMaxPeopleChange(this.value)">
-                      <option value="">-- Chọn --</option>
-                      <option value="1">1 người</option>
-                      <option value="2">2 người</option>
-                      <option value="3">3 người</option>
-                      <option value="4">4 người</option>
-                      <option value="5">5 người</option>
-                    </select>
-                    <div id="extraPersonFeeWrap" style="display:none;margin-top:8px;">
-                      <div class="post-field-label"><span>Phụ Thu <small class="util-unit">(người)</small></span></div>
+                  <div id="peopleLimitGrid" style="display:grid;grid-template-columns:1fr;gap:8px;align-items:end;">
+                    <div>
+                      <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:#d97706;"></i> Giới Hạn Người</span></div>
+                      <select id="dMaxPeople" class="post-input" onchange="onMaxPeopleChange(this.value)">
+                        <option value="">-- Chọn --</option>
+                        <option value="1">1 người</option>
+                        <option value="2">2 người</option>
+                        <option value="3">3 người</option>
+                        <option value="4">4 người</option>
+                        <option value="5">5 người</option>
+                      </select>
+                    </div>
+                    <div id="extraPersonFeeWrap" style="display:none;">
+                      <div class="post-field-label"><span>Phụ Thu <small id="extraPersonNote" class="util-unit">(từ người thứ 2)</small></span></div>
                       <input type="text" inputmode="decimal" id="dExtraPerson" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                     </div>
                   </div>
@@ -1077,10 +1079,15 @@
     }
 
     function onMaxPeopleChange(val) {
+      const grid = document.getElementById("peopleLimitGrid");
       const wrap = document.getElementById("extraPersonFeeWrap");
+      const note = document.getElementById("extraPersonNote");
       const feeEl = document.getElementById("dExtraPerson");
-      const showFee = parseInt(val, 10) >= 2;
+      const num = parseInt(val, 10);
+      const showFee = num >= 2;
+      if (grid) grid.style.gridTemplateColumns = showFee ? "1fr 1.15fr" : "1fr";
       if (wrap) wrap.style.display = showFee ? "block" : "none";
+      if (note && showFee) note.textContent = `(từ người thứ ${num})`;
       if (!showFee && feeEl) feeEl.value = "";
       renderPreview();
     }
