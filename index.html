@@ -1192,8 +1192,11 @@
               </div>
 
               <div style="margin-bottom:10px;">
-                <div class="post-field-label"><span>Tiêu Đề <span class="req-star">*</span></span></div>
-                <input type="text" id="dTitle" class="post-input" value="" oninput="onStudioManualContentEdit()">
+                <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                  <span>Tiêu Đề <span class="req-star">*</span></span>
+                  <small id="demoTitleCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/70 ký tự</small>
+                </div>
+                <input type="text" id="dTitle" maxlength="70" class="post-input" value="" oninput="onStudioManualContentEdit()">
               </div>
 
               <div style="margin-bottom:12px;">
@@ -1732,6 +1735,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261117a"></script>
+  <script src="app.js?v=20261117b"></script>
 </body>
 </html>

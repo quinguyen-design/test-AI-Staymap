@@ -671,8 +671,11 @@
               </div>
 
               <div style="margin-bottom:10px;">
-                <div class="post-field-label"><span>Tiêu Đề <span class="req-star">*</span></span></div>
-                <input type="text" id="dTitle" class="post-input" value="" oninput="onManualContentEdit()">
+                <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                  <span>Tiêu Đề <span class="req-star">*</span></span>
+                  <small id="demoTitleCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/70 ký tự</small>
+                </div>
+                <input type="text" id="dTitle" maxlength="70" class="post-input" value="" oninput="onManualContentEdit()">
               </div>
 
               <!-- MÔ TẢ ĐẶT NGAY PHÍA DƯỚI TIÊU ĐỀ -->
@@ -1280,7 +1283,14 @@
         highlightSpec,
         price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"
       ].filter(Boolean).join(" • ");
-      document.getElementById("dTitle").value = seoTitle.slice(0, 99);
+      const fitTitle70 = (str) => {
+        if (str.length <= 70) return str;
+        const cut = str.slice(0, 70);
+        const lastSpace = cut.lastIndexOf(" ");
+        return (lastSpace > 45 ? cut.slice(0, lastSpace) : cut).replace(/[•,\-\s]+$/, "");
+      };
+      document.getElementById("dTitle").value = fitTitle70(seoTitle);
+      updateDemoTitleCount();
 
       // 2. Mô tả chuẩn SEO thuyết phục, phân đoạn rõ ràng theo từng lựa chọn của khách
       const lines = [];
@@ -1362,11 +1372,23 @@
       renderPreview();
     }
 
+    function updateDemoTitleCount() {
+      const titleEl = document.getElementById("dTitle");
+      const countEl = document.getElementById("demoTitleCountLabel");
+      if (!titleEl) return;
+      if (titleEl.value.length > 70) titleEl.value = titleEl.value.slice(0, 70);
+      if (countEl) {
+        countEl.textContent = `${titleEl.value.length}/70 ký tự`;
+        countEl.style.color = titleEl.value.length >= 70 ? "var(--ctt-orange)" : "#64748b";
+      }
+    }
+
     function onManualContentEdit() {
       if (D.aiAutoSync) {
         D.aiAutoSync = false;
         updateAiButtonUI();
       }
+      updateDemoTitleCount();
       renderPreview();
     }
 

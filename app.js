@@ -3483,8 +3483,16 @@ function buildStudioAiDraft() {
     price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"
   ].filter(Boolean).join(" • ");
 
+  const fitTitle70 = (str) => {
+    if (str.length <= 70) return str;
+    const cut = str.slice(0, 70);
+    const lastSpace = cut.lastIndexOf(" ");
+    return (lastSpace > 45 ? cut.slice(0, lastSpace) : cut).replace(/[•,\-\s]+$/, "");
+  };
+
   const titleEl = document.getElementById("dTitle");
-  if (titleEl) titleEl.value = seoTitle.slice(0, 99);
+  if (titleEl) titleEl.value = fitTitle70(seoTitle);
+  updateStudioTitleCount();
 
   const hookByCat = {
     "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ, dọn vào ở ngay",
@@ -3550,11 +3558,26 @@ function generateStudioAISeo() {
   renderStudioPreview();
 }
 
+function updateStudioTitleCount() {
+  const titleEl = document.getElementById("dTitle");
+  const countEl = document.getElementById("demoTitleCountLabel");
+  if (!titleEl) return;
+  if (titleEl.value.length > 70) {
+    titleEl.value = titleEl.value.slice(0, 70);
+  }
+  const len = titleEl.value.length;
+  if (countEl) {
+    countEl.textContent = `${len}/70 ký tự`;
+    countEl.style.color = len >= 70 ? "var(--ctt-orange)" : "#64748b";
+  }
+}
+
 function onStudioManualContentEdit() {
   if (STUDIO_STATE.aiAutoSync) {
     STUDIO_STATE.aiAutoSync = false;
     updateStudioAiButtonUI();
   }
+  updateStudioTitleCount();
   renderStudioPreview();
 }
 
@@ -3666,6 +3689,7 @@ function initStudioPostListing(preselectedZoneId = null) {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
+  updateStudioTitleCount();
   ["dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = "";
