@@ -962,257 +962,435 @@
        (Chuyển trang mượt mà ngay trong khung như localhost:4173 + Khớp 1:1 với Bài viết)
        ======================================================================== -->
   <div class="ctt-modal-backdrop" id="postModalBackdrop">
-    <div class="ctt-modal-dialog" style="max-width:1220px;">
-      <div class="ctt-modal-header" style="padding:14px 26px;background:#fff;">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div style="width:10px;height:32px;border-radius:4px;background:var(--ctt-grad-brand);"></div>
-          <div>
-            <h3 style="font-size:17px;font-weight:900;color:#0f172a;">ĐĂNG TIN BẤT ĐỘNG SẢN MỚI — KHỚP 1:1 VỚI BÀI VIẾT</h3>
-            <small style="color:#64748b;font-size:11.5px;">Hiệu ứng chuyển bước mượt mà trong khung • Xem thử trực tiếp Thẻ tin, Banner VIP & Bài viết</small>
+    <div class="ctt-modal-dialog" style="max-width:1200px;">
+      <!-- HEADER: Only "Đăng Tin Bất Động Sản Mới" + 4 subtle steps aligned on same row with Wallet -->
+      <div class="demo-header-row">
+        <div class="demo-title-wrap">
+          <div style="width:8px;height:26px;border-radius:4px;background:var(--ctt-grad-brand);"></div>
+          <h3 style="font-size:17px;font-weight:900;color:#0f172a;margin:0;white-space:nowrap;">Đăng Tin Bất Động Sản Mới</h3>
+        </div>
+
+        <div class="demo-header-right">
+          <div class="subtle-stepper" id="modalWizardTabs">
+            <button type="button" class="subtle-step-btn active" onclick="goToModalWizardStep(1)"><span class="snum">1</span> Vị Trí</button>
+            <button type="button" class="subtle-step-btn" onclick="goToModalWizardStep(2)"><span class="snum">2</span> Thông Số</button>
+            <button type="button" class="subtle-step-btn" onclick="goToModalWizardStep(3)"><span class="snum">3</span> Nội Dung & Ảnh</button>
+            <button type="button" class="subtle-step-btn" onclick="goToModalWizardStep(4)"><span class="snum">4</span> Gói Tin</button>
           </div>
-        </div>
 
-        <!-- 4 Interactive Wizard Step Tabs inside Modal Header -->
-        <div class="post-stepper-pills" id="modalWizardTabs">
-          <button type="button" class="post-step-badge active" onclick="goToModalWizardStep(1)"><span class="num">1</span> Phân loại & Vị trí</button>
-          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(2)"><span class="num">2</span> Thông số & Chi phí</button>
-          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(3)"><span class="num">3</span> Tiện ích & 4 Ảnh</button>
-          <button type="button" class="post-step-badge" onclick="goToModalWizardStep(4)"><span class="num">4</span> Gói VIP & Đăng</button>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:#fff3e6;color:#f37201;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:800;border:1px solid #ffd6be;cursor:pointer;" onclick="openWalletModal()">
+          <div class="demo-wallet-pill tabular-nums" onclick="openWalletModal()">
             <i class="fa-solid fa-wallet"></i> Ví: <span class="js-wallet-balance">550.000đ</span>
           </div>
-          <button type="button" onclick="closePostModal()" style="width:34px;height:34px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:15px;"><i class="fa-solid fa-xmark"></i></button>
+
+          <button type="button" onclick="closePostModal()" title="Đóng khung" style="width:32px;height:32px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;color:#475569;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
       </div>
 
-      <div class="ctt-modal-body" style="padding:22px 26px;">
-        <div style="display:grid;grid-template-columns:1.32fr 1fr;gap:24px;align-items:start;">
-          <!-- LEFT PANE: 4 ANIMATED WIZARD SLIDES INSIDE FRAME -->
-          <div style="background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:22px 24px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
+      <div class="ctt-modal-body" style="padding:20px 24px;">
+        <div style="display:grid;grid-template-columns:1.32fr 1fr;gap:22px;align-items:start;">
+          <!-- LEFT PANE: 4 CONCISE STEPS -->
+          <div style="background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:20px 22px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
 
-            <!-- WIZARD SLIDE 1: PHÂN LOẠI & VỊ TRÍ -->
+            <!-- STEP 1: VỊ TRÍ -->
             <div class="modal-wizard-slide active" id="modalWizardSlide1">
               <div class="post-step-head">
                 <div class="post-step-title">
                   <span class="step-circle">1</span>
-                  <span>Bước 1/4: Chọn Loại hình BĐS & Địa chỉ chuẩn Phường/Xã mới</span>
+                  <span>Loại Hình & Vị Trí</span>
                 </div>
-                <span style="font-size:11.5px;color:#059669;font-weight:700;"><i class="fa-solid fa-location-dot"></i> Tự động ghim Bản đồ 3D</span>
+                <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Nhập Chuẩn Vị Trí – Bản Đồ Ghim Đúng Ý</span>
               </div>
 
-              <div class="post-field-label"><span>Chọn loại hình cho thuê (1 chạm) *</span></div>
+              <div class="post-field-label"><span>Loại Hình <span class="req-star">*</span></span></div>
               <div class="post-cat-selector">
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('phong-tro', 'Phòng trọ', this)"><i class="fa-solid fa-door-open"></i><span>Phòng trọ</span></button>
-                <button type="button" class="post-cat-btn active" onclick="selectStudioCategory('can-ho-chung-cu', 'Căn hộ, chung cư', this)"><i class="fa-solid fa-building"></i><span>Căn hộ, Studio</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('nha-o', 'Nhà ở', this)"><i class="fa-solid fa-house-chimney"></i><span>Nhà nguyên căn</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('mat-bang-van-phong', 'Mặt bằng, văn phòng', this)"><i class="fa-solid fa-shop"></i><span>Mặt bằng, VP</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('bai-dat-kho-xuong', 'Bãi, Đất, Kho, Xưởng', this)"><i class="fa-solid fa-warehouse"></i><span>Kho xưởng</span></button>
+                <button type="button" class="post-cat-btn active" onclick="selectStudioCategory('phong-tro', 'Phòng Trọ / CHDV', this)"><span class="cat-icon-circle"><i class="fa-solid fa-door-open"></i></span><span style="line-height:1.25;">Phòng Trọ<br>CHDV</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('nha-nguyen-can', 'Nhà Nguyên Căn', this)"><span class="cat-icon-circle"><i class="fa-solid fa-house-chimney"></i></span><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('can-ho-chung-cu', 'Căn Hộ Chung Cư', this)"><span class="cat-icon-circle"><i class="fa-solid fa-building"></i></span><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('mat-bang-van-phong', 'Mặt Bằng Văn Phòng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-shop"></i></span><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('dat-xuong-kho-bai', 'Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('homestay-airbnb', 'HomeStay / AirBnb', this)"><span class="cat-icon-circle"><i class="fa-solid fa-umbrella-beach"></i></span><span style="line-height:1.25;">HomeStay<br>AirBnb</span></button>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
                 <div>
-                  <div class="post-field-label"><span>Tỉnh / Thành phố *</span></div>
-                  <select id="postCitySelect" class="post-input" onchange="renderStudioPreview()">
+                  <div class="post-field-label"><span>Tỉnh / Thành <span class="req-star">*</span></span></div>
+                  <select id="dCity" class="post-input" onchange="onStudioLocationChange()">
                     <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
                     <option value="TP. Hà Nội">TP. Hà Nội</option>
                   </select>
                 </div>
                 <div>
-                  <div class="post-field-label"><span>Phường / Xã sáp nhập mới *</span></div>
-                  <select id="postWardSelect" class="post-input" onchange="renderStudioPreview()">
-                    <option value="P. Cầu Kiệu">Phường Cầu Kiệu (Phú Nhuận)</option>
-                    <option value="P. Hòa Hưng">Phường Hòa Hưng (Quận 10)</option>
-                    <option value="P. Nhiêu Lộc">Phường Nhiêu Lộc (Quận 3)</option>
-                    <option value="P. Hạnh Thông">Phường Hạnh Thông (Gò Vấp)</option>
-                    <option value="P. Gia Định">Phường Gia Định (Bình Thạnh)</option>
+                  <div class="post-field-label"><span>Phường / Xã <span class="req-star">*</span></span></div>
+                  <select id="dWard" class="post-input" onchange="onStudioLocationChange(true)">
+                    <option value="P. Cầu Kiệu">P. Cầu Kiệu (Phú Nhuận)</option>
+                    <option value="P. Hòa Hưng">P. Hòa Hưng (Quận 10)</option>
+                    <option value="P. Nhiêu Lộc">P. Nhiêu Lộc (Quận 3)</option>
+                    <option value="P. Gia Định">P. Gia Định (Bình Thạnh)</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Tên Đường <span class="req-star">*</span></span></div>
+                  <select id="dStreet" class="post-input" onchange="onStudioLocationChange()">
+                    <option value="">-- Chọn tên đường --</option>
+                  </select>
+                </div>
+                <div>
+                  <div class="post-field-label"><span>Dự Án</span></div>
+                  <select id="dProject" class="post-input" onchange="onStudioLocationChange()">
+                    <option value="">-- Không thuộc dự án --</option>
+                    <option value="Vinhomes Central Park">Vinhomes Central Park</option>
+                    <option value="Vinhomes Grand Park">Vinhomes Grand Park</option>
+                    <option value="The Sun Avenue">The Sun Avenue</option>
                   </select>
                 </div>
               </div>
 
-              <div style="margin-bottom:14px;">
-                <div class="post-field-label"><span>Số nhà, Tên đường hiển thị trên Bài viết *</span></div>
-                <input type="text" id="postAddressInput" class="post-input" value="142 Phan Xích Long, Phường Cầu Kiệu, TP. Hồ Chí Minh" oninput="renderStudioPreview()">
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label">
+                  <span>Địa Chỉ Chi Tiết <span class="req-star">*</span></span>
+                </div>
+                <div class="addr-composite-box" onclick="document.getElementById('dAddress').focus()">
+                  <input type="text" id="dAddress" value="" onfocus="onStudioAddressFocus()" oninput="onStudioAddressInput(this.value)" onblur="onStudioAddressBlur()">
+                  <span id="dAddressSuffix" class="addr-locked-suffix"></span>
+                </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div>
-                  <div class="post-field-label"><span>Tên người đăng / Chính chủ *</span></div>
-                  <input type="text" id="postHostInput" class="post-input" value="Chính chủ Minh Quân" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span>Người Liên Hệ <span class="req-star">*</span></span></div>
+                  <input type="text" id="dHost" class="post-input" value="" oninput="renderStudioPreview()">
                 </div>
                 <div>
-                  <div class="post-field-label"><span>Số điện thoại nhận cuộc gọi & Zalo *</span></div>
-                  <input type="text" id="postPhoneInput" class="post-input tabular-nums" value="0906 344 877" oninput="renderStudioPreview()">
+                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Số Điện Thoại / Zalo <span class="req-star">*</span></span>
+                    <small id="dPhoneStatus" style="font-size:10.5px;font-weight:700;"></small>
+                  </div>
+                  <input type="tel" inputmode="numeric" maxlength="10" id="dPhone" class="post-input tabular-nums" value="" oninput="sanitizeStudioVnPhone(this)">
                 </div>
               </div>
             </div>
 
-            <!-- WIZARD SLIDE 2: THÔNG SỐ VÀNG & CHI PHÍ MINH BẠCH -->
+            <!-- STEP 2: THÔNG SỐ -->
             <div class="modal-wizard-slide" id="modalWizardSlide2">
               <div class="post-step-head">
                 <div class="post-step-title">
                   <span class="step-circle">2</span>
-                  <span>Bước 2/4: Thông số Vàng & Chi phí Điện/Nước minh bạch</span>
+                  <span>Thông Số & Chi Phí</span>
                 </div>
-                <span style="font-size:11.5px;color:#059669;font-weight:700;">Khớp 100% với Đáy thẻ & Bảng tính chi phí</span>
+                <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Đúng Thông Số - Chuẩn Bảng Tính</span>
               </div>
 
-              <div style="display:grid;grid-template-columns:1.1fr 1fr 1.4fr;gap:12px;margin-bottom:16px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;align-items:start;">
                 <div>
-                  <div class="post-field-label"><span>Giá thuê (Triệu/thg) *</span></div>
-                  <input type="number" step="0.1" id="postPriceInput" class="post-input tabular-nums" value="6.5" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span>Giá Thuê (Triệu/Th) <span class="req-star">*</span></span></div>
+                  <input type="number" step="0.1" id="dPrice" class="post-input tabular-nums" value="" oninput="renderStudioPreview()">
                 </div>
                 <div>
-                  <div class="post-field-label"><span>Diện tích (m²) *</span></div>
-                  <input type="number" id="postAreaInput" class="post-input tabular-nums" value="35" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span>Diện Tích (m²) <span class="req-star">*</span></span></div>
+                  <input type="number" id="dArea" class="post-input tabular-nums" value="" oninput="renderStudioPreview()">
                 </div>
                 <div>
-                  <div class="post-field-label"><span>Tiền đặt cọc (1 chạm)</span></div>
-                  <div class="post-seg-group">
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('deposit', '0.5 tháng', this)">0.5 tháng</button>
-                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('deposit', '1 tháng', this)">1 tháng</button>
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('deposit', '2 tháng', this)">2 tháng</button>
-                  </div>
-                </div>
-              </div>
-
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
-                <div>
-                  <div class="post-field-label"><span>Không gian ngủ (Số PN) *</span></div>
-                  <div class="post-seg-group">
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', 'Studio', this)">Studio</button>
-                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('beds', '1 PN', this)">1 PN</button>
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', '2 PN', this)">2 PN</button>
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('beds', '3 PN', this)">3 PN</button>
-                  </div>
-                </div>
-                <div>
-                  <div class="post-field-label"><span>Phòng vệ sinh (Số WC) *</span></div>
-                  <div class="post-seg-group">
-                    <button type="button" class="post-seg-btn active" onclick="selectStudioSeg('baths', '1 WC', this)">1 WC</button>
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('baths', '2 WC', this)">2 WC</button>
-                    <button type="button" class="post-seg-btn" onclick="selectStudioSeg('baths', '3 WC', this)">3+ WC</button>
-                  </div>
+                  <div class="post-field-label"><span>Tiền Cọc</span></div>
+                  <select id="dDeposit" class="post-input" onchange="STUDIO_STATE.deposit=this.value;renderStudioPreview()">
+                    <option value="" selected hidden></option>
+                    <option value="Miễn Cọc">Miễn Cọc</option>
+                    <option value="1 Tháng">1 Tháng</option>
+                    <option value="2 Tháng">2 Tháng</option>
+                    <option value="3 Tháng">3 Tháng</option>
+                    <option value="Thỏa Thuận">Thỏa Thuận</option>
+                  </select>
                 </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-bolt" style="color:var(--ctt-orange);"></i> Giá điện</span></div>
-                  <input type="text" id="postElecInput" class="post-input tabular-nums" value="3.5k/kWh" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span>Phòng Ngủ</span></div>
+                  <select id="dBeds" class="post-input tabular-nums" onchange="STUDIO_STATE.beds=this.value;renderStudioPreview()">
+                    <option value="1 PN" selected>1 Phòng Ngủ</option>
+                    <option value="2 PN">2 Phòng Ngủ</option>
+                    <option value="3 PN">3 Phòng Ngủ</option>
+                    <option value="4 PN">4 Phòng Ngủ</option>
+                    <option value="5 PN">5 Phòng Ngủ</option>
+                    <option value="6+ PN">6+ Phòng Ngủ</option>
+                  </select>
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:#0284c7;"></i> Giá nước</span></div>
-                  <input type="text" id="postWaterInput" class="post-input tabular-nums" value="100k/người" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span>Nhà Vệ Sinh</span></div>
+                  <select id="dBaths" class="post-input tabular-nums" onchange="STUDIO_STATE.baths=this.value;renderStudioPreview()">
+                    <option value="1 WC" selected>1 Nhà Vệ Sinh</option>
+                    <option value="2 WC">2 Nhà Vệ Sinh</option>
+                    <option value="3 WC">3 Nhà Vệ Sinh</option>
+                    <option value="4 WC">4 Nhà Vệ Sinh</option>
+                    <option value="5 WC">5 Nhà Vệ Sinh</option>
+                    <option value="6+ WC">6+ Nhà Vệ Sinh</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-bolt" style="color:var(--ctt-orange);"></i> Điện <small class="util-unit">(kWh)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dElec" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeStudioNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:#059669;"></i> Phí DV / Giữ xe</span></div>
-                  <input type="text" id="postServiceInput" class="post-input tabular-nums" value="150.000đ/thg" oninput="renderStudioPreview()">
+                  <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:var(--ctt-orange);"></i> Nước <small class="util-unit">(Người)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="Giá nhà nước (Để trống)" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-receipt" style="color:var(--ctt-orange);"></i> Trọn Gói Chi Phí Khác</span></div>
+                  <input type="text" inputmode="decimal" id="dOtherCost" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:var(--ctt-orange);"></i> Internet <small class="util-unit">(Phòng)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dInternet" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-shirt" style="color:var(--ctt-orange);"></i> Giặt Sấy <small class="util-unit">(Người)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dLaundry" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Thu Rác <small class="util-unit">(Phòng)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(SLXe / Tháng)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                </div>
+                <div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:var(--ctt-orange);"></i> Giới Hạn <small class="util-unit">(Người / Phòng)</small></span></div>
+                  <select id="dMaxPeople" class="post-input" onchange="onStudioMaxPeopleChange(this.value)">
+                    <option value="" selected hidden></option>
+                    <option value="1">1 Người</option>
+                    <option value="2">2 Người</option>
+                    <option value="3">3 Người</option>
+                    <option value="4">4 Người</option>
+                    <option value="5">5 Người</option>
+                  </select>
+                </div>
+                <div id="extraPersonFeeWrap" style="visibility:hidden;">
+                  <div class="post-field-label"><span>Phụ Thu <small id="extraPersonNote" class="util-unit">(từ người thứ 2)</small></span></div>
+                  <input type="text" inputmode="decimal" id="dExtraPerson" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
                 </div>
               </div>
             </div>
 
-            <!-- WIZARD SLIDE 3: TIÊU ĐỀ, CHIP TIỆN ÍCH 1 CHẠM & 4 ẢNH THỰC TẾ -->
+            <!-- STEP 3: TIÊU ĐỀ, MÔ TẢ & HÌNH ẢNH -->
             <div class="modal-wizard-slide" id="modalWizardSlide3">
               <div class="post-step-head">
                 <div class="post-step-title">
                   <span class="step-circle">3</span>
-                  <span>Bước 3/4: Tiêu đề, Tiện ích 1 chạm & Bộ 4 Ảnh thực tế</span>
+                  <span>Tiêu Đề, Mô Tả & Hình Ảnh</span>
                 </div>
-                <button type="button" onclick="generateStudioAISeo()" style="padding:5px 12px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
-                  <i class="fa-solid fa-wand-magic-sparkles"></i> AI Viết tự động
-                </button>
-              </div>
-
-              <div style="margin-bottom:12px;">
-                <div class="post-field-label"><span>Tiêu đề bài viết *</span></div>
-                <input type="text" id="postTitleInput" class="post-input" value="CĂN HỘ 1PN TÁCH BẾP BAN CÔNG THOÁNG MÁT NGAY PHAN XÍCH LONG CẦU KIỆU" oninput="renderStudioPreview()">
-              </div>
-
-              <div style="margin-bottom:12px;">
-                <div class="post-field-label"><span>Bấm chọn Tiện ích có sẵn (Tự động gắn vào bài viết):</span></div>
-                <div class="post-amenity-chips">
-                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Có ban công thoáng')"><i class="fa-solid fa-sun"></i> Ban công thoáng</span>
-                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Tách bếp riêng')"><i class="fa-solid fa-utensils"></i> Tách bếp</span>
-                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Full nội thất cao cấp')"><i class="fa-solid fa-couch"></i> Full nội thất</span>
-                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Khóa vân tay 24/24')"><i class="fa-solid fa-fingerprint"></i> Khóa vân tay</span>
-                  <span class="post-amenity-chip" onclick="toggleStudioAmenity(this, 'Thang máy tốc độ cao')"><i class="fa-solid fa-elevator"></i> Thang máy</span>
-                  <span class="post-amenity-chip active" onclick="toggleStudioAmenity(this, 'Giờ giấc tự do, không chung chủ')"><i class="fa-solid fa-clock"></i> Giờ tự do</span>
-                  <span class="post-amenity-chip" onclick="toggleStudioAmenity(this, 'Cho nuôi thú cưng (Pet)')"><i class="fa-solid fa-paw"></i> Nuôi Pet</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Click Chọn Thông Minh, AI Viết Cực Đỉnh</span>
+                  <button type="button" id="btnAiAutoWrite" onclick="generateStudioAISeo()" style="padding:4px 11px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-grad-brand);color:#ffffff;font-size:11px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>
+                  </button>
                 </div>
               </div>
 
-              <div style="margin-bottom:12px;">
-                <div class="post-field-label"><span>Bộ 4 Ảnh thực tế (Bấm vào ảnh để chọn làm Ảnh bìa chính):</span></div>
-                <div class="post-photo-manager" id="modalPhotoManager"></div>
+              <div style="margin-bottom:10px;">
+                <div class="post-field-label"><span>Tiêu Đề <span class="req-star">*</span></span></div>
+                <input type="text" id="dTitle" class="post-input" value="" oninput="onStudioManualContentEdit()">
               </div>
 
-              <div>
-                <div class="post-field-label"><span>Mô tả chi tiết</span></div>
-                <textarea id="postDescInput" rows="2" class="post-input" oninput="renderStudioPreview()">Chính chủ cho thuê căn hộ 1PN tách bếp ban công thoáng mát tại 142 Phan Xích Long, P. Cầu Kiệu. Phòng mới 100%, full nội thất cao cấp, khóa vân tay 24/24.</textarea>
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Mô Tả Chi Tiết <span class="req-star">*</span></span></div>
+                <textarea id="dDesc" rows="9" class="post-input" style="min-height:210px;line-height:1.55;resize:vertical;" oninput="onStudioManualContentEdit()"></textarea>
+              </div>
+
+              <div style="padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:12px;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
+                  <div>
+                    <div class="post-field-label"><span>Nội Thất</span></div>
+                    <select id="dFurniture" class="post-input" onchange="STUDIO_STATE.furniture=this.value;renderStudioPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="Không Có">Không Có</option>
+                      <option value="Cơ Bản">Cơ Bản</option>
+                      <option value="Đầy Đủ">Đầy Đủ</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Số Tầng</span></div>
+                    <select id="dFloors" class="post-input tabular-nums" onchange="renderStudioPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="1 Tầng">1 Tầng</option>
+                      <option value="2 Tầng">2 Tầng</option>
+                      <option value="3 Tầng">3 Tầng</option>
+                      <option value="4 Tầng">4 Tầng</option>
+                      <option value="5 Tầng">5 Tầng</option>
+                      <option value="6+ Tầng">6+ Tầng</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Hướng Nhà</span></div>
+                    <select id="dDirection" class="post-input" onchange="renderStudioPreview()">
+                      <option value="">-- Chọn --</option>
+                      <option value="Đông">Đông</option>
+                      <option value="Tây">Tây</option>
+                      <option value="Nam">Nam</option>
+                      <option value="Bắc">Bắc</option>
+                      <option value="Đông Bắc">Đông Bắc</option>
+                      <option value="Đông Nam">Đông Nam</option>
+                      <option value="Tây Bắc">Tây Bắc</option>
+                      <option value="Tây Nam">Tây Nam</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div>
+                    <div class="post-field-label"><span>Mặt Tiền - Lộ Giới Hiện Hữu <small class="util-unit">(m)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dFrontageRoad" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericUnit(this, 'm')">
+                  </div>
+                  <div>
+                    <div class="post-field-label"><span>Đường Vào Nhà <small class="util-unit">(m)</small></span></div>
+                    <input type="text" inputmode="decimal" id="dRoadAccess" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericUnit(this, 'm')">
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                  <span>Hình Ảnh <span class="req-star">*</span></span>
+                  <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
+                </div>
+                <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+                  <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:16px;"></i>
+                  <span>Tải Ảnh Thực Tế Từ Máy (Bấm Chọn Ảnh Bìa)</span>
+                  <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleStudioPhotoUpload(this)">
+                </label>
+                <div class="post-photo-manager" id="demoPhotos"></div>
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <div class="post-field-label"><span>Video Thực Tế <small class="util-unit">(Không Bắt Buộc)</small></span></div>
+                <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;">
+                  <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:15px;"></i>
+                  <span id="demoVideoLabel">Tải Video Ngắn Từ Máy (MP4, MOV)</span>
+                  <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleStudioVideoUpload(this)">
+                </label>
+              </div>
+
+              <div class="check-section-box">
+                <div class="post-field-label" style="margin-bottom:8px;"><span>Tiện Ích</span></div>
+                <div class="check-list-grid">
+                  <div>
+                    <label class="check-list-item">
+                      <input type="checkbox" id="chkSchool" onchange="toggleStudioSchoolCode(this.checked)">
+                      <span>Trường Học <small class="util-unit">(Ghi Mã/Ký Hiệu Trường)</small></span>
+                    </label>
+                    <div id="schoolCodeWrap" style="display:none;margin-top:6px;padding-left:24px;">
+                      <input type="text" id="dSchoolCode" class="post-input" style="padding:7px 10px;font-size:12.5px;" placeholder="Nhập Mã / Ký Hiệu Trường..." oninput="renderStudioPreview()">
+                    </div>
+                  </div>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderStudioPreview()"><span>Chợ / Siêu Thị</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderStudioPreview()"><span>Bệnh Viện / Y Tế</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderStudioPreview()"><span>Công Viên</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderStudioPreview()"><span>Xe Bus</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderStudioPreview()"><span>Bank / ATM</span></label>
+                </div>
+              </div>
+
+              <div class="check-section-box" style="margin-bottom:0;">
+                <div class="post-field-label" style="margin-bottom:8px;"><span>Dịch Vụ</span></div>
+                <div class="check-list-grid">
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderStudioPreview()"><span>Nhà Xe / Hầm Xe Rộng</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderStudioPreview()"><span>Khu Giặt / Phơi / Sấy</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderStudioPreview()"><span>Bảo Vệ / Camera An Ninh</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderStudioPreview()"><span>Hệ Thống PCCC</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderStudioPreview()"><span>Thang Máy</span></label>
+                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderStudioPreview()"><span>Quản Lý / Kiểm Tra Khu Vực Chung</span></label>
+                </div>
               </div>
             </div>
 
-            <!-- WIZARD SLIDE 4: CHỌN GÓI VIP (TÁCH 2 BƯỚC RÕ RÀNG) -->
+            <!-- STEP 4: CHỌN 1/6 KHU VỰC -> SỐ NGÀY & NHÃN DÁN -->
             <div class="modal-wizard-slide" id="modalWizardSlide4">
               <div class="post-step-head">
                 <div class="post-step-title">
                   <span class="step-circle">4</span>
-                  <span>Bước 4/4: Chọn Khu vực hiển thị VIP & Số ngày</span>
+                  <span>Chọn Gói Hiển Thị</span>
                 </div>
-                <span style="font-size:11.5px;color:#ef4444;font-weight:800;">Ưu đãi giảm 5% - 10% - 20%</span>
+                <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Khuyến Mãi Ngập Tràn, Deal Ngàn Ưu Đãi</span>
               </div>
 
-              <div class="post-field-label"><span>4A. Chọn 1 trong 6 Khu vực hiển thị:</span></div>
-              <div class="post-zone-clean-grid" id="modalZonePackagesGrid"></div>
+              <div class="post-field-label"><span>Chọn 1 Trong 6 Khu Vực <span class="req-star">*</span></span></div>
+              <div class="post-zone-clean-grid" id="demoZonesGrid"></div>
 
-              <div class="post-field-label"><span>4B. Chọn số ngày hiển thị:</span></div>
-              <div class="post-duration-4grid" id="modalDuration4Grid"></div>
+              <div id="zonePickHint" class="zone-hint-banner">
+                <i class="fa-regular fa-hand-pointer"></i> Bấm chọn 1 trong 6 khu vực phía trên để hiện tùy chọn số ngày hiển thị.
+              </div>
 
-              <div class="vip-roi-banner" id="vipRoiSocialProof"></div>
+              <div id="durationSectionWrap" class="duration-reveal-box">
+                <div class="post-field-label"><span>Chọn Số Ngày Hiển Thị <span class="req-star">*</span></span></div>
+                <div class="post-duration-4grid" id="demoDurationGrid"></div>
+
+                <div id="stickerSectionWrap" style="margin-top:14px;">
+                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Nhãn Dán <small class="util-unit">(Không Bắt Buộc • 1.000đ/ngày)</small></span>
+                    <small id="stickerPriceHint" class="tabular-nums" style="color:var(--ctt-orange);font-weight:700;"></small>
+                  </div>
+                  <div class="sticker-3grid" id="demoStickerGrid"></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Bottom Step Navigation Bar inside Left Pane -->
-            <div style="margin-top:18px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
-              <button type="button" class="hsp-btn-reset" id="btnWizardPrev" onclick="stepModalWizard(-1)" style="visibility:hidden;">
-                <i class="fa-solid fa-arrow-left"></i> Quay lại bước trước
+            <!-- Inline Validation Banner -->
+            <div id="stepValidationError" class="step-inline-error"></div>
+
+            <!-- Bottom Navigation -->
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+              <button type="button" class="hsp-btn-reset" id="btnModalPrev" onclick="stepModalWizard(-1)" style="visibility:hidden;">
+                <i class="fa-solid fa-arrow-left"></i> Quay lại
               </button>
-              <span style="font-size:12px;font-weight:700;color:#64748b;" id="wizardStepIndicatorText">Bước 1 / 4</span>
-              <button type="button" class="hsp-btn-apply" id="btnWizardNext" onclick="stepModalWizard(1)">
-                Tiếp theo: Thông số & Chi phí <i class="fa-solid fa-arrow-right"></i>
+              <span style="font-size:12px;font-weight:700;color:#64748b;" id="modalStepCounter">Bước 1 / 4</span>
+              <button type="button" class="hsp-btn-apply" id="btnModalNext" onclick="stepModalWizard(1)">
+                Tiếp theo <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
           </div>
 
-          <!-- RIGHT PANE: LIVE 1:1 PREVIEW STUDIO (3 TABS: CARD / SV1 / ARTICLE) -->
+          <!-- RIGHT PANE: EXACT 1:1 LIVE PREVIEW STUDIO -->
           <div style="background:#fff;padding:18px 20px;border-radius:18px;border:1px solid #e2e8f0;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
               <strong style="font-size:13.5px;color:#0f172a;">
                 <i class="fa-solid fa-desktop" style="color:var(--ctt-orange);margin-right:6px;"></i>XEM THỬ BÀI VIẾT TRỰC TIẾP (1:1)
               </strong>
-              <span style="font-size:11px;font-weight:700;color:#059669;background:#ecfdf5;padding:3px 8px;border-radius:99px;">Khớp 100%</span>
+              <span style="font-size:11px;font-weight:700;color:var(--ctt-orange);background:var(--ctt-orange-soft);padding:3px 8px;border-radius:99px;">Khớp 100%</span>
             </div>
 
             <div class="post-preview-tabs">
-              <button type="button" class="post-prev-tab active" onclick="switchStudioPreviewTab('card', this)">1. Thẻ tin (.lc-card)</button>
-              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('sv1', this)">2. Banner VIP (.sv1)</button>
-              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('detail', this)">3. Trang Bài viết</button>
+              <button type="button" class="post-prev-tab active" onclick="switchStudioPreviewTab('card', this)">1. Thẻ Tin</button>
+              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('sv1', this)">2. Banner VIP</button>
+              <button type="button" class="post-prev-tab" onclick="switchStudioPreviewTab('detail', this)">3. Trang Bài Viết</button>
             </div>
 
-            <div id="postLiveCardPreview"></div>
+            <div id="demoLivePreviewBox"></div>
+
+            <div id="previewCheckoutBox" style="margin-top:14px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;">
+              <div id="previewPriceBreakdown" style="font-size:12.5px;color:#475569;line-height:1.6;">
+                Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4)
+              </div>
+              <label style="display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#334155;cursor:pointer;">
+                <input type="checkbox" id="agreePostTerms" style="margin-top:2px;width:15px;height:15px;accent-color:var(--ctt-orange);cursor:pointer;">
+                <span>Tôi đã kiểm tra thông tin & đồng ý với <strong>Điều khoản đăng tin</strong> của ChoThueTot.vn</span>
+              </label>
+              <div style="margin-top:12px;text-align:center;">
+                <button type="button" class="hsp-btn-apply" style="padding:11px 28px;font-weight:900;letter-spacing:0.4px;" onclick="publishStudioListingNow()">
+                  <i class="fa-solid fa-check-circle"></i> XÁC NHẬN TIN ĐĂNG
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="ctt-modal-footer">
-        <div id="postModalSummaryText" style="font-size:14px;color:#334155;"></div>
+        <div id="postModalSummaryText" style="font-size:12.5px;color:#64748b;">Xem thử trực tiếp 1:1 trước khi xác nhận đăng tin</div>
         <div style="display:flex;gap:10px;">
-          <button type="button" class="hsp-btn-reset" onclick="closePostModal()">Đóng khung</button>
-          <button type="button" class="hsp-btn-apply" onclick="closePostModal();publishStudioListingNow()">
-            <i class="fa-solid fa-check-circle"></i> XÁC NHẬN ĐĂNG TIN & XEM BÀI VIẾT NGAY
-          </button>
+          <button type="button" class="hsp-btn-reset" onclick="closePostModal()">Đóng</button>
         </div>
       </div>
     </div>

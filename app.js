@@ -1455,37 +1455,39 @@ function buildListingCardHTML(item) {
       ? "zone-prime"
       : "";
 
-  // Harmonized, non-redundant Tier Tag matching all 6 real zones
-  let cleanVipLabel = "• VIP 3";
-  let badgeClass = item.badgeClass || "tag-top3";
+  // 4-Tier VIP Icon Hierarchy (Basic & Free have no badge)
+  let cleanVipLabel = "";
+  let badgeClass = "";
   if (item.zoneId === 1 || item.mapTier === "banner") {
     cleanVipLabel = "✦ ĐẶC QUYỀN";
-    badgeClass = "tag-top1";
+    badgeClass = "tag-dacquyen";
   } else if (item.tier === "spotlight") {
     cleanVipLabel = "✦ VIP 1";
-    badgeClass = "tag-top1";
+    badgeClass = "tag-vip1";
   } else if (item.tier === "featured") {
     cleanVipLabel = "• VIP 2";
-    badgeClass = "tag-top2";
+    badgeClass = "tag-vip2";
   } else if (item.tier === "prime") {
-    cleanVipLabel = "• VIP 3";
-    badgeClass = "tag-top3";
-  } else if (item.tier === "basic") {
-    cleanVipLabel = "TIN CƠ BẢN";
-    badgeClass = "tag-top3";
-  } else if (item.tier === "free") {
-    cleanVipLabel = "MIỄN PHÍ";
-    badgeClass = "tag-top3";
+    cleanVipLabel = "VIP 3";
+    badgeClass = "tag-vip3";
   }
+
+  const stickerMap = {
+    urgent: { name: "Giảm Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
+    hot: { name: "HOT", cls: "sticker-hot", icon: "fa-fire" },
+    promo: { name: "Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+  };
+  const stObj = item.sticker ? stickerMap[item.sticker] : null;
+  const stickerHTML = stObj
+    ? `<span class="sticker-pill ${stObj.cls}" style="position:absolute;bottom:calc(100% + 3px);right:0;font-size:9px;padding:1.5px 7px;line-height:1.25;border-radius:999px;white-space:nowrap;box-shadow:none;pointer-events:none;z-index:2;"><i class="fa-solid ${stObj.icon}" style="font-size:8px;"></i> ${stObj.name}</span>`
+    : "";
 
   return `
     <div class="lc-card ${zoneClass}" onclick="openPropertyDetailView(${item.id})" onmouseenter="highlightMapPin(${item.id}, true)" onmouseleave="highlightMapPin(${item.id}, false)">
       <div class="lc-card-img">
         <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
         <div class="lc-card-badges">
-          <span class="lc-vip-tag ${badgeClass}">
-            ${cleanVipLabel}
-          </span>
+          ${cleanVipLabel ? `<span class="lc-vip-tag ${badgeClass}">${cleanVipLabel}</span>` : ""}
         </div>
         <div class="lc-card-top-actions">
           <button type="button" class="lc-compare-btn ${isComp ? "active" : ""}" onclick="toggleCompare(event, ${item.id}, this)" title="So sánh phòng này">
@@ -1500,28 +1502,31 @@ function buildListingCardHTML(item) {
         </div>
       </div>
 
-      <div class="lc-card-body">
+      <div class="lc-card-body" style="${stObj ? "padding-top:20px;" : ""}">
         <div class="lc-card-toprow">
           <div class="lc-card-price tabular-nums">
             ${item.priceText} <span>| Tháng</span>
           </div>
-          <span class="lc-card-type">${item.categoryLabel}</span>
+          <div style="position:relative;display:inline-flex;align-items:center;">
+            ${stickerHTML}
+            <span class="lc-card-type">${item.categoryLabel}</span>
+          </div>
         </div>
 
         <div class="lc-card-title">${item.title}</div>
 
-        <div class="lc-utility-bar">
-          <span><i class="fa-solid fa-bolt"></i> Điện: ${item.elec}</span>
-          <span><i class="fa-solid fa-droplet"></i> Nước: ${item.water}</span>
-          <span><i class="fa-solid fa-circle-check"></i> Chính chủ</span>
+        <div class="lc-utility-bar demo-utility-bar">
+          <span>Điện: ${item.elec}</span>
+          <span>Nước: ${item.water}</span>
+          <span>${item.otherCost ? `Khác: ${item.otherCost}` : "Chính chủ"}</span>
         </div>
 
         <div class="lc-card-footer">
           <div class="lc-card-addr">
             <i class="fa-solid fa-location-dot"></i>
             <div class="lc-card-addr-text">
-              <span class="lc-addr-ward">${item.ward}</span>
-              <span class="lc-addr-city">${item.city}</span>
+              <span class="lc-addr-ward">${(item.ward || "").toUpperCase()}</span>
+              <span class="lc-addr-city">${(item.city || "").toUpperCase()}</span>
             </div>
           </div>
 
@@ -2998,32 +3003,55 @@ function submitGoogleRegister() {
 // 11. ANIMATED 4-STEP WIZARD POST LISTING IN MODAL FRAME (#postModalBackdrop)
 //     & FULL MEMBER ACCOUNT PORTAL (#view-member) + ADMIN CONTROL CENTER (#view-admin)
 // ==========================================================================
-const STUDIO_STATE = {
-  wizardStep: 1,
-  catKey: "can-ho-chung-cu",
-  catLabel: "Căn hộ, chung cư",
-  deposit: "1 tháng",
-  beds: "1 PN",
-  baths: "1 WC",
-  amenities: [
-    "Có ban công thoáng",
-    "Tách bếp riêng",
-    "Full nội thất cao cấp",
-    "Khóa vân tay 24/24",
-    "Giờ giấc tự do, không chung chủ",
-    "Hệ thống PCCC đạt chuẩn"
-  ],
-  coverIndex: 0,
-  photos: [
-    "https://chothuetot.vn/assets/images/properties/album_1791041892_3752.webp",
-    "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
-    "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
-    "https://chothuetot.vn/assets/images/properties/album_1791043298_7263.webp"
-  ],
-  previewTab: "card" // card | sv1 | detail
+const STUDIO_ZONES = [
+  { id: 1, name: "Banner Đặc Quyền", badge: "✦ ĐẶC QUYỀN", badgeClass: "tag-dacquyen", zoneClass: "zone-spotlight", tier: "spotlight", mapTier: "banner", rate: 50000, desc: "Top đầu trang chủ" },
+  { id: 2, name: "TOP 1 Hiển Thị", badge: "✦ VIP 1", badgeClass: "tag-vip1", zoneClass: "zone-spotlight", tier: "spotlight", mapTier: "vip1", rate: 35000, desc: "Spotlight nổi bật" },
+  { id: 3, name: "TOP 2 Nổi Bật", badge: "• VIP 2", badgeClass: "tag-vip2", zoneClass: "zone-featured", tier: "featured", mapTier: "vip2", rate: 25000, desc: "Featured ưu tiên" },
+  { id: 5, name: "TOP 3 Hiệu Quả", badge: "VIP 3", badgeClass: "tag-vip3", zoneClass: "zone-prime", tier: "prime", mapTier: "vip3", rate: 15000, desc: "Prime tiết kiệm" },
+  { id: 4, name: "Tin Cơ Bản", badge: "", badgeClass: "", zoneClass: "", tier: "basic", mapTier: "basic", rate: 1000, desc: "Lên bản đồ chuẩn" },
+  { id: 13, name: "Đăng Tin Miễn Phí", badge: "", badgeClass: "", zoneClass: "", tier: "free", mapTier: "free", rate: 0, desc: "Không lên bản đồ" }
+];
+
+const STUDIO_DURATIONS = [
+  { days: 3, label: "3 ngày", off: 0 },
+  { days: 7, label: "7 ngày", off: 5 },
+  { days: 15, label: "15 ngày", off: 10 },
+  { days: 30, label: "30 ngày", off: 20 }
+];
+
+const STUDIO_STICKERS = [
+  { id: "urgent", name: "Giảm Sâu", hint: "Cần cho thuê nhanh", cls: "sticker-urgent", icon: "fa-bolt" },
+  { id: "hot", name: "HOT", hint: "Thu hút sự chú ý", cls: "sticker-hot", icon: "fa-fire" },
+  { id: "promo", name: "Ưu Đãi", hint: "Tìm khách hàng mới", cls: "sticker-promo", icon: "fa-gift" }
+];
+
+const STUDIO_STREETS_BY_WARD = {
+  "P. Cầu Kiệu": ["Phan Xích Long", "Hoa Sứ", "Hoa Phượng", "Trường Sa", "Phan Đăng Lưu"],
+  "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái"],
+  "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Lý Chính Thắng"],
+  "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"]
 };
 
-// Open Post Listing inside the Centered Multi-Step Animated Modal Frame (requires login)
+const STUDIO_STATE = {
+  wizardStep: 1,
+  previewTab: "card",
+  catKey: "phong-tro",
+  catLabel: "Phòng Trọ / CHDV",
+  beds: "1 PN",
+  baths: "1 WC",
+  deposit: "",
+  furniture: "",
+  houseNumber: "",
+  isEditingAddress: false,
+  addrMergeTimer: null,
+  selectedZoneId: null,
+  selectedDays: 7,
+  aiAutoSync: false,
+  selectedSticker: null,
+  coverIndex: 0,
+  photos: []
+};
+
 openPostModal = function () {
   if (!STATE.auth.isLoggedIn) {
     STATE.pendingPostModal = true;
@@ -3032,8 +3060,8 @@ openPostModal = function () {
     return;
   }
   document.getElementById("postModalBackdrop")?.classList.add("is-open");
-  initStudioPostListing();
-  goToModalWizardStep(1);
+  initStudioPostListing(null);
+  goToModalWizardStep(1, true);
 };
 
 openPostModalWithZone = function (zoneId) {
@@ -3043,52 +3071,116 @@ openPostModalWithZone = function (zoneId) {
     openAuthModal("Vui lòng đăng nhập hoặc đăng ký tài khoản để chọn gói tin & đăng bài.");
     return;
   }
-  STATE.selectedZoneId = zoneId;
-  STATE.selectedPkgIndex = 0;
   document.getElementById("postModalBackdrop")?.classList.add("is-open");
-  initStudioPostListing();
-  goToModalWizardStep(4);
+  initStudioPostListing(zoneId);
+  goToModalWizardStep(1, true);
 };
 
-function goToModalWizardStep(stepNum) {
-  if (stepNum < 1) stepNum = 1;
-  if (stepNum > 4) stepNum = 4;
-  STUDIO_STATE.wizardStep = stepNum;
+function showStudioStepError(msg) {
+  const box = document.getElementById("stepValidationError");
+  if (!box) return;
+  if (msg) {
+    box.textContent = msg;
+    box.style.display = "block";
+  } else {
+    box.textContent = "";
+    box.style.display = "none";
+  }
+}
 
-  for (let i = 1; i <= 4; i++) {
-    const slide = document.getElementById(`modalWizardSlide${i}`);
-    if (slide) slide.classList.toggle("active", i === stepNum);
+function validateStudioStepBeforeNext(stepNum) {
+  if (stepNum === 1) {
+    const street = (document.getElementById("dStreet")?.value || "").trim();
+    const house = (STUDIO_STATE.houseNumber || "").trim();
+    const host = (document.getElementById("dHost")?.value || "").trim();
+    const phone = (document.getElementById("dPhone")?.value || "").trim();
+    if (!street) {
+      showStudioStepError("Vui lòng chọn Tên Đường trước khi qua Bước 2.");
+      document.getElementById("dStreet")?.focus();
+      return false;
+    }
+    if (!house) {
+      showStudioStepError("Vui lòng nhập Địa Chỉ Chi Tiết (số nhà) trước khi qua Bước 2.");
+      document.getElementById("dAddress")?.focus();
+      return false;
+    }
+    if (!host) {
+      showStudioStepError("Vui lòng nhập Tên Người Liên Hệ.");
+      document.getElementById("dHost")?.focus();
+      return false;
+    }
+    if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
+      showStudioStepError("Vui lòng nhập đúng Số Điện Thoại / Zalo Việt Nam (10 số, bắt đầu 03/05/07/08/09).");
+      document.getElementById("dPhone")?.focus();
+      return false;
+    }
+  } else if (stepNum === 2) {
+    const price = parseFloat(document.getElementById("dPrice")?.value || "0");
+    const area = parseFloat(document.getElementById("dArea")?.value || "0");
+    if (!price || price <= 0) {
+      showStudioStepError("Vui lòng nhập Giá Thuê (Triệu/Tháng) hợp lệ trước khi qua Bước 3.");
+      document.getElementById("dPrice")?.focus();
+      return false;
+    }
+    if (!area || area < 5) {
+      showStudioStepError("Vui lòng nhập Diện Tích (≥ 5 m²) trước khi qua Bước 3.");
+      document.getElementById("dArea")?.focus();
+      return false;
+    }
+  } else if (stepNum === 3) {
+    const title = (document.getElementById("dTitle")?.value || "").trim();
+    const desc = (document.getElementById("dDesc")?.value || "").trim();
+    if (title.length < 10) {
+      showStudioStepError("Vui lòng nhập Tiêu Đề (hoặc bấm 'Click Ngay' để AI viết) trước khi qua Bước 4.");
+      document.getElementById("dTitle")?.focus();
+      return false;
+    }
+    if (desc.length < 15) {
+      showStudioStepError("Vui lòng nhập Mô Tả Chi Tiết (hoặc bấm 'Click Ngay') trước khi qua Bước 4.");
+      document.getElementById("dDesc")?.focus();
+      return false;
+    }
+    if (STUDIO_STATE.photos.length < 4) {
+      showStudioStepError(`Vui lòng tải lên tối thiểu 4 hình ảnh thực tế (hiện có ${STUDIO_STATE.photos.length}/9 hình).`);
+      return false;
+    }
+  }
+  showStudioStepError("");
+  return true;
+}
+
+function goToModalWizardStep(stepNum, force = false) {
+  const target = Math.max(1, Math.min(4, stepNum));
+  if (!force && target > STUDIO_STATE.wizardStep) {
+    for (let s = STUDIO_STATE.wizardStep; s < target; s++) {
+      if (!validateStudioStepBeforeNext(s)) {
+        if (s !== STUDIO_STATE.wizardStep) {
+          STUDIO_STATE.wizardStep = s;
+          break;
+        }
+        return;
+      }
+    }
+  } else {
+    showStudioStepError("");
   }
 
-  document.querySelectorAll("#modalWizardTabs .post-step-badge").forEach((btn, idx) => {
-    btn.classList.toggle("active", idx + 1 === stepNum);
+  STUDIO_STATE.wizardStep = target;
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById(`modalWizardSlide${i}`)?.classList.toggle("active", i === target);
+  }
+  document.querySelectorAll("#modalWizardTabs .subtle-step-btn").forEach((btn, idx) => {
+    btn.classList.toggle("active", idx + 1 === target);
   });
 
-  const prevBtn = document.getElementById("btnWizardPrev");
-  const nextBtn = document.getElementById("btnWizardNext");
-  const indText = document.getElementById("wizardStepIndicatorText");
-
-  if (prevBtn) prevBtn.style.visibility = stepNum === 1 ? "hidden" : "visible";
-  if (indText) indText.textContent = `Bước ${stepNum} / 4`;
-
-  const stepLabels = {
-    1: "Tiếp theo: Thông số & Chi phí",
-    2: "Tiếp theo: Tiện ích & 4 Ảnh bìa",
-    3: "Tiếp theo: Chọn Gói VIP",
-    4: "Hoàn tất & Đăng tin ngay"
-  };
-
+  const prevBtn = document.getElementById("btnModalPrev");
+  const nextBtn = document.getElementById("btnModalNext");
+  const counterEl = document.getElementById("modalStepCounter");
+  if (prevBtn) prevBtn.style.visibility = target === 1 ? "hidden" : "visible";
+  if (counterEl) counterEl.textContent = `Bước ${target} / 4`;
   if (nextBtn) {
-    if (stepNum < 4) {
-      nextBtn.innerHTML = `${stepLabels[stepNum]} <i class="fa-solid fa-arrow-right"></i>`;
-      nextBtn.onclick = () => stepModalWizard(1);
-    } else {
-      nextBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Đăng tin & Xem bài viết ngay`;
-      nextBtn.onclick = () => {
-        closePostModal();
-        publishStudioListingNow();
-      };
-    }
+    nextBtn.style.visibility = target === 4 ? "hidden" : "visible";
+    nextBtn.innerHTML = `Tiếp theo <i class="fa-solid fa-arrow-right"></i>`;
   }
 }
 
@@ -3096,238 +3188,567 @@ function stepModalWizard(dir) {
   goToModalWizardStep(STUDIO_STATE.wizardStep + dir);
 }
 
-function initStudioPostListing() {
-  updateWalletUI();
-  renderStudioPhotoManager();
-  renderStudioZoneCleanSelector();
-  renderStudioPreview();
-}
-
 function selectStudioCategory(catKey, catLabel, btnEl) {
   STUDIO_STATE.catKey = catKey;
   STUDIO_STATE.catLabel = catLabel;
-  btnEl?.parentElement?.querySelectorAll(".post-cat-btn").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderStudioPreview();
-}
-
-function selectStudioSeg(field, value, btnEl) {
-  STUDIO_STATE[field] = value;
-  btnEl?.parentElement?.querySelectorAll(".post-seg-btn").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderStudioPreview();
-}
-
-function toggleStudioAmenity(chipEl, text) {
-  chipEl.classList.toggle("active");
-  const idx = STUDIO_STATE.amenities.indexOf(text);
-  if (idx > -1) {
-    STUDIO_STATE.amenities.splice(idx, 1);
-  } else {
-    STUDIO_STATE.amenities.push(text);
+  if (btnEl && btnEl.parentElement) {
+    btnEl.parentElement.querySelectorAll(".post-cat-btn").forEach((b) => b.classList.remove("active"));
+    btnEl.classList.add("active");
   }
   renderStudioPreview();
 }
 
-function renderStudioPhotoManager() {
-  const html = STUDIO_STATE.photos
-    .map(
-      (url, idx) => `
-      <div class="post-photo-slot ${idx === STUDIO_STATE.coverIndex ? "is-cover" : ""}" onclick="selectStudioCoverPhoto(${idx})">
-        <img src="${url}" alt="Ảnh ${idx + 1}">
-        <span class="post-photo-slot-tag">
-          ${idx === STUDIO_STATE.coverIndex ? '<i class="fa-solid fa-star"></i> Ảnh bìa chính' : `Ảnh góc #${idx + 1}`}
-        </span>
-      </div>
-    `
-    )
-    .join("");
-
-  const s1 = document.getElementById("studioPhotoManager");
-  const s2 = document.getElementById("modalPhotoManager");
-  if (s1) s1.innerHTML = html;
-  if (s2) s2.innerHTML = html;
+function sanitizeStudioVnPhone(inputEl) {
+  const digits = (inputEl.value || "").replace(/\D/g, "").slice(0, 10);
+  inputEl.value = digits;
+  const statusEl = document.getElementById("dPhoneStatus");
+  if (statusEl) {
+    if (!digits) {
+      statusEl.textContent = "";
+    } else if (/^0(3|5|7|8|9)\d{8}$/.test(digits)) {
+      statusEl.textContent = "✓ Hợp lệ";
+      statusEl.style.color = "#059669";
+    } else {
+      statusEl.textContent = "10 số (03/05/07/08/09)";
+      statusEl.style.color = "#dc2626";
+    }
+  }
+  renderStudioPreview();
 }
 
-function selectStudioCoverPhoto(idx) {
-  STUDIO_STATE.coverIndex = idx;
-  renderStudioPhotoManager();
+function populateStudioStreets() {
+  const ward = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
+  const streetEl = document.getElementById("dStreet");
+  if (!streetEl) return;
+  const list = STUDIO_STREETS_BY_WARD[ward] || ["Phan Xích Long", "Lê Văn Sỹ"];
+  const prev = streetEl.value;
+  streetEl.innerHTML =
+    `<option value="">-- Chọn tên đường --</option>` +
+    list.map((s) => `<option value="${s}">${s}</option>`).join("");
+  if (list.includes(prev)) streetEl.value = prev;
+}
+
+function getStudioLockedSuffix() {
+  const city = document.getElementById("dCity")?.value || "";
+  const ward = document.getElementById("dWard")?.value || "";
+  const street = document.getElementById("dStreet")?.value || "";
+  const project = document.getElementById("dProject")?.value || "";
+  const parts = [];
+  if (street) parts.push(street);
+  if (project) parts.push(project);
+  if (ward) parts.push(ward);
+  if (city) parts.push(city);
+  return parts.join(", ");
+}
+
+function buildStudioFullAddress() {
+  const prefix = (STUDIO_STATE.houseNumber || "").trim();
+  const street = document.getElementById("dStreet")?.value || "";
+  const project = document.getElementById("dProject")?.value || "";
+  const ward = document.getElementById("dWard")?.value || "";
+  const city = document.getElementById("dCity")?.value || "";
+
+  const front = [prefix, street].filter(Boolean).join(" ");
+  const tail = [project, ward, city].filter(Boolean).join(", ");
+  if (front && tail) return `${front}, ${tail}`;
+  return front || tail;
+}
+
+function mergeStudioFullAddressNow() {
+  const addrEl = document.getElementById("dAddress");
+  const suffixEl = document.getElementById("dAddressSuffix");
+  const hasPrefix = Boolean((STUDIO_STATE.houseNumber || "").trim());
+  if (hasPrefix && addrEl) {
+    addrEl.value = buildStudioFullAddress();
+    if (suffixEl) suffixEl.textContent = "";
+  }
+  renderStudioPreview();
+}
+
+function syncStudioAddressDisplay() {
+  const addrEl = document.getElementById("dAddress");
+  const suffixEl = document.getElementById("dAddressSuffix");
+  const suffix = getStudioLockedSuffix();
+  const hasPrefix = Boolean((STUDIO_STATE.houseNumber || "").trim());
+  if (!STUDIO_STATE.isEditingAddress && hasPrefix && addrEl) {
+    addrEl.value = buildStudioFullAddress();
+    if (suffixEl) suffixEl.textContent = "";
+  } else if (suffixEl) {
+    suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
+    suffixEl.classList.toggle("has-prefix", hasPrefix);
+  }
+  renderStudioPreview();
+}
+
+function onStudioLocationChange(wardChanged = false) {
+  if (wardChanged) populateStudioStreets();
+  syncStudioAddressDisplay();
+}
+
+function onStudioAddressFocus() {
+  clearTimeout(STUDIO_STATE.addrMergeTimer);
+  STUDIO_STATE.isEditingAddress = true;
+  const addrEl = document.getElementById("dAddress");
+  if (addrEl) addrEl.value = STUDIO_STATE.houseNumber || "";
+  syncStudioAddressDisplay();
+}
+
+function onStudioAddressInput(val) {
+  STUDIO_STATE.isEditingAddress = true;
+  STUDIO_STATE.houseNumber = val;
+  syncStudioAddressDisplay();
+  clearTimeout(STUDIO_STATE.addrMergeTimer);
+  if ((val || "").trim()) {
+    STUDIO_STATE.addrMergeTimer = setTimeout(() => {
+      STUDIO_STATE.isEditingAddress = false;
+      mergeStudioFullAddressNow();
+    }, 1500);
+  }
+}
+
+function onStudioAddressBlur() {
+  clearTimeout(STUDIO_STATE.addrMergeTimer);
+  STUDIO_STATE.isEditingAddress = false;
+  syncStudioAddressDisplay();
+}
+
+function onStudioMaxPeopleChange(val) {
+  const wrap = document.getElementById("extraPersonFeeWrap");
+  const note = document.getElementById("extraPersonNote");
+  const feeEl = document.getElementById("dExtraPerson");
+  const num = parseInt(val, 10);
+  const showFee = num >= 2;
+  if (wrap) wrap.style.visibility = showFee ? "visible" : "hidden";
+  if (note && showFee) note.textContent = `(từ người thứ ${num})`;
+  if (!showFee && feeEl) feeEl.value = "";
+  renderStudioPreview();
+}
+
+function toggleStudioSchoolCode(isChecked) {
+  const wrap = document.getElementById("schoolCodeWrap");
+  if (wrap) wrap.style.display = isChecked ? "block" : "none";
+  if (isChecked) document.getElementById("dSchoolCode")?.focus();
+  renderStudioPreview();
+}
+
+function sanitizeStudioNumericUnit(inputEl, unit) {
+  const re = new RegExp(unit, "gi");
+  const clean = inputEl.value.replace(re, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+  inputEl.value = clean ? `${clean}${unit}` : "";
+  if (clean && document.activeElement === inputEl) {
+    const pos = clean.length;
+    inputEl.setSelectionRange(pos, pos);
+  }
+  renderStudioPreview();
+}
+
+function sanitizeStudioNumericK(inputEl) {
+  const clean = inputEl.value.replace(/k/gi, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+  inputEl.value = clean ? `${clean}k` : "";
+  if (clean && document.activeElement === inputEl) {
+    const pos = clean.length;
+    inputEl.setSelectionRange(pos, pos);
+  }
+  renderStudioPreview();
+}
+
+function renderStudioPhotosManager() {
+  const el = document.getElementById("demoPhotos");
+  const countLbl = document.getElementById("demoPhotoCountLabel");
+  if (countLbl) countLbl.textContent = `${STUDIO_STATE.photos.length}/9 hình`;
+  if (!el) return;
+  if (!STUDIO_STATE.photos.length) {
+    el.innerHTML = `<div style="grid-column:1/-1;font-size:11.5px;color:#94a3b8;text-align:center;padding:6px 0;">Chưa có hình ảnh nào được tải lên.</div>`;
+    return;
+  }
+  el.innerHTML = STUDIO_STATE.photos.map((src, i) => `
+    <div onclick="STUDIO_STATE.coverIndex=${i};renderStudioPhotosManager();renderStudioPreview();" style="position:relative;border-radius:10px;overflow:hidden;height:68px;cursor:pointer;border:2px solid ${i === STUDIO_STATE.coverIndex ? "var(--ctt-orange)" : "#e2e8f0"};">
+      <img src="${src}" style="width:100%;height:100%;object-fit:cover;">
+      ${i === STUDIO_STATE.coverIndex ? '<span style="position:absolute;bottom:3px;left:3px;background:var(--ctt-orange);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px;">Bìa</span>' : ""}
+      <button type="button" onclick="removeStudioPhoto(${i}, event)" title="Xóa ảnh" style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(15,23,42,0.75);color:#fff;font-size:10px;line-height:1;cursor:pointer;">×</button>
+    </div>
+  `).join("");
+}
+
+function removeStudioPhoto(idx, e) {
+  if (e) e.stopPropagation();
+  STUDIO_STATE.photos.splice(idx, 1);
+  if (STUDIO_STATE.coverIndex >= STUDIO_STATE.photos.length) {
+    STUDIO_STATE.coverIndex = Math.max(0, STUDIO_STATE.photos.length - 1);
+  }
+  renderStudioPhotosManager();
+  renderStudioPreview();
+}
+
+function handleStudioPhotoUpload(input) {
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
+  const remaining = Math.max(0, 9 - STUDIO_STATE.photos.length);
+  if (remaining === 0) {
+    alert("Chỉ được tải tối đa 9 hình ảnh.");
+    input.value = "";
+    return;
+  }
+  files.slice(0, remaining).forEach((file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (STUDIO_STATE.photos.length < 9) {
+        STUDIO_STATE.photos.push(e.target.result);
+        renderStudioPhotosManager();
+        renderStudioPreview();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = "";
+}
+
+function handleStudioVideoUpload(input) {
+  const file = input.files && input.files[0];
+  const lbl = document.getElementById("demoVideoLabel");
+  if (lbl) {
+    lbl.textContent = file ? `Đã chọn video: ${file.name}` : "Tải Video Ngắn Từ Máy (MP4, MOV)";
+  }
+}
+
+function buildStudioAiDraft() {
+  const city = document.getElementById("dCity")?.value || "";
+  const ward = document.getElementById("dWard")?.value || "";
+  const street = document.getElementById("dStreet")?.value || "";
+  const project = document.getElementById("dProject")?.value || "";
+  const fullAddr = buildStudioFullAddress() || [street, project, ward, city].filter(Boolean).join(", ");
+  const area = (document.getElementById("dArea")?.value || "").trim();
+  const price = (document.getElementById("dPrice")?.value || "").trim();
+  const furn = document.getElementById("dFurniture")?.value || "";
+  const floors = document.getElementById("dFloors")?.value || "";
+  const dir = document.getElementById("dDirection")?.value || "";
+  const frontage = (document.getElementById("dFrontageRoad")?.value || "").trim();
+  const road = (document.getElementById("dRoadAccess")?.value || "").trim();
+  const host = (document.getElementById("dHost")?.value || "").trim();
+  const phone = (document.getElementById("dPhone")?.value || "").trim();
+
+  const elec = (document.getElementById("dElec")?.value || "").trim();
+  const water = (document.getElementById("dWater")?.value || "").trim();
+  const otherCost = (document.getElementById("dOtherCost")?.value || "").trim();
+  const internet = (document.getElementById("dInternet")?.value || "").trim();
+  const laundry = (document.getElementById("dLaundry")?.value || "").trim();
+  const trash = (document.getElementById("dTrash")?.value || "").trim();
+  const parking = (document.getElementById("dParking")?.value || "").trim();
+  const maxPeople = document.getElementById("dMaxPeople")?.value || "";
+  const extraPerson = (document.getElementById("dExtraPerson")?.value || "").trim();
+
+  const utils = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
+  if (document.getElementById("chkSchool")?.checked) {
+    const sc = (document.getElementById("dSchoolCode")?.value || "").trim();
+    utils.unshift(sc ? `gần Trường học (${sc})` : "gần Trường học");
+  }
+  const svcs = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
+
+  const locFocus = project || (street ? `Đường ${street}` : ward);
+  const highlightSpec = [
+    area ? `${area}m²` : "",
+    furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
+    STUDIO_STATE.beds !== "1 PN" ? STUDIO_STATE.beds : ""
+  ].filter(Boolean).join(" ");
+
+  const seoTitle = [
+    `Cho Thuê ${STUDIO_STATE.catLabel}`,
+    locFocus ? `${locFocus}, ${ward}` : ward,
+    highlightSpec,
+    price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"
+  ].filter(Boolean).join(" • ");
+
+  const titleEl = document.getElementById("dTitle");
+  if (titleEl) titleEl.value = seoTitle.slice(0, 99);
+
+  const hookByCat = {
+    "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ, dọn vào ở ngay",
+    "Nhà Nguyên Căn": "không gian rộng rãi, riêng tư tuyệt đối, phù hợp gia đình hoặc làm văn phòng",
+    "Căn Hộ Chung Cư": "thiết kế hiện đại, thoáng sáng tự nhiên, tiện nghi chuẩn sống xanh",
+    "Mặt Bằng Văn Phòng": "vị trí đắc địa, mặt bằng vuông vức, tối ưu nhận diện thương hiệu",
+    "Đất - Xưởng, Kho - Bãi": "mặt bằng thông thoáng, giao thông thuận tiện, sẵn sàng vận hành ngay",
+    "HomeStay / AirBnb": "phong cách tinh tế, đầy đủ tiện nghi nghỉ dưỡng, vị trí trung tâm"
+  };
+  const catHook = hookByCat[STUDIO_STATE.catLabel] || "vị trí thuận tiện, sẵn sàng bàn giao ngay";
+
+  const lines = [];
+  lines.push(`🔥 CHÍNH CHỦ CHO THUÊ ${STUDIO_STATE.catLabel.toUpperCase()} TẠI ${fullAddr ? fullAddr.toUpperCase() : "TRUNG TÂM"} — ${catHook}!`);
+  lines.push(
+    `• Diện tích & Bố trí: ${area ? `${area}m²` : "Rộng thoáng"} (${STUDIO_STATE.beds}, ${STUDIO_STATE.baths})` +
+    `${price ? ` | Giá thuê chỉ ${price} triệu/tháng` : ""}` +
+    `${STUDIO_STATE.deposit ? ` | Cọc ${STUDIO_STATE.deposit.toLowerCase()}` : ""}.`
+  );
+
+  const specBits = [
+    furn ? `Nội thất ${furn.toLowerCase()}` : "",
+    floors ? `Kết cấu ${floors.toLowerCase()}` : "",
+    dir ? `Hướng ${dir}` : "",
+    frontage ? `Mặt tiền - lộ giới ${frontage}` : "",
+    road ? `Đường vào ${road}` : "",
+    maxPeople ? `Giới hạn ${maxPeople} người/phòng${extraPerson ? ` (phụ thu từ người thứ ${maxPeople}: ${extraPerson})` : ""}` : ""
+  ].filter(Boolean);
+  if (specBits.length) lines.push(`• Điểm nổi bật: ${specBits.join(" • ")}.`);
+
+  const costBits = [
+    `Điện: ${elec || "Giá nhà nước"}`,
+    `Nước: ${water || "Giá nhà nước"}`,
+    otherCost ? `Trọn gói chi phí khác: ${otherCost}` : "",
+    internet ? `Internet: ${internet}` : "",
+    laundry ? `Giặt sấy: ${laundry}` : "",
+    trash ? `Thu rác: ${trash}` : "",
+    parking ? `Phí xe: ${parking}` : ""
+  ].filter(Boolean);
+  lines.push(`• Chi phí minh bạch: ${costBits.join(" | ")}.`);
+
+  if (utils.length) lines.push(`• Tiện ích kết nối nhanh: ${utils.join(", ")}.`);
+  if (svcs.length) lines.push(`• Dịch vụ & An ninh: ${svcs.join(", ")}.`);
+  lines.push(`📞 Liên hệ ngay${host ? ` ${host}` : ""}${phone ? ` (${phone})` : ""} để xem thực tế và chốt giá tốt nhất hôm nay!`);
+
+  const descEl = document.getElementById("dDesc");
+  if (descEl) descEl.value = lines.join("\n");
+}
+
+function updateStudioAiButtonUI() {
+  const btn = document.getElementById("btnAiAutoWrite");
+  if (!btn) return;
+  if (STUDIO_STATE.aiAutoSync) {
+    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đang Tự Cập Nhật</span>`;
+  } else {
+    btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>`;
+  }
+}
+
+function generateStudioAISeo() {
+  STUDIO_STATE.aiAutoSync = true;
+  updateStudioAiButtonUI();
+  buildStudioAiDraft();
+  renderStudioPreview();
+}
+
+function onStudioManualContentEdit() {
+  if (STUDIO_STATE.aiAutoSync) {
+    STUDIO_STATE.aiAutoSync = false;
+    updateStudioAiButtonUI();
+  }
   renderStudioPreview();
 }
 
 function renderStudioZoneCleanSelector() {
-  const zoneHtml = PRICING_TIERS.map((tier) => {
-    const active = tier.zoneId === STATE.selectedZoneId;
-    return `
-      <div class="post-zone-clean-card ${active ? "active" : ""}" onclick="selectStudioZone(${tier.zoneId})">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-          <strong style="font-size:13.5px;color:#0f172a;"><i class="fa-solid ${tier.icon}" style="color:var(--ctt-orange);margin-right:6px;"></i>${tier.name}</strong>
-          <input type="radio" ${active ? "checked" : ""} style="accent-color:var(--ctt-orange);">
-        </div>
-        <div style="font-size:11.5px;font-weight:800;color:var(--ctt-orange);margin-bottom:3px;">${tier.tag}</div>
-        <small style="font-size:10.5px;color:#64748b;display:block;line-height:1.3;">${tier.desc}</small>
-      </div>
-    `;
-  }).join("");
-
-  const activeTier = PRICING_TIERS.find((t) => t.zoneId === STATE.selectedZoneId) || PRICING_TIERS[0];
-  if (STATE.selectedPkgIndex >= activeTier.packages.length) STATE.selectedPkgIndex = 0;
-
-  const durHtml = activeTier.packages
-    .map((pkg, idx) => {
-      const isSelected = idx === STATE.selectedPkgIndex;
-      return `
-        <div class="post-dur-big-card ${isSelected ? "active" : ""}" onclick="selectStudioDuration(${idx})">
-          ${pkg.save ? `<span class="dur-save-badge">Tiết kiệm ${pkg.save}</span>` : ""}
-          <div style="font-size:13.5px;font-weight:900;color:#0f172a;margin-bottom:2px;">Gói ${pkg.days} Ngày</div>
-          <div style="font-size:14.5px;font-weight:900;color:var(--ctt-orange);" class="tabular-nums">${new Intl.NumberFormat("vi-VN").format(pkg.price)}đ</div>
-          <small style="font-size:10px;color:#64748b;">Hiển thị ${pkg.days * 24}h</small>
-        </div>
-      `;
-    })
-    .join("");
-
-  ["studioZoneCleanGrid", "modalZonePackagesGrid"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = zoneHtml;
-  });
-
-  ["studioDuration4Grid", "modalDuration4Grid"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = durHtml;
-  });
-
-  const activePkg = activeTier.packages[STATE.selectedPkgIndex] || activeTier.packages[0];
-  const roi = VIP_ROI_METRICS[activeTier.zoneId] || VIP_ROI_METRICS[1];
-
-  const roiHtml = `
-    <div class="vip-roi-stat">
-      <i class="fa-solid fa-chart-line" style="font-size:18px;color:var(--ctt-orange);"></i>
-      <div>
-        <div>Hiệu quả gói <strong>${activeTier.name}</strong>: Trung bình <strong>${roi.calls}</strong> (Gấp <strong>${roi.boost}</strong> tin thường)</div>
-        <small style="color:#9a3412;">⚡ Tốc độ lấp phòng trống thống kê: <strong>${roi.fillTime}</strong></small>
-      </div>
-    </div>
-    <span style="padding:4px 10px;border-radius:99px;background:#fff;border:1px solid #fdba74;font-size:11px;font-weight:800;color:var(--ctt-orange);white-space:nowrap;">
-      Khuyên dùng
-    </span>
-  `;
-
-  ["studioVipRoiBanner", "vipRoiSocialProof"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = roiHtml;
-  });
-
-  const sumHtml = `
-    Gói đang chọn: <strong style="color:var(--ctt-orange);">${activeTier.name} (${activePkg.days} ngày)</strong>
-    • Thành tiền: <strong style="font-size:18px;font-weight:900;color:#0f172a;" class="tabular-nums">${new Intl.NumberFormat("vi-VN").format(activePkg.price)} VNĐ</strong>
-  `;
-
-  ["studioFinalSummaryText", "postModalSummaryText"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = sumHtml;
-  });
+  const grid = document.getElementById("demoZonesGrid");
+  if (!grid) return;
+  grid.innerHTML = STUDIO_ZONES.map((z) => `
+    <button type="button" class="zone-pkg-card ${STUDIO_STATE.selectedZoneId === z.id ? "selected" : ""}" onclick="pickStudioZone(${z.id})" style="text-align:left;">
+      <strong style="font-size:12.5px;color:#0f172a;display:block;">${z.name}</strong>
+      <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${z.rate === 0 ? "0đ (Miễn phí)" : new Intl.NumberFormat("vi-VN").format(z.rate) + "đ/ngày"}</div>
+      <small style="font-size:10.5px;color:#64748b;">${z.desc}</small>
+    </button>
+  `).join("");
 }
 
-function selectStudioZone(zoneId) {
-  STATE.selectedZoneId = zoneId;
-  STATE.selectedPkgIndex = 0;
-  if (zoneId === 1) {
-    STUDIO_STATE.previewTab = "sv1";
-    document.querySelectorAll(".post-prev-tab").forEach((b) => {
-      b.classList.toggle("active", b.textContent.includes("Banner"));
-    });
+function pickStudioZone(id) {
+  STUDIO_STATE.selectedZoneId = id;
+  if (id === 13) {
+    STUDIO_STATE.selectedDays = 3;
+    STUDIO_STATE.selectedSticker = null;
   }
   renderStudioZoneCleanSelector();
+  const hint = document.getElementById("zonePickHint");
+  const durWrap = document.getElementById("durationSectionWrap");
+  if (hint) hint.style.display = "none";
+  if (durWrap) durWrap.classList.add("is-visible");
+  renderStudioDurations();
+  renderStudioStickers();
   renderStudioPreview();
 }
 
-function selectStudioDuration(pkgIdx) {
-  STATE.selectedPkgIndex = pkgIdx;
-  renderStudioZoneCleanSelector();
+function renderStudioDurations() {
+  const z = STUDIO_ZONES.find((x) => x.id === STUDIO_STATE.selectedZoneId);
+  const grid = document.getElementById("demoDurationGrid");
+  if (!z || !grid) return;
+  const availableDurations = z.id === 13 ? STUDIO_DURATIONS.filter((d) => d.days === 3) : STUDIO_DURATIONS;
+  if (z.id === 13) STUDIO_STATE.selectedDays = 3;
+  grid.innerHTML = availableDurations.map((dur) => {
+    const total = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+    return `
+      <button type="button" class="zone-pkg-card ${STUDIO_STATE.selectedDays === dur.days ? "selected" : ""}" onclick="STUDIO_STATE.selectedDays=${dur.days};renderStudioDurations();renderStudioStickers();renderStudioPreview();" style="text-align:left;">
+        <strong style="font-size:12.5px;color:#0f172a;display:block;">${dur.label} ${dur.off ? `<span style="color:#059669;font-size:10.5px;">(-${dur.off}%)</span>` : ""}</strong>
+        <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</div>
+      </button>
+    `;
+  }).join("");
+}
+
+function pickStudioSticker(id) {
+  if (STUDIO_STATE.selectedZoneId === 13) return;
+  STUDIO_STATE.selectedSticker = STUDIO_STATE.selectedSticker === id ? null : id;
+  renderStudioStickers();
+  renderStudioPreview();
+}
+
+function renderStudioStickers() {
+  const noSticker = STUDIO_STATE.selectedZoneId === 13;
+  const wrap = document.getElementById("stickerSectionWrap");
+  if (wrap) wrap.style.display = noSticker ? "none" : "block";
+  if (noSticker) return;
+
+  const totalSticker = STUDIO_STATE.selectedDays * 1000;
+  const hint = document.getElementById("stickerPriceHint");
+  if (hint) {
+    hint.textContent = STUDIO_STATE.selectedSticker
+      ? `+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ (${STUDIO_STATE.selectedDays} ngày)`
+      : `${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ / ${STUDIO_STATE.selectedDays} ngày`;
+  }
+  const grid = document.getElementById("demoStickerGrid");
+  if (!grid) return;
+  grid.innerHTML = STUDIO_STICKERS.map((st) => `
+    <button type="button" class="sticker-card ${STUDIO_STATE.selectedSticker === st.id ? "selected" : ""}" onclick="pickStudioSticker('${st.id}')">
+      <span class="sticker-pill ${st.cls}" style="margin-bottom:6px;"><i class="fa-solid ${st.icon}"></i> ${st.name}</span>
+      <div class="tabular-nums" style="font-size:11.5px;font-weight:700;color:#475569;">+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ <small style="font-weight:500;color:#94a3b8;">(1k/ngày)</small></div>
+      <div style="font-size:10.5px;color:#64748b;margin-top:3px;line-height:1.3;">${st.hint}</div>
+    </button>
+  `).join("");
 }
 
 function switchStudioPreviewTab(tabName, btnEl) {
   STUDIO_STATE.previewTab = tabName;
-  btnEl?.parentElement?.querySelectorAll(".post-prev-tab").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
+  document.querySelectorAll("#postModalBackdrop .post-prev-tab").forEach((b) => b.classList.remove("active"));
+  if (btnEl) btnEl.classList.add("active");
   renderStudioPreview();
 }
 
-function generateStudioAISeo() {
-  const ward = document.getElementById("postWardSelect")?.value || "P. Cầu Kiệu";
-  const area = document.getElementById("postAreaInput")?.value || "35";
-  const price = document.getElementById("postPriceInput")?.value || "6.5";
-  const elec = document.getElementById("postElecInput")?.value || "3.5k/kWh";
-  const water = document.getElementById("postWaterInput")?.value || "100k/người";
-  const newTitle = `CHÍNH CHỦ CHO THUÊ ${STUDIO_STATE.catLabel.toUpperCase()} ${STUDIO_STATE.beds} ${area}M² FULL TIỆN NGHI TẠI ${ward.toUpperCase()}`;
-  const newDesc =
-    `✅ Chính chủ cho thuê ${STUDIO_STATE.catLabel} (${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}) rộng ${area}m² cực thoáng mát tại ${ward}.\n` +
-    `• Đặc điểm nổi bật: ${STUDIO_STATE.amenities.join(", ")}.\n` +
-    `• Chi phí minh bạch 100%: Giá thuê ${price} Triệu/tháng (Cọc ${STUDIO_STATE.deposit}), Điện ${elec}, Nước ${water}. Cam kết hình ảnh thực tế 100%.`;
+function initStudioPostListing(preselectedZoneId = null) {
+  STUDIO_STATE.houseNumber = "";
+  STUDIO_STATE.isEditingAddress = false;
+  STUDIO_STATE.deposit = "";
+  STUDIO_STATE.furniture = "";
+  STUDIO_STATE.beds = "1 PN";
+  STUDIO_STATE.baths = "1 WC";
+  STUDIO_STATE.aiAutoSync = false;
+  STUDIO_STATE.selectedSticker = null;
+  STUDIO_STATE.selectedDays = 7;
+  STUDIO_STATE.coverIndex = 0;
+  STUDIO_STATE.photos = [];
+  STUDIO_STATE.selectedZoneId = preselectedZoneId || null;
 
-  const titleEl = document.getElementById("postTitleInput");
-  const descEl = document.getElementById("postDescInput");
-  if (titleEl) titleEl.value = newTitle;
-  if (descEl) descEl.value = newDesc;
+  const hostEl = document.getElementById("dHost");
+  if (hostEl) hostEl.value = STATE.auth.displayName || "Chính chủ Minh Quân";
+  const phoneEl = document.getElementById("dPhone");
+  if (phoneEl) {
+    phoneEl.value = STATE.auth.phone || "";
+    sanitizeStudioVnPhone(phoneEl);
+  }
+  ["dPrice", "dArea", "dElec", "dWater", "dOtherCost", "dInternet", "dLaundry", "dTrash", "dParking", "dExtraPerson", "dTitle", "dDesc", "dFrontageRoad", "dRoadAccess", "dAddress", "dSchoolCode"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  ["dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  const bedsEl = document.getElementById("dBeds");
+  if (bedsEl) bedsEl.value = "1 PN";
+  const bathsEl = document.getElementById("dBaths");
+  if (bathsEl) bathsEl.value = "1 WC";
+  const agreeEl = document.getElementById("agreePostTerms");
+  if (agreeEl) agreeEl.checked = false;
+  document.querySelectorAll("#postModalBackdrop .util-chk, #postModalBackdrop .svc-chk, #chkSchool").forEach((c) => {
+    c.checked = false;
+  });
+  const schoolWrap = document.getElementById("schoolCodeWrap");
+  if (schoolWrap) schoolWrap.style.display = "none";
+  const extraWrap = document.getElementById("extraPersonFeeWrap");
+  if (extraWrap) extraWrap.style.visibility = "hidden";
+
+  populateStudioStreets();
+  syncStudioAddressDisplay();
+  updateStudioAiButtonUI();
+  renderStudioPhotosManager();
+  renderStudioZoneCleanSelector();
+
+  if (STUDIO_STATE.selectedZoneId) {
+    const hint = document.getElementById("zonePickHint");
+    const durWrap = document.getElementById("durationSectionWrap");
+    if (hint) hint.style.display = "none";
+    if (durWrap) durWrap.classList.add("is-visible");
+    renderStudioDurations();
+    renderStudioStickers();
+  } else {
+    const hint = document.getElementById("zonePickHint");
+    const durWrap = document.getElementById("durationSectionWrap");
+    if (hint) hint.style.display = "block";
+    if (durWrap) durWrap.classList.remove("is-visible");
+  }
+
   renderStudioPreview();
 }
 
 function renderStudioPreview() {
-  const title = document.getElementById("postTitleInput")?.value || "CĂN HỘ 1PN TÁCH BẾP BAN CÔNG THOÁNG MÁT";
-  const priceNum = parseFloat(document.getElementById("postPriceInput")?.value || "6.5");
-  const priceText = `${priceNum} Triệu`;
-  const area = document.getElementById("postAreaInput")?.value || "35";
-  const city = document.getElementById("postCitySelect")?.value || "TP. Hồ Chí Minh";
-  const ward = document.getElementById("postWardSelect")?.value || "P. Cầu Kiệu";
-  const fullAddr = document.getElementById("postAddressInput")?.value || "142 Phan Xích Long, P. Cầu Kiệu";
-  const elec = document.getElementById("postElecInput")?.value || "3.5k/kWh";
-  const water = document.getElementById("postWaterInput")?.value || "100k/người";
-  const desc = document.getElementById("postDescInput")?.value || "";
-  const phone = document.getElementById("postPhoneInput")?.value || "0906 344 877";
+  if (STUDIO_STATE.aiAutoSync) {
+    buildStudioAiDraft();
+  }
+  const city = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
+  const ward = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
+  const fullAddr = document.getElementById("dAddress")?.value.trim() || `${ward}, ${city}`;
+  const price = document.getElementById("dPrice")?.value.trim() || "--";
+  const area = document.getElementById("dArea")?.value.trim() || "--";
+  const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
+  const waterRaw = (document.getElementById("dWater")?.value || "").replace(/k/gi, "").trim();
+  const otherRaw = (document.getElementById("dOtherCost")?.value || "").replace(/k/gi, "").trim();
+  const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
+  const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
+  const otherCost = otherRaw ? `${otherRaw}k` : "--";
+  const title = document.getElementById("dTitle")?.value.trim() || "Chưa nhập tiêu đề tin đăng";
+  const desc = document.getElementById("dDesc")?.value.trim() || "Chưa nhập mô tả chi tiết...";
+  const phone = document.getElementById("dPhone")?.value.trim() || "Chưa nhập SĐT";
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
-  const roi = VIP_ROI_METRICS[STATE.selectedZoneId] || VIP_ROI_METRICS[1];
+  const z = STUDIO_ZONES.find((x) => x.id === STUDIO_STATE.selectedZoneId);
+  const badgeText = z ? z.badge : "✦ VIP 1";
+  const badgeClass = z ? z.badgeClass : "tag-vip1";
+  const zoneClass = z ? z.zoneClass : "zone-spotlight";
+
+  const stObj = STUDIO_STICKERS.find((s) => s.id === STUDIO_STATE.selectedSticker);
+  const stickerHTML = stObj
+    ? `<span class="sticker-pill ${stObj.cls}" style="position:absolute;bottom:calc(100% + 3px);right:0;font-size:9px;padding:1.5px 7px;line-height:1.25;border-radius:999px;white-space:nowrap;box-shadow:none;pointer-events:none;z-index:2;"><i class="fa-solid ${stObj.icon}" style="font-size:8px;"></i> ${stObj.name}</span>`
+    : "";
 
   let html = "";
   if (STUDIO_STATE.previewTab === "card") {
     html = `
       <div style="max-width:350px;margin:0 auto;">
-        <div class="lc-card zone-spotlight" style="cursor:default;">
+        <div class="lc-card ${zoneClass}" style="cursor:default;">
           <div class="lc-card-img">
-            <img src="${coverPhoto}" alt="${title}">
+            ${coverPhoto
+              ? `<img src="${coverPhoto}" alt="${title}">`
+              : `<div style="width:100%;height:100%;min-height:190px;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;gap:6px;"><i class="fa-regular fa-image" style="font-size:26px;"></i><span>Chưa có hình ảnh</span></div>`}
             <div class="lc-card-badges">
-              <span class="lc-vip-tag ${roi.badgeClass}">✦ ${roi.badge}</span>
+              ${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeText}</span>` : ""}
             </div>
             <div class="lc-photo-count">
               <i class="fa-regular fa-images"></i> ${STUDIO_STATE.photos.length}
             </div>
           </div>
-
-          <div class="lc-card-body">
+          <div class="lc-card-body" style="padding-top:20px;">
             <div class="lc-card-toprow">
-              <div class="lc-card-price tabular-nums">
-                ${priceText} <span>| Tháng</span>
+              <div class="lc-card-price tabular-nums">${price} Triệu <span>| Tháng</span></div>
+              <div style="position:relative;display:inline-flex;align-items:center;">
+                ${stickerHTML}
+                <span class="lc-card-type">${STUDIO_STATE.catLabel}</span>
               </div>
-              <span class="lc-card-type">${STUDIO_STATE.catLabel}</span>
             </div>
-
             <div class="lc-card-title">${title}</div>
-
-            <div class="lc-utility-bar">
-              <span><i class="fa-solid fa-bolt"></i> Điện: ${elec}</span>
-              <span><i class="fa-solid fa-droplet"></i> Nước: ${water}</span>
-              <span><i class="fa-solid fa-circle-check"></i> Cọc ${STUDIO_STATE.deposit}</span>
+            <div class="lc-utility-bar demo-utility-bar">
+              <span>Điện: ${elec}</span>
+              <span>Nước: ${water}</span>
+              <span>Khác: ${otherCost}</span>
             </div>
-
             <div class="lc-card-footer">
               <div class="lc-card-addr">
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="lc-card-addr-text">
-                  <span class="lc-addr-ward">${ward}</span>
-                  <span class="lc-addr-city">${city}</span>
+                  <span class="lc-addr-ward">${ward.toUpperCase()}</span>
+                  <span class="lc-addr-city">${city.toUpperCase()}</span>
                 </div>
               </div>
-
               <div class="lc-card-specs">
                 <span><i class="fa-solid fa-maximize"></i> ${area}&nbsp;m²</span>
                 <span><i class="fa-solid fa-bed"></i> ${STUDIO_STATE.beds}</span>
@@ -3349,7 +3770,7 @@ function renderStudioPreview() {
           <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> ${fullAddr}
         </div>
         <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);line-height:1.1;margin-bottom:6px;" class="tabular-nums">
-          ${priceText} <span style="font-size:13px;color:#64748b;font-weight:600;">| Tháng</span>
+          ${price} Triệu <span style="font-size:13px;color:#64748b;font-weight:600;">| Tháng</span>
         </div>
         <div style="font-size:14.5px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:6px;">${title}</div>
         <p style="font-size:11.5px;color:#475569;line-height:1.45;margin-bottom:10px;">${desc}</p>
@@ -3358,8 +3779,10 @@ function renderStudioPreview() {
           <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bed"></i> ${STUDIO_STATE.beds}</span>
           <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bath"></i> ${STUDIO_STATE.baths}</span>
         </div>
-        <div style="position:relative;border-radius:14px;overflow:hidden;height:175px;border:2px solid #fff;box-shadow:0 10px 24px rgba(0,0,0,0.15);">
-          <img src="${coverPhoto}" alt="${title}" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:relative;border-radius:14px;overflow:hidden;height:175px;border:2px solid #fff;box-shadow:0 10px 24px rgba(0,0,0,0.15);background:#f1f5f9;">
+          ${coverPhoto
+            ? `<img src="${coverPhoto}" alt="${title}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;">Chưa có hình ảnh</div>`}
           <div style="position:absolute;bottom:8px;left:8px;background:#0f172a;color:#fff;padding:5px 12px;border-radius:99px;font-size:11.5px;font-weight:800;border:1px solid #ffd700;">
             <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i> ${phone}
           </div>
@@ -3367,109 +3790,136 @@ function renderStudioPreview() {
       </div>
     `;
   } else {
-    const baseRentVnd = priceNum * 1000000;
-    const totalEstVnd = baseRentVnd + 350000 + 100000 + 150000;
     html = `
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;max-height:460px;overflow-y:auto;">
-        <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:6px;height:130px;border-radius:10px;overflow:hidden;margin-bottom:10px;">
-          <img src="${coverPhoto}" style="width:100%;height:100%;object-fit:cover;" alt="Cover">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;">
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Trang chủ › ${STUDIO_STATE.catLabel} › ${ward}</div>
+        <h4 style="font-size:15px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:8px;">${title}</h4>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:6px;margin-bottom:10px;">
+          ${coverPhoto
+            ? `<img src="${coverPhoto}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;">`
+            : `<div style="width:100%;height:120px;background:#e2e8f0;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:11.5px;">Chưa có ảnh</div>`}
           <div style="display:grid;grid-template-rows:1fr 1fr;gap:6px;">
-            <img src="${STUDIO_STATE.photos[1]}" style="width:100%;height:100%;object-fit:cover;" alt="Sub 1">
-            <img src="${STUDIO_STATE.photos[2]}" style="width:100%;height:100%;object-fit:cover;" alt="Sub 2">
+            ${STUDIO_STATE.photos[1] ? `<img src="${STUDIO_STATE.photos[1]}" style="width:100%;height:57px;object-fit:cover;border-radius:8px;">` : `<div style="background:#e2e8f0;border-radius:8px;"></div>`}
+            ${STUDIO_STATE.photos[2] ? `<img src="${STUDIO_STATE.photos[2]}" style="width:100%;height:57px;object-fit:cover;border-radius:8px;">` : `<div style="background:#e2e8f0;border-radius:8px;"></div>`}
           </div>
         </div>
-        <h4 style="font-size:14px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:4px;">${title}</h4>
-        <div style="font-size:11px;color:#64748b;margin-bottom:8px;"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> ${fullAddr}</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fffaf5;border:1px solid #fed7aa;border-radius:8px;margin-bottom:8px;" class="tabular-nums">
-          <strong style="font-size:16px;color:var(--ctt-orange);font-weight:900;">${priceText}/thg</strong>
-          <div style="font-size:11.5px;font-weight:800;color:#0f172a;">${area}m² • ${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}</div>
-          <div style="font-size:11px;font-weight:700;color:#059669;">Cọc ${STUDIO_STATE.deposit}</div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
-          ${STUDIO_STATE.amenities
-            .map(
-              (am) =>
-                `<span style="font-size:10px;padding:2px 7px;border-radius:99px;background:#fff;border:1px solid #cbd5e1;color:#334155;font-weight:600;"><i class="fa-solid fa-check" style="color:#059669;"></i> ${am}</span>`
-            )
-            .join("")}
-        </div>
-        <div style="padding:8px 10px;background:#fff;border-radius:8px;border:1px solid #fed7aa;" class="tabular-nums">
-          <div style="font-size:11px;font-weight:800;color:#0f172a;">Tổng chi phí dự kiến / tháng:</div>
-          <div style="font-size:13.5px;font-weight:900;color:var(--ctt-orange);">
-            ~ ${new Intl.NumberFormat("vi-VN").format(totalEstVnd)} VNĐ/tháng
-          </div>
+        <div style="background:#fff;border-radius:10px;padding:10px;border:1px solid #e2e8f0;font-size:12px;color:#334155;">
+          <strong style="color:var(--ctt-orange);font-size:16px;">${price} Triệu/tháng</strong> • ${area} m² • ${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}
+          <div style="margin-top:4px;color:#64748b;">${desc}</div>
         </div>
       </div>
     `;
   }
 
-  ["studioLivePreviewStage", "postLiveCardPreview"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = html;
-  });
+  const previewBox = document.getElementById("demoLivePreviewBox");
+  if (previewBox) previewBox.innerHTML = html;
+
+  const breakdownEl = document.getElementById("previewPriceBreakdown");
+  if (breakdownEl) {
+    if (!z) {
+      breakdownEl.innerHTML = `<span style="color:#64748b;">Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4).</span>`;
+    } else {
+      const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
+      const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+      const stickerTotal = stObj ? dur.days * 1000 : 0;
+      const subtotal = pkgTotal + stickerTotal;
+      const vatTotal = Math.round(subtotal * 0.08);
+      const grandTotal = subtotal + vatTotal;
+      const fmt = (n) => (n === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(n) + "đ");
+      breakdownEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span>Gói hiển thị: <strong>${z.name}</strong> (${dur.label})</span>
+          <strong class="tabular-nums">${fmt(pkgTotal)}</strong>
+        </div>
+        ${stObj ? `
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span>Nhãn Dán: <strong>${stObj.name}</strong> (${dur.label} × 1k)</span>
+          <strong class="tabular-nums">+${fmt(stickerTotal)}</strong>
+        </div>` : ""}
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span>Thuế VAT (8%):</span>
+          <strong class="tabular-nums">${fmt(vatTotal)}</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-size:14px;">
+          <strong style="color:#0f172a;">Tổng thanh toán:</strong>
+          <strong class="tabular-nums" style="font-size:17px;color:var(--ctt-orange);">${grandTotal === 0 ? "0đ (Miễn phí)" : fmt(grandTotal)}</strong>
+        </div>
+      `;
+    }
+  }
 }
 
 function publishStudioListingNow() {
-  const activeTier = PRICING_TIERS.find((t) => t.zoneId === STATE.selectedZoneId) || PRICING_TIERS[0];
-  const activePkg = activeTier.packages[STATE.selectedPkgIndex] || activeTier.packages[0];
+  if (!validateStudioStepBeforeNext(1)) { goToModalWizardStep(1, true); return; }
+  if (!validateStudioStepBeforeNext(2)) { goToModalWizardStep(2, true); return; }
+  if (!validateStudioStepBeforeNext(3)) { goToModalWizardStep(3, true); return; }
 
-  if (STATE.walletBalance < activePkg.price) {
-    alert("Số dư Ví đăng tin chưa đủ! Vui lòng nạp thêm qua VietQR (+11% ưu đãi) để thanh toán gói tin.");
+  const z = STUDIO_ZONES.find((x) => x.id === STUDIO_STATE.selectedZoneId);
+  if (!z) {
+    showStudioStepError("Vui lòng chọn 1 trong 6 khu vực hiển thị ở Bước 4 trước khi xác nhận.");
+    goToModalWizardStep(4, true);
+    return;
+  }
+  if (!document.getElementById("agreePostTerms")?.checked) {
+    alert("Vui lòng tick xác nhận đồng ý với Điều khoản đăng tin của ChoThueTot.vn.");
+    return;
+  }
+
+  const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
+  const stObj = STUDIO_STICKERS.find((s) => s.id === STUDIO_STATE.selectedSticker);
+  const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
+  const stickerTotal = stObj ? dur.days * 1000 : 0;
+  const subtotal = pkgTotal + stickerTotal;
+  const vatTotal = Math.round(subtotal * 0.08);
+  const grandTotal = subtotal + vatTotal;
+
+  if (STATE.walletBalance < grandTotal) {
+    alert(`Số dư Ví hiện tại (${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ) chưa đủ để thanh toán ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ (đã gồm VAT 8%). Vui lòng nạp thêm vào Ví.`);
     openWalletModal();
     return;
   }
 
-  STATE.walletBalance -= activePkg.price;
+  STATE.walletBalance -= grandTotal;
   updateWalletUI();
 
-  const newId = Math.floor(5000 + Math.random() * 900);
-  const priceNum = parseFloat(document.getElementById("postPriceInput")?.value || "6.5");
-  const roi = VIP_ROI_METRICS[STATE.selectedZoneId] || VIP_ROI_METRICS[1];
+  const newId = Math.max(...PROPERTIES.map((p) => p.id)) + 1;
+  const priceNum = parseFloat(document.getElementById("dPrice")?.value || "6.5");
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
+  const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
+  const waterRaw = (document.getElementById("dWater")?.value || "").replace(/k/gi, "").trim();
+  const otherRaw = (document.getElementById("dOtherCost")?.value || "").replace(/k/gi, "").trim();
 
   const newProp = {
     id: newId,
-    zoneId: STATE.selectedZoneId,
-    mapTier:
-      STATE.selectedZoneId === 1
-        ? "banner"
-        : STATE.selectedZoneId === 4
-        ? "basic"
-        : STATE.selectedZoneId === 13
-        ? "free"
-        : "vip-star",
-    tier:
-      STATE.selectedZoneId === 13
-        ? "free"
-        : STATE.selectedZoneId === 4
-        ? "basic"
-        : STATE.selectedZoneId <= 2
-        ? "spotlight"
-        : STATE.selectedZoneId === 3
-        ? "featured"
-        : "prime",
-    badge: roi.badge,
-    badgeClass: roi.badgeClass,
+    tier: z.tier,
+    mapTier: z.mapTier,
+    zoneId: z.id,
+    vipBadge: z.badge || z.name,
+    badge: z.badge || z.name,
+    badgeClass: z.badgeClass,
+    sticker: STUDIO_STATE.selectedSticker,
     category: STUDIO_STATE.catKey,
     categoryLabel: STUDIO_STATE.catLabel,
-    title: document.getElementById("postTitleInput")?.value || "CĂN HỘ MỚI ĐĂNG",
+    title: document.getElementById("dTitle")?.value.trim() || "CĂN HỘ MỚI ĐĂNG",
     price: priceNum,
+    priceMillion: priceNum,
     priceText: `${priceNum} Triệu`,
-    ward: document.getElementById("postWardSelect")?.value || "P. Cầu Kiệu",
-    city: document.getElementById("postCitySelect")?.value || "TP. Hồ Chí Minh",
-    fullAddress: document.getElementById("postAddressInput")?.value || "142 Phan Xích Long, P. Cầu Kiệu",
-    area: parseInt(document.getElementById("postAreaInput")?.value || "35", 10),
+    city: document.getElementById("dCity")?.value || "TP. Hồ Chí Minh",
+    ward: document.getElementById("dWard")?.value || "P. Cầu Kiệu",
+    fullAddress: buildStudioFullAddress() || "P. Cầu Kiệu, TP. Hồ Chí Minh",
+    area: parseInt(document.getElementById("dArea")?.value || "35", 10),
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
-    elec: document.getElementById("postElecInput")?.value || "3.5k/kWh",
-    water: document.getElementById("postWaterInput")?.value || "100k/người",
-    deposit: STUDIO_STATE.deposit,
+    elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
+    water: waterRaw ? `${waterRaw}k` : "Nhà nước",
+    otherCost: otherRaw ? `${otherRaw}k` : "",
+    deposit: STUDIO_STATE.deposit || "Thỏa Thuận",
     lat: 10.7965,
     lng: 106.6825,
     verified: true,
-    isVipPin: STATE.selectedZoneId === 1,
-    phone: document.getElementById("postPhoneInput")?.value || "0906 344 877",
-    host: document.getElementById("postHostInput")?.value || "Chính chủ Minh Quân",
+    isVipPin: z.id === 1,
+    phone: document.getElementById("dPhone")?.value || "0906344877",
+    host: document.getElementById("dHost")?.value || "Chính chủ Minh Quân",
     image: coverPhoto,
     gallery: STUDIO_STATE.photos.slice()
   };
@@ -3478,11 +3928,12 @@ function publishStudioListingNow() {
   renderAllHomeGrids();
   updateMapPins("all", newId);
   updateMapFilterChipCounts();
+  closePostModal();
 
   alert(
     `🎉 ĐĂNG TIN THÀNH CÔNG (#${newId})!\n\n` +
-      `• Gói hiển thị: ${activeTier.name} (${activePkg.days} ngày)\n` +
-      `• Đã khấu trừ Ví: ${new Intl.NumberFormat("vi-VN").format(activePkg.price)} VNĐ\n` +
+      `• Gói hiển thị: ${z.name} (${dur.label})\n` +
+      `• Tổng thanh toán (gồm VAT 8%): ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ\n` +
       `• Hệ thống đang mở Trang Chi Tiết Bài Viết vừa xuất bản của bạn!`
   );
 
