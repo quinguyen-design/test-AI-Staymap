@@ -1005,9 +1005,9 @@
     }
 
     const STICKERS = [
-      { id: "urgent", name: "Cho Thuê Gấp", cls: "sticker-urgent", icon: "fa-bolt" },
-      { id: "hot", name: "Tin HOT", cls: "sticker-hot", icon: "fa-fire" },
-      { id: "promo", name: "Siêu Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+      { id: "urgent", name: "Giảm Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
+      { id: "hot", name: "HOT", cls: "sticker-hot", icon: "fa-fire" },
+      { id: "promo", name: "Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
     ];
 
     function pickZone(id) {
@@ -1150,7 +1150,7 @@
 
       const stObj = STICKERS.find((s) => s.id === D.selectedSticker);
       const stickerHTML = stObj
-        ? `<span class="sticker-pill ${stObj.cls}" style="font-size:10px;padding:3px 9px;line-height:1.25;"><i class="fa-solid ${stObj.icon}" style="font-size:9px;"></i> ${stObj.name}</span>`
+        ? `<span class="sticker-pill ${stObj.cls}" style="border-radius:999px;font-size:9px;padding:2px 7px;line-height:1.25;box-shadow:0 2px 5px rgba(15,23,42,0.16);white-space:nowrap;"><i class="fa-solid ${stObj.icon}" style="font-size:8.5px;"></i> ${stObj.name}</span>`
         : "";
 
       let html = "";
@@ -1162,9 +1162,8 @@
                 ${coverPhoto
                   ? `<img src="${coverPhoto}" alt="${title}">`
                   : `<div style="width:100%;height:100%;min-height:190px;background:#f1f5f9;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;gap:6px;"><i class="fa-regular fa-image" style="font-size:26px;"></i><span>Chưa có hình ảnh</span></div>`}
-                <div class="lc-card-badges" style="left:10px;right:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
-                  <div>${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeInner}</span>` : ""}</div>
-                  <div>${stickerHTML}</div>
+                <div class="lc-card-badges">
+                  ${badgeText ? `<span class="lc-vip-tag ${badgeClass}">${badgeInner}</span>` : ""}
                 </div>
                 <div class="lc-photo-count">
                   <i class="fa-regular fa-images"></i> ${D.photos.length}
@@ -1172,7 +1171,10 @@
               </div>
               <div class="lc-card-body">
                 <div class="lc-card-toprow">
-                  <div class="lc-card-price tabular-nums">${price} Triệu <span>| Tháng</span></div>
+                  <div style="display:flex;align-items:center;gap:6px;min-width:0;">
+                    <div class="lc-card-price tabular-nums" style="white-space:nowrap;">${price} Triệu <span>| Tháng</span></div>
+                    ${stickerHTML}
+                  </div>
                   <span class="lc-card-type">${D.cat}</span>
                 </div>
                 <div class="lc-card-title">${title}</div>
