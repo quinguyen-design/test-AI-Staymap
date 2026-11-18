@@ -4384,7 +4384,7 @@ function renderStudioPreview() {
   const breakdownEl = document.getElementById("previewPriceBreakdown");
   if (breakdownEl) {
     if (!z) {
-      breakdownEl.innerHTML = `<span style="color:#64748b;">Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4).</span>`;
+      breakdownEl.innerHTML = `<div style="text-align:center;color:#64748b;">Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4).</div>`;
     } else {
       const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
       const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
