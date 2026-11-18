@@ -2283,9 +2283,6 @@ button, input, select, textarea, .leaflet-container {
   transition: color 0.2s ease;
 }
 
-.lc-card:hover .lc-card-title {
-  color: var(--ctt-orange);
-}
 
 /* Transparent Electricity/Water Mini Sub-bar (Next-Gen Upgrade) */
 .lc-utility-bar {
