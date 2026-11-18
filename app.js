@@ -1231,27 +1231,29 @@ function updateMapPins(catFilter = "all", focusId = null) {
       : "";
     marker.bindPopup(`
       <div class="hero-map-popup" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">
-        <div class="hmp-pop-thumb">
-          <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
-          ${vipTagHtml}
-        </div>
-        <div class="hmp-pop-body">
-          <div class="hmp-pop-price tabular-nums">
-            <span class="hmp-pop-price-val">${item.priceText}</span>
-            <span class="hmp-pop-price-unit">| Tháng</span>
+        <div class="hmp-pop-top">
+          <div class="hmp-pop-thumb">
+            <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
+            ${vipTagHtml}
           </div>
-          <div class="hmp-pop-title">${item.title}</div>
-          <div class="hmp-pop-footer">
-            <div class="hmp-pop-specs">
-              <span><i class="fa-solid fa-maximize"></i> ${item.area}&nbsp;m²</span>
-              <span><i class="fa-solid fa-bed"></i> ${item.beds ?? 1}</span>
-              <span><i class="fa-solid fa-bath"></i> ${item.baths ?? 1}</span>
+          <div class="hmp-pop-body">
+            <div class="hmp-pop-price tabular-nums">
+              <span class="hmp-pop-price-val">${item.priceText}</span>
+              <span class="hmp-pop-price-unit">| Tháng</span>
             </div>
-            <span class="hmp-pop-more">Xem Thêm <i class="fa-solid fa-arrow-right"></i></span>
+            <div class="hmp-pop-title">${item.title}</div>
           </div>
+        </div>
+        <div class="hmp-pop-footer">
+          <div class="hmp-pop-specs">
+            <span><i class="fa-solid fa-maximize"></i> ${item.area}&nbsp;m²</span>
+            <span><i class="fa-solid fa-bed"></i> ${item.beds ?? 1}</span>
+            <span><i class="fa-solid fa-bath"></i> ${item.baths ?? 1}</span>
+          </div>
+          <span class="hmp-pop-more">Xem Thêm <i class="fa-solid fa-arrow-right"></i></span>
         </div>
       </div>
-    `, { maxWidth: 360, className: "ctt-compact-map-popup" });
+    `, { maxWidth: 356, className: "ctt-compact-map-popup" });
 
     marker.on("click", () => {
       const heroEl = document.getElementById("siteHeaderHero");
