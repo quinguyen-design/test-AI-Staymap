@@ -449,6 +449,17 @@ button, input, select, textarea, .leaflet-container {
   border-color: var(--ctt-orange);
 }
 
+.site-header-hero.hero-is-map.is-expanded .map-expand-btn {
+  background: var(--ctt-grad-brand);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 14px rgba(241, 90, 34, 0.45);
+}
+
+.site-header-hero.hero-is-map.is-expanded .map-expand-btn:hover {
+  filter: brightness(1.06);
+}
+
 /* ==========================================================================
    6-TIER HIERARCHY MAP PINS (.hmp-marker):
    1. VIP Banner (Banner Đặc Quyền): Luxury Gold/Dark gradient + Crown icon (like 4173)
