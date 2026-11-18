@@ -105,11 +105,11 @@ button, input, select, textarea, .leaflet-container {
 
 .hero-map-left-drawer {
   position: absolute;
-  top: 84px;
-  left: 18px;
+  top: 96px;
+  left: 28px;
   bottom: auto;
-  width: 355px;
-  max-width: calc(100vw - 36px);
+  width: 356px;
+  max-width: calc(100vw - 56px);
   background: transparent;
   border: none;
   box-shadow: none;
@@ -125,6 +125,9 @@ button, input, select, textarea, .leaflet-container {
 }
 .hero-map-left-drawer .lc-card-img {
   height: 225px;
+}
+.hero-map-left-drawer .lc-card-body {
+  padding: 16px 18px 14px;
 }
 
 .site-header-hero.hero-is-map.is-compact {

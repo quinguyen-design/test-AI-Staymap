@@ -1320,12 +1320,12 @@ function openHeroMapLeftDrawer(item) {
     `onclick="openDetailFromExpandedMap(${item.id})"`
   );
   const actionRowHtml = `
-    <div style="display:flex;align-items:center;gap:8px;padding:10px 14px 12px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
-      <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="padding:9px 12px;border-radius:9px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
-        <i class="fa-solid fa-phone" style="color:var(--ctt-orange);margin-right:5px;"></i>${item.phone || ""}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 18px 16px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
+      <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:10px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
+        <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i>${item.phone || ""}
       </a>
-      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="flex:1;padding:9px 12px;border:none;border-radius:9px;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
-        Xem Thêm <i class="fa-solid fa-arrow-right" style="margin-left:4px;"></i>
+      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border:none;border-radius:10px;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+        Xem Thêm <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
   `;
