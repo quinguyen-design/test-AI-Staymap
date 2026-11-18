@@ -4518,7 +4518,7 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 }
 .demo-utility-bar {
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
   text-align: center;
   gap: 0 !important;
