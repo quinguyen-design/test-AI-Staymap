@@ -4969,6 +4969,14 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   font-weight: 500;
   opacity: 1;
 }
+#postModalBackdrop #dWater {
+  padding-right: 14px;
+}
+#postModalBackdrop #dWater::placeholder {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
+}
 .ctt-combo-arrow {
   position: absolute;
   right: 11px;
