@@ -4605,8 +4605,11 @@ function renderStudioDurations() {
     const total = Math.round(z.rate * dur.days * (1 - dur.off / 100));
     return `
       <button type="button" class="zone-pkg-card ${STUDIO_STATE.selectedDays === dur.days ? "selected" : ""}" onclick="STUDIO_STATE.selectedDays=${dur.days};renderStudioDurations();renderStudioStickers();renderStudioPreview();" style="text-align:left;">
-        <strong style="font-size:12.5px;color:#0f172a;display:block;">${dur.label} ${dur.off ? `<span style="color:#059669;font-size:10.5px;">(-${dur.off}%)</span>` : ""}</strong>
-        <div class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</div>
+        <strong style="font-size:12.5px;color:#0f172a;display:block;margin-bottom:3px;">${dur.label}</strong>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;flex-wrap:wrap;">
+          <span class="tabular-nums" style="font-size:12px;font-weight:800;color:var(--ctt-orange);">${total === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(total) + "đ"}</span>
+          ${dur.off ? `<span class="tabular-nums" style="background:linear-gradient(135deg,#f15a22,#ff9d00);color:#ffffff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:5px;line-height:1.4;">-${dur.off}%</span>` : ""}
+        </div>
       </button>
     `;
   }).join("");
