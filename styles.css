@@ -105,28 +105,26 @@ button, input, select, textarea, .leaflet-container {
 
 .hero-map-left-drawer {
   position: absolute;
-  top: 80px;
+  top: 84px;
   left: 18px;
   bottom: auto;
-  max-height: calc(100vh - 154px);
-  width: 375px;
+  width: 355px;
   max-width: calc(100vw - 36px);
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.22);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   z-index: 460;
   display: none;
   flex-direction: column;
-  overflow: hidden;
 }
 .site-header-hero.hero-is-map.is-expanded .hero-map-left-drawer.is-open {
   display: flex;
 }
-.hero-map-left-drawer-body {
-  padding: 12px 14px;
-  overflow-y: auto;
-  flex: 1;
+.hero-map-left-drawer .lc-card {
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.28);
+}
+.hero-map-left-drawer .lc-card-img {
+  height: 225px;
 }
 
 .site-header-hero.hero-is-map.is-compact {
