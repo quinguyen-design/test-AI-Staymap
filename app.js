@@ -1352,6 +1352,7 @@ function renderSegLocSuggestions(query = "") {
   const qNorm = typeof toVietnameseSlug === "function" ? toVietnameseSlug(query) : query.trim().toLowerCase();
   const match = (txt) => !qNorm || (typeof toVietnameseSlug === "function" ? toVietnameseSlug(txt).includes(qNorm) : txt.toLowerCase().includes(qNorm));
 
+  const cities = (typeof STUDIO_CITIES !== "undefined" ? STUDIO_CITIES : []).filter((c) => match(c.label)).slice(0, 4);
   const projects = (typeof STUDIO_PROJECTS !== "undefined" ? STUDIO_PROJECTS : []).filter((p) => match(p.label)).slice(0, 4);
   const wards = (typeof STUDIO_WARDS_BY_CITY !== "undefined" ? Object.values(STUDIO_WARDS_BY_CITY).flat() : []).filter((w) => match(w.label)).slice(0, 5);
   const streets = (typeof STUDIO_STREETS_BY_WARD !== "undefined" ? Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat())) : []).filter((s) => match(s)).slice(0, 5);
@@ -1369,6 +1370,10 @@ function renderSegLocSuggestions(query = "") {
     html += `<div class="hsp-seg-group">Tên đường</div>`;
     html += streets.map((s) => `<button type="button" class="hsp-seg-item" onclick="pickSegLocation('street', '${s.replace(/'/g, "\\'")}', '${s.replace(/'/g, "\\'")}')"><span><i class="fa-solid fa-road" style="color:#64748b;margin-right:6px;"></i>Đường ${s}</span></button>`).join("");
   }
+  if (cities.length && qNorm) {
+    html += `<div class="hsp-seg-group">Tỉnh / Thành phố</div>`;
+    html += cities.map((c) => `<button type="button" class="hsp-seg-item" onclick="pickSegLocation('city', '${c.value.replace(/'/g, "\\'")}', '${c.label.replace(/'/g, "\\'")}')"><span><i class="fa-solid fa-map" style="color:#64748b;margin-right:6px;"></i>${c.label}</span></button>`).join("");
+  }
   if (!html) {
     html = `<div style="padding:10px 12px;font-size:12px;color:#94a3b8;">Nhấn Enter hoặc nút Tìm để tìm theo từ khóa vừa nhập.</div>`;
   }
@@ -1381,7 +1386,13 @@ function pickSegLocation(kind, val, label) {
     input.value = label;
     input.dataset.pickedLabel = label;
   }
-  if (kind === "project") {
+  if (kind === "city") {
+    const cityEl = document.getElementById("megaCitySelect");
+    if (cityEl) {
+      cityEl.value = val;
+      populateMegaWards();
+    }
+  } else if (kind === "project") {
     const projEl = document.getElementById("megaProjectSelect");
     if (projEl) {
       projEl.value = val;
@@ -1629,12 +1640,85 @@ function matchesMegaFilter(p, f) {
   return true;
 }
 
+function clearSingleMegaFilter(kind, val) {
+  if (kind === "project") {
+    const el = document.getElementById("megaProjectSelect");
+    if (el) el.value = "all";
+  } else if (kind === "ward") {
+    const el = document.getElementById("megaWardSelect");
+    if (el) el.value = "all";
+    populateMegaStreets();
+  } else if (kind === "street") {
+    const el = document.getElementById("megaStreetSelect");
+    if (el) el.value = "all";
+  } else if (kind === "category") {
+    pickSegCategory("all", "Tất cả loại hình", document.querySelector("#segCatPopover .hsp-seg-item"));
+    return;
+  } else if (kind === "price") {
+    pickSegPrice(50, "Tất cả giá", document.querySelector("#segPricePopover .hsp-seg-item"));
+    return;
+  } else if (kind === "area") {
+    const el = document.getElementById("megaAreaRange");
+    if (el) el.value = "0";
+  } else if (kind === "furniture") {
+    const el = document.getElementById("megaFurnitureSelect");
+    if (el) el.value = "all";
+    document.querySelectorAll("#hspMegaPanel .hsp-q-pill[onclick*=\"'furniture'\"]").forEach((b) => b.classList.remove("active"));
+  } else if (kind === "util") {
+    document.querySelectorAll("#hspMegaPanel .hsp-q-pill.active[onclick*=\"'util'\"]").forEach((b) => {
+      if ((b.getAttribute("onclick") || "").includes(`'${val}'`)) b.classList.remove("active");
+    });
+  } else if (kind === "keyword") {
+    const input = document.getElementById("hspSearchInput");
+    if (input) {
+      input.value = "";
+      delete input.dataset.pickedLabel;
+    }
+  }
+  updateMegaLiveCount();
+}
+
+function renderActiveFilterPills(f) {
+  const bar = document.getElementById("hspActivePillsBar");
+  if (!bar) return;
+  const pills = [];
+  if (f.project && f.project !== "all") pills.push({ kind: "project", val: f.project, label: f.project });
+  if (f.ward && f.ward !== "all") pills.push({ kind: "ward", val: f.ward, label: f.ward });
+  if (f.street && f.street !== "all") pills.push({ kind: "street", val: f.street, label: `Đường ${f.street}` });
+  if (f.category && f.category !== "all") {
+    const catDisp = document.getElementById("segCatDisplay")?.textContent || f.category;
+    pills.push({ kind: "category", val: f.category, label: catDisp });
+  }
+  if (f.maxPrice && f.maxPrice < 50) pills.push({ kind: "price", val: f.maxPrice, label: `Dưới ${f.maxPrice}Tr` });
+  if (f.minArea && f.minArea > 0) pills.push({ kind: "area", val: f.minArea, label: `Từ ${f.minArea}m²` });
+  if (f.furniture && f.furniture !== "all") pills.push({ kind: "furniture", val: f.furniture, label: `NT ${f.furniture}` });
+  if (f.utilities && f.utilities.length) {
+    f.utilities.forEach((u) => pills.push({ kind: "util", val: u, label: u }));
+  }
+  if (f.keyword) pills.push({ kind: "keyword", val: f.keyword, label: `"${f.keyword}"` });
+
+  if (!pills.length) {
+    bar.style.display = "none";
+    bar.innerHTML = "";
+    return;
+  }
+  bar.style.display = "flex";
+  bar.innerHTML =
+    pills
+      .map(
+        (pl) => `<button type="button" class="hsp-active-pill" onclick="clearSingleMegaFilter('${pl.kind}', '${String(pl.val).replace(/'/g, "\\'")}')"><span>${pl.label}</span><i class="fa-solid fa-xmark" style="font-size:10px;"></i></button>`
+      )
+      .join("") +
+    `<button type="button" class="hsp-active-pill-clear" onclick="resetMegaSearchFilters()">Xóa tất cả</button>`;
+}
+
 function updateMegaLiveCount() {
   const badge = document.getElementById("megaLiveMatchBadge");
-  if (!badge || typeof PROPERTIES === "undefined") return;
+  if (typeof PROPERTIES === "undefined") return;
   const f = getMegaFilterPayload();
   const count = PROPERTIES.filter((p) => matchesMegaFilter(p, f)).length;
-  badge.textContent = `Xem ${count} tin phù hợp`;
+  if (badge) badge.textContent = `Xem ${count} tin phù hợp`;
+  renderActiveFilterPills(f);
 }
 
 function resetMegaSearchFilters() {
@@ -1672,6 +1756,15 @@ function initMegaSearchSync() {
   populateMegaWards();
   populateMegaProjects();
   updateMegaSliderLabels();
+  const clearEmailAutofill = () => {
+    const inp = document.getElementById("hspSearchInput");
+    if (inp && inp.value && inp.value.includes("@")) {
+      inp.value = "";
+    }
+  };
+  clearEmailAutofill();
+  setTimeout(clearEmailAutofill, 150);
+  setTimeout(clearEmailAutofill, 500);
 }
 
 function updateMapFilterChipCounts() {

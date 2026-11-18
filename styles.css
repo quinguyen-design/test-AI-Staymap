@@ -920,6 +920,45 @@ button, input, select, textarea, .leaflet-container {
   padding: 6px 11px 3px;
 }
 
+/* Mẫu 2: Faceted Active Filter Pills with 1-click × removal */
+.hsp-active-pills-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0 6px;
+}
+.hsp-active-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fffaf5;
+  border: 1px solid rgba(241, 90, 34, 0.35);
+  color: var(--ctt-orange);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.hsp-active-pill:hover {
+  background: #fff1e6;
+}
+.hsp-active-pill-clear {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.hsp-active-pill-clear:hover {
+  color: var(--ctt-orange);
+}
+
 /* Wide 760px Mega-Search Panel (Fixes the old 280px narrow broken dropdown!) */
 .hsp-panel {
   position: absolute;

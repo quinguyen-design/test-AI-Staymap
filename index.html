@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118aq">
+  <link rel="stylesheet" href="styles.css?v=20261118ar">
 </head>
 <body>
 
@@ -161,7 +161,7 @@
           <!-- Segment 1: Location / Project Autocomplete -->
           <div class="hsp-seg-field hsp-seg-loc" onclick="openSegPopover('loc', event)">
             <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Dự án</span>
-            <input type="text" id="hspSearchInput" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="off" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
+            <input type="text" id="hspSearchInput" name="ctt_search_loc_q" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="new-password" data-lpignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
             <div class="hsp-seg-popover" id="segLocPopover" style="min-width:320px;" onclick="event.stopPropagation()"></div>
           </div>
 
@@ -204,6 +204,9 @@
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
+
+        <!-- Mẫu 2: Faceted Active Filter Pills (1-click × clear) -->
+        <div id="hspActivePillsBar" class="hsp-active-pills-bar" style="display:none;"></div>
 
         <!-- Minimalist Airbnb/Zillow-Style Horizontal Smart Filter (Progressive Disclosure) -->
         <div class="hsp-panel" id="hspMegaPanel" style="width:840px;padding:18px 22px;">
@@ -1876,6 +1879,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118aq"></script>
+  <script src="app.js?v=20261118ar"></script>
 </body>
 </html>
