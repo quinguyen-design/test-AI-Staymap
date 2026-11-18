@@ -3327,10 +3327,10 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail {
-  border-top-color: var(--ctt-orange) !important;
-  background: var(--ctt-orange) !important;
-  border-right-color: var(--ctt-orange) !important;
-  border-bottom-color: var(--ctt-orange) !important;
+  background: var(--ctt-grad-brand) !important;
+  border-top-color: #f15a22 !important;
+  border-right-color: #f15a22 !important;
+  border-bottom-color: #f15a22 !important;
 }
 
 /* Landmark Proximity Filter Pills */
