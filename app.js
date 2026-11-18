@@ -965,6 +965,7 @@ function navigateTo(route, pushHistory = true) {
     route.includes("can-ho-chung-cu") ||
     route.includes("mat-bang-van-phong") ||
     route.includes("bai-dat-kho-xuong") ||
+    route.includes("homestay-airbnb") ||
     route.includes("spotlight") ||
     route.includes("featured") ||
     route.includes("prime") ||
@@ -1649,6 +1650,9 @@ function openCategoryView(route) {
   } else if (route.includes("bai-dat-kho-xuong")) {
     title = "Cho Thuê Bãi Đất, Kho Xưởng Chuẩn Công Nghiệp";
     catKey = "bai-dat-kho-xuong";
+  } else if (route.includes("homestay-airbnb")) {
+    title = "Cho Thuê HomeStay, AirBnb & Căn Hộ Nghỉ Dưỡng";
+    catKey = "homestay-airbnb";
   } else if (route.includes("spotlight")) {
     title = "Spotlight — Đỉnh Cao Hiển Thị, Dẫn Đầu Vị Thế";
     subtitle = "Chỉ hiển thị các tin thuộc hạng TOP 1 Spotlight (Không bao gồm tin thường & miễn phí)";
@@ -1724,6 +1728,113 @@ function applyCategoryBarFilter() {
 // ==========================================================================
 // 6. PROPERTY DETAIL VIEW (/cho-thue-phong-tro-phuong-cau-kieu/...-2078)
 // ==========================================================================
+function parseKToVnd(rawStr) {
+  if (!rawStr) return 0;
+  const cleaned = String(rawStr).replace(/[^0-9.]/g, "");
+  const num = parseFloat(cleaned);
+  return Number.isFinite(num) && num > 0 ? Math.round(num * 1000) : 0;
+}
+
+function computePropertyMonthlyCost(item) {
+  const priceNum = Number(item.price ?? item.priceMillion ?? 0);
+  const baseRentVnd = Math.round(priceNum * 1000000);
+
+  const elecStr = String(item.elec || "Nhà nước").trim();
+  const isElecState = !elecStr || /nhà nước/i.test(elecStr);
+  const elecUnitVnd = isElecState ? 3000 : parseKToVnd(elecStr);
+  const elecEstVnd = elecUnitVnd > 0 ? elecUnitVnd * 100 : 300000;
+  const elecNote = isElecState ? "Điện (Giá nhà nước ~100 kWh)" : `Điện (${elecStr} × 100 kWh)`;
+
+  const waterStr = String(item.water || "Nhà nước").trim();
+  const isWaterState = !waterStr || /nhà nước/i.test(waterStr);
+  const waterEstVnd = isWaterState ? 80000 : (parseKToVnd(waterStr) || 80000);
+  const waterNote = isWaterState ? "Nước (Giá nhà nước)" : `Nước (${waterStr})`;
+
+  const hasCustomServiceFields = Boolean(item.internet || item.laundry || item.trash || item.parking || item.otherCost);
+  const serviceEstVnd = hasCustomServiceFields
+    ? parseKToVnd(item.internet) + parseKToVnd(item.laundry) + parseKToVnd(item.trash) + parseKToVnd(item.parking) + parseKToVnd(item.otherCost)
+    : 150000;
+  const serviceLabel = hasCustomServiceFields
+    ? [
+        item.internet ? `Net ${item.internet}` : "",
+        item.laundry ? `Giặt ${item.laundry}` : "",
+        item.trash ? `Rác ${item.trash}` : "",
+        item.parking ? `Xe ${item.parking}` : "",
+        item.otherCost ? `Khác ${item.otherCost}` : ""
+      ].filter(Boolean).join(" + ")
+    : "Wifi + Rác + Giữ xe";
+
+  const estTotalVnd = baseRentVnd + elecEstVnd + waterEstVnd + serviceEstVnd;
+  return { baseRentVnd, elecEstVnd, elecNote, waterEstVnd, waterNote, serviceEstVnd, serviceLabel, estTotalVnd };
+}
+
+function getPropertyVipDisplay(item) {
+  if (item.zoneId === 1 || item.mapTier === "banner") {
+    return { label: "✦ ĐẶC QUYỀN", badgeClass: "tag-dacquyen" };
+  }
+  if (item.tier === "spotlight") {
+    return { label: "✦ VIP 1", badgeClass: "tag-vip1" };
+  }
+  if (item.tier === "featured") {
+    return { label: "• VIP 2", badgeClass: "tag-vip2" };
+  }
+  if (item.tier === "prime") {
+    return { label: "VIP 3", badgeClass: "tag-vip3" };
+  }
+  return { label: "", badgeClass: "" };
+}
+
+function openPropertyGalleryModal(propId, startIdx = 0) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  const photos = item.gallery && item.gallery.length ? item.gallery : [item.image];
+  let existing = document.getElementById("propertyGalleryBackdrop");
+  if (!existing) {
+    existing = document.createElement("div");
+    existing.id = "propertyGalleryBackdrop";
+    existing.className = "ctt-modal-backdrop";
+    existing.onclick = (e) => {
+      if (e.target === existing) existing.classList.remove("is-open");
+    };
+    document.body.appendChild(existing);
+  }
+  const activeSrc = photos[startIdx] || photos[0];
+  existing.innerHTML = `
+    <div class="ctt-modal-dialog" style="max-width:860px;background:#0f172a;color:#fff;border:1px solid #334155;">
+      <div class="ctt-modal-header" style="background:#0f172a;border-bottom:1px solid #1e293b;padding:14px 20px;">
+        <strong style="font-size:14px;color:#fff;"><i class="fa-regular fa-images" style="color:var(--ctt-orange);margin-right:6px;"></i>Hình ảnh thực tế (${photos.length} ảnh${item.videoUrl ? " + 1 Video" : ""})</strong>
+        <button type="button" onclick="document.getElementById('propertyGalleryBackdrop').classList.remove('is-open')" style="width:32px;height:32px;border-radius:50%;border:1px solid #334155;background:#1e293b;color:#fff;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div style="padding:16px 20px;">
+        <div id="galLightboxStage" style="border-radius:12px;overflow:hidden;background:#020617;max-height:420px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+          <img src="${activeSrc}" style="max-width:100%;max-height:420px;object-fit:contain;" alt="Gallery">
+        </div>
+        <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+          ${photos.map((src, i) => `
+            <button type="button" onclick="document.getElementById('galLightboxStage').innerHTML='<img src=\\'${src}\\' style=\\'max-width:100%;max-height:420px;object-fit:contain;\\'>'" style="width:76px;height:56px;border-radius:8px;overflow:hidden;border:2px solid ${i === startIdx ? "var(--ctt-orange)" : "#334155"};padding:0;cursor:pointer;flex-shrink:0;">
+              <img src="${src}" style="width:100%;height:100%;object-fit:cover;" alt="Thumb ${i + 1}">
+            </button>
+          `).join("")}
+          ${item.videoUrl ? `
+            <button type="button" onclick="document.getElementById('galLightboxStage').innerHTML='<video src=\\'${item.videoUrl}\\' controls autoplay style=\\'max-width:100%;max-height:420px;\\'></video>'" style="width:96px;height:56px;border-radius:8px;border:2px solid var(--ctt-orange);background:#1e293b;color:#fff;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;">
+              <i class="fa-solid fa-video" style="color:var(--ctt-orange);"></i>
+              <span>Xem Video</span>
+            </button>
+          ` : ""}
+        </div>
+      </div>
+    </div>
+  `;
+  existing.classList.add("is-open");
+}
+
+function copyHostPhoneNow(btnEl, phone) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(phone).catch(() => {});
+  }
+  btnEl.innerHTML = `<i class="fa-solid fa-phone-volume"></i> ${phone} (Đã sao chép)`;
+}
+
 function openPropertyDetailView(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
   window.history.pushState({}, "", `#/cho-thue-${item.category}/${item.id}`);
@@ -1735,12 +1846,48 @@ function openPropertyDetailView(propId) {
   // Zoom Hero Map to this property and show nearby pins
   updateMapPins("all", item.id);
 
-  const g1 = item.gallery?.[0] || item.image;
-  const g2 = item.gallery?.[1] || "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp";
-  const g3 = item.gallery?.[2] || "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp";
+  const galleryList = item.gallery && item.gallery.length ? item.gallery : [item.image];
+  const g1 = galleryList[0] || item.image;
+  const g2 = galleryList[1] || galleryList[0] || "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp";
+  const g3 = galleryList[2] || galleryList[1] || galleryList[0] || "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp";
 
-  const baseRentVnd = item.price * 1000000;
-  const estTotalVnd = baseRentVnd + 350000 + 100000 + 150000;
+  const vipInfo = getPropertyVipDisplay(item);
+  const stickerMap = {
+    urgent: { name: "Giảm Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
+    hot: { name: "HOT", cls: "sticker-hot", icon: "fa-fire" },
+    promo: { name: "Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+  };
+  const stObj = item.sticker ? stickerMap[item.sticker] : null;
+  const costs = computePropertyMonthlyCost(item);
+  const fmtVnd = (n) => new Intl.NumberFormat("vi-VN").format(n) + "đ";
+  const cleanPhoneDigits = (item.phone || "0906344877").replace(/\D/g, "");
+  const defaultSchedPhone = STATE.auth?.isLoggedIn && STATE.auth?.phone ? STATE.auth.phone : "";
+
+  const extraSpecs = [
+    item.furniture ? `<div class="pd-spec-box"><i class="fa-solid fa-couch"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Nội thất</small><strong>${item.furniture}</strong></div></div>` : "",
+    item.floors ? `<div class="pd-spec-box"><i class="fa-solid fa-layer-group"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Số tầng</small><strong>${item.floors}</strong></div></div>` : "",
+    item.direction ? `<div class="pd-spec-box"><i class="fa-solid fa-compass"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Hướng nhà</small><strong>${item.direction}</strong></div></div>` : "",
+    item.frontageRoad ? `<div class="pd-spec-box"><i class="fa-solid fa-road"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Mặt tiền - Lộ giới</small><strong>${item.frontageRoad}</strong></div></div>` : "",
+    item.roadAccess ? `<div class="pd-spec-box"><i class="fa-solid fa-arrows-left-right"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Đường vào nhà</small><strong>${item.roadAccess}</strong></div></div>` : "",
+    item.maxPeople ? `<div class="pd-spec-box"><i class="fa-solid fa-users"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Giới hạn người</small><strong>${item.maxPeople} người/phòng${item.extraPerson ? ` (Phụ thu ${item.extraPerson})` : ""}</strong></div></div>` : ""
+  ].filter(Boolean).join("");
+
+  const descriptionText = (item.description || "").trim()
+    || `Chính chủ cho thuê ${item.title} tại ${item.fullAddress}. Không gian thiết kế hiện đại, thoáng sáng tự nhiên, khu dân cư văn minh an ninh 24/7. Cam kết hình ảnh thật 100% và minh bạch toàn bộ chi phí điện, nước, dịch vụ ngay trong hợp đồng thuê.`;
+
+  const hasCustomUtilitiesOrServices = (item.utilities && item.utilities.length) || (item.services && item.services.length);
+  const pillsHtml = hasCustomUtilitiesOrServices
+    ? [
+        ...(item.utilities || []).map((u) => `<span class="sv1-spec-pill"><i class="fa-solid fa-location-crosshairs"></i> ${u}</span>`),
+        ...(item.services || []).map((s) => `<span class="sv1-spec-pill"><i class="fa-solid fa-circle-check"></i> ${s}</span>`)
+      ].join("")
+    : `
+        <span class="sv1-spec-pill"><i class="fa-solid fa-graduation-cap"></i> Gần trường Đại học (400m)</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-cart-shopping"></i> Chợ & Siêu thị Co.opmart (250m)</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-hospital"></i> Bệnh viện / Phòng khám (600m)</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-tree"></i> Công viên thể thao (500m)</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-droplet-slash"></i> Khu vực cao ráo không ngập nước</span>
+      `;
 
   detailView.innerHTML = `
     <div class="pd-container">
@@ -1749,24 +1896,24 @@ function openPropertyDetailView(propId) {
         <span>/</span>
         <a href="javascript:void(0)" onclick="navigateTo('/${item.category}.html')">${item.categoryLabel}</a>
         <span>/</span>
-        <span>${item.ward}, ${item.city}</span>
+        <span>${(item.ward || "").toUpperCase()}, ${(item.city || "").toUpperCase()}</span>
         <span>/</span>
         <strong style="color:var(--ctt-orange);">Mã tin #${item.id}</strong>
       </div>
 
       <!-- Collage Photo Gallery -->
       <div class="pd-gallery">
-        <div class="pd-gal-main">
+        <div class="pd-gal-main" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 0)">
           <img src="${g1}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
-          <span class="sv1-3d-glass-tag"><i class="fa-solid fa-crown"></i> ${item.badge} • Ảnh Thực Tế Xác Minh</span>
+          <span class="sv1-3d-glass-tag"><i class="fa-solid fa-shield-check"></i> ${vipInfo.label ? `${vipInfo.label} • ` : ""}Ảnh Thực Tế Xác Minh (${galleryList.length} ảnh)</span>
         </div>
         <div class="pd-gal-side">
-          <div class="pd-gal-item">
+          <div class="pd-gal-item" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 1)">
             <img src="${g2}" alt="Ảnh góc 2" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
           </div>
-          <div class="pd-gal-item">
+          <div class="pd-gal-item" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 2)">
             <img src="${g3}" alt="Ảnh góc 3" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
-            <div class="pd-view-all-photos"><i class="fa-regular fa-images"></i> + Xem tất cả 8 ảnh & Video 360°</div>
+            <div class="pd-view-all-photos"><i class="fa-regular fa-images"></i> + Xem tất cả ${galleryList.length} ảnh${item.videoUrl ? " & Video" : ""}</div>
           </div>
         </div>
       </div>
@@ -1776,8 +1923,9 @@ function openPropertyDetailView(propId) {
         <div>
           <div class="pd-card-box">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
-              <div style="display:flex;gap:8px;align-items:center;">
-                <span class="sv1-badge-vip"><i class="fa-solid fa-crown"></i> ${item.badge}</span>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                ${vipInfo.label ? `<span class="lc-vip-tag ${vipInfo.badgeClass}" style="position:static;">${vipInfo.label}</span>` : `<span style="background:#f1f5f9;color:#475569;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800;">${item.categoryLabel}</span>`}
+                ${stObj ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>` : ""}
                 <span class="sv1-badge-verified"><i class="fa-solid fa-shield-check"></i> Đã xác minh chính chủ</span>
               </div>
               <span style="font-size:12.5px;color:#64748b;font-weight:600;">Cập nhật: Hôm nay • Lượt xem: 1.428</span>
@@ -1803,7 +1951,7 @@ function openPropertyDetailView(propId) {
                 </div>
                 <div>
                   <div style="font-size:11px;color:#64748b;font-weight:700;">TIỀN CỌC</div>
-                  <div style="font-size:18px;font-weight:900;color:#0f172a;">${item.deposit}</div>
+                  <div style="font-size:18px;font-weight:900;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
                 </div>
                 <div>
                   <div style="font-size:11px;color:#64748b;font-weight:700;">ĐIỆN / NƯỚC</div>
@@ -1819,25 +1967,19 @@ function openPropertyDetailView(propId) {
               <div class="pd-spec-box"><i class="fa-solid fa-bath"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Phòng vệ sinh</small><strong>${item.baths} khép kín</strong></div></div>
               <div class="pd-spec-box"><i class="fa-solid fa-bolt"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Giá điện</small><strong>${item.elec}</strong></div></div>
               <div class="pd-spec-box"><i class="fa-solid fa-droplet"></i> <div><small style="color:#64748b;display:block;font-size:11px;">Giá nước</small><strong>${item.water}</strong></div></div>
-              <div class="pd-spec-box"><i class="fa-solid fa-fingerprint"></i> <div><small style="color:#64748b;display:block;font-size:11px;">An ninh & Giờ giấc</small><strong>Vân tay 24/24</strong></div></div>
+              ${extraSpecs || `<div class="pd-spec-box"><i class="fa-solid fa-fingerprint"></i> <div><small style="color:#64748b;display:block;font-size:11px;">An ninh & Giờ giấc</small><strong>Vân tay 24/24</strong></div></div>`}
             </div>
 
             <h3 style="font-size:17px;font-weight:800;margin:26px 0 10px;">Mô tả chi tiết</h3>
-            <p style="font-size:14.5px;color:#334155;line-height:1.75;">
-              Chính chủ cho thuê <strong>${item.title}</strong> tại ${item.fullAddress}. Không gian thiết kế hiện đại, thoáng sáng tự nhiên, khu dân cư văn minh an ninh 24/7. Trang bị đầy đủ hệ thống PCCC đạt chuẩn, khóa vân tay, camera an ninh hành lang, khu vực để xe rộng rãi. Cam kết hình ảnh thật 100% và minh bạch toàn bộ chi phí điện, nước, dịch vụ ngay trong hợp đồng thuê.
-            </p>
+            <div style="font-size:14.5px;color:#334155;line-height:1.75;white-space:pre-line;">${descriptionText}</div>
 
-            <h3 style="font-size:17px;font-weight:800;margin:26px 0 12px;">Tiện ích trong bán kính 1km</h3>
+            <h3 style="font-size:17px;font-weight:800;margin:26px 0 12px;">Tiện ích & Dịch vụ nổi bật</h3>
             <div style="display:flex;flex-wrap:wrap;gap:10px;">
-              <span class="sv1-spec-pill"><i class="fa-solid fa-graduation-cap"></i> Gần trường Đại học (400m)</span>
-              <span class="sv1-spec-pill"><i class="fa-solid fa-cart-shopping"></i> Chợ & Siêu thị Co.opmart (250m)</span>
-              <span class="sv1-spec-pill"><i class="fa-solid fa-hospital"></i> Bệnh viện / Phòng khám (600m)</span>
-              <span class="sv1-spec-pill"><i class="fa-solid fa-tree"></i> Công viên thể thao (500m)</span>
-              <span class="sv1-spec-pill"><i class="fa-solid fa-droplet-slash"></i> Khu vực cao ráo không ngập nước</span>
+              ${pillsHtml}
             </div>
           </div>
 
-          <!-- Transparent Monthly Cost Calculator (Next-Gen Upgrade) -->
+          <!-- Transparent Monthly Cost Calculator (Dynamic by Real Listing Costs) -->
           <div class="pd-card-box" style="background:linear-gradient(135deg,#ffffff 0%,#fffaf5 100%);border-color:#fed7aa;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
               <h3 style="font-size:18px;font-weight:900;color:#0f172a;">
@@ -1849,25 +1991,25 @@ function openPropertyDetailView(propId) {
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;" class="tabular-nums">
               <div style="padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;">
                 <small style="color:#64748b;font-size:11px;display:block;">Tiền thuê cố định</small>
-                <strong style="font-size:15px;color:#0f172a;">${new Intl.NumberFormat("vi-VN").format(baseRentVnd)}đ</strong>
+                <strong style="font-size:15px;color:#0f172a;">${fmtVnd(costs.baseRentVnd)}</strong>
               </div>
               <div style="padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;">
-                <small style="color:#64748b;font-size:11px;display:block;">Điện (~100 kWh)</small>
-                <strong style="font-size:15px;color:#0f172a;">350.000đ</strong>
+                <small style="color:#64748b;font-size:11px;display:block;">${costs.elecNote}</small>
+                <strong style="font-size:15px;color:#0f172a;">~${fmtVnd(costs.elecEstVnd)}</strong>
               </div>
               <div style="padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;">
-                <small style="color:#64748b;font-size:11px;display:block;">Nước sinh hoạt</small>
-                <strong style="font-size:15px;color:#0f172a;">100.000đ</strong>
+                <small style="color:#64748b;font-size:11px;display:block;">${costs.waterNote}</small>
+                <strong style="font-size:15px;color:#0f172a;">~${fmtVnd(costs.waterEstVnd)}</strong>
               </div>
               <div style="padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;">
-                <small style="color:#64748b;font-size:11px;display:block;">Wifi + Rác + Giữ xe</small>
-                <strong style="font-size:15px;color:#0f172a;">150.000đ</strong>
+                <small style="color:#64748b;font-size:11px;display:block;">${costs.serviceLabel || "Phí dịch vụ khác"}</small>
+                <strong style="font-size:15px;color:#0f172a;">${fmtVnd(costs.serviceEstVnd)}</strong>
               </div>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1.5px dashed #fdba74;">
               <span style="font-size:14px;font-weight:700;color:#475569;">Tổng chi phí dự kiến trọn gói / tháng:</span>
               <strong style="font-size:24px;font-weight:900;color:var(--ctt-orange);font-variant-numeric:tabular-nums;">
-                ~ ${new Intl.NumberFormat("vi-VN").format(estTotalVnd)} VNĐ/tháng
+                ~ ${new Intl.NumberFormat("vi-VN").format(costs.estTotalVnd)} VNĐ/tháng
               </strong>
             </div>
           </div>
@@ -1878,7 +2020,7 @@ function openPropertyDetailView(propId) {
           <div class="pd-card-box" style="margin-bottom:0;">
             <div style="display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #f1f5f9;">
               <div style="width:56px;height:56px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;">
-                ${item.host.charAt(0)}
+                ${(item.host || "C").charAt(0)}
               </div>
               <div>
                 <div style="font-size:16px;font-weight:900;color:#0f172a;">${item.host}</div>
@@ -1886,15 +2028,14 @@ function openPropertyDetailView(propId) {
               </div>
             </div>
 
-            <button type="button" onclick="this.innerHTML='<i class=\\'fa-solid fa-phone-volume\\'></i> ${item.phone} (Đã sao chép)'" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;box-shadow:0 10px 24px rgba(241,90,34,0.35);display:flex;align-items:center;justify-content:center;gap:10px;">
+            <button type="button" onclick="copyHostPhoneNow(this, '${item.phone}')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;box-shadow:0 10px 24px rgba(241,90,34,0.35);display:flex;align-items:center;justify-content:center;gap:10px;">
               <i class="fa-solid fa-phone-volume"></i> ${item.phone} • Gọi ngay
             </button>
 
-            <a href="https://zalo.me/0906344877" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0068ff;background:#f0f7ff;color:#0068ff;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
+            <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0068ff;background:#f0f7ff;color:#0068ff;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;text-decoration:none;">
               <img src="assets/zalo.svg" alt="Zalo" style="width:20px;height:20px;"> Nhắn Zalo nhận video phòng thực tế
             </a>
 
-            <!-- NEW UPGRADE #8: Standardized Zalo Schedule Viewing & Hold Room Widget -->
             <div class="pd-schedule-box">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                 <strong style="font-size:13px;color:#0f172a;"><i class="fa-regular fa-calendar-check" style="color:var(--ctt-orange);margin-right:6px;"></i>Đặt lịch hẹn xem phòng trực tiếp</strong>
@@ -1915,7 +2056,7 @@ function openPropertyDetailView(propId) {
                 <div class="pd-sched-pill" onclick="selectViewingSlot('time', 'Tối (18h-20h)', this)">Tối 18h-20h</div>
               </div>
 
-              <input type="text" id="schedTenantPhone" class="hsp-select" style="background:#fff;margin-bottom:10px;font-size:12.5px;" placeholder="Nhập SĐT Zalo của bạn để chủ nhà xác nhận...">
+              <input type="tel" inputmode="numeric" maxlength="10" id="schedTenantPhone" value="${defaultSchedPhone}" class="hsp-select tabular-nums" style="background:#fff;margin-bottom:10px;font-size:12.5px;" placeholder="Nhập SĐT Zalo 10 số của bạn...">
 
               <button type="button" onclick="submitZaloViewingSchedule(${item.id})" style="width:100%;padding:11px;border-radius:12px;border:none;background:#0f172a;color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                 <i class="fa-solid fa-paper-plane"></i> Gửi lịch hẹn qua Zalo Chủ Nhà
@@ -1947,7 +2088,13 @@ function selectViewingSlot(type, val, pillEl) {
 
 function submitZaloViewingSchedule(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
-  const phone = document.getElementById("schedTenantPhone")?.value.trim() || "0909 xxx xxx";
+  const phoneEl = document.getElementById("schedTenantPhone");
+  const phone = (phoneEl?.value || "").replace(/\D/g, "").trim();
+  if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
+    alert("Vui lòng nhập đúng Số Điện Thoại / Zalo 10 số (bắt đầu 03/05/07/08/09) để chủ nhà xác nhận lịch hẹn.");
+    phoneEl?.focus();
+    return;
+  }
   alert(
     `✅ ĐÃ TẠO LỊCH HẸN XEM PHÒNG QUA ZALO CHỦ NHÀ!\n\n` +
       `• Mã tin: #${item.id} (${item.ward}, ${item.city})\n` +
@@ -3050,11 +3197,41 @@ const STUDIO_STICKERS = [
   { id: "promo", name: "Ưu Đãi", hint: "Tìm khách hàng mới", cls: "sticker-promo", icon: "fa-gift" }
 ];
 
+const STUDIO_WARDS_BY_CITY = {
+  "TP. Hồ Chí Minh": [
+    { value: "P. Cầu Kiệu", label: "P. Cầu Kiệu (Phú Nhuận)" },
+    { value: "P. Hòa Hưng", label: "P. Hòa Hưng (Quận 10)" },
+    { value: "P. Nhiêu Lộc", label: "P. Nhiêu Lộc (Quận 3)" },
+    { value: "P. Gia Định", label: "P. Gia Định (Bình Thạnh)" }
+  ],
+  "TP. Hà Nội": [
+    { value: "P. Đống Đa", label: "P. Đống Đa (Đống Đa)" },
+    { value: "P. Cầu Giấy", label: "P. Cầu Giấy (Cầu Giấy)" },
+    { value: "P. Hoàn Kiếm", label: "P. Hoàn Kiếm (Hoàn Kiếm)" },
+    { value: "P. Thanh Xuân", label: "P. Thanh Xuân (Thanh Xuân)" }
+  ]
+};
+
 const STUDIO_STREETS_BY_WARD = {
   "P. Cầu Kiệu": ["Phan Xích Long", "Hoa Sứ", "Hoa Phượng", "Trường Sa", "Phan Đăng Lưu"],
   "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái"],
   "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Lý Chính Thắng"],
-  "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"]
+  "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"],
+  "P. Đống Đa": ["Chùa Bộc", "Thái Hà", "Tây Sơn", "Xã Đàn"],
+  "P. Cầu Giấy": ["Xuân Thủy", "Trần Duy Hưng", "Cầu Giấy", "Trung Kính"],
+  "P. Hoàn Kiếm": ["Hàng Bài", "Tràng Tiền", "Lý Thường Kiệt", "Phố Huế"],
+  "P. Thanh Xuân": ["Nguyễn Trãi", "Lê Văn Lương", "Khuất Duy Tiến", "Vũ Trọng Phụng"]
+};
+
+const STUDIO_WARD_COORDS = {
+  "P. Cầu Kiệu": [10.7965, 106.6825],
+  "P. Hòa Hưng": [10.7758, 106.6682],
+  "P. Nhiêu Lộc": [10.7852, 106.6815],
+  "P. Gia Định": [10.8012, 106.7065],
+  "P. Đống Đa": [21.0124, 105.8256],
+  "P. Cầu Giấy": [21.0338, 105.7945],
+  "P. Hoàn Kiếm": [21.0285, 105.8542],
+  "P. Thanh Xuân": [20.9956, 105.8089]
 };
 
 const STUDIO_STATE = {
@@ -3074,7 +3251,9 @@ const STUDIO_STATE = {
   aiAutoSync: false,
   selectedSticker: null,
   coverIndex: 0,
-  photos: []
+  photos: [],
+  videoUrl: "",
+  videoName: ""
 };
 
 openPostModal = function () {
@@ -3239,6 +3418,24 @@ function sanitizeStudioVnPhone(inputEl) {
     }
   }
   renderStudioPreview();
+}
+
+function populateStudioWards() {
+  const city = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
+  const wardEl = document.getElementById("dWard");
+  if (!wardEl) return;
+  const list = STUDIO_WARDS_BY_CITY[city] || STUDIO_WARDS_BY_CITY["TP. Hồ Chí Minh"];
+  const prev = wardEl.value;
+  wardEl.innerHTML = list.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
+  if (list.some((w) => w.value === prev)) {
+    wardEl.value = prev;
+  }
+}
+
+function onStudioCityChange() {
+  populateStudioWards();
+  populateStudioStreets();
+  syncStudioAddressDisplay();
 }
 
 function populateStudioStreets() {
@@ -3431,9 +3628,16 @@ function handleStudioPhotoUpload(input) {
 function handleStudioVideoUpload(input) {
   const file = input.files && input.files[0];
   const lbl = document.getElementById("demoVideoLabel");
-  if (lbl) {
-    lbl.textContent = file ? `Đã chọn video: ${file.name}` : "Tải Video Ngắn Từ Máy (MP4, MOV)";
+  if (file) {
+    STUDIO_STATE.videoUrl = URL.createObjectURL(file);
+    STUDIO_STATE.videoName = file.name;
+    if (lbl) lbl.textContent = `Đã chọn video: ${file.name}`;
+  } else {
+    STUDIO_STATE.videoUrl = "";
+    STUDIO_STATE.videoName = "";
+    if (lbl) lbl.textContent = "Tải Video Ngắn Từ Máy (MP4, MOV)";
   }
+  renderStudioPreview();
 }
 
 function buildStudioAiDraft() {
@@ -3676,7 +3880,12 @@ function initStudioPostListing(preselectedZoneId = null) {
   STUDIO_STATE.selectedDays = 7;
   STUDIO_STATE.coverIndex = 0;
   STUDIO_STATE.photos = [];
+  STUDIO_STATE.videoUrl = "";
+  STUDIO_STATE.videoName = "";
   STUDIO_STATE.selectedZoneId = preselectedZoneId || null;
+  const vLbl = document.getElementById("demoVideoLabel");
+  if (vLbl) vLbl.textContent = "Tải Video Ngắn Từ Máy (MP4, MOV)";
+  populateStudioWards();
 
   const hostEl = document.getElementById("dHost");
   if (hostEl) hostEl.value = STATE.auth.displayName || "Chính chủ Minh Quân";
@@ -3839,9 +4048,30 @@ function renderStudioPreview() {
       </div>
     `;
   } else {
+    const prevUtils = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
+    if (document.getElementById("chkSchool")?.checked) {
+      const sc = (document.getElementById("dSchoolCode")?.value || "").trim();
+      prevUtils.unshift(sc ? `Trường học (${sc})` : "Trường học");
+    }
+    const prevSvcs = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
+    const prevAllPills = [...prevUtils, ...prevSvcs];
+    const furnVal = document.getElementById("dFurniture")?.value || "";
+    const floorsVal = document.getElementById("dFloors")?.value || "";
+    const dirVal = document.getElementById("dDirection")?.value || "";
+    const extraBits = [
+      furnVal ? `Nội thất: ${furnVal}` : "",
+      floorsVal ? floorsVal : "",
+      dirVal ? `Hướng ${dirVal}` : "",
+      STUDIO_STATE.deposit ? `Cọc ${STUDIO_STATE.deposit}` : ""
+    ].filter(Boolean).join(" • ");
+
     html = `
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:14px;">
-        <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Trang chủ › ${STUDIO_STATE.catLabel} › ${ward}</div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:6px;">Trang chủ › ${STUDIO_STATE.catLabel} › ${ward.toUpperCase()}</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
+          ${badgeText ? `<span class="lc-vip-tag ${badgeClass}" style="position:static;font-size:10px;">${badgeText}</span>` : ""}
+          ${stObj ? `<span class="sticker-pill ${stObj.cls}" style="font-size:9.5px;"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>` : ""}
+        </div>
         <h4 style="font-size:15px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:8px;">${title}</h4>
         <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:6px;margin-bottom:10px;">
           ${coverPhoto
@@ -3854,7 +4084,9 @@ function renderStudioPreview() {
         </div>
         <div style="background:#fff;border-radius:10px;padding:10px;border:1px solid #e2e8f0;font-size:12px;color:#334155;">
           <strong style="color:var(--ctt-orange);font-size:16px;">${price} Triệu/tháng</strong> • ${area} m² • ${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}
-          <div style="margin-top:4px;color:#64748b;">${desc}</div>
+          ${extraBits ? `<div style="margin-top:4px;font-size:11px;font-weight:700;color:#0f172a;">${extraBits}</div>` : ""}
+          <div style="margin-top:6px;color:#475569;white-space:pre-line;line-height:1.45;">${desc}</div>
+          ${prevAllPills.length ? `<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">${prevAllPills.map((p) => `<span style="background:#fffaf5;border:1px solid #fed7aa;color:#9a3412;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;">${p}</span>`).join("")}</div>` : ""}
         </div>
       </div>
     `;
@@ -3937,6 +4169,23 @@ function publishStudioListingNow() {
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
   const waterRaw = (document.getElementById("dWater")?.value || "").replace(/k/gi, "").trim();
   const otherRaw = (document.getElementById("dOtherCost")?.value || "").replace(/k/gi, "").trim();
+  const internetRaw = (document.getElementById("dInternet")?.value || "").replace(/k/gi, "").trim();
+  const laundryRaw = (document.getElementById("dLaundry")?.value || "").replace(/k/gi, "").trim();
+  const trashRaw = (document.getElementById("dTrash")?.value || "").replace(/k/gi, "").trim();
+  const parkingRaw = (document.getElementById("dParking")?.value || "").replace(/k/gi, "").trim();
+  const extraPersonRaw = (document.getElementById("dExtraPerson")?.value || "").replace(/k/gi, "").trim();
+
+  const wardVal = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
+  const cityVal = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
+  const baseCoords = STUDIO_WARD_COORDS[wardVal] || [10.7965, 106.6825];
+  const jitter = ((newId % 7) - 3) * 0.0008;
+
+  const utilitiesList = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
+  if (document.getElementById("chkSchool")?.checked) {
+    const sc = (document.getElementById("dSchoolCode")?.value || "").trim();
+    utilitiesList.unshift(sc ? `Trường học (${sc})` : "Trường học");
+  }
+  const servicesList = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
 
   const newProp = {
     id: newId,
@@ -3949,31 +4198,69 @@ function publishStudioListingNow() {
     sticker: STUDIO_STATE.selectedSticker,
     category: STUDIO_STATE.catKey,
     categoryLabel: STUDIO_STATE.catLabel,
-    title: document.getElementById("dTitle")?.value.trim() || "CĂN HỘ MỚI ĐĂNG",
+    title: (document.getElementById("dTitle")?.value.trim() || "CĂN HỘ MỚI ĐĂNG").slice(0, 70),
+    description: document.getElementById("dDesc")?.value.trim() || "",
     price: priceNum,
     priceMillion: priceNum,
     priceText: `${priceNum} Triệu`,
-    city: document.getElementById("dCity")?.value || "TP. Hồ Chí Minh",
-    ward: document.getElementById("dWard")?.value || "P. Cầu Kiệu",
-    fullAddress: buildStudioFullAddress() || "P. Cầu Kiệu, TP. Hồ Chí Minh",
+    city: cityVal,
+    ward: wardVal,
+    fullAddress: buildStudioFullAddress() || `${wardVal}, ${cityVal}`,
     area: parseInt(document.getElementById("dArea")?.value || "35", 10),
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
     elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
     water: waterRaw ? `${waterRaw}k` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
+    internet: internetRaw ? `${internetRaw}k` : "",
+    laundry: laundryRaw ? `${laundryRaw}k` : "",
+    trash: trashRaw ? `${trashRaw}k` : "",
+    parking: parkingRaw ? `${parkingRaw}k` : "",
+    maxPeople: document.getElementById("dMaxPeople")?.value || "",
+    extraPerson: extraPersonRaw ? `${extraPersonRaw}k` : "",
+    furniture: document.getElementById("dFurniture")?.value || "",
+    floors: document.getElementById("dFloors")?.value || "",
+    direction: document.getElementById("dDirection")?.value || "",
+    frontageRoad: document.getElementById("dFrontageRoad")?.value.trim() || "",
+    roadAccess: document.getElementById("dRoadAccess")?.value.trim() || "",
+    utilities: utilitiesList,
+    services: servicesList,
     deposit: STUDIO_STATE.deposit || "Thỏa Thuận",
-    lat: 10.7965,
-    lng: 106.6825,
+    lat: Number((baseCoords[0] + jitter).toFixed(4)),
+    lng: Number((baseCoords[1] - jitter).toFixed(4)),
     verified: true,
     isVipPin: z.id === 1,
     phone: document.getElementById("dPhone")?.value || "0906344877",
     host: document.getElementById("dHost")?.value || "Chính chủ Minh Quân",
     image: coverPhoto,
-    gallery: STUDIO_STATE.photos.slice()
+    gallery: STUDIO_STATE.photos.slice(),
+    videoUrl: STUDIO_STATE.videoUrl || "",
+    videoName: STUDIO_STATE.videoName || ""
   };
 
   PROPERTIES.unshift(newProp);
+  if (z.id === 1 && typeof VIP_EXCLUSIVE_SLIDES !== "undefined" && Array.isArray(VIP_EXCLUSIVE_SLIDES)) {
+    VIP_EXCLUSIVE_SLIDES.unshift({
+      id: newId,
+      location: newProp.fullAddress,
+      price: String(priceNum),
+      unit: "Triệu | Tháng",
+      title: newProp.title,
+      desc: newProp.description || `${newProp.categoryLabel} tại ${newProp.fullAddress}`,
+      area: `${newProp.area} m²`,
+      beds: newProp.beds,
+      baths: newProp.baths,
+      elec: newProp.elec,
+      water: newProp.water,
+      phone: newProp.phone,
+      phoneFull: newProp.phone,
+      phoneMasked: newProp.phone.length >= 7 ? `${newProp.phone.slice(0, 4)} ${newProp.phone.slice(4, 7)} ***` : newProp.phone,
+      photos: newProp.gallery.length >= 3 ? newProp.gallery.slice(0, 3) : [coverPhoto, coverPhoto, coverPhoto]
+    });
+    STATE.sv1Index = 0;
+    STATE.sv1ThumbIndex = 0;
+    renderSv1Slider();
+  }
   renderAllHomeGrids();
   updateMapPins("all", newId);
   updateMapFilterChipCounts();

@@ -1006,17 +1006,17 @@
               <div class="post-field-label"><span>Loại Hình <span class="req-star">*</span></span></div>
               <div class="post-cat-selector">
                 <button type="button" class="post-cat-btn active" onclick="selectStudioCategory('phong-tro', 'Phòng Trọ / CHDV', this)"><span class="cat-icon-circle"><i class="fa-solid fa-door-open"></i></span><span style="line-height:1.25;">Phòng Trọ<br>CHDV</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('nha-nguyen-can', 'Nhà Nguyên Căn', this)"><span class="cat-icon-circle"><i class="fa-solid fa-house-chimney"></i></span><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('nha-o', 'Nhà Nguyên Căn', this)"><span class="cat-icon-circle"><i class="fa-solid fa-house-chimney"></i></span><span style="line-height:1.25;">Nhà<br>Nguyên Căn</span></button>
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('can-ho-chung-cu', 'Căn Hộ Chung Cư', this)"><span class="cat-icon-circle"><i class="fa-solid fa-building"></i></span><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('mat-bang-van-phong', 'Mặt Bằng Văn Phòng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-shop"></i></span><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('dat-xuong-kho-bai', 'Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('bai-dat-kho-xuong', 'Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('homestay-airbnb', 'HomeStay / AirBnb', this)"><span class="cat-icon-circle"><i class="fa-solid fa-umbrella-beach"></i></span><span style="line-height:1.25;">HomeStay<br>AirBnb</span></button>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
                 <div>
                   <div class="post-field-label"><span>Tỉnh / Thành <span class="req-star">*</span></span></div>
-                  <select id="dCity" class="post-input" onchange="onStudioLocationChange()">
+                  <select id="dCity" class="post-input" onchange="onStudioCityChange()">
                     <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
                     <option value="TP. Hà Nội">TP. Hà Nội</option>
                   </select>
@@ -1735,6 +1735,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261117b"></script>
+  <script src="app.js?v=20261118c"></script>
 </body>
 </html>
