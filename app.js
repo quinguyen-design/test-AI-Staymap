@@ -4098,31 +4098,45 @@ function handleStudioVideoUpload(input) {
   renderStudioPreview();
 }
 
+function formatStudioAiFee(val, unitSuffix) {
+  const clean = (val || "").trim();
+  if (!clean) return "";
+  const withK = /k$/i.test(clean) ? clean : `${clean}k`;
+  return unitSuffix ? `${withK}/${unitSuffix}` : withK;
+}
+
+function formatStudioAiDim(val, fallbackUnit = "m") {
+  const clean = (val || "").trim();
+  if (!clean) return "";
+  return /(m2|m²|m)$/i.test(clean) ? clean : `${clean}${fallbackUnit}`;
+}
+
 function buildStudioAiDraft() {
-  const city = document.getElementById("dCity")?.value || "";
-  const ward = document.getElementById("dWard")?.value || "";
-  const street = document.getElementById("dStreet")?.value || "";
-  const project = document.getElementById("dProject")?.value || "";
-  const fullAddr = buildStudioFullAddress() || [street, project, ward, city].filter(Boolean).join(", ");
+  const city = getValidStudioComboValue("city") || document.getElementById("dCity")?.value || "";
+  const ward = getValidStudioComboValue("ward") || document.getElementById("dWard")?.value || "";
+  const street = getValidStudioComboValue("street") || document.getElementById("dStreet")?.value || "";
+  const project = getValidStudioComboValue("project") || document.getElementById("dProject")?.value || "";
+  const fullAddr = buildStudioFullAddress() || [project, street, ward, city].filter(Boolean).join(", ");
   const area = (document.getElementById("dArea")?.value || "").trim();
   const price = (document.getElementById("dPrice")?.value || "").trim();
+  const deposit = (document.getElementById("dDeposit")?.value || STUDIO_STATE.deposit || "").trim();
   const furn = document.getElementById("dFurniture")?.value || "";
   const floors = document.getElementById("dFloors")?.value || "";
   const dir = document.getElementById("dDirection")?.value || "";
-  const frontage = (document.getElementById("dFrontageRoad")?.value || "").trim();
-  const road = (document.getElementById("dRoadAccess")?.value || "").trim();
+  const frontage = formatStudioAiDim(document.getElementById("dFrontageRoad")?.value || "", "m");
+  const road = formatStudioAiDim(document.getElementById("dRoadAccess")?.value || "", "m");
   const host = (document.getElementById("dHost")?.value || "").trim();
   const phone = (document.getElementById("dPhone")?.value || "").trim();
 
-  const elec = (document.getElementById("dElec")?.value || "").trim();
-  const water = (document.getElementById("dWater")?.value || "").trim();
-  const otherCost = (document.getElementById("dOtherCost")?.value || "").trim();
-  const internet = (document.getElementById("dInternet")?.value || "").trim();
-  const laundry = (document.getElementById("dLaundry")?.value || "").trim();
-  const trash = (document.getElementById("dTrash")?.value || "").trim();
-  const parking = (document.getElementById("dParking")?.value || "").trim();
+  const elec = formatStudioAiFee(document.getElementById("dElec")?.value || "", "kWh");
+  const water = formatStudioAiFee(document.getElementById("dWater")?.value || "", "người");
+  const otherCost = formatStudioAiFee(document.getElementById("dOtherCost")?.value || "", "tháng");
+  const internet = formatStudioAiFee(document.getElementById("dInternet")?.value || "", "phòng");
+  const laundry = formatStudioAiFee(document.getElementById("dLaundry")?.value || "", "người");
+  const trash = formatStudioAiFee(document.getElementById("dTrash")?.value || "", "phòng");
+  const parking = formatStudioAiFee(document.getElementById("dParking")?.value || "", "xe/người/tháng");
   const maxPeople = document.getElementById("dMaxPeople")?.value || "";
-  const extraPerson = (document.getElementById("dExtraPerson")?.value || "").trim();
+  const extraPerson = formatStudioAiFee(document.getElementById("dExtraPerson")?.value || "", "người/tháng");
 
   const utils = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
   if (document.getElementById("chkSchool")?.checked) {
@@ -4131,79 +4145,129 @@ function buildStudioAiDraft() {
   }
   const svcs = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
 
+  const variant = Number(STUDIO_STATE.aiVariant || 0);
+  const catLower = STUDIO_STATE.catLabel.toLowerCase();
+  const isCommercial = STUDIO_STATE.catKey === "mat-bang" || STUDIO_STATE.catKey === "kho-xuong";
   const locFocus = project || (street ? `Đường ${street}` : ward);
   const locShort = project || (street ? `${street}, ${ward}` : ward);
   const priceShort = price ? `Giá ${price}Tr/Th` : "Giá Tốt";
   const areaShort = area ? `${area}m²` : "";
   const furnShort = furn && furn !== "Không Có" ? `NT ${furn}` : "";
+  const bedsTag = !isCommercial && STUDIO_STATE.beds && STUDIO_STATE.beds !== "1 PN" ? STUDIO_STATE.beds : "";
   const highlightSpec = [
     areaShort,
     furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
-    STUDIO_STATE.beds !== "1 PN" ? STUDIO_STATE.beds : ""
+    bedsTag
   ].filter(Boolean).join(" ");
 
-  const titleCandidates = [
-    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locFocus ? `${locFocus}, ${ward}` : ward, highlightSpec, price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"].filter(Boolean).join(" • "),
-    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, furnShort, priceShort].filter(Boolean).join(" • "),
-    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
+  const titlePools = [
+    [
+      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locFocus ? `${locFocus}, ${ward}` : ward, highlightSpec, price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"].filter(Boolean).join(" • "),
+      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, furnShort, priceShort].filter(Boolean).join(" • "),
+      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
+    ],
+    [
+      [STUDIO_STATE.catLabel, bedsTag, locFocus ? `${locFocus}, ${ward}` : ward, areaShort, price ? `Chỉ ${price}Tr/Tháng` : "Chính Chủ"].filter(Boolean).join(" • "),
+      [`Chính Chủ Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
+      [`${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
+    ],
+    [
+      [furn === "Đầy Đủ" ? "Full Nội Thất" : "Vị Trí Đẹp", `${STUDIO_STATE.catLabel}`, locFocus, areaShort, price ? `${price} Triệu/Tháng` : "Giá Tốt"].filter(Boolean).join(" • "),
+      [`${STUDIO_STATE.catLabel} Đẹp`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
+      [`Cho Thuê ${STUDIO_STATE.catLabel}`, street || ward, areaShort, priceShort].filter(Boolean).join(" • ")
+    ]
+  ];
+  const activePool = titlePools[variant % titlePools.length];
+  const fallbackTitles = [
     [`Cho Thuê ${STUDIO_STATE.catLabel}`, street || ward, areaShort, priceShort].filter(Boolean).join(" • "),
     [`Cho Thuê ${STUDIO_STATE.catLabel}`, ward, priceShort].filter(Boolean).join(" • ")
   ];
-  const bestTitle = titleCandidates.find((c) => c.length <= 70) || titleCandidates[titleCandidates.length - 1].slice(0, 70);
+  const allCandidates = [...activePool, ...fallbackTitles];
+  const bestTitle = allCandidates.find((c) => c.length <= 70) || allCandidates[allCandidates.length - 1].slice(0, 70);
 
   const titleEl = document.getElementById("dTitle");
   if (titleEl) titleEl.value = bestTitle;
   updateStudioTitleCount();
 
   const hookByCat = {
-    "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ và yên tĩnh, rất phù hợp cho nhân viên văn phòng hoặc sinh viên ở lâu dài",
-    "Nhà Nguyên Căn": "không gian rộng rãi và riêng tư tuyệt đối, thích hợp cho gia đình sinh sống hoặc kết hợp làm văn phòng công ty",
-    "Căn Hộ Chung Cư": "thiết kế hiện đại, thoáng sáng tự nhiên và an ninh cao, mang lại cảm giác thoải mái ngay khi dọn vào",
-    "Mặt Bằng Văn Phòng": "vị trí dễ nhận diện, mặt bằng vuông vức thuận tiện bố trí showroom, cửa hàng hoặc văn phòng giao dịch",
-    "Đất - Xưởng, Kho - Bãi": "khuôn viên thông thoáng, giao thông thuận tiện cho xe tải ra vào và sẵn sàng đưa vào vận hành ngay",
-    "HomeStay / AirBnb": "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm"
+    "Phòng Trọ / CHDV": [
+      "không gian riêng tư, sạch sẽ và yên tĩnh, rất phù hợp cho nhân viên văn phòng hoặc sinh viên ở lâu dài",
+      "môi trường sống văn minh, giờ giấc tự do và tách biệt hoàn toàn, vào ở thoải mái như nhà mình"
+    ],
+    "Nhà Nguyên Căn": [
+      "không gian rộng rãi và riêng tư tuyệt đối, thích hợp cho gia đình sinh sống hoặc kết hợp làm văn phòng công ty",
+      "nhà thoáng sáng, công năng linh hoạt để vừa ở gia đình vừa kinh doanh online hoặc mở studio"
+    ],
+    "Căn Hộ Chung Cư": [
+      "thiết kế hiện đại, thoáng sáng tự nhiên và an ninh thẻ từ 24/7, mang lại trải nghiệm sống tiện nghi ngay khi dọn vào",
+      "tầm nhìn thoáng đãng, cộng đồng cư dân văn minh và thừa hưởng trọn vẹn tiện ích nội khu cao cấp"
+    ],
+    "Mặt Bằng Văn Phòng": [
+      "vị trí dễ nhận diện, mặt bằng vuông vức thuận tiện bố trí showroom, spa, cửa hàng hoặc văn phòng giao dịch",
+      "tọa lạc trên trục giao thông sầm uất, dễ đón khách và tối ưu hiệu quả nhận diện thương hiệu"
+    ],
+    "Đất - Xưởng, Kho - Bãi": [
+      "khuôn viên thông thoáng, giao thông thuận tiện cho xe tải ra vào và sẵn sàng đưa vào vận hành ngay",
+      "mặt bằng rộng rãi, cao ráo sạch sẽ, đáp ứng tốt nhu cầu lưu trữ hàng hóa hoặc sản xuất"
+    ],
+    "HomeStay / AirBnb": [
+      "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm",
+      "góc decor chụp ảnh đẹp, check-in linh hoạt và chỉ mất vài phút di chuyển ra các điểm ăn uống nổi tiếng"
+    ]
   };
-  const catHook = hookByCat[STUDIO_STATE.catLabel] || "vị trí thuận tiện đi lại, sẵn sàng bàn giao ngay";
+  const catHooks = hookByCat[STUDIO_STATE.catLabel] || ["vị trí thuận tiện đi lại, sẵn sàng bàn giao ngay"];
+  const catHook = catHooks[variant % catHooks.length];
 
   const paragraphs = [];
 
-  // Đoạn 1: Mở đầu tự nhiên như người thật viết
+  // Đoạn 1: Mở đầu tự nhiên, giàu ngữ cảnh
   const addrPhrase = fullAddr ? `tại ${fullAddr}` : (ward ? `tại khu vực ${ward}` : "tại khu vực trung tâm");
-  paragraphs.push(
-    `Chính chủ đang cần cho thuê ${STUDIO_STATE.catLabel.toLowerCase()} ${addrPhrase} — ${catHook}.`
-  );
+  const introTemplates = [
+    `Chính chủ đang cần cho thuê ${catLower} ${addrPhrase} — ${catHook}.`,
+    `Cần cho thuê nhanh ${catLower} ${addrPhrase}, nổi bật với ${catHook}.`,
+    `Gửi đến anh/chị lựa chọn ${catLower} chất lượng ${addrPhrase}: ${catHook}.`
+  ];
+  paragraphs.push(introTemplates[variant % introTemplates.length]);
 
-  // Đoạn 2: Diện tích, kết cấu, nội thất, hướng & đường vào (thích nghi theo từng ô đã chọn)
+  // Đoạn 2: Thông số, kết cấu, nội thất & giao thông
   const layoutBits = [];
   if (area) layoutBits.push(`diện tích sử dụng ${area}m²`);
-  layoutBits.push(`bố trí ${STUDIO_STATE.beds}, ${STUDIO_STATE.baths}`);
+  if (isCommercial) {
+    layoutBits.push(`mặt bằng thông suốt kèm ${STUDIO_STATE.baths}`);
+  } else {
+    layoutBits.push(`bố trí ${STUDIO_STATE.beds}, ${STUDIO_STATE.baths}`);
+  }
   if (floors) layoutBits.push(`kết cấu ${floors.toLowerCase()}`);
   if (dir) layoutBits.push(`hướng ${dir} đón gió tự nhiên`);
 
   let spaceSentence = `Không gian có ${layoutBits.join(", ")}.`;
-  if (furn === "Đầy Đủ") {
-    spaceSentence += " Nội thất đã được trang bị đầy đủ từ A-Z, anh/chị chỉ cần xách vali vào ở ngay.";
-  } else if (furn === "Cơ Bản") {
-    spaceSentence += " Đã có sẵn các hạng mục nội thất cơ bản, rất dễ bài trí thêm theo nhu cầu riêng.";
-  } else if (furn === "Không Có") {
-    spaceSentence += " Hiện trạng bàn giao trống suốt, thuận tiện để tự do thiết kế và sắp xếp đồ đạc.";
+  if (!isCommercial) {
+    if (furn === "Đầy Đủ") {
+      spaceSentence += " Nội thất đã được trang bị đầy đủ từ A-Z, anh/chị chỉ cần xách vali vào ở ngay.";
+    } else if (furn === "Cơ Bản") {
+      spaceSentence += " Đã có sẵn các hạng mục nội thất cơ bản, rất dễ bài trí thêm theo gu riêng.";
+    } else if (furn === "Không Có") {
+      spaceSentence += " Hiện trạng bàn giao trống suốt, thuận tiện để tự do thiết kế và sắp xếp đồ đạc.";
+    }
   }
   if (frontage || road) {
     const roadBits = [
       frontage ? `mặt tiền lộ giới ${frontage}` : "",
-      road ? `đường vào nhà rộng ${road}` : ""
+      road ? `đường vào rộng ${road}` : ""
     ].filter(Boolean).join(", ");
-    spaceSentence += ` Lợi thế ${roadBits} giúp việc đi lại và vận chuyển hằng ngày cực kỳ thuận tiện.`;
+    spaceSentence += ` Lợi thế ${roadBits} giúp việc di chuyển, đậu xe và vận chuyển hằng ngày cực kỳ thuận tiện.`;
   }
-  if (maxPeople) {
-    spaceSentence += ` Không gian phù hợp tối đa ${maxPeople} người ở${extraPerson ? ` (có phụ thu nhẹ ${extraPerson} từ người thứ ${maxPeople})` : " để đảm bảo sinh hoạt thoải mái"}.`;
+  if (!isCommercial && maxPeople) {
+    spaceSentence += ` Phù hợp tối đa ${maxPeople} người ở${extraPerson ? ` (phụ thu thêm ${extraPerson} từ người thứ ${maxPeople})` : " để đảm bảo sinh hoạt thoải mái"}.`;
   }
   paragraphs.push(spaceSentence);
 
-  // Đoạn 3: Tiện ích xung quanh & Dịch vụ tòa nhà (chỉ xuất hiện khi khách có tick chọn)
+  // Đoạn 3: Tiện ích xung quanh & Dịch vụ tòa nhà
   const lifestyleSentences = [];
   if (utils.length) {
     lifestyleSentences.push(`Xung quanh kết nối nhanh chóng tới các tiện ích thiết yếu như ${utils.join(", ")}.`);
+  } else if (project) {
+    lifestyleSentences.push(`Cư dân tại ${project} được hưởng trọn hạ tầng đồng bộ, công viên cây xanh và tiện ích mua sắm - ẩm thực ngay nội khu.`);
   }
   if (svcs.length) {
     lifestyleSentences.push(`Khu vực được vận hành chu đáo với ${svcs.join(", ")}, đảm bảo sự an tâm và tiện lợi mỗi ngày.`);
@@ -4212,31 +4276,33 @@ function buildStudioAiDraft() {
     paragraphs.push(lifestyleSentences.join(" "));
   }
 
-  // Đoạn 4: Giá thuê, cọc & chi phí minh bạch
+  // Đoạn 4: Giá thuê, cọc & chi phí minh bạch (chuẩn đơn vị k)
   const priceIntro = price
-    ? `Giá thuê hiện tại là ${price} triệu/tháng${STUDIO_STATE.deposit ? ` (đặt cọc ${STUDIO_STATE.deposit.toLowerCase()})` : ""}.`
-    : `${STUDIO_STATE.deposit ? `Tiền cọc ${STUDIO_STATE.deposit.toLowerCase()}, giá thuê thương lượng trực tiếp.` : "Giá thuê hợp lý cho khách thiện chí."}`;
+    ? `Giá thuê hiện tại là ${price} triệu/tháng${deposit ? ` (đặt cọc ${deposit.toLowerCase()})` : ""}.`
+    : `${deposit ? `Tiền cọc ${deposit.toLowerCase()}, giá thuê thương lượng trực tiếp.` : "Giá thuê hợp lý cho khách thiện chí."}`;
 
   const feeParts = [
-    elec ? `điện ${elec}/kWh` : "điện tính theo giá nhà nước",
-    water ? `nước ${water}/người` : "nước theo giá nhà nước"
+    elec ? `điện ${elec}` : "điện tính theo giá nhà nước",
+    water ? `nước ${water}` : "nước theo giá nhà nước"
   ];
   if (otherCost) {
-    feeParts.push(`trọn gói các chi phí dịch vụ khác ${otherCost}/tháng`);
+    feeParts.push(`trọn gói các chi phí dịch vụ khác ${otherCost}`);
   } else {
-    if (internet) feeParts.push(`internet ${internet}/phòng`);
-    if (laundry) feeParts.push(`giặt sấy ${laundry}/người`);
-    if (trash) feeParts.push(`thu rác ${trash}/phòng`);
-    if (parking) feeParts.push(`phí gửi xe ${parking}/xe/người/tháng`);
+    if (internet) feeParts.push(`internet ${internet}`);
+    if (laundry) feeParts.push(`giặt sấy ${laundry}`);
+    if (trash) feeParts.push(`thu rác ${trash}`);
+    if (parking) feeParts.push(`phí gửi xe ${parking}`);
   }
-  paragraphs.push(`${priceIntro} Mọi chi phí sinh hoạt đều minh bạch ngay từ đầu: ${feeParts.join(", ")}.`);
+  paragraphs.push(`${priceIntro} Mọi chi phí sinh hoạt đều công khai minh bạch ngay từ đầu: ${feeParts.join(", ")}.`);
 
   // Đoạn 5: Lời mời xem nhà chân thành
-  const contactWho = host ? `cho ${host}` : "trực tiếp với chính chủ";
+  const contactWho = host ? `trực tiếp cho ${host}` : "trực tiếp với chính chủ";
   const contactPhone = phone ? ` qua SĐT/Zalo ${phone}` : "";
-  paragraphs.push(
-    `Anh/chị quan tâm vui lòng liên hệ ${contactWho}${contactPhone} để hẹn lịch xem thực tế và trao đổi thêm nhé!`
-  );
+  const closingTemplates = [
+    `Anh/chị quan tâm vui lòng liên hệ ${contactWho}${contactPhone} để hẹn lịch xem thực tế và trao đổi thêm nhé!`,
+    `Nếu phù hợp nhu cầu, anh/chị nhắn Zalo hoặc gọi ${contactWho}${contactPhone} để xem thực tế bất cứ lúc nào ạ!`
+  ];
+  paragraphs.push(closingTemplates[variant % closingTemplates.length]);
 
   const descEl = document.getElementById("dDesc");
   if (descEl) descEl.value = paragraphs.join("\n\n");
@@ -4246,13 +4312,14 @@ function updateStudioAiButtonUI() {
   const btn = document.getElementById("btnAiAutoWrite");
   if (!btn) return;
   if (STUDIO_STATE.aiAutoSync) {
-    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đang Tự Cập Nhật</span>`;
+    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đổi Văn Phong AI</span>`;
   } else {
     btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>`;
   }
 }
 
 function generateStudioAISeo() {
+  STUDIO_STATE.aiVariant = ((STUDIO_STATE.aiVariant || 0) + 1) % 6;
   STUDIO_STATE.aiAutoSync = true;
   updateStudioAiButtonUI();
   buildStudioAiDraft();
