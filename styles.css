@@ -472,7 +472,7 @@ button, input, select, textarea, .leaflet-container {
   border: 2px solid transparent;
   color: #ff9d00;
   font-weight: 800;
-  box-shadow: 0 8px 20px rgba(241, 90, 34, 0.38), 0 4px 12px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 10px rgba(241, 90, 34, 0.42), 0 2px 5px rgba(0, 0, 0, 0.65);
 }
 
 .hmp-marker.pin-vip-banner .hmp-pin-tail {
