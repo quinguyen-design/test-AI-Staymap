@@ -4154,29 +4154,12 @@ function sanitizeStudioNumericK(inputEl) {
 
 let STUDIO_DRAG_PHOTO_IDX = null;
 
-function moveStudioPhoto(idx, delta, e) {
-  if (e) e.stopPropagation();
-  const targetIdx = idx + delta;
-  if (targetIdx < 0 || targetIdx >= STUDIO_STATE.photos.length) return;
-  const arr = STUDIO_STATE.photos;
-  [arr[idx], arr[targetIdx]] = [arr[targetIdx], arr[idx]];
-  if (STUDIO_STATE.coverIndex === idx) {
-    STUDIO_STATE.coverIndex = targetIdx;
-  } else if (STUDIO_STATE.coverIndex === targetIdx) {
-    STUDIO_STATE.coverIndex = idx;
-  }
-  renderStudioPhotosManager();
-  renderStudioPreview();
-}
-
 function reorderStudioPhoto(fromIdx, toIdx) {
   if (fromIdx === null || fromIdx === toIdx) return;
   if (fromIdx < 0 || toIdx < 0 || fromIdx >= STUDIO_STATE.photos.length || toIdx >= STUDIO_STATE.photos.length) return;
-  const coverSrc = STUDIO_STATE.photos[STUDIO_STATE.coverIndex];
   const [moved] = STUDIO_STATE.photos.splice(fromIdx, 1);
   STUDIO_STATE.photos.splice(toIdx, 0, moved);
-  const newCoverIdx = STUDIO_STATE.photos.indexOf(coverSrc);
-  if (newCoverIdx !== -1) STUDIO_STATE.coverIndex = newCoverIdx;
+  STUDIO_STATE.coverIndex = 0;
   renderStudioPhotosManager();
   renderStudioPreview();
 }
@@ -4190,23 +4173,19 @@ function renderStudioPhotosManager() {
     el.innerHTML = `<div style="grid-column:1/-1;font-size:11.5px;color:#94a3b8;text-align:center;padding:6px 0;">Chưa có hình ảnh nào được tải lên.</div>`;
     return;
   }
+  STUDIO_STATE.coverIndex = 0;
   el.innerHTML = STUDIO_STATE.photos.map((src, i) => `
     <div draggable="true"
       ondragstart="STUDIO_DRAG_PHOTO_IDX=${i};this.style.opacity='0.5';"
       ondragend="STUDIO_DRAG_PHOTO_IDX=null;this.style.opacity='1';"
       ondragover="event.preventDefault();"
       ondrop="event.preventDefault();reorderStudioPhoto(STUDIO_DRAG_PHOTO_IDX, ${i});"
-      onclick="STUDIO_STATE.coverIndex=${i};renderStudioPhotosManager();renderStudioPreview();"
-      title="Bấm chọn làm ảnh bìa hoặc dùng ◀ ▶ / kéo thả để đổi thứ tự"
-      style="position:relative;border-radius:10px;overflow:hidden;height:74px;cursor:grab;border:2px solid ${i === STUDIO_STATE.coverIndex ? "var(--ctt-orange)" : "#e2e8f0"};">
+      title="Giữ chuột kéo thả để đổi vị trí (Hình #1 mặc định là Ảnh Bìa)"
+      style="position:relative;border-radius:10px;overflow:hidden;height:104px;cursor:grab;border:2px solid ${i === 0 ? "var(--ctt-orange)" : "#e2e8f0"};">
       <img src="${src}" style="width:100%;height:100%;object-fit:cover;pointer-events:none;">
-      <span style="position:absolute;top:3px;left:3px;background:rgba(15,23,42,0.72);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px;">#${i + 1}</span>
-      ${i === STUDIO_STATE.coverIndex ? '<span style="position:absolute;bottom:3px;left:3px;background:var(--ctt-orange);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:4px;">Bìa</span>' : ""}
-      <button type="button" onclick="removeStudioPhoto(${i}, event)" title="Xóa ảnh" style="position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(15,23,42,0.78);color:#fff;font-size:10px;line-height:1;cursor:pointer;">×</button>
-      <div style="position:absolute;bottom:3px;right:3px;display:flex;gap:3px;">
-        ${i > 0 ? `<button type="button" onclick="moveStudioPhoto(${i}, -1, event)" title="Di chuyển sang trái" style="width:20px;height:18px;border-radius:4px;border:none;background:rgba(15,23,42,0.82);color:#fff;font-size:9px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-chevron-left"></i></button>` : ""}
-        ${i < STUDIO_STATE.photos.length - 1 ? `<button type="button" onclick="moveStudioPhoto(${i}, 1, event)" title="Di chuyển sang phải" style="width:20px;height:18px;border-radius:4px;border:none;background:rgba(15,23,42,0.82);color:#fff;font-size:9px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-chevron-right"></i></button>` : ""}
-      </div>
+      <span style="position:absolute;top:4px;left:4px;background:rgba(15,23,42,0.75);color:#fff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:4px;">#${i + 1}</span>
+      ${i === 0 ? '<span style="position:absolute;bottom:4px;left:4px;background:var(--ctt-orange);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;">Bìa</span>' : ""}
+      <button type="button" onclick="removeStudioPhoto(${i}, event)" title="Xóa ảnh" style="position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(15,23,42,0.78);color:#fff;font-size:11px;line-height:1;cursor:pointer;">×</button>
     </div>
   `).join("");
 }
@@ -4214,9 +4193,7 @@ function renderStudioPhotosManager() {
 function removeStudioPhoto(idx, e) {
   if (e) e.stopPropagation();
   STUDIO_STATE.photos.splice(idx, 1);
-  if (STUDIO_STATE.coverIndex >= STUDIO_STATE.photos.length) {
-    STUDIO_STATE.coverIndex = Math.max(0, STUDIO_STATE.photos.length - 1);
-  }
+  STUDIO_STATE.coverIndex = 0;
   renderStudioPhotosManager();
   renderStudioPreview();
 }

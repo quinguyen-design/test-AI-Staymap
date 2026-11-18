@@ -3423,7 +3423,7 @@ button, input, select, textarea, .leaflet-container {
 /* 4-Photo Collage Manager (1 Cover + 3 Sub-Photos matching Article & .sv1) */
 .post-photo-manager {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 10px;
 }
