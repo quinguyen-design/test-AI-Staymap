@@ -3325,13 +3325,13 @@ button, input, select, textarea, .leaflet-container {
 
 .hmp-marker.pin-vip-banner.is-hovered .hmp-pill {
   background: var(--ctt-grad-brand) !important;
-  color: #000000 !important;
+  color: #ffffff !important;
   border-color: #f15a22 !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
 .hmp-marker.pin-vip-banner.is-hovered .hmp-pill i.fa-crown {
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .hmp-marker.pin-vip-banner.is-hovered .hmp-pin-tail {
