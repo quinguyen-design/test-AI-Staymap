@@ -4690,6 +4690,7 @@ function renderStudioStickers() {
   if (promoWrap) promoWrap.style.display = noSticker ? "none" : "block";
   if (noSticker) return;
 
+  const totalSticker = STUDIO_STATE.selectedDays * 1000;
   const grid = document.getElementById("demoStickerGrid");
   if (!grid) return;
   grid.innerHTML = STUDIO_STICKERS.map((st) => `
@@ -4717,7 +4718,7 @@ function initStudioPostListing(preselectedZoneId = null) {
   STUDIO_STATE.baths = "1 WC";
   STUDIO_STATE.aiAutoSync = false;
   STUDIO_STATE.selectedSticker = null;
-  STUDIO_STATE.selectedDays = 7;
+  STUDIO_STATE.selectedDays = 15;
   STUDIO_STATE.coverIndex = 0;
   STUDIO_STATE.photos = [];
   STUDIO_STATE.videoUrl = "";
