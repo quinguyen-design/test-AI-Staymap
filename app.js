@@ -1299,11 +1299,14 @@ function clearLandmarkFilter() {
 function toggleExpandHeroMap() {
   const heroEl = document.getElementById("siteHeaderHero");
   const btnSpan = document.getElementById("expandMapBtnText");
+  if (!heroEl) return;
   heroEl.classList.toggle("is-expanded");
   const expanded = heroEl.classList.contains("is-expanded");
+  document.body.style.overflow = expanded ? "hidden" : "";
   if (btnSpan) {
-    btnSpan.textContent = expanded ? "Thu gọn bản đồ" : "Mở rộng bản đồ 3D";
+    btnSpan.textContent = expanded ? "Thu gọn" : "Mở rộng";
   }
+  setTimeout(() => heroMapInstance?.invalidateSize(), 100);
   setTimeout(() => heroMapInstance?.invalidateSize(), 460);
 }
 
