@@ -3425,6 +3425,18 @@ const STUDIO_PROMO_CODES = {
 function syncStudioPromoUI(isLocked) {
   const inputEl = document.getElementById("dPromoCode");
   const btnEl = document.getElementById("btnPromoAction");
+  const subLabel = document.getElementById("promoSubLabel");
+  if (subLabel) {
+    if (isLocked) {
+      subLabel.textContent = "(Đã Áp Dụng)";
+      subLabel.style.color = "var(--ctt-orange)";
+      subLabel.style.fontWeight = "800";
+    } else {
+      subLabel.textContent = "(Nếu Có)";
+      subLabel.style.color = "";
+      subLabel.style.fontWeight = "";
+    }
+  }
   if (inputEl) {
     inputEl.readOnly = Boolean(isLocked);
     inputEl.style.background = isLocked ? "#fffaf5" : "#ffffff";
