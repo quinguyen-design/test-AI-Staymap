@@ -4553,6 +4553,11 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .ctt-combo-wrap .post-input {
   padding-right: 30px;
 }
+.ctt-combo-wrap .post-input::placeholder {
+  font-size: 13px;
+  color: #94a3b8;
+  opacity: 1;
+}
 .ctt-combo-arrow {
   position: absolute;
   right: 11px;
