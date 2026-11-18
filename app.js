@@ -1194,7 +1194,8 @@ function updateMapPins(catFilter = "all", focusId = null) {
   list.forEach((item, idx) => {
     const isCurrent = focusId && Number(item.id) === Number(focusId);
     const shortCat = item.categoryLabel.split(",")[0];
-    const priceShort = item.priceText.replace(" Triệu", "tr");
+    const priceDisplay = String(item.priceText || "").replace(/,/g, ".");
+    const priceShort = priceDisplay.replace(" Triệu", "tr");
     const labelText = `${shortCat} - ${priceShort}`;
 
     const vipInfo = typeof getPropertyVipDisplay === "function" ? getPropertyVipDisplay(item) : { badgeClass: "", label: "" };
@@ -1267,7 +1268,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
           <div class="hmp-pop-body">
             ${bannerLocText ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${bannerLocText}</span></div>` : ""}
             <div class="hmp-pop-price tabular-nums">
-              <span class="hmp-pop-price-val">${item.priceText}</span>
+              <span class="hmp-pop-price-val">${priceDisplay}</span>
               <span class="hmp-pop-price-unit">| Tháng</span>
               ${popStickerHtml}
             </div>
