@@ -1157,39 +1157,30 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Tiền Cọc</span></div>
-                  <select id="dDeposit" class="post-input" onchange="STUDIO_STATE.deposit=this.value;renderStudioPreview()">
-                    <option value="" selected hidden></option>
-                    <option value="Miễn Cọc">Miễn Cọc</option>
-                    <option value="1 Tháng">1 Tháng</option>
-                    <option value="2 Tháng">2 Tháng</option>
-                    <option value="3 Tháng">3 Tháng</option>
-                    <option value="Thỏa Thuận">Thỏa Thuận</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dDeposit" class="post-input" value="" placeholder="" readonly autocomplete="off" onfocus="openStudioCombo('deposit')" onclick="openStudioCombo('deposit')" onblur="closeStudioComboDelay('deposit')" style="cursor:pointer;">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dDepositSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                 <div>
                   <div class="post-field-label"><span>Phòng Ngủ</span></div>
-                  <select id="dBeds" class="post-input tabular-nums" onchange="STUDIO_STATE.beds=this.value;renderStudioPreview()">
-                    <option value="1 PN" selected>1 Phòng Ngủ</option>
-                    <option value="2 PN">2 Phòng Ngủ</option>
-                    <option value="3 PN">3 Phòng Ngủ</option>
-                    <option value="4 PN">4 Phòng Ngủ</option>
-                    <option value="5 PN">5 Phòng Ngủ</option>
-                    <option value="6+ PN">6+ Phòng Ngủ</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dBeds" class="post-input tabular-nums" value="1 PN" readonly autocomplete="off" onfocus="openStudioCombo('beds')" onclick="openStudioCombo('beds')" onblur="closeStudioComboDelay('beds')" style="cursor:pointer;">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dBedsSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
                 <div>
                   <div class="post-field-label"><span>Nhà Vệ Sinh</span></div>
-                  <select id="dBaths" class="post-input tabular-nums" onchange="STUDIO_STATE.baths=this.value;renderStudioPreview()">
-                    <option value="1 WC" selected>1 Nhà Vệ Sinh</option>
-                    <option value="2 WC">2 Nhà Vệ Sinh</option>
-                    <option value="3 WC">3 Nhà Vệ Sinh</option>
-                    <option value="4 WC">4 Nhà Vệ Sinh</option>
-                    <option value="5 WC">5 Nhà Vệ Sinh</option>
-                    <option value="6+ WC">6+ Nhà Vệ Sinh</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dBaths" class="post-input tabular-nums" value="1 WC" readonly autocomplete="off" onfocus="openStudioCombo('baths')" onclick="openStudioCombo('baths')" onblur="closeStudioComboDelay('baths')" style="cursor:pointer;">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dBathsSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1224,14 +1215,11 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-users" style="color:var(--ctt-orange);"></i> Giới Hạn <small class="util-unit">(Người / Phòng)</small></span></div>
-                  <select id="dMaxPeople" class="post-input" onchange="onStudioMaxPeopleChange(this.value)">
-                    <option value="" selected hidden></option>
-                    <option value="1">1 Người</option>
-                    <option value="2">2 Người</option>
-                    <option value="3">3 Người</option>
-                    <option value="4">4 Người</option>
-                    <option value="5">5 Người</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dMaxPeople" class="post-input" value="" placeholder="" readonly autocomplete="off" onfocus="openStudioCombo('maxPeople')" onclick="openStudioCombo('maxPeople')" onblur="closeStudioComboDelay('maxPeople')" style="cursor:pointer;">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dMaxPeopleSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
                 <div id="extraPersonFeeWrap" style="visibility:hidden;">
                   <div class="post-field-label"><span>Phụ Thu <small id="extraPersonNote" class="util-unit">(từ người thứ 2)</small></span></div>
@@ -1268,45 +1256,34 @@
                 <textarea id="dDesc" rows="9" class="post-input" style="min-height:210px;line-height:1.55;resize:vertical;" oninput="onStudioManualContentEdit()"></textarea>
               </div>
 
-              <div style="padding:10px 12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:10px;">
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+              <div style="padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:10px;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px;">
                   <div>
                     <div class="post-field-label"><span>Nội Thất</span></div>
-                    <select id="dFurniture" class="post-input" onchange="STUDIO_STATE.furniture=this.value;renderStudioPreview()">
-                      <option value="" selected hidden></option>
-                      <option value="Không Có">Không Có</option>
-                      <option value="Cơ Bản">Cơ Bản</option>
-                      <option value="Đầy Đủ">Đầy Đủ</option>
-                    </select>
+                    <div class="ctt-combo-wrap">
+                      <input type="text" id="dFurniture" class="post-input" value="" placeholder="" readonly autocomplete="off" onfocus="openStudioCombo('furniture')" onclick="openStudioCombo('furniture')" onblur="closeStudioComboDelay('furniture')" style="cursor:pointer;">
+                      <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                      <div id="dFurnitureSuggestList" class="ctt-combo-list"></div>
+                    </div>
                   </div>
                   <div>
                     <div class="post-field-label"><span>Số Tầng</span></div>
-                    <select id="dFloors" class="post-input tabular-nums" onchange="renderStudioPreview()">
-                      <option value="" selected hidden></option>
-                      <option value="1 Tầng">1 Tầng</option>
-                      <option value="2 Tầng">2 Tầng</option>
-                      <option value="3 Tầng">3 Tầng</option>
-                      <option value="4 Tầng">4 Tầng</option>
-                      <option value="5 Tầng">5 Tầng</option>
-                      <option value="6+ Tầng">6+ Tầng</option>
-                    </select>
+                    <div class="ctt-combo-wrap">
+                      <input type="text" id="dFloors" class="post-input tabular-nums" value="" placeholder="" readonly autocomplete="off" onfocus="openStudioCombo('floors')" onclick="openStudioCombo('floors')" onblur="closeStudioComboDelay('floors')" style="cursor:pointer;">
+                      <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                      <div id="dFloorsSuggestList" class="ctt-combo-list"></div>
+                    </div>
                   </div>
                   <div>
                     <div class="post-field-label"><span>Hướng Nhà</span></div>
-                    <select id="dDirection" class="post-input" onchange="renderStudioPreview()">
-                      <option value="" selected hidden></option>
-                      <option value="Đông">Đông</option>
-                      <option value="Tây">Tây</option>
-                      <option value="Nam">Nam</option>
-                      <option value="Bắc">Bắc</option>
-                      <option value="Đông Bắc">Đông Bắc</option>
-                      <option value="Đông Nam">Đông Nam</option>
-                      <option value="Tây Bắc">Tây Bắc</option>
-                      <option value="Tây Nam">Tây Nam</option>
-                    </select>
+                    <div class="ctt-combo-wrap">
+                      <input type="text" id="dDirection" class="post-input" value="" placeholder="" readonly autocomplete="off" onfocus="openStudioCombo('direction')" onclick="openStudioCombo('direction')" onblur="closeStudioComboDelay('direction')" style="cursor:pointer;">
+                      <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                      <div id="dDirectionSuggestList" class="ctt-combo-list"></div>
+                    </div>
                   </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                   <div>
                     <div class="post-field-label"><span>Mặt Tiền - Lộ Giới <small class="util-unit">(m²)</small></span></div>
                     <input type="text" inputmode="decimal" id="dFrontageRoad" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericUnit(this, 'm²')">
@@ -1813,6 +1790,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118ah"></script>
+  <script src="app.js?v=20261118ai"></script>
 </body>
 </html>

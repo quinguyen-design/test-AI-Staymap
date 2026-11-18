@@ -3812,11 +3812,44 @@ function getSelectedStudioProject() {
   return STUDIO_PROJECTS.find((p) => p.value === projectVal) || null;
 }
 
-const STUDIO_COMBO_TIMERS = { city: null, ward: null, street: null, project: null };
+const STUDIO_DEPOSITS = ["Miễn Cọc", "1 Tháng", "2 Tháng", "3 Tháng", "Thỏa Thuận"].map((v) => ({ value: v, label: v }));
+const STUDIO_BEDS_OPTS = [
+  { value: "1 PN", label: "1 Phòng Ngủ" },
+  { value: "2 PN", label: "2 Phòng Ngủ" },
+  { value: "3 PN", label: "3 Phòng Ngủ" },
+  { value: "4 PN", label: "4 Phòng Ngủ" },
+  { value: "5 PN", label: "5 Phòng Ngủ" },
+  { value: "6+ PN", label: "6+ Phòng Ngủ" }
+];
+const STUDIO_BATHS_OPTS = [
+  { value: "1 WC", label: "1 Nhà Vệ Sinh" },
+  { value: "2 WC", label: "2 Nhà Vệ Sinh" },
+  { value: "3 WC", label: "3 Nhà Vệ Sinh" },
+  { value: "4 WC", label: "4 Nhà Vệ Sinh" },
+  { value: "5 WC", label: "5 Nhà Vệ Sinh" },
+  { value: "6+ WC", label: "6+ Nhà Vệ Sinh" }
+];
+const STUDIO_MAX_PEOPLE_OPTS = ["1 Người", "2 Người", "3 Người", "4 Người", "5 Người"].map((v) => ({ value: v, label: v }));
+const STUDIO_FURNITURE_OPTS = ["Không Có", "Cơ Bản", "Đầy Đủ"].map((v) => ({ value: v, label: v }));
+const STUDIO_FLOORS_OPTS = ["1 Tầng", "2 Tầng", "3 Tầng", "4 Tầng", "5 Tầng", "6+ Tầng"].map((v) => ({ value: v, label: v }));
+const STUDIO_DIRECTIONS_OPTS = ["Đông", "Tây", "Nam", "Bắc", "Đông Bắc", "Đông Nam", "Tây Bắc", "Tây Nam"].map((v) => ({ value: v, label: v }));
+
+const STUDIO_COMBO_TIMERS = {
+  city: null, ward: null, street: null, project: null,
+  deposit: null, beds: null, baths: null, maxPeople: null,
+  furniture: null, floors: null, direction: null
+};
 
 function getStudioComboItems(kind) {
   if (kind === "city") return STUDIO_CITIES;
   if (kind === "project") return STUDIO_PROJECTS;
+  if (kind === "deposit") return STUDIO_DEPOSITS;
+  if (kind === "beds") return STUDIO_BEDS_OPTS;
+  if (kind === "baths") return STUDIO_BATHS_OPTS;
+  if (kind === "maxPeople") return STUDIO_MAX_PEOPLE_OPTS;
+  if (kind === "furniture") return STUDIO_FURNITURE_OPTS;
+  if (kind === "floors") return STUDIO_FLOORS_OPTS;
+  if (kind === "direction") return STUDIO_DIRECTIONS_OPTS;
   if (kind === "ward") {
     const city = (document.getElementById("dCity")?.value || "").trim();
     if (city && STUDIO_WARDS_BY_CITY[city]) {
@@ -3834,7 +3867,14 @@ function getStudioComboEls(kind) {
     city: ["dCity", "dCitySuggestList"],
     ward: ["dWard", "dWardSuggestList"],
     street: ["dStreet", "dStreetSuggestList"],
-    project: ["dProject", "dProjectSuggestList"]
+    project: ["dProject", "dProjectSuggestList"],
+    deposit: ["dDeposit", "dDepositSuggestList"],
+    beds: ["dBeds", "dBedsSuggestList"],
+    baths: ["dBaths", "dBathsSuggestList"],
+    maxPeople: ["dMaxPeople", "dMaxPeopleSuggestList"],
+    furniture: ["dFurniture", "dFurnitureSuggestList"],
+    floors: ["dFloors", "dFloorsSuggestList"],
+    direction: ["dDirection", "dDirectionSuggestList"]
   };
   const [inputId, listId] = map[kind] || ["dStreet", "dStreetSuggestList"];
   return {
@@ -3935,6 +3975,16 @@ function pickStudioComboItem(kind, val) {
       STUDIO_STATE.houseNumber = "";
       STUDIO_STATE.isEditingAddress = false;
     }
+  } else if (kind === "deposit") {
+    STUDIO_STATE.deposit = val;
+  } else if (kind === "beds") {
+    STUDIO_STATE.beds = val;
+  } else if (kind === "baths") {
+    STUDIO_STATE.baths = val;
+  } else if (kind === "maxPeople") {
+    onStudioMaxPeopleChange(val);
+  } else if (kind === "furniture") {
+    STUDIO_STATE.furniture = val;
   }
   syncStudioAddressDisplay();
 }
@@ -4288,7 +4338,7 @@ function buildStudioAiDraft() {
   const laundry = formatStudioAiFee(document.getElementById("dLaundry")?.value || "", "người");
   const trash = formatStudioAiFee(document.getElementById("dTrash")?.value || "", "phòng");
   const parking = formatStudioAiFee(document.getElementById("dParking")?.value || "", "xe/người/tháng");
-  const maxPeople = document.getElementById("dMaxPeople")?.value || "";
+  const maxPeople = (document.getElementById("dMaxPeople")?.value || "").replace(/\D/g, "");
   const extraPerson = formatStudioAiFee(document.getElementById("dExtraPerson")?.value || "", "người/tháng");
 
   const utils = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
