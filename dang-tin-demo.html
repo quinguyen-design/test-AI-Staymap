@@ -1507,6 +1507,42 @@
       renderPreview();
     }
 
+    function syncDemoCostExclusion() {
+      const otherEl = document.getElementById("dOtherCost");
+      const subEls = ["dInternet", "dLaundry", "dTrash", "dParking"].map((id) => document.getElementById(id)).filter(Boolean);
+      if (!otherEl) return;
+      const hasOther = Boolean(otherEl.value.replace(/k/gi, "").trim());
+      const hasAnySub = subEls.some((el) => Boolean(el.value.replace(/k/gi, "").trim()));
+      subEls.forEach((el) => {
+        el.disabled = hasOther;
+        if (hasOther) {
+          el.value = "";
+          el.placeholder = "Đã chọn Trọn Gói";
+          el.style.background = "#f1f5f9";
+          el.style.opacity = "0.6";
+          el.style.cursor = "not-allowed";
+        } else {
+          el.placeholder = "";
+          el.style.background = "";
+          el.style.opacity = "";
+          el.style.cursor = "";
+        }
+      });
+      otherEl.disabled = !hasOther && hasAnySub;
+      if (otherEl.disabled) {
+        otherEl.value = "";
+        otherEl.placeholder = "Đã nhập chi phí lẻ";
+        otherEl.style.background = "#f1f5f9";
+        otherEl.style.opacity = "0.6";
+        otherEl.style.cursor = "not-allowed";
+      } else {
+        otherEl.placeholder = "";
+        otherEl.style.background = "";
+        otherEl.style.opacity = "";
+        otherEl.style.cursor = "";
+      }
+    }
+
     function sanitizeNumericK(inputEl) {
       const clean = inputEl.value.replace(/k/gi, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
       inputEl.value = clean ? `${clean}k` : "";
@@ -1514,6 +1550,7 @@
         const pos = clean.length;
         inputEl.setSelectionRange(pos, pos);
       }
+      syncDemoCostExclusion();
       renderPreview();
     }
 

@@ -3564,6 +3564,48 @@ function sanitizeStudioNumericUnit(inputEl, unit) {
   renderStudioPreview();
 }
 
+function syncStudioCostExclusion() {
+  const otherEl = document.getElementById("dOtherCost");
+  const subIds = ["dInternet", "dLaundry", "dTrash", "dParking"];
+  const subEls = subIds.map((id) => document.getElementById(id)).filter(Boolean);
+  if (!otherEl) return;
+
+  const hasOther = Boolean(otherEl.value.replace(/k/gi, "").trim());
+  const hasAnySub = subEls.some((el) => Boolean(el.value.replace(/k/gi, "").trim()));
+
+  subEls.forEach((el) => {
+    if (hasOther) {
+      el.value = "";
+      el.disabled = true;
+      el.placeholder = "Đã chọn Trọn Gói";
+      el.style.background = "#f1f5f9";
+      el.style.opacity = "0.6";
+      el.style.cursor = "not-allowed";
+    } else {
+      el.disabled = false;
+      el.placeholder = "";
+      el.style.background = "";
+      el.style.opacity = "";
+      el.style.cursor = "";
+    }
+  });
+
+  if (!hasOther && hasAnySub) {
+    otherEl.value = "";
+    otherEl.disabled = true;
+    otherEl.placeholder = "Đã nhập chi phí lẻ";
+    otherEl.style.background = "#f1f5f9";
+    otherEl.style.opacity = "0.6";
+    otherEl.style.cursor = "not-allowed";
+  } else if (!hasAnySub) {
+    otherEl.disabled = false;
+    otherEl.placeholder = "";
+    otherEl.style.background = "";
+    otherEl.style.opacity = "";
+    otherEl.style.cursor = "";
+  }
+}
+
 function sanitizeStudioNumericK(inputEl) {
   const clean = inputEl.value.replace(/k/gi, "").replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
   inputEl.value = clean ? `${clean}k` : "";
@@ -3571,6 +3613,7 @@ function sanitizeStudioNumericK(inputEl) {
     const pos = clean.length;
     inputEl.setSelectionRange(pos, pos);
   }
+  syncStudioCostExclusion();
   renderStudioPreview();
 }
 
@@ -3898,6 +3941,7 @@ function initStudioPostListing(preselectedZoneId = null) {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
+  syncStudioCostExclusion();
   updateStudioTitleCount();
   ["dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
     const el = document.getElementById(id);
