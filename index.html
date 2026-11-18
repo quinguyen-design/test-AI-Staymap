@@ -1197,19 +1197,11 @@
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                 <div>
                   <div class="post-field-label"><span>Phòng Ngủ</span></div>
-                  <div class="ctt-combo-wrap">
-                    <input type="text" id="dBeds" class="post-input tabular-nums" value="1 PN" readonly autocomplete="off" onfocus="openStudioCombo('beds')" onclick="openStudioCombo('beds')" onblur="closeStudioComboDelay('beds')" style="cursor:pointer;">
-                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
-                    <div id="dBedsSuggestList" class="ctt-combo-list"></div>
-                  </div>
+                  <input type="text" inputmode="numeric" id="dBeds" class="post-input tabular-nums" value="1" placeholder="1" oninput="onStudioRoomCountInput('beds', this)" onblur="onStudioRoomCountBlur('beds', this)">
                 </div>
                 <div>
                   <div class="post-field-label"><span>Nhà Vệ Sinh</span></div>
-                  <div class="ctt-combo-wrap">
-                    <input type="text" id="dBaths" class="post-input tabular-nums" value="1 WC" readonly autocomplete="off" onfocus="openStudioCombo('baths')" onclick="openStudioCombo('baths')" onblur="closeStudioComboDelay('baths')" style="cursor:pointer;">
-                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
-                    <div id="dBathsSuggestList" class="ctt-combo-list"></div>
-                  </div>
+                  <input type="text" inputmode="numeric" id="dBaths" class="post-input tabular-nums" value="1" placeholder="1" oninput="onStudioRoomCountInput('baths', this)" onblur="onStudioRoomCountBlur('baths', this)">
                 </div>
               </div>
 
@@ -1866,6 +1858,6 @@
   <script src="data/listings_1000.js?v=20261119z23"></script>
   <script src="data/listings_4000_a.js?v=20261119z21"></script>
   <script src="data/listings_4000_b.js?v=20261119z21"></script>
-  <script src="app.js?v=20261119z23"></script></script></script></script></script>
+  <script src="app.js?v=20261119z24"></script></script></script></script></script>
 </body>
 </html>

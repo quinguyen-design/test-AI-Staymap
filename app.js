@@ -4660,6 +4660,30 @@ function pickStudioComboItem(kind, val) {
   syncStudioAddressDisplay();
 }
 
+function onStudioRoomCountInput(kind, inputEl) {
+  if (!inputEl) return;
+  const digits = String(inputEl.value || "").replace(/\D/g, "");
+  if (inputEl.value !== digits) inputEl.value = digits;
+  const n = parseInt(digits, 10);
+  if (kind === "beds") {
+    STUDIO_STATE.beds = `${Number.isFinite(n) && n > 0 ? n : 1} PN`;
+  } else {
+    STUDIO_STATE.baths = `${Number.isFinite(n) && n > 0 ? n : 1} WC`;
+  }
+}
+
+function onStudioRoomCountBlur(kind, inputEl) {
+  if (!inputEl) return;
+  const n = parseInt(String(inputEl.value || "").replace(/\D/g, ""), 10);
+  const finalN = Number.isFinite(n) && n > 0 ? n : 1;
+  inputEl.value = String(finalN);
+  if (kind === "beds") {
+    STUDIO_STATE.beds = `${finalN} PN`;
+  } else {
+    STUDIO_STATE.baths = `${finalN} WC`;
+  }
+}
+
 function closeStudioComboDelay(kind) {
   STUDIO_COMBO_TIMERS[kind] = setTimeout(() => {
     const { inputEl, listEl } = getStudioComboEls(kind);
@@ -5443,9 +5467,9 @@ function initStudioPostListing(preselectedZoneId = null) {
     cityEl.dataset.prevValid = "TP. Hồ Chí Minh";
   }
   const bedsEl = document.getElementById("dBeds");
-  if (bedsEl) bedsEl.value = "1 PN";
+  if (bedsEl) bedsEl.value = "1";
   const bathsEl = document.getElementById("dBaths");
-  if (bathsEl) bathsEl.value = "1 WC";
+  if (bathsEl) bathsEl.value = "1";
   const agreeEl = document.getElementById("agreePostTerms");
   if (agreeEl) agreeEl.checked = false;
   document.querySelectorAll("#postModalBackdrop .util-chk, #postModalBackdrop .svc-chk, #chkSchool").forEach((c) => {

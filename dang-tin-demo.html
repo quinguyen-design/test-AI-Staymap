@@ -594,25 +594,11 @@
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                 <div>
                   <div class="post-field-label"><span>Phòng Ngủ</span></div>
-                  <select id="dBeds" class="post-input tabular-nums" onchange="D.beds=this.value;renderPreview()">
-                    <option value="1 PN" selected>1 Phòng Ngủ</option>
-                    <option value="2 PN">2 Phòng Ngủ</option>
-                    <option value="3 PN">3 Phòng Ngủ</option>
-                    <option value="4 PN">4 Phòng Ngủ</option>
-                    <option value="5 PN">5 Phòng Ngủ</option>
-                    <option value="6+ PN">6+ Phòng Ngủ</option>
-                  </select>
+                  <input type="text" inputmode="numeric" id="dBeds" class="post-input tabular-nums" value="1" placeholder="1" oninput="this.value=this.value.replace(/\D/g,'');D.beds=(this.value||'1')+' PN';renderPreview()" onblur="if(!this.value||parseInt(this.value,10)<=0)this.value='1';D.beds=this.value+' PN';renderPreview()">
                 </div>
                 <div>
                   <div class="post-field-label"><span>Nhà Vệ Sinh</span></div>
-                  <select id="dBaths" class="post-input tabular-nums" onchange="D.baths=this.value;renderPreview()">
-                    <option value="1 WC" selected>1 Nhà Vệ Sinh</option>
-                    <option value="2 WC">2 Nhà Vệ Sinh</option>
-                    <option value="3 WC">3 Nhà Vệ Sinh</option>
-                    <option value="4 WC">4 Nhà Vệ Sinh</option>
-                    <option value="5 WC">5 Nhà Vệ Sinh</option>
-                    <option value="6+ WC">6+ Nhà Vệ Sinh</option>
-                  </select>
+                  <input type="text" inputmode="numeric" id="dBaths" class="post-input tabular-nums" value="1" placeholder="1" oninput="this.value=this.value.replace(/\D/g,'');D.baths=(this.value||'1')+' WC';renderPreview()" onblur="if(!this.value||parseInt(this.value,10)<=0)this.value='1';D.baths=this.value+' WC';renderPreview()">
                 </div>
               </div>
 
