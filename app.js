@@ -1250,7 +1250,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
             <span><i class="fa-solid fa-bed"></i> ${item.beds ?? 1}</span>
             <span><i class="fa-solid fa-bath"></i> ${item.baths ?? 1}</span>
           </div>
-          <span class="hmp-pop-more">Xem Thêm <i class="fa-solid fa-arrow-right"></i></span>
+          <button type="button" class="hmp-pop-more" onclick="event.stopPropagation(); expandMapFromCompactPopup(${item.id});">Xem Thêm <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
     `, { maxWidth: 356, className: "ctt-compact-map-popup" });
@@ -1375,6 +1375,24 @@ function openHeroMapLeftDrawer(item) {
     </div>
   `;
   drawer.classList.add("is-open");
+}
+
+function expandMapFromCompactPopup(propId) {
+  const item = PROPERTIES.find((p) => Number(p.id) === Number(propId));
+  heroMapInstance?.closePopup();
+  const heroEl = document.getElementById("siteHeaderHero");
+  if (heroEl && !heroEl.classList.contains("is-expanded")) {
+    toggleExpandHeroMap();
+  }
+  if (item) {
+    openHeroMapLeftDrawer(item);
+    setTimeout(() => {
+      heroMapInstance?.invalidateSize();
+      if (item.lat && item.lng) {
+        heroMapInstance?.panTo([item.lat, item.lng], { animate: true });
+      }
+    }, 120);
+  }
 }
 
 function openDetailFromExpandedMap(propId) {
