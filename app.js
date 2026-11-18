@@ -3412,7 +3412,10 @@ const STUDIO_WARDS_BY_CITY = {
     { value: "P. Cầu Kiệu", label: "P. Cầu Kiệu (Phú Nhuận)" },
     { value: "P. Hòa Hưng", label: "P. Hòa Hưng (Quận 10)" },
     { value: "P. Nhiêu Lộc", label: "P. Nhiêu Lộc (Quận 3)" },
-    { value: "P. Gia Định", label: "P. Gia Định (Bình Thạnh)" }
+    { value: "P. Gia Định", label: "P. Gia Định (Bình Thạnh)" },
+    { value: "P. Thảo Điền", label: "P. Thảo Điền (Thủ Đức)" },
+    { value: "P. An Phú", label: "P. An Phú (Thủ Đức)" },
+    { value: "P. Long Bình", label: "P. Long Bình (Thủ Đức)" }
   ],
   "TP. Hà Nội": [
     { value: "P. Đống Đa", label: "P. Đống Đa (Đống Đa)" },
@@ -3427,6 +3430,9 @@ const STUDIO_STREETS_BY_WARD = {
   "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái"],
   "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Lý Chính Thắng"],
   "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"],
+  "P. Thảo Điền": ["Xa Lộ Hà Nội", "Xuân Thủy", "Thảo Điền", "Quốc Hương"],
+  "P. An Phú": ["Mai Chí Thọ", "Lương Định Của", "Trần Não", "Song Hành"],
+  "P. Long Bình": ["Nguyễn Xiển", "Phước Thiện", "Nguyễn Văn Tăng"],
   "P. Đống Đa": ["Chùa Bộc", "Thái Hà", "Tây Sơn", "Xã Đàn"],
   "P. Cầu Giấy": ["Xuân Thủy", "Trần Duy Hưng", "Cầu Giấy", "Trung Kính"],
   "P. Hoàn Kiếm": ["Hàng Bài", "Tràng Tiền", "Lý Thường Kiệt", "Phố Huế"],
@@ -3438,6 +3444,9 @@ const STUDIO_WARD_COORDS = {
   "P. Hòa Hưng": [10.7758, 106.6682],
   "P. Nhiêu Lộc": [10.7852, 106.6815],
   "P. Gia Định": [10.8012, 106.7065],
+  "P. Thảo Điền": [10.8035, 106.7346],
+  "P. An Phú": [10.7876, 106.7484],
+  "P. Long Bình": [10.8421, 106.8364],
   "P. Đống Đa": [21.0124, 105.8256],
   "P. Cầu Giấy": [21.0338, 105.7945],
   "P. Hoàn Kiếm": [21.0285, 105.8542],
@@ -3525,7 +3534,8 @@ function validateStudioStepBeforeNext(stepNum) {
       document.getElementById("dStreet")?.focus();
       return false;
     }
-    if (!house) {
+    const project = getValidStudioComboValue("project");
+    if (!house && !project) {
       showStudioStepError("Vui lòng nhập Địa Chỉ Chi Tiết (số nhà) trước khi qua Bước 2.");
       document.getElementById("dAddress")?.focus();
       return false;
@@ -3654,12 +3664,18 @@ const STUDIO_CITIES = [
 ];
 
 const STUDIO_PROJECTS = [
-  { value: "Vinhomes Central Park", label: "Vinhomes Central Park" },
-  { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park" },
-  { value: "The Sun Avenue", label: "The Sun Avenue" },
-  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền" },
-  { value: "Saigon Pearl", label: "Saigon Pearl" }
+  { value: "Vinhomes Central Park", label: "Vinhomes Central Park", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "208" },
+  { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park", city: "TP. Hồ Chí Minh", ward: "P. Long Bình", street: "Nguyễn Xiển", streetNumber: "512" },
+  { value: "The Sun Avenue", label: "The Sun Avenue", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Mai Chí Thọ", streetNumber: "28" },
+  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. Thảo Điền", street: "Xa Lộ Hà Nội", streetNumber: "159" },
+  { value: "Saigon Pearl", label: "Saigon Pearl", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "92" }
 ];
+
+function getSelectedStudioProject() {
+  const projectVal = getValidStudioComboValue("project");
+  if (!projectVal) return null;
+  return STUDIO_PROJECTS.find((p) => p.value === projectVal) || null;
+}
 
 const STUDIO_COMBO_TIMERS = { city: null, ward: null, street: null, project: null };
 
@@ -3763,6 +3779,25 @@ function pickStudioComboItem(kind, val) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
     }
+  } else if (kind === "project") {
+    const proj = STUDIO_PROJECTS.find((p) => p.value === val);
+    if (proj) {
+      const cityEl = document.getElementById("dCity");
+      const wardEl = document.getElementById("dWard");
+      const streetEl = document.getElementById("dStreet");
+      if (cityEl && proj.city) {
+        cityEl.value = proj.city;
+        cityEl.dataset.prevValid = proj.city;
+      }
+      if (wardEl && proj.ward) {
+        wardEl.value = proj.ward;
+        wardEl.dataset.prevValid = proj.ward;
+      }
+      if (streetEl && proj.street) {
+        streetEl.value = proj.street;
+        streetEl.dataset.prevValid = proj.street;
+      }
+    }
   }
   syncStudioAddressDisplay();
 }
@@ -3805,17 +3840,25 @@ function populateStudioStreets() {
   // Kept for compatibility; #dStreet dynamically filters by #dWard
 }
 
+function getStudioStreetWithProjectNumber(street, proj) {
+  if (!street) return "";
+  if (proj?.streetNumber && proj.street === street) {
+    return `${proj.streetNumber} ${street}`;
+  }
+  return street;
+}
+
 function getStudioLockedSuffix() {
   const city = getValidStudioComboValue("city");
   const ward = getValidStudioComboValue("ward");
   const street = getValidStudioComboValue("street");
   const project = getValidStudioComboValue("project");
-  const parts = [];
-  if (street) parts.push(street);
-  if (project) parts.push(project);
-  if (ward) parts.push(ward);
-  if (city) parts.push(city);
-  return parts.join(", ");
+  const projObj = project ? STUDIO_PROJECTS.find((p) => p.value === project) : null;
+  const streetPart = getStudioStreetWithProjectNumber(street, projObj);
+  const parts = project
+    ? [project, streetPart, ward, city]
+    : [street, ward, city];
+  return parts.filter(Boolean).join(", ");
 }
 
 function buildStudioFullAddress() {
@@ -3824,9 +3867,15 @@ function buildStudioFullAddress() {
   const project = getValidStudioComboValue("project");
   const ward = getValidStudioComboValue("ward");
   const city = getValidStudioComboValue("city");
+  const projObj = project ? STUDIO_PROJECTS.find((p) => p.value === project) : null;
+
+  if (project) {
+    const streetPart = getStudioStreetWithProjectNumber(street, projObj);
+    return [prefix, project, streetPart, ward, city].filter(Boolean).join(", ");
+  }
 
   const front = [prefix, street].filter(Boolean).join(" ");
-  const tail = [project, ward, city].filter(Boolean).join(", ");
+  const tail = [ward, city].filter(Boolean).join(", ");
   if (front && tail) return `${front}, ${tail}`;
   return front || tail;
 }
@@ -3845,6 +3894,12 @@ function mergeStudioFullAddressNow() {
 function syncStudioAddressDisplay() {
   const addrEl = document.getElementById("dAddress");
   const suffixEl = document.getElementById("dAddressSuffix");
+  const hasProject = Boolean(getValidStudioComboValue("project"));
+  if (addrEl) {
+    addrEl.placeholder = hasProject
+      ? "Tòa / Block / Mã Căn (không bắt buộc) - VD: Tòa C1 - 12.05"
+      : "Số Nhà Chuẩn, Ghim Đúng Map - VD: 168/86";
+  }
   const suffix = getStudioLockedSuffix();
   const hasPrefix = Boolean((STUDIO_STATE.houseNumber || "").trim());
   if (!STUDIO_STATE.isEditingAddress && hasPrefix && addrEl) {
