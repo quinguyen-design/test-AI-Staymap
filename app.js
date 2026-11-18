@@ -1178,23 +1178,30 @@ function updateMapPins(catFilter = "all", focusId = null) {
     const vipInfo = typeof getPropertyVipDisplay === "function" ? getPropertyVipDisplay(item) : { badgeClass: "", label: "" };
     let pinClass = "pin-basic";
     let pinIconHtml = "";
+    let pinZOffset = 0;
 
     if (vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
       pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ff9d00;font-size:10px;"></i>';
+      pinZOffset = 2000;
     } else if (vipInfo.badgeClass === "tag-vip1" || item.mapTier === "vip1" || item.zoneId === 2 || item.tier === "spotlight") {
       pinClass = "pin-vip1";
       pinIconHtml = "";
+      pinZOffset = 600;
     } else if (vipInfo.badgeClass === "tag-vip2" || item.mapTier === "vip2" || item.zoneId === 3 || item.tier === "featured") {
       pinClass = "pin-vip2";
       pinIconHtml = "";
+      pinZOffset = 400;
     } else if (vipInfo.badgeClass === "tag-vip3" || item.mapTier === "vip3" || item.zoneId === 5 || item.tier === "prime") {
       pinClass = "pin-vip3";
       pinIconHtml = "";
+      pinZOffset = 200;
     } else {
       pinClass = "pin-basic";
       pinIconHtml = "";
+      pinZOffset = 0;
     }
+    if (isCurrent) pinZOffset += 3000;
 
     const icon = L.divIcon({
       className: "hero-map-price-marker",
@@ -1210,7 +1217,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
       iconAnchor: [0, 0]
     });
 
-    const marker = L.marker([item.lat, item.lng], { icon });
+    const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
     marker.bindPopup(`
       <div class="hero-map-popup">
         <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
