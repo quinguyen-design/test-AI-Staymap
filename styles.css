@@ -502,6 +502,16 @@ button, input, select, textarea, .leaflet-container {
   transition: all 0.2s ease;
 }
 
+.hmp-pin-tail {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #f15a22;
+  margin-top: -1px;
+  filter: drop-shadow(0 2px 2px rgba(15, 23, 42, 0.25));
+}
+
 /* 1. VIP BANNER — Icon vương miện, nền Đen, viền cam, chữ cam sáng, có đổ bóng */
 .hmp-marker.pin-vip-banner {
   z-index: 50;
@@ -545,18 +555,12 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.pin-vip1 .hmp-pin-tail,
 .hmp-marker.pin-vip2 .hmp-pin-tail,
 .hmp-marker.pin-vip3 .hmp-pin-tail,
-.hmp-marker.pin-vip-star .hmp-pin-tail,
-.hmp-marker.pin-basic .hmp-pin-tail {
-  border-top-color: #cbd5e1;
+.hmp-marker.pin-vip-star .hmp-pin-tail {
+  border-top-color: #f15a22;
 }
 
-.hmp-pin-tail {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 7px solid #ffffff;
-  margin-top: -1px;
+.hmp-marker.pin-basic .hmp-pin-tail {
+  border-top-color: #0f172a;
 }
 
 /* Luxury Compact Map Popup Card (.hero-map-popup) */
