@@ -802,6 +802,7 @@
             <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#38bdf8;"></i> Doanh thu VIP & VAT 8%</span></button></li>
             <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#34d399;"></i> Quản lý Tài khoản & Cấp quyền</span></button></li>
             <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('seo-config', this)"><span><i class="fa-solid fa-magnifying-glass-chart" style="color:#a78bfa;"></i> Cấu hình SEO Link & Vị trí</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('post-schema', this)"><span><i class="fa-solid fa-table-list" style="color:var(--ctt-orange);"></i> Tổng Hợp Mục Đăng Tin</span></button></li>
             <li style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
               <button type="button" class="portal-nav-btn" style="color:#ffd700;" onclick="navigateTo('/tai-khoan.html')">
                 <span><i class="fa-solid fa-user-check" style="color:#ffd700;"></i> Xem trang Thành viên</span>
@@ -1551,13 +1552,16 @@
 
           <!-- Right: Login / Secure Registration / Forgot Password -->
           <div class="auth-right-card">
-            <!-- Mode Switcher: Đăng nhập / Đăng ký -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f1f5f9;padding:4px;border-radius:12px;margin-bottom:16px;">
-              <button type="button" id="authTabLogin" onclick="switchAuthMode('login')" style="padding:9px 12px;border-radius:9px;border:none;background:#fff;color:#0f172a;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(15,23,42,0.08);">
+            <!-- Mode Switcher: Đăng nhập / Đăng ký / Admin -->
+            <div style="display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:6px;background:#f1f5f9;padding:4px;border-radius:12px;margin-bottom:16px;">
+              <button type="button" id="authTabLogin" onclick="switchAuthMode('login')" style="padding:9px 8px;border-radius:9px;border:none;background:#fff;color:#0f172a;font-size:12.5px;font-weight:800;cursor:pointer;box-shadow:0 2px 6px rgba(15,23,42,0.08);white-space:nowrap;">
                 Đăng nhập
               </button>
-              <button type="button" id="authTabRegister" onclick="switchAuthMode('register')" style="padding:9px 12px;border-radius:9px;border:none;background:transparent;color:#64748b;font-size:13px;font-weight:800;cursor:pointer;">
-                <i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);margin-right:4px;"></i> Đăng ký bảo mật
+              <button type="button" id="authTabRegister" onclick="switchAuthMode('register')" style="padding:9px 8px;border-radius:9px;border:none;background:transparent;color:#64748b;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                <i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);margin-right:4px;"></i>Đăng ký
+              </button>
+              <button type="button" id="authTabAdmin" onclick="switchAuthMode('admin')" style="padding:9px 8px;border-radius:9px;border:none;background:transparent;color:#64748b;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                <i class="fa-solid fa-user-shield" style="color:var(--ctt-orange);margin-right:4px;"></i>Admin
               </button>
             </div>
 
@@ -1600,6 +1604,43 @@
                   Chưa có tài khoản?
                   <a href="javascript:void(0)" onclick="switchAuthMode('register')" style="color:var(--ctt-orange);font-weight:800;text-decoration:none;">Đăng ký bảo mật ngay</a>
                 </div>
+              </div>
+            </div>
+
+            <!-- PANEL 1C: ĐĂNG NHẬP QUẢN TRỊ VIÊN (ADMIN GATEWAY) -->
+            <div id="authPanelAdmin" style="display:none;">
+              <div style="background:#0f172a;color:#fff;border-radius:12px;padding:12px 14px;margin-bottom:14px;border:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                <div>
+                  <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:var(--ctt-orange);text-transform:uppercase;">ADMIN CONTROL GATEWAY</div>
+                  <div style="font-size:13.5px;font-weight:900;color:#fff;margin-top:2px;">Cổng Quản Trị Hệ Thống</div>
+                </div>
+                <span style="padding:4px 10px;border-radius:99px;background:rgba(241,90,34,0.16);border:1px solid rgba(241,90,34,0.45);color:var(--ctt-orange);font-size:10.5px;font-weight:800;white-space:nowrap;">
+                  <i class="fa-solid fa-lock"></i> Admin Only
+                </span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div>
+                  <label class="auth-field-label" for="adminLoginIdentity"><i class="fa-solid fa-user-shield" style="color:var(--ctt-orange);"></i> Tài khoản Admin (Email / Username)</label>
+                  <input type="text" id="adminLoginIdentity" class="post-input" placeholder="Nhập Email hoặc tên đăng nhập Admin" onkeydown="if(event.key==='Enter') submitAdminLogin()">
+                </div>
+                <div>
+                  <label class="auth-field-label" for="adminLoginPassword"><i class="fa-solid fa-key" style="color:var(--ctt-orange);"></i> Mật khẩu quản trị</label>
+                  <div class="auth-pwd-wrap">
+                    <input type="password" id="adminLoginPassword" class="post-input" placeholder="Nhập mật khẩu quản trị viên" onkeydown="if(event.key==='Enter') submitAdminLogin()">
+                    <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('adminLoginPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+                  <label style="display:inline-flex;align-items:center;gap:6px;color:#475569;cursor:pointer;">
+                    <input type="checkbox" id="adminRememberMe" checked style="accent-color:var(--ctt-orange);">
+                    <span>Ghi nhớ phiên quản trị</span>
+                  </label>
+                  <a href="javascript:void(0)" onclick="switchAuthMode('login')" style="color:#64748b;font-weight:700;text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Đăng nhập thành viên</a>
+                </div>
+                <div id="adminLoginError" class="auth-error-box" style="background:#fffaf5;border-color:var(--ctt-orange);color:var(--ctt-orange);"></div>
+                <button type="button" class="hsp-btn-apply" style="width:100%;padding:12px;background:linear-gradient(135deg,#f15a22,#ff9d00);color:#fff;font-weight:900;letter-spacing:0.4px;" onclick="submitAdminLogin()">
+                  <i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i>ĐĂNG NHẬP HỆ THỐNG ADMIN
+                </button>
               </div>
             </div>
 
@@ -1790,6 +1831,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118al"></script>
+  <script src="app.js?v=20261118am"></script>
 </body>
 </html>

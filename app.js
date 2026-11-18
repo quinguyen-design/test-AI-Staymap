@@ -3035,6 +3035,48 @@ function submitStandardLogin() {
   completeAuthSession(matched, remember);
 }
 
+function submitAdminLogin() {
+  showRegError("adminLoginError", "");
+  if (REG_STATE.loginAttempts >= 5) {
+    showRegError("adminLoginError", "Bạn đã nhập sai quá 5 lần. Vui lòng thử lại sau hoặc liên hệ Quản trị cấp cao.");
+    return;
+  }
+
+  const rawId = document.getElementById("adminLoginIdentity")?.value || "";
+  const pwd = document.getElementById("adminLoginPassword")?.value || "";
+  const remember = document.getElementById("adminRememberMe")?.checked !== false;
+  const normId = normalizeAuthIdentity(rawId);
+
+  if (!normId) {
+    showRegError("adminLoginError", "Vui lòng nhập Email hoặc tên đăng nhập Admin.");
+    return;
+  }
+  if (!pwd) {
+    showRegError("adminLoginError", "Vui lòng nhập mật khẩu quản trị.");
+    return;
+  }
+
+  const accounts = getAccountsStore();
+  const matched = accounts.find((a) => normalizeAuthIdentity(a.identity) === normId);
+  if (!matched || matched.password !== pwd) {
+    REG_STATE.loginAttempts += 1;
+    showRegError(
+      "adminLoginError",
+      `Tài khoản hoặc mật khẩu Admin chưa chính xác (${REG_STATE.loginAttempts}/5 lần thử).`
+    );
+    return;
+  }
+  if (matched.role !== "admin") {
+    showRegError(
+      "adminLoginError",
+      "Tài khoản này không có quyền Quản trị viên. Vui lòng dùng tab Đăng nhập thành viên."
+    );
+    return;
+  }
+
+  completeAuthSession(matched, remember);
+}
+
 function loginWithZaloQuick() {
   switchAuthMode("register");
   switchRegisterMethod("zalo");
@@ -3083,24 +3125,34 @@ const REG_STATE = {
 function switchAuthMode(mode) {
   const tabLogin = document.getElementById("authTabLogin");
   const tabReg = document.getElementById("authTabRegister");
+  const tabAdmin = document.getElementById("authTabAdmin");
   const panelLogin = document.getElementById("authPanelLogin");
   const panelReg = document.getElementById("authPanelRegister");
   const panelForgot = document.getElementById("authPanelForgot");
+  const panelAdmin = document.getElementById("authPanelAdmin");
 
   if (panelLogin) panelLogin.style.display = mode === "login" ? "block" : "none";
   if (panelReg) panelReg.style.display = mode === "register" ? "block" : "none";
   if (panelForgot) panelForgot.style.display = mode === "forgot" ? "block" : "none";
+  if (panelAdmin) panelAdmin.style.display = mode === "admin" ? "block" : "none";
 
+  const isLogin = mode === "login" || mode === "forgot";
   const isReg = mode === "register";
+  const isAdmin = mode === "admin";
   if (tabLogin) {
-    tabLogin.style.background = !isReg ? "#fff" : "transparent";
-    tabLogin.style.color = !isReg ? "#0f172a" : "#64748b";
-    tabLogin.style.boxShadow = !isReg ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
+    tabLogin.style.background = isLogin ? "#fff" : "transparent";
+    tabLogin.style.color = isLogin ? "#0f172a" : "#64748b";
+    tabLogin.style.boxShadow = isLogin ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
   }
   if (tabReg) {
     tabReg.style.background = isReg ? "#fff" : "transparent";
     tabReg.style.color = isReg ? "#0f172a" : "#64748b";
     tabReg.style.boxShadow = isReg ? "0 2px 6px rgba(15,23,42,0.08)" : "none";
+  }
+  if (tabAdmin) {
+    tabAdmin.style.background = isAdmin ? "#0f172a" : "transparent";
+    tabAdmin.style.color = isAdmin ? "#fff" : "#64748b";
+    tabAdmin.style.boxShadow = isAdmin ? "0 2px 8px rgba(15,23,42,0.2)" : "none";
   }
 }
 
@@ -6127,6 +6179,240 @@ function switchAdminTab(tabName, btnEl) {
             `).join("")}
           </tbody>
         </table>
+      </div>
+    `;
+  } else if (tabName === "post-schema") {
+    const catStats = [
+      { key: "phong-tro", label: "Phòng Trọ / CHDV" },
+      { key: "nha-o", label: "Nhà Nguyên Căn" },
+      { key: "can-ho-chung-cu", label: "Căn Hộ Chung Cư" },
+      { key: "mat-bang-van-phong", label: "Mặt Bằng Văn Phòng" },
+      { key: "bai-dat-kho-xuong", label: "Đất - Xưởng, Kho - Bãi" },
+      { key: "homestay-airbnb", label: "HomeStay / Aribnb" }
+    ].map((c) => ({
+      ...c,
+      count: PROPERTIES.filter((p) => p.category === c.key).length
+    }));
+    const totalWards = Object.values(STUDIO_WARDS_BY_CITY).flat().length;
+    const totalStreets = Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat())).length;
+    const promoList = Object.values(STUDIO_PROMO_CODES);
+    const fmtVnd = (n) => (n === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(n) + "đ");
+
+    container.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;" class="tabular-nums">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Bước 1 • Loại Hình & Địa Bàn</div>
+          <div style="font-size:22px;font-weight:900;color:#0f172a;margin:4px 0;">6 Loại • ${STUDIO_CITIES.length} Tỉnh/TP</div>
+          <div style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">${totalWards} Phường • ${totalStreets} Đường • ${STUDIO_PROJECTS.length} Dự Án</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Bước 2 • Giá & Chi Phí</div>
+          <div style="font-size:22px;font-weight:900;color:#0f172a;margin:4px 0;">12 Trường Dữ Liệu</div>
+          <div style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Giá, Cọc, PN/WC, Điện/Nước, Phụ Thu</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;">
+          <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Bước 3 • AI, Media & Tiện Ích</div>
+          <div style="font-size:22px;font-weight:900;color:#0f172a;margin:4px 0;">5 Mẫu AI • 4–9 Ảnh</div>
+          <div style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">6 Tiện Ích • 6 Dịch Vụ • 5 Thông Số</div>
+        </div>
+        <div style="background:#0f172a;border:1px solid #1e293b;border-radius:14px;padding:14px 16px;color:#fff;">
+          <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;">Bước 4 • Gói Tin & Khuyến Mãi</div>
+          <div style="font-size:22px;font-weight:900;color:#fff;margin:4px 0;">${STUDIO_ZONES.length} Khu Vực • ${promoList.length} Mã KM</div>
+          <div style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">4 Mốc Ngày • 3 Nhãn Dán • VAT 8%</div>
+        </div>
+      </div>
+
+      <div class="portal-table-card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div>
+            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">1. Nhóm Phân Loại Bất Động Sản, Địa Bàn & Dự Án (Bước 1)</h3>
+            <small style="color:#64748b;">Tổng hợp 6 danh mục tin, danh sách Tỉnh/Phường/Đường và 5 Dự án có sẵn tọa độ GPS ghim map</small>
+          </div>
+          <span style="padding:4px 10px;border-radius:99px;background:linear-gradient(135deg,#f15a22,#ff9d00);color:#fff;font-size:11px;font-weight:800;">Tổng ${PROPERTIES.length} tin đang hiển thị</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:14px;">
+          <table class="portal-table tabular-nums">
+            <thead>
+              <tr>
+                <th>Loại Hình BĐS (6)</th>
+                <th>Slug URL</th>
+                <th style="text-align:right;">Số Tin</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${catStats.map((c) => `
+                <tr>
+                  <td><strong>${c.label}</strong></td>
+                  <td><code style="font-size:11px;color:#475569;background:#f8fafc;padding:2px 6px;border-radius:5px;">/${c.key}</code></td>
+                  <td style="text-align:right;"><strong style="color:var(--ctt-orange);">${c.count}</strong></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <table class="portal-table tabular-nums">
+            <thead>
+              <tr>
+                <th>Dự Án Chuẩn (${STUDIO_PROJECTS.length})</th>
+                <th>Địa Chỉ Gốc Đồng Bộ</th>
+                <th>Tọa Độ Map</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${STUDIO_PROJECTS.map((pr) => `
+                <tr>
+                  <td><strong>${pr.label}</strong></td>
+                  <td style="font-size:12px;color:#475569;">${pr.streetNumber} ${pr.street}, ${pr.ward}, ${pr.city}</td>
+                  <td style="font-size:11px;color:#64748b;">${pr.coords.join(", ")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="portal-table-card" style="margin-bottom:0;">
+          <h3 style="font-size:16px;font-weight:900;color:#0f172a;margin-bottom:4px;">2. Nhóm Giá Thuê, Kết Cấu & Chi Phí (Bước 2)</h3>
+          <small style="color:#64748b;display:block;margin-bottom:12px;">Gom toàn bộ thông số tài chính, đặt cọc và chi phí sinh hoạt minh bạch</small>
+          <table class="portal-table tabular-nums">
+            <thead>
+              <tr>
+                <th>Nhóm Mục</th>
+                <th>Trường Dữ Liệu & Tùy Chọn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Giá & Diện Tích</strong></td>
+                <td style="font-size:12px;color:#334155;">Giá Thuê (Triệu/Tháng) • Diện Tích (m²) • Tiền Cọc (${STUDIO_DEPOSITS.map((x) => x.label).join(", ")})</td>
+              </tr>
+              <tr>
+                <td><strong>Kết Cấu Phòng</strong></td>
+                <td style="font-size:12px;color:#334155;">Phòng Ngủ (1–6+ PN) • Nhà Vệ Sinh (1–6+ WC)</td>
+              </tr>
+              <tr>
+                <td><strong>Chi Phí Cơ Bản</strong></td>
+                <td style="font-size:12px;color:#334155;">Điện (k/kWh hoặc Giá nhà nước) • Nước (k/Người hoặc Giá nhà nước)</td>
+              </tr>
+              <tr>
+                <td><strong>Chi Phí Khác</strong></td>
+                <td style="font-size:12px;color:#334155;"><strong>Trọn Gói Chi Phí Khác</strong> (loại trừ 4 mục lẻ) hoặc tách: Internet, Giặt Sấy, Thu Rác, Phí Xe (Xe/Người/Tháng)</td>
+              </tr>
+              <tr>
+                <td><strong>Giới Hạn Người</strong></td>
+                <td style="font-size:12px;color:#334155;">1–5 Người/Phòng • Phụ thu thêm người (k/Người/Tháng khi ≥ 2 người)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="portal-table-card" style="margin-bottom:0;">
+          <h3 style="font-size:16px;font-weight:900;color:#0f172a;margin-bottom:4px;">3. Nhóm Nội Dung AI, Thông Số & Tiện Ích (Bước 3)</h3>
+          <small style="color:#64748b;display:block;margin-bottom:12px;">Cấu trúc bài đăng tự động cập nhật, hình ảnh kéo thả và danh mục tiện ích</small>
+          <table class="portal-table tabular-nums">
+            <thead>
+              <tr>
+                <th>Nhóm Mục</th>
+                <th>Chi Tiết Cấu Hình</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>AI Copywriter</strong></td>
+                <td style="font-size:12px;color:#334155;">Tiêu Đề (≤ 70 ký tự) • Mô Tả 5 đoạn • <strong>5 mẫu văn phong AI</strong> tự viết lại theo dữ liệu thực</td>
+              </tr>
+              <tr>
+                <td><strong>Thông Số BĐS</strong></td>
+                <td style="font-size:12px;color:#334155;">Nội Thất (${STUDIO_FURNITURE_OPTS.map((x) => x.label).join(", ")}) • Số Tầng (1–6+ Tầng) • Hướng Nhà (8 hướng) • Mặt Tiền / Đường Vào (m²)</td>
+              </tr>
+              <tr>
+                <td><strong>Hình Ảnh & Video</strong></td>
+                <td style="font-size:12px;color:#334155;">4–9 Hình ảnh (lưới 3 cột, kéo thả đổi thứ tự, ảnh #1 là Bìa) • Video ngắn (MP4)</td>
+              </tr>
+              <tr>
+                <td><strong>Tiện Ích (6)</strong></td>
+                <td style="font-size:12px;color:#334155;">Trường Học (Tên Trường / Mã Trường), Chợ / Siêu Thị, Bệnh Viện / Y Tế, Công Viên, Xe Bus, Bank / ATM</td>
+              </tr>
+              <tr>
+                <td><strong>Dịch Vụ (6)</strong></td>
+                <td style="font-size:12px;color:#334155;">Nhà Xe / Hầm Xe Rộng, Khu Giặt / Phơi / Sấy, Bảo Vệ / Camera An Ninh, Hệ Thống PCCC, Thang Máy, Quản Lý Khu Vực Chung</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="portal-table-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+          <div>
+            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">4. Nhóm Gói Hiển Thị, Ngày Đăng, Nhãn Dán & Mã Khuyến Mãi (Bước 4)</h3>
+            <small style="color:#64748b;">Tổng hợp bảng giá 6 khu vực, 4 mốc ngày (mặc định 15 ngày), 3 nhãn dán và 4 mã khuyến mãi đang kích hoạt</small>
+          </div>
+          <span style="padding:4px 10px;border-radius:99px;background:#0f172a;color:#fff;font-size:11px;font-weight:800;">Công thức: (Gói + Nhãn − Ưu đãi) + VAT 8%</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:14px;">
+          <table class="portal-table tabular-nums">
+            <thead>
+              <tr>
+                <th>6 Khu Vực Hiển Thị</th>
+                <th>Đơn Giá / Ngày</th>
+                <th>Nhãn Badge</th>
+                <th>Mô Tả</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${STUDIO_ZONES.map((z) => `
+                <tr>
+                  <td><strong>${z.name}</strong></td>
+                  <td><strong style="color:var(--ctt-orange);">${fmtVnd(z.rate)}</strong></td>
+                  <td><span style="font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:5px;background:#f8fafc;border:1px solid #e2e8f0;color:#0f172a;">${z.badge || "Thường"}</span></td>
+                  <td style="font-size:11.5px;color:#64748b;">${z.desc}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <table class="portal-table tabular-nums">
+              <thead>
+                <tr>
+                  <th>Mốc Ngày</th>
+                  <th>Ưu Đãi</th>
+                  <th>Ghi Chú</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${STUDIO_DURATIONS.map((d) => `
+                  <tr>
+                    <td><strong>${d.label}</strong></td>
+                    <td>${d.off ? `<span style="background:linear-gradient(135deg,#f15a22,#ff9d00);color:#fff;font-size:10.5px;font-weight:800;padding:1px 7px;border-radius:5px;">-${d.off}%</span>` : `<span style="color:#64748b;font-size:11.5px;">0%</span>`}</td>
+                    <td style="font-size:11.5px;color:#64748b;">${d.days === 15 ? "Mặc định gói trả phí" : d.days === 3 ? "Mặc định tin miễn phí" : "Tùy chọn"}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+
+            <table class="portal-table tabular-nums">
+              <thead>
+                <tr>
+                  <th>Mã Khuyến Mãi</th>
+                  <th>Mức Giảm</th>
+                  <th>Nhãn Dán (1.000đ/ngày)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${promoList.map((pr, idx) => `
+                  <tr>
+                    <td><strong style="color:var(--ctt-orange);">${pr.code}</strong></td>
+                    <td style="font-size:12px;font-weight:700;color:#0f172a;">${pr.desc}</td>
+                    <td style="font-size:11.5px;color:#475569;">${STUDIO_STICKERS[idx] ? `${STUDIO_STICKERS[idx].name} — ${STUDIO_STICKERS[idx].hint}` : "—"}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     `;
   } else {
