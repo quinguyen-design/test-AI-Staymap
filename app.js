@@ -3491,12 +3491,7 @@ function applyStudioPromoCode() {
   if (inputEl) inputEl.value = clean;
   STUDIO_STATE.promoCode = clean;
   if (statusEl) {
-    const discountBadge = promo.type === "percent"
-      ? `${promo.value}%`
-      : `${new Intl.NumberFormat("vi-VN").format(promo.value)}đ`;
-    statusEl.innerHTML = `<i class="fa-solid fa-check"></i> ĐÃ GIẢM ${discountBadge}`;
-    statusEl.style.color = "var(--ctt-orange)";
-    statusEl.style.fontWeight = "800";
+    statusEl.textContent = "";
   }
   syncStudioPromoUI(true);
   renderStudioPreview();
