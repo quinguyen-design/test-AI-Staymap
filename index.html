@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118i">
+  <link rel="stylesheet" href="styles.css?v=20261118j">
 </head>
 <body>
 
@@ -1083,18 +1083,19 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Phường / Xã <span class="req-star">*</span></span></div>
-                  <select id="dWard" class="post-input" onchange="onStudioLocationChange(true)">
-                    <option value="P. Cầu Kiệu">P. Cầu Kiệu (Phú Nhuận)</option>
-                    <option value="P. Hòa Hưng">P. Hòa Hưng (Quận 10)</option>
-                    <option value="P. Nhiêu Lộc">P. Nhiêu Lộc (Quận 3)</option>
-                    <option value="P. Gia Định">P. Gia Định (Bình Thạnh)</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dWard" class="post-input" value="" autocomplete="off" onfocus="openStudioCombo('ward')" onclick="openStudioCombo('ward')" oninput="filterStudioCombo('ward')" onblur="closeStudioComboDelay('ward')">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dWardSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
                 <div>
                   <div class="post-field-label"><span>Tên Đường <span class="req-star">*</span></span></div>
-                  <select id="dStreet" class="post-input" onchange="onStudioLocationChange()">
-                    <option value="">-- Chọn tên đường --</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dStreet" class="post-input" value="" autocomplete="off" onfocus="openStudioCombo('street')" onclick="openStudioCombo('street')" oninput="filterStudioCombo('street')" onblur="closeStudioComboDelay('street')">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dStreetSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
                 <div>
                   <div class="post-field-label"><span>Dự Án</span></div>
@@ -1802,6 +1803,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118h"></script>
+  <script src="app.js?v=20261118j"></script>
 </body>
 </html>

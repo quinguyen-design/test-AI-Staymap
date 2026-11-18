@@ -3504,12 +3504,18 @@ function showStudioStepError(msg) {
 
 function validateStudioStepBeforeNext(stepNum) {
   if (stepNum === 1) {
+    const ward = (document.getElementById("dWard")?.value || "").trim();
     const street = (document.getElementById("dStreet")?.value || "").trim();
     const house = (STUDIO_STATE.houseNumber || "").trim();
     const host = (document.getElementById("dHost")?.value || "").trim();
     const phone = (document.getElementById("dPhone")?.value || "").trim();
+    if (!ward) {
+      showStudioStepError("Vui lòng chọn hoặc nhập Phường / Xã trước khi qua Bước 2.");
+      document.getElementById("dWard")?.focus();
+      return false;
+    }
     if (!street) {
-      showStudioStepError("Vui lòng chọn Tên Đường trước khi qua Bước 2.");
+      showStudioStepError("Vui lòng chọn hoặc nhập Tên Đường trước khi qua Bước 2.");
       document.getElementById("dStreet")?.focus();
       return false;
     }
@@ -3632,34 +3638,86 @@ function sanitizeStudioVnPhone(inputEl) {
   renderStudioPreview();
 }
 
-function populateStudioWards() {
-  const city = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
-  const wardEl = document.getElementById("dWard");
-  if (!wardEl) return;
-  const list = STUDIO_WARDS_BY_CITY[city] || STUDIO_WARDS_BY_CITY["TP. Hồ Chí Minh"];
-  const prev = wardEl.value;
-  wardEl.innerHTML = list.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
-  if (list.some((w) => w.value === prev)) {
-    wardEl.value = prev;
+const STUDIO_COMBO_TIMERS = { ward: null, street: null };
+
+function getStudioComboItems(kind) {
+  if (kind === "ward") {
+    const city = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
+    return STUDIO_WARDS_BY_CITY[city] || STUDIO_WARDS_BY_CITY["TP. Hồ Chí Minh"];
   }
+  const ward = (document.getElementById("dWard")?.value || "").trim();
+  const list = STUDIO_STREETS_BY_WARD[ward] || Object.values(STUDIO_STREETS_BY_WARD).flat();
+  return Array.from(new Set(list)).map((s) => ({ value: s, label: s }));
+}
+
+function renderStudioComboList(kind, query = "") {
+  const listEl = document.getElementById(kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList");
+  if (!listEl) return;
+  const items = getStudioComboItems(kind);
+  const qNorm = toVietnameseSlug(query);
+  const filtered = qNorm
+    ? items.filter((it) => toVietnameseSlug(it.label).includes(qNorm) || toVietnameseSlug(it.value).includes(qNorm))
+    : items;
+
+  if (!filtered.length) {
+    listEl.innerHTML = `<div class="ctt-combo-empty">Không có trong gợi ý — Bạn có thể dùng tên vừa nhập.</div>`;
+  } else {
+    listEl.innerHTML = filtered
+      .map(
+        (it) => `<button type="button" class="ctt-combo-item" onmousedown="event.preventDefault();pickStudioComboItem('${kind}', '${it.value.replace(/'/g, "\\'")}')"><span>${it.label}</span><i class="fa-solid fa-check" style="font-size:10px;opacity:0.35;"></i></button>`
+      )
+      .join("");
+  }
+  listEl.classList.add("is-open");
+}
+
+function openStudioCombo(kind) {
+  clearTimeout(STUDIO_COMBO_TIMERS[kind]);
+  const inputEl = document.getElementById(kind === "ward" ? "dWard" : "dStreet");
+  renderStudioComboList(kind, inputEl?.value || "");
+}
+
+function filterStudioCombo(kind) {
+  const inputEl = document.getElementById(kind === "ward" ? "dWard" : "dStreet");
+  renderStudioComboList(kind, inputEl?.value || "");
+  syncStudioAddressDisplay();
+}
+
+function pickStudioComboItem(kind, val) {
+  const inputEl = document.getElementById(kind === "ward" ? "dWard" : "dStreet");
+  const listEl = document.getElementById(kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList");
+  if (inputEl) inputEl.value = val;
+  if (listEl) listEl.classList.remove("is-open");
+  if (kind === "ward") {
+    const streetEl = document.getElementById("dStreet");
+    if (streetEl && !STUDIO_STREETS_BY_WARD[val]?.includes(streetEl.value)) {
+      streetEl.value = "";
+    }
+  }
+  syncStudioAddressDisplay();
+}
+
+function closeStudioComboDelay(kind) {
+  STUDIO_COMBO_TIMERS[kind] = setTimeout(() => {
+    const listEl = document.getElementById(kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList");
+    if (listEl) listEl.classList.remove("is-open");
+  }, 150);
+}
+
+function populateStudioWards() {
+  // Kept for compatibility; #dWard is now an empty searchable combo input
 }
 
 function onStudioCityChange() {
-  populateStudioWards();
-  populateStudioStreets();
+  const wardEl = document.getElementById("dWard");
+  const streetEl = document.getElementById("dStreet");
+  if (wardEl) wardEl.value = "";
+  if (streetEl) streetEl.value = "";
   syncStudioAddressDisplay();
 }
 
 function populateStudioStreets() {
-  const ward = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
-  const streetEl = document.getElementById("dStreet");
-  if (!streetEl) return;
-  const list = STUDIO_STREETS_BY_WARD[ward] || ["Phan Xích Long", "Lê Văn Sỹ"];
-  const prev = streetEl.value;
-  streetEl.innerHTML =
-    `<option value="">-- Chọn tên đường --</option>` +
-    list.map((s) => `<option value="${s}">${s}</option>`).join("");
-  if (list.includes(prev)) streetEl.value = prev;
+  // Kept for compatibility; #dStreet dynamically filters by #dWard
 }
 
 function getStudioLockedSuffix() {
@@ -4194,7 +4252,7 @@ function initStudioPostListing(preselectedZoneId = null) {
   });
   syncStudioCostExclusion();
   updateStudioTitleCount();
-  ["dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
+  ["dWard", "dStreet", "dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
@@ -4245,8 +4303,8 @@ function renderStudioPreview() {
     buildStudioAiDraft();
   }
   const city = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
-  const ward = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
-  const fullAddr = document.getElementById("dAddress")?.value.trim() || `${ward}, ${city}`;
+  const ward = (document.getElementById("dWard")?.value || "").trim();
+  const fullAddr = document.getElementById("dAddress")?.value.trim() || [ward, city].filter(Boolean).join(", ");
   const price = document.getElementById("dPrice")?.value.trim() || "--";
   const area = document.getElementById("dArea")?.value.trim() || "--";
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
@@ -4309,7 +4367,7 @@ function renderStudioPreview() {
               <div class="lc-card-addr">
                 <i class="fa-solid fa-location-dot"></i>
                 <div class="lc-card-addr-text">
-                  <span class="lc-addr-ward">${ward.toUpperCase()}</span>
+                  <span class="lc-addr-ward">${(ward || "CHỌN PHƯỜNG/XÃ").toUpperCase()}</span>
                   <span class="lc-addr-city">${city.toUpperCase()}</span>
                 </div>
               </div>
