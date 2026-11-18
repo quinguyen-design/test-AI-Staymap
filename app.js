@@ -1566,7 +1566,14 @@ function buildListingCardHTML(item) {
         <div class="lc-utility-bar demo-utility-bar">
           <span>Điện: ${item.elec}</span>
           <span>Nước: ${item.water}</span>
-          <span>${item.otherCost ? `Chi Phí Khác: ${item.otherCost}` : "Chính chủ"}</span>
+          <span>${(() => {
+            if (item.otherCost) return `Chi Phí Khác: ${item.otherCost}`;
+            const sumK = [item.internet, item.laundry, item.trash, item.parking].reduce((s, v) => {
+              const n = parseFloat(String(v || "").replace(/[^0-9.]/g, ""));
+              return s + (Number.isFinite(n) && n > 0 ? n : 0);
+            }, 0);
+            return sumK > 0 ? `Chi Phí Khác: ${Number(sumK.toFixed(2))}k` : "Chính chủ";
+          })()}</span>
         </div>
 
         <div class="lc-card-footer">
@@ -4238,9 +4245,15 @@ function renderStudioPreview() {
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
   const waterRaw = (document.getElementById("dWater")?.value || "").replace(/k/gi, "").trim();
   const otherRaw = (document.getElementById("dOtherCost")?.value || "").replace(/k/gi, "").trim();
+  const subFeesSumK = ["dInternet", "dLaundry", "dTrash", "dParking"].reduce((sum, id) => {
+    const val = parseFloat((document.getElementById(id)?.value || "").replace(/k/gi, "").trim());
+    return sum + (Number.isFinite(val) && val > 0 ? val : 0);
+  }, 0);
   const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
   const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
-  const otherCost = otherRaw ? `${otherRaw}k` : "--";
+  const otherCost = otherRaw
+    ? `${otherRaw}k`
+    : (subFeesSumK > 0 ? `${Number(subFeesSumK.toFixed(2))}k` : "--");
   const title = document.getElementById("dTitle")?.value.trim() || "Chưa nhập tiêu đề tin đăng";
   const desc = document.getElementById("dDesc")?.value.trim() || "Chưa nhập mô tả chi tiết...";
   const phone = document.getElementById("dPhone")?.value.trim() || "Chưa nhập SĐT";
