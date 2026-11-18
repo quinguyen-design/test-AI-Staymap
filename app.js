@@ -3716,7 +3716,9 @@ function renderStudioComboList(kind, query = "") {
 function openStudioCombo(kind) {
   clearTimeout(STUDIO_COMBO_TIMERS[kind]);
   const { inputEl } = getStudioComboEls(kind);
-  renderStudioComboList(kind, inputEl?.value || "");
+  const val = (inputEl?.value || "").trim();
+  const isExactOption = val && getStudioComboItems(kind).some((it) => it.value === val || it.label === val);
+  renderStudioComboList(kind, isExactOption ? "" : val);
 }
 
 function filterStudioCombo(kind) {
@@ -4298,10 +4300,12 @@ function initStudioPostListing(preselectedZoneId = null) {
   });
   syncStudioCostExclusion();
   updateStudioTitleCount();
-  ["dCity", "dWard", "dStreet", "dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
+  ["dWard", "dStreet", "dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
+  const cityEl = document.getElementById("dCity");
+  if (cityEl) cityEl.value = "TP. Hồ Chí Minh";
   const bedsEl = document.getElementById("dBeds");
   if (bedsEl) bedsEl.value = "1 PN";
   const bathsEl = document.getElementById("dBaths");
