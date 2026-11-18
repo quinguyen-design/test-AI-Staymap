@@ -4488,8 +4488,8 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 /* 4-Tier VIP Icon Hierarchy */
 .lc-vip-tag.tag-dacquyen {
   background: #000000 !important;
-  color: var(--ctt-orange) !important;
-  border: 1px solid rgba(241, 90, 34, 0.55);
+  color: #ff9d00 !important;
+  border: 1px solid rgba(255, 157, 0, 0.65);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 .lc-vip-tag.tag-vip1 {
