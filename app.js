@@ -1226,7 +1226,8 @@ function updateMapPins(catFilter = "all", focusId = null) {
     });
 
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
-    const shortLoc = item.ward || item.district || item.city || "";
+    const locParts = [item.ward, item.city].filter(Boolean).map((s) => s.toUpperCase());
+    const locText = locParts.join(", ");
     const vipTagHtml = vipInfo.label
       ? `<span class="lc-vip-tag hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
       : "";
@@ -1237,15 +1238,17 @@ function updateMapPins(catFilter = "all", focusId = null) {
           ${vipTagHtml}
         </div>
         <div class="hmp-pop-body">
+          <div class="hmp-pop-price tabular-nums">${item.priceText} <span>| Th</span></div>
           <div class="hmp-pop-title">${item.title}</div>
-          ${shortLoc ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${shortLoc}</span></div>` : ""}
-          <div class="hmp-pop-footer">
-            <div class="hmp-pop-price">${item.priceText}/Th</div>
-            <span class="hmp-pop-link">Xem <i class="fa-solid fa-arrow-right"></i></span>
+          ${locText ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${locText}</span></div>` : ""}
+          <div class="hmp-pop-specs">
+            <span><i class="fa-solid fa-maximize"></i> ${item.area}&nbsp;m²</span>
+            <span><i class="fa-solid fa-bed"></i> ${item.beds ?? 1}</span>
+            <span><i class="fa-solid fa-bath"></i> ${item.baths ?? 1}</span>
           </div>
         </div>
       </div>
-    `, { maxWidth: 330, className: "ctt-compact-map-popup" });
+    `, { maxWidth: 344, className: "ctt-compact-map-popup" });
 
     marker.on("click", () => {
       const heroEl = document.getElementById("siteHeaderHero");
