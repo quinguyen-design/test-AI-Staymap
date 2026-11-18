@@ -3470,8 +3470,8 @@ function applyStudioPromoCode() {
   if (!clean) {
     STUDIO_STATE.promoCode = "";
     if (statusEl) {
-      statusEl.textContent = "Vui lòng nhập mã (VD: STAYMAP10)";
-      statusEl.style.color = "#d97706";
+      statusEl.textContent = "Vui lòng nhập mã khuyến mãi";
+      statusEl.style.color = "var(--ctt-orange)";
     }
     syncStudioPromoUI(false);
     renderStudioPreview();
@@ -3481,8 +3481,8 @@ function applyStudioPromoCode() {
   if (!promo) {
     STUDIO_STATE.promoCode = "";
     if (statusEl) {
-      statusEl.textContent = "Mã không hợp lệ (Thử: STAYMAP10, VIP20, CHOTHUE50K)";
-      statusEl.style.color = "#dc2626";
+      statusEl.textContent = "Mã Nhập Không Hợp Lệ";
+      statusEl.style.color = "var(--ctt-orange)";
     }
     syncStudioPromoUI(false);
     renderStudioPreview();
