@@ -3654,7 +3654,6 @@ const STUDIO_CITIES = [
 ];
 
 const STUDIO_PROJECTS = [
-  { value: "", label: "Không thuộc dự án" },
   { value: "Vinhomes Central Park", label: "Vinhomes Central Park" },
   { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park" },
   { value: "The Sun Avenue", label: "The Sun Avenue" },
