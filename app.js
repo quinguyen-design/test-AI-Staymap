@@ -4670,6 +4670,7 @@ function onStudioRoomCountInput(kind, inputEl) {
   } else {
     STUDIO_STATE.baths = `${Number.isFinite(n) && n > 0 ? n : 1} WC`;
   }
+  renderStudioPreview();
 }
 
 function onStudioRoomCountBlur(kind, inputEl) {
@@ -4682,6 +4683,7 @@ function onStudioRoomCountBlur(kind, inputEl) {
   } else {
     STUDIO_STATE.baths = `${finalN} WC`;
   }
+  renderStudioPreview();
 }
 
 function closeStudioComboDelay(kind) {
