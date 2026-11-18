@@ -4875,9 +4875,9 @@ function onStudioMaxPeopleChange(val) {
   const note = document.getElementById("extraPersonNote");
   const feeEl = document.getElementById("dExtraPerson");
   const num = parseInt(val, 10);
-  const showFee = num >= 2;
+  const showFee = Number.isFinite(num) && num >= 1;
   if (wrap) wrap.style.visibility = showFee ? "visible" : "hidden";
-  if (note && showFee) note.textContent = `(từ người thứ ${num})`;
+  if (note && showFee) note.textContent = `(từ người thứ ${num + 1})`;
   if (!showFee && feeEl) feeEl.value = "";
   renderStudioPreview();
 }
