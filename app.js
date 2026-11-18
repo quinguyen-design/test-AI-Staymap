@@ -98,7 +98,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 10.7995,
     lng: 106.6825,
@@ -130,7 +130,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.8k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 10.7915,
     lng: 106.7045,
@@ -162,7 +162,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.8k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 10.7835,
     lng: 106.6745,
@@ -226,7 +226,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 10.7124,
     lng: 106.7042,
@@ -352,7 +352,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "80k/thg",
+    water: "80k/Th",
     deposit: "1 tháng",
     lat: 10.8065,
     lng: 106.6289,
@@ -380,7 +380,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 10.8112,
     lng: 106.7014,
@@ -408,7 +408,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "90k/thg",
+    water: "90k/Th",
     deposit: "1 tháng",
     lat: 10.8245,
     lng: 106.7712,
@@ -436,7 +436,7 @@ const PROPERTIES = [
     beds: "Gác lửng",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "90k/thg",
+    water: "90k/Th",
     deposit: "1 tháng",
     lat: 10.7782,
     lng: 106.6345,
@@ -464,7 +464,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.8k/kWh",
-    water: "100k/thg",
+    water: "100k/Th",
     deposit: "1 tháng",
     lat: 21.0433,
     lng: 105.7944,
@@ -548,7 +548,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "90k/thg",
+    water: "90k/Th",
     deposit: "1 tháng",
     lat: 10.8265,
     lng: 106.6889,
@@ -606,7 +606,7 @@ const PROPERTIES = [
     beds: "1 PN",
     baths: "1 WC",
     elec: "3.5k/kWh",
-    water: "80k/thg",
+    water: "80k/Th",
     deposit: "1 tháng",
     lat: 10.7712,
     lng: 106.6658,
@@ -1226,7 +1226,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
           <div class="hmp-pop-title">${item.title}</div>
           <div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i> ${item.ward}, ${item.city}</div>
           <div class="hmp-pop-footer">
-            <div class="hmp-pop-price">${item.priceText}/thg</div>
+            <div class="hmp-pop-price">${item.priceText}/Th</div>
             <a href="javascript:void(0)" onclick="openPropertyDetailView(${item.id})" class="hmp-pop-link">Xem chi tiết</a>
           </div>
         </div>
@@ -3158,7 +3158,7 @@ function renderCompareTray() {
           <img src="${item.image}" alt="${item.title}">
           <div class="compare-tray-chip-info">
             <div class="compare-tray-chip-title">${item.title}</div>
-            <div class="compare-tray-chip-price tabular-nums">${item.priceText}/thg • ${item.area}m²</div>
+            <div class="compare-tray-chip-price tabular-nums">${item.priceText}/Th • ${item.area}m²</div>
           </div>
           <button type="button" class="compare-tray-remove" onclick="toggleCompare(event, ${item.id})" title="Bỏ chọn">
             <i class="fa-solid fa-xmark"></i>
@@ -6146,7 +6146,7 @@ function switchMemberTab(tabName, btnEl) {
                     <div style="min-width:0;">
                       <strong style="color:#0f172a;display:block;font-size:13px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
                       <div>
-                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg</span>
+                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/Th</span>
                         <small style="color:#64748b;"> • ${p.area}m² • ${p.ward}, ${p.city}</small>
                       </div>
                       <small style="display:block;color:#059669;font-family:monospace;font-size:10.5px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${seoUrl.replace("#", "")}</small>
@@ -6294,7 +6294,7 @@ function switchMemberTab(tabName, btnEl) {
                 <tr>
                   <td><strong>#${p.id}</strong> • ${p.title.slice(0, 38)}...</td>
                   <td><a href="javascript:void(0)" onclick="navigateTo('${wardUrl}')" class="pd-seo-tag-pill">${p.ward}</a></td>
-                  <td><a href="javascript:void(0)" onclick="navigateTo('${priceUrl}')" class="pd-seo-tag-pill">${p.priceText}/thg</a></td>
+                  <td><a href="javascript:void(0)" onclick="navigateTo('${priceUrl}')" class="pd-seo-tag-pill">${p.priceText}/Th</a></td>
                   <td><code style="font-size:11px;color:#059669;background:#f0fdf4;padding:4px 8px;border-radius:6px;display:inline-block;max-width:310px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${seoUrl.replace("#", "")}</code></td>
                   <td>
                     <button type="button" onclick="copyPropertySeoLink(${p.id}, this)" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;">
@@ -6481,7 +6481,7 @@ function switchAdminTab(tabName, btnEl) {
                       <img src="${p.image}" alt="${p.title}" style="width:68px;height:48px;border-radius:8px;object-fit:cover;">
                       <div>
                         <strong style="color:#0f172a;display:block;font-size:13px;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
-                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg • ${p.area}m²</span>
+                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/Th • ${p.area}m²</span>
                         <small style="color:#64748b;"> • ${p.ward}, ${p.city}</small>
                       </div>
                     </div>
@@ -6577,7 +6577,7 @@ function switchAdminTab(tabName, btnEl) {
                     <small style="display:block;color:#64748b;">${p.ward}, ${p.city}</small>
                   </td>
                   <td>
-                    <strong style="color:var(--ctt-orange);">${p.priceText}/thg</strong>
+                    <strong style="color:var(--ctt-orange);">${p.priceText}/Th</strong>
                     <small style="display:block;color:#64748b;">${p.elec} • ${p.water}</small>
                   </td>
                   <td>
