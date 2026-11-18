@@ -1181,13 +1181,13 @@ function updateMapPins(catFilter = "all", focusId = null) {
 
     if (vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
-      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">✦</span>';
+      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ff7b3a;font-size:10px;"></i>';
     } else if (vipInfo.badgeClass === "tag-vip1" || item.mapTier === "vip1" || item.zoneId === 2 || item.tier === "spotlight") {
       pinClass = "pin-vip1";
-      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">✦</span>';
+      pinIconHtml = "";
     } else if (vipInfo.badgeClass === "tag-vip2" || item.mapTier === "vip2" || item.zoneId === 3 || item.tier === "featured") {
       pinClass = "pin-vip2";
-      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">•</span>';
+      pinIconHtml = "";
     } else if (vipInfo.badgeClass === "tag-vip3" || item.mapTier === "vip3" || item.zoneId === 5 || item.tier === "prime") {
       pinClass = "pin-vip3";
       pinIconHtml = "";
