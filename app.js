@@ -1321,50 +1321,45 @@ function openHeroMapLeftDrawer(item) {
   if (item.area) specParts.push(`${item.area} m²`);
   if (item.beds && !String(item.beds).startsWith("0")) specParts.push(item.beds);
   if (item.baths && !String(item.baths).startsWith("0")) specParts.push(item.baths);
-  const specsHtml = specParts.map((s) => `<span style="padding:4px 9px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:11.5px;font-weight:600;color:#334155;">${s}</span>`).join("");
+  const specsHtml = specParts.map((s) => `<span style="padding:2px 7px;border-radius:6px;background:#f8fafc;border:1px solid #e2e8f0;font-size:11px;font-weight:600;color:#334155;">${s}</span>`).join("");
 
   drawer.innerHTML = `
-    <div style="position:relative;height:190px;flex-shrink:0;background:#0f172a;">
+    <div style="position:relative;height:148px;flex-shrink:0;background:#0f172a;">
       <img id="hmdMainImg" src="${photos[0]}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80'">
-      <button type="button" onclick="closeHeroMapLeftDrawer()" title="Đóng bảng thông tin" style="position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(15,23,42,0.82);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <button type="button" onclick="closeHeroMapLeftDrawer()" title="Đóng bảng thông tin" style="position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(15,23,42,0.82);color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
         <i class="fa-solid fa-xmark"></i>
       </button>
-      ${vip.label ? `<span class="lc-vip-tag ${vip.badgeClass}" style="position:absolute;top:10px;left:10px;font-size:10px;padding:3px 9px;">${vip.label}</span>` : ""}
+      ${vip.label ? `<span class="lc-vip-tag ${vip.badgeClass}" style="position:absolute;top:8px;left:8px;font-size:9.5px;padding:2px 8px;">${vip.label}</span>` : ""}
     </div>
     ${photos.length > 1 ? `
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 16px 0;">
-        ${photos.map((src) => `<img src="${src}" onclick="document.getElementById('hmdMainImg').src=this.src" style="width:100%;height:44px;object-fit:cover;border-radius:7px;cursor:pointer;border:1px solid #e2e8f0;">`).join("")}
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px 14px 0;">
+        ${photos.map((src) => `<img src="${src}" onclick="document.getElementById('hmdMainImg').src=this.src" style="width:100%;height:34px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid #e2e8f0;">`).join("")}
       </div>
     ` : ""}
     <div class="hero-map-left-drawer-body">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;">
-        <div class="tabular-nums" style="font-size:20px;font-weight:900;color:var(--ctt-orange);">${item.priceText} <span style="font-size:12px;font-weight:500;color:#64748b;">| Tháng</span></div>
-        <span style="font-size:11px;font-weight:700;color:#475569;background:#f8fafc;border:1px solid #e2e8f0;padding:2px 8px;border-radius:99px;">${item.categoryLabel}</span>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:4px;">
+        <div class="tabular-nums" style="font-size:18px;font-weight:900;color:var(--ctt-orange);">${item.priceText} <span style="font-size:11.5px;font-weight:500;color:#64748b;">| Tháng</span></div>
+        <span style="font-size:10.5px;font-weight:700;color:#475569;background:#f8fafc;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;">${item.categoryLabel}</span>
       </div>
-      <h3 style="font-size:15px;font-weight:800;color:#0f172a;line-height:1.35;margin:0 0 8px;">${item.title}</h3>
-      <div style="font-size:12px;color:#64748b;margin-bottom:10px;display:flex;align-items:flex-start;gap:6px;">
-        <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-top:2px;"></i>
-        <span>${item.fullAddress || `${item.ward}, ${item.city}`}</span>
+      <h3 style="font-size:14px;font-weight:800;color:#0f172a;line-height:1.3;margin:0 0 5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.title}</h3>
+      <div style="font-size:11.5px;color:#64748b;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+        <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:4px;"></i>${item.fullAddress || `${item.ward}, ${item.city}`}
       </div>
-      ${specsHtml ? `<div class="tabular-nums" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">${specsHtml}</div>` : ""}
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:11.5px;color:#475569;margin-bottom:12px;" class="tabular-nums">
-        <div><span style="color:#94a3b8;display:block;font-size:10px;">Điện</span><strong>${item.elec || "Nhà nước"}</strong></div>
-        <div><span style="color:#94a3b8;display:block;font-size:10px;">Nước</span><strong>${item.water || "Nhà nước"}</strong></div>
-        <div><span style="color:#94a3b8;display:block;font-size:10px;">Khác</span><strong>${item.otherCost || "--"}</strong></div>
+      ${specsHtml ? `<div class="tabular-nums" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">${specsHtml}</div>` : ""}
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 9px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;font-size:11px;color:#475569;margin-bottom:8px;" class="tabular-nums">
+        <div><span style="color:#94a3b8;font-size:10px;">Điện:</span> <strong>${item.elec || "Nhà nước"}</strong></div>
+        <div><span style="color:#94a3b8;font-size:10px;">Nước:</span> <strong>${item.water || "Nhà nước"}</strong></div>
+        <div><span style="color:#94a3b8;font-size:10px;">Khác:</span> <strong>${item.otherCost || "--"}</strong></div>
       </div>
-      <p style="font-size:12.5px;color:#475569;line-height:1.5;margin:0 0 14px;">${item.desc || ""}</p>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fffaf5;border:1px solid #fed7aa;border-radius:10px;margin-bottom:12px;">
-        <div>
-          <div style="font-size:10.5px;color:#64748b;">Liên hệ chính chủ</div>
-          <strong style="font-size:13px;color:#0f172a;">${item.host || "Chính chủ"}</strong>
-        </div>
-        <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="padding:6px 12px;border-radius:8px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">
+      ${item.desc ? `<p style="font-size:11.5px;color:#64748b;line-height:1.4;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${item.desc}</p>` : ""}
+      <div style="display:flex;align-items:center;gap:8px;">
+        <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="padding:9px 11px;border-radius:9px;background:#0f172a;color:#fff;font-size:11.5px;font-weight:700;text-decoration:none;white-space:nowrap;">
           <i class="fa-solid fa-phone" style="color:var(--ctt-orange);margin-right:4px;"></i>${item.phone || ""}
         </a>
+        <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="flex:1;padding:9px 10px;border:none;border-radius:9px;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+          Xem Chi Tiết <i class="fa-solid fa-arrow-right" style="margin-left:3px;"></i>
+        </button>
       </div>
-      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="width:100%;padding:11px;border:none;border-radius:10px;background:var(--ctt-grad-brand);color:#fff;font-size:13px;font-weight:800;cursor:pointer;">
-        Xem Chi Tiết Bài Viết <i class="fa-solid fa-arrow-right" style="margin-left:4px;"></i>
-      </button>
     </div>
   `;
   drawer.classList.add("is-open");
