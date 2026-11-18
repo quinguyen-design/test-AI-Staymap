@@ -1160,12 +1160,20 @@ function updateMapPins(catFilter = "all", focusId = null) {
   if (!heroMapInstance || !heroMarkersLayer) return;
   heroMarkersLayer.clearLayers();
 
-  const list = PROPERTIES.filter((p) => {
+  const rawPool = PROPERTIES.filter((p) => {
     // Hạng 6: Tin miễn phí không hiển thị trên bản đồ
     if (p.tier === "free" || p.mapTier === "free" || p.zoneId === 13) return false;
     if (catFilter === "all") return true;
     return p.category === catFilter;
-  }).slice(0, 140);
+  });
+  const banners = rawPool.filter((p) => p.isVipPin || p.mapTier === "banner" || p.zoneId === 1).slice(0, 20);
+  const vips = rawPool.filter((p) => !banners.includes(p) && p.tier !== "basic" && p.mapTier !== "basic" && p.zoneId !== 4).slice(0, 75);
+  const basics = rawPool.filter((p) => p.tier === "basic" || p.mapTier === "basic" || p.zoneId === 4).slice(0, 65);
+  const list = [...basics, ...vips, ...banners];
+  if (focusId) {
+    const focusObj = rawPool.find((p) => Number(p.id) === Number(focusId));
+    if (focusObj && !list.includes(focusObj)) list.push(focusObj);
+  }
 
   const bounds = [];
 
@@ -5788,14 +5796,22 @@ const PORTAL_DATA = {
 
 // Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/Aribnb listings
 (function enrichPropertiesAndPortals() {
-  if (Array.isArray(window.IMPORTED_CHOTHUETOT_LISTINGS) && window.IMPORTED_CHOTHUETOT_LISTINGS.length > 0) {
-    const existingIds = new Set(PROPERTIES.map((p) => p.id));
-    window.IMPORTED_CHOTHUETOT_LISTINGS.forEach((item) => {
-      if (!existingIds.has(item.id)) {
-        PROPERTIES.push(item);
-      }
-    });
-  }
+  const importedBatches = [
+    window.IMPORTED_CHOTHUETOT_LISTINGS,
+    window.IMPORTED_CHOTHUETOT_4000_A,
+    window.IMPORTED_CHOTHUETOT_4000_B
+  ];
+  const existingIds = new Set(PROPERTIES.map((p) => p.id));
+  importedBatches.forEach((batch) => {
+    if (Array.isArray(batch) && batch.length > 0) {
+      batch.forEach((item) => {
+        if (!existingIds.has(item.id)) {
+          existingIds.add(item.id);
+          PROPERTIES.push(item);
+        }
+      });
+    }
+  });
   const poolPhotos = [
     "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
     "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
