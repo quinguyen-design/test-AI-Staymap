@@ -3615,13 +3615,15 @@ function selectStudioCategory(catKey, catLabel, btnEl) {
 function sanitizeStudioVnPhone(inputEl) {
   const digits = (inputEl.value || "").replace(/\D/g, "").slice(0, 10);
   inputEl.value = digits;
+  const isValid = /^0(3|5|7|8|9)\d{8}$/.test(digits);
   const statusEl = document.getElementById("dPhoneStatus");
+  const iconEl = document.getElementById("dPhoneValidIcon");
+  if (iconEl) {
+    iconEl.style.display = isValid ? "inline-flex" : "none";
+  }
   if (statusEl) {
-    if (!digits) {
+    if (!digits || isValid) {
       statusEl.textContent = "";
-    } else if (/^0(3|5|7|8|9)\d{8}$/.test(digits)) {
-      statusEl.textContent = "✓ Hợp lệ";
-      statusEl.style.color = "#059669";
     } else {
       statusEl.textContent = "10 số (03/05/07/08/09)";
       statusEl.style.color = "#dc2626";

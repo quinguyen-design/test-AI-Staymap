@@ -1127,7 +1127,10 @@
                     <span>Số Điện Thoại / Zalo <span class="req-star">*</span></span>
                     <small id="dPhoneStatus" style="font-size:10.5px;font-weight:700;"></small>
                   </div>
-                  <input type="tel" inputmode="numeric" maxlength="10" id="dPhone" class="post-input tabular-nums" value="" oninput="sanitizeStudioVnPhone(this)">
+                  <div style="position:relative;display:flex;align-items:center;">
+                    <input type="tel" inputmode="numeric" maxlength="10" id="dPhone" class="post-input tabular-nums" style="padding-right:34px;" value="" oninput="sanitizeStudioVnPhone(this)">
+                    <span id="dPhoneValidIcon" style="position:absolute;right:12px;color:var(--ctt-orange);font-size:14px;font-weight:900;display:none;pointer-events:none;" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1799,6 +1802,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118g"></script>
+  <script src="app.js?v=20261118h"></script>
 </body>
 </html>
