@@ -1165,7 +1165,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
     if (p.tier === "free" || p.mapTier === "free" || p.zoneId === 13) return false;
     if (catFilter === "all") return true;
     return p.category === catFilter;
-  });
+  }).slice(0, 140);
 
   const bounds = [];
 
@@ -2141,16 +2141,19 @@ function renderAllHomeGrids() {
 
   if (spotlightGrid) {
     spotlightGrid.innerHTML = PROPERTIES.filter((p) => p.tier === "spotlight")
+      .slice(0, 8)
       .map(buildListingCardHTML)
       .join("");
   }
   if (featuredGrid) {
     featuredGrid.innerHTML = PROPERTIES.filter((p) => p.tier === "featured")
+      .slice(0, 8)
       .map(buildListingCardHTML)
       .join("");
   }
   if (primeGrid) {
     primeGrid.innerHTML = PROPERTIES.filter((p) => p.tier === "prime")
+      .slice(0, 8)
       .map(buildListingCardHTML)
       .join("");
   }
@@ -5785,6 +5788,14 @@ const PORTAL_DATA = {
 
 // Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/Aribnb listings
 (function enrichPropertiesAndPortals() {
+  if (Array.isArray(window.IMPORTED_CHOTHUETOT_LISTINGS) && window.IMPORTED_CHOTHUETOT_LISTINGS.length > 0) {
+    const existingIds = new Set(PROPERTIES.map((p) => p.id));
+    window.IMPORTED_CHOTHUETOT_LISTINGS.forEach((item) => {
+      if (!existingIds.has(item.id)) {
+        PROPERTIES.push(item);
+      }
+    });
+  }
   const poolPhotos = [
     "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
     "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
