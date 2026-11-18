@@ -3594,7 +3594,7 @@ const STUDIO_STATE = {
   isEditingAddress: false,
   addrMergeTimer: null,
   selectedZoneId: null,
-  selectedDays: 7,
+  selectedDays: 15,
   aiAutoSync: false,
   selectedSticker: null,
   coverIndex: 0,
@@ -4584,7 +4584,17 @@ function pickStudioZone(id) {
   if (id === 13) {
     STUDIO_STATE.selectedDays = 3;
     STUDIO_STATE.selectedSticker = null;
+    STUDIO_STATE.promoCode = "";
+    const promoEl = document.getElementById("dPromoCode");
+    if (promoEl) promoEl.value = "";
+    const promoStatusEl = document.getElementById("promoCodeStatus");
+    if (promoStatusEl) promoStatusEl.textContent = "";
+    syncStudioPromoUI(false);
+  } else {
+    STUDIO_STATE.selectedDays = 15;
   }
+  const promoWrap = document.getElementById("promoCodeWrap");
+  if (promoWrap) promoWrap.style.display = id === 13 ? "none" : "block";
   renderStudioZoneCleanSelector();
   const hint = document.getElementById("zonePickHint");
   const durWrap = document.getElementById("durationSectionWrap");
@@ -4626,6 +4636,8 @@ function renderStudioStickers() {
   const noSticker = STUDIO_STATE.selectedZoneId === 13;
   const wrap = document.getElementById("stickerSectionWrap");
   if (wrap) wrap.style.display = noSticker ? "none" : "block";
+  const promoWrap = document.getElementById("promoCodeWrap");
+  if (promoWrap) promoWrap.style.display = noSticker ? "none" : "block";
   if (noSticker) return;
 
   const totalSticker = STUDIO_STATE.selectedDays * 1000;
