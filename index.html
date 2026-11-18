@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118ac">
+  <link rel="stylesheet" href="styles.css?v=20261118ao">
 </head>
 <body>
 
@@ -168,19 +168,20 @@
           </button>
         </div>
 
-        <!-- Upgraded Wide 2-Column Mega Search Dropdown (Synced 1:1 with Post Listing Schema) -->
+        <!-- Upgraded Horizontal Wide Mega Search Dropdown (Synced 1:1 with Post Listing Schema) -->
         <div class="hsp-panel" id="hspMegaPanel">
           <div class="hsp-panel-header">
             <div class="hsp-panel-title">
               <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>BỘ LỌC TÌM KIẾM CÔNG NGHỆ CAO</span>
+              <span>Bộ lọc tìm kiếm thông minh</span>
             </div>
-            <span id="megaLiveMatchBadge" class="tabular-nums" style="font-size:11.5px;color:var(--ctt-orange);background:#fffaf5;border:1px solid rgba(241,90,34,0.3);padding:4px 10px;border-radius:99px;font-weight:800;">Đồng bộ dữ liệu Đăng Tin</span>
+            <span id="megaLiveMatchBadge" class="tabular-nums" style="font-size:11.5px;color:var(--ctt-orange);background:#fffaf5;border:1px solid rgba(241,90,34,0.22);padding:3px 10px;border-radius:99px;font-weight:600;">Đồng bộ dữ liệu Đăng Tin</span>
           </div>
 
+          <!-- Row 1: 6 Categories Horizontal Strip -->
           <div style="margin-bottom:14px;">
-            <div class="hsp-sec-title"><span><i class="fa-solid fa-layer-group"></i> Loại hình bất động sản (6 danh mục)</span></div>
-            <div id="megaCatPills" style="display:flex;flex-wrap:wrap;gap:6px;">
+            <div class="hsp-sec-title"><span>Loại hình bất động sản</span></div>
+            <div id="megaCatPills" style="display:flex;flex-wrap:wrap;gap:7px;">
               <button type="button" class="hsp-q-pill active" onclick="pickMegaCat('all', this)">Tất cả</button>
               <button type="button" class="hsp-q-pill" onclick="pickMegaCat('phong-tro', this)">Phòng trọ / CHDV</button>
               <button type="button" class="hsp-q-pill" onclick="pickMegaCat('nha-o', this)">Nhà nguyên căn</button>
@@ -192,60 +193,60 @@
             <input type="hidden" id="megaCatSelect" value="all">
           </div>
 
-          <div class="hsp-grid-2col">
-            <!-- Col 1: 2x2 Location Synced (City, Ward, Street, Project) + Specs -->
+          <!-- Row 2: 4-Column Horizontal Location Bar (City, Ward, Street, Project) -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
             <div>
-              <div class="hsp-sec-title"><span><i class="fa-solid fa-location-dot"></i> Khu vực &amp; Dự án chuẩn</span></div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-                <div>
-                  <label for="megaCitySelect" style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Tỉnh / Thành</label>
-                  <select id="megaCitySelect" class="hsp-select" onchange="onMegaCityChange()">
-                    <option value="all">Tất cả Tỉnh / Thành</option>
-                    <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
-                    <option value="TP. Hà Nội">TP. Hà Nội</option>
-                    <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
-                    <option value="Bình Dương">Bình Dương</option>
-                    <option value="Đồng Nai">Đồng Nai</option>
-                    <option value="TP. Cần Thơ">TP. Cần Thơ</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="megaWardSelect" style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Phường / Xã</label>
-                  <select id="megaWardSelect" class="hsp-select" onchange="onMegaWardChange()">
-                    <option value="all">Tất cả Phường / Xã</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="megaStreetSelect" style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Tên Đường</label>
-                  <select id="megaStreetSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                    <option value="all">Tất cả Tên Đường</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="megaProjectSelect" style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Dự Án</label>
-                  <select id="megaProjectSelect" class="hsp-select" onchange="onMegaProjectChange()">
-                    <option value="all">Tất cả Dự Án</option>
-                  </select>
-                </div>
-              </div>
+              <label for="megaCitySelect" class="hsp-sec-title" style="margin-bottom:5px;">Tỉnh / Thành</label>
+              <select id="megaCitySelect" class="hsp-select" onchange="onMegaCityChange()">
+                <option value="all">Tất cả Tỉnh / Thành</option>
+                <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
+                <option value="TP. Hà Nội">TP. Hà Nội</option>
+                <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
+                <option value="Bình Dương">Bình Dương</option>
+                <option value="Đồng Nai">Đồng Nai</option>
+                <option value="TP. Cần Thơ">TP. Cần Thơ</option>
+              </select>
+            </div>
+            <div>
+              <label for="megaWardSelect" class="hsp-sec-title" style="margin-bottom:5px;">Phường / Xã</label>
+              <select id="megaWardSelect" class="hsp-select" onchange="onMegaWardChange()">
+                <option value="all">Tất cả Phường / Xã</option>
+              </select>
+            </div>
+            <div>
+              <label for="megaStreetSelect" class="hsp-sec-title" style="margin-bottom:5px;">Tên Đường</label>
+              <select id="megaStreetSelect" class="hsp-select" onchange="updateMegaLiveCount()">
+                <option value="all">Tất cả Tên Đường</option>
+              </select>
+            </div>
+            <div>
+              <label for="megaProjectSelect" class="hsp-sec-title" style="margin-bottom:5px;">Dự Án</label>
+              <select id="megaProjectSelect" class="hsp-select" onchange="onMegaProjectChange()">
+                <option value="all">Tất cả Dự Án</option>
+              </select>
+            </div>
+          </div>
 
-              <div class="hsp-sec-title"><span><i class="fa-solid fa-sliders"></i> Nội thất, Phòng ngủ &amp; Hướng nhà</span></div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <!-- Row 3: Horizontal Specs (3 cols) + Price Slider + Area Slider -->
+          <div style="display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:14px;margin-bottom:14px;padding:12px 14px;background:#f8fafc;border-radius:12px;border:1px solid #f1f5f9;">
+            <div>
+              <div class="hsp-sec-title"><span>Thông số căn / phòng</span></div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;">
                 <select id="megaFurnitureSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Mọi nội thất</option>
+                  <option value="all">Nội thất</option>
                   <option value="Đầy Đủ">Đầy Đủ</option>
                   <option value="Cơ Bản">Cơ Bản</option>
                   <option value="Không Có">Không Có</option>
                 </select>
                 <select id="megaBedsSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Mọi số PN</option>
+                  <option value="all">Số PN</option>
                   <option value="1 PN">1 PN</option>
                   <option value="2 PN">2 PN</option>
                   <option value="3 PN">3 PN</option>
                   <option value="4+ PN">4+ PN</option>
                 </select>
                 <select id="megaDirectionSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Mọi hướng</option>
+                  <option value="all">Hướng</option>
                   <option value="Đông">Đông</option>
                   <option value="Tây">Tây</option>
                   <option value="Nam">Nam</option>
@@ -258,53 +259,51 @@
               </div>
             </div>
 
-            <!-- Col 2: Price Slider, Area Slider & Synced Amenities -->
             <div>
-              <div style="margin-bottom:12px;">
-                <div class="hsp-sec-title">
-                  <span><i class="fa-solid fa-tags"></i> Mức giá thuê tối đa</span>
-                  <span class="hsp-range-val tabular-nums" id="megaPriceLabel">Tất cả mức giá</span>
-                </div>
-                <input type="range" id="megaPriceRange" class="hsp-range-slider" min="1" max="50" value="50" oninput="updateMegaSliderLabels()">
-                <div class="hsp-quick-pills">
-                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(3.5, this)">&lt; 3.5 Triệu</button>
-                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(7, this)">Dưới 7 Triệu</button>
-                  <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(15, this)">Dưới 15 Triệu</button>
-                  <button type="button" class="hsp-q-pill active" onclick="setQuickPriceFilter(50, this)">Tất cả giá</button>
-                </div>
+              <div class="hsp-sec-title">
+                <span>Mức giá tối đa</span>
+                <span class="hsp-range-val tabular-nums" id="megaPriceLabel">Tất cả mức giá</span>
               </div>
-
-              <div style="margin-bottom:12px;">
-                <div class="hsp-sec-title">
-                  <span><i class="fa-solid fa-maximize"></i> Diện tích tối thiểu</span>
-                  <span class="hsp-range-val tabular-nums" id="megaAreaLabel">Tất cả diện tích</span>
-                </div>
-                <input type="range" id="megaAreaRange" class="hsp-range-slider" min="0" max="200" step="5" value="0" oninput="updateMegaSliderLabels()">
-                <div class="hsp-quick-pills">
-                  <button type="button" class="hsp-q-pill active" onclick="setQuickAreaFilter(0, this)">Tất cả</button>
-                  <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(20, this)">≥ 20 m²</button>
-                  <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(35, this)">≥ 35 m²</button>
-                  <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(60, this)">≥ 60 m²</button>
-                </div>
+              <input type="range" id="megaPriceRange" class="hsp-range-slider" min="1" max="50" value="50" oninput="updateMegaSliderLabels()">
+              <div class="hsp-quick-pills">
+                <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(3.5, this)">&lt; 3.5Tr</button>
+                <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(7, this)">&lt; 7Tr</button>
+                <button type="button" class="hsp-q-pill" onclick="setQuickPriceFilter(15, this)">&lt; 15Tr</button>
+                <button type="button" class="hsp-q-pill active" onclick="setQuickPriceFilter(50, this)">Tất cả</button>
               </div>
+            </div>
 
-              <div>
-                <div class="hsp-sec-title"><span><i class="fa-solid fa-check-double"></i> Tiện ích &amp; Dịch vụ (Đồng bộ Đăng Tin)</span></div>
-                <div class="hsp-checks-grid">
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Trường học" onchange="updateMegaLiveCount()"> Trường Học</label>
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Chợ / Siêu Thị" onchange="updateMegaLiveCount()"> Chợ / Siêu Thị</label>
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Bệnh Viện" onchange="updateMegaLiveCount()"> Bệnh Viện</label>
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Thang Máy" onchange="updateMegaLiveCount()"> Thang Máy</label>
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Bảo Vệ" onchange="updateMegaLiveCount()"> Bảo Vệ / Cam</label>
-                  <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Nhà Xe" onchange="updateMegaLiveCount()"> Nhà Xe / Hầm</label>
-                </div>
+            <div>
+              <div class="hsp-sec-title">
+                <span>Diện tích tối thiểu</span>
+                <span class="hsp-range-val tabular-nums" id="megaAreaLabel">Tất cả diện tích</span>
+              </div>
+              <input type="range" id="megaAreaRange" class="hsp-range-slider" min="0" max="200" step="5" value="0" oninput="updateMegaSliderLabels()">
+              <div class="hsp-quick-pills">
+                <button type="button" class="hsp-q-pill active" onclick="setQuickAreaFilter(0, this)">Tất cả</button>
+                <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(20, this)">≥ 20m²</button>
+                <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(35, this)">≥ 35m²</button>
+                <button type="button" class="hsp-q-pill" onclick="setQuickAreaFilter(60, this)">≥ 60m²</button>
               </div>
             </div>
           </div>
 
-          <!-- Landmark / Metro / University Proximity Quick Filter -->
+          <!-- Row 4: 6-Column Horizontal Utilities -->
+          <div style="margin-bottom:12px;">
+            <div class="hsp-sec-title"><span>Tiện ích &amp; Dịch vụ</span></div>
+            <div class="hsp-checks-grid">
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Trường học" onchange="updateMegaLiveCount()"> Trường Học</label>
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Chợ / Siêu Thị" onchange="updateMegaLiveCount()"> Chợ / Siêu Thị</label>
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Bệnh Viện" onchange="updateMegaLiveCount()"> Bệnh Viện</label>
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Thang Máy" onchange="updateMegaLiveCount()"> Thang Máy</label>
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Bảo Vệ" onchange="updateMegaLiveCount()"> Bảo Vệ / Cam</label>
+              <label class="hsp-check-item"><input type="checkbox" class="mega-util-chk" value="Nhà Xe" onchange="updateMegaLiveCount()"> Nhà Xe / Hầm</label>
+            </div>
+          </div>
+
+          <!-- Row 5: Landmark Proximity Horizontal Strip -->
           <div class="landmark-pills-row">
-            <span style="font-size:11.5px;font-weight:800;color:#0f172a;"><i class="fa-solid fa-compass" style="color:var(--ctt-orange);margin-right:4px;"></i> Điểm mốc (&lt; 2.5km):</span>
+            <span style="font-size:11.5px;font-weight:600;color:#64748b;"><i class="fa-solid fa-compass" style="color:var(--ctt-orange);margin-right:4px;"></i> Điểm mốc (&lt; 2.5km):</span>
             <button type="button" class="landmark-pill" onclick="filterByLandmark('metro', this)">
               <i class="fa-solid fa-train-subway"></i> Ga Metro Bến Thành - Suối Tiên
             </button>
@@ -1857,6 +1856,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118an"></script>
+  <script src="app.js?v=20261118ao"></script>
 </body>
 </html>
