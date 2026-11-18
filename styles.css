@@ -508,6 +508,8 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.pin-vip-banner .hmp-pill {
+  position: relative;
+  z-index: 1;
   background: linear-gradient(#000000, #000000), linear-gradient(135deg, #f15a22 0%, #ff9d00 100%);
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -518,7 +520,16 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.pin-vip-banner .hmp-pin-tail {
-  border-top-color: #f15a22;
+  width: 9px;
+  height: 9px;
+  background: #000000;
+  border: none;
+  border-right: 2px solid #ff9d00;
+  border-bottom: 2px solid #f87c11;
+  transform: rotate(45deg);
+  margin-top: -6px;
+  position: relative;
+  z-index: 2;
 }
 
 /* 2. VIP 1, 2, 3 & TIN THƯỜNG — Nền trắng chữ đen */
