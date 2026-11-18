@@ -570,7 +570,7 @@ button, input, select, textarea, .leaflet-container {
   border: 1.5px solid #cbd5e1;
   color: #0f172a;
   font-weight: 700;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.14);
+  box-shadow: none;
 }
 
 .hmp-marker.pin-vip1 .hmp-pin-tail,
@@ -3348,7 +3348,11 @@ button, input, select, textarea, .leaflet-container {
   background: #ffffff !important;
   color: #f15a22 !important;
   border-color: #f15a22 !important;
-  box-shadow: 0 8px 20px rgba(241, 90, 34, 0.26) !important;
+  box-shadow: none !important;
+}
+
+.hmp-marker.pin-basic.is-hovered .hmp-pill {
+  box-shadow: none !important;
 }
 
 .hmp-marker.pin-vip1.is-hovered .hmp-pill i,
