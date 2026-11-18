@@ -161,7 +161,7 @@
           <!-- Segment 1: Location / Project Autocomplete -->
           <div class="hsp-seg-field hsp-seg-loc" onclick="openSegPopover('loc', event)">
             <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Dự án</span>
-            <input type="text" id="hspSearchInput" name="ctt_search_loc_q" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="new-password" data-lpignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
+            <input type="search" id="hspSearchInput" name="ctt_search_loc_q" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" data-lpignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
             <div class="hsp-seg-popover" id="segLocPopover" style="min-width:320px;" onclick="event.stopPropagation()"></div>
           </div>
 
@@ -1879,6 +1879,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118ar"></script>
+  <script src="app.js?v=20261118as"></script>
 </body>
 </html>
