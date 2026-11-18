@@ -708,6 +708,32 @@ button, input, select, textarea, .leaflet-container {
   overflow: hidden;
 }
 
+.hero-map-popup.is-vip-banner .hmp-pop-thumb {
+  height: 94px;
+}
+
+.hmp-pop-loc {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.hmp-pop-loc span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hmp-pop-loc i {
+  color: var(--ctt-orange);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
 .hmp-pop-footer {
   display: flex;
   align-items: center;

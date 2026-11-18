@@ -1226,11 +1226,15 @@ function updateMapPins(catFilter = "all", focusId = null) {
     });
 
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
+    const isBanner = vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1;
+    const bannerLocText = isBanner
+      ? [item.ward, item.city].filter(Boolean).map((s) => s.toUpperCase()).join(", ")
+      : "";
     const vipTagHtml = vipInfo.label
       ? `<span class="lc-vip-tag hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
       : "";
     marker.bindPopup(`
-      <div class="hero-map-popup" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">
+      <div class="hero-map-popup ${isBanner ? "is-vip-banner" : ""}" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">
         <div class="hmp-pop-top">
           <div class="hmp-pop-thumb">
             <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
@@ -1242,6 +1246,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
               <span class="hmp-pop-price-unit">| Tháng</span>
             </div>
             <div class="hmp-pop-title">${item.title}</div>
+            ${bannerLocText ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${bannerLocText}</span></div>` : ""}
           </div>
         </div>
         <div class="hmp-pop-footer">
