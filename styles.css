@@ -3315,7 +3315,7 @@ button, input, select, textarea, .leaflet-container {
   z-index: 9999 !important;
 }
 
-.hmp-marker.is-hovered .hmp-pill {
+.hmp-marker.is-hovered:not(.pin-basic) .hmp-pill {
   background: var(--ctt-grad-brand) !important;
   color: #ffffff !important;
   border-color: #f15a22 !important;
@@ -3326,7 +3326,7 @@ button, input, select, textarea, .leaflet-container {
   color: #000000 !important;
 }
 
-.hmp-marker.is-hovered .hmp-pin-tail {
+.hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail {
   border-top-color: var(--ctt-orange) !important;
   background: var(--ctt-orange) !important;
   border-right-color: var(--ctt-orange) !important;
