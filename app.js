@@ -4708,7 +4708,7 @@ function renderStudioStickers() {
   grid.innerHTML = STUDIO_STICKERS.map((st) => `
     <button type="button" class="sticker-card ${STUDIO_STATE.selectedSticker === st.id ? "selected" : ""}" onclick="pickStudioSticker('${st.id}')">
       <span class="sticker-pill ${st.cls}" style="margin-bottom:6px;"><i class="fa-solid ${st.icon}"></i> ${st.name}</span>
-      <div class="tabular-nums" style="font-size:11.5px;font-weight:700;color:#475569;">+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ <small style="font-weight:500;color:#94a3b8;">(1k/ngày)</small></div>
+      <div class="tabular-nums" style="font-size:11.5px;font-weight:700;color:#475569;">+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ</div>
       <div style="font-size:10.5px;color:#64748b;margin-top:3px;line-height:1.3;">${st.hint}</div>
     </button>
   `).join("");
