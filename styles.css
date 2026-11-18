@@ -655,14 +655,16 @@ button, input, select, textarea, .leaflet-container {
 
 .lc-vip-tag.hmp-pop-vip {
   position: absolute;
-  top: 6px;
-  left: 6px;
-  font-size: 9px;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.02em;
-  padding: 2px 6px;
+  padding: 1.5px 6px;
   border-radius: 999px;
-  line-height: 1.2;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .hmp-pop-body {
