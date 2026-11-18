@@ -574,6 +574,10 @@ button, input, select, textarea, .leaflet-container {
   width: 336px !important;
 }
 
+.ctt-compact-map-popup .leaflet-popup-tip-container {
+  display: none;
+}
+
 .ctt-compact-map-popup .leaflet-popup-close-button {
   top: 6px !important;
   right: 6px !important;
