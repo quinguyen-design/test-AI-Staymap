@@ -502,6 +502,29 @@ button, input, select, textarea, .leaflet-container {
   transition: all 0.2s ease;
 }
 
+.hmp-pin-tail {
+  position: relative;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #cbd5e1;
+}
+
+.hmp-pin-tail::after {
+  content: "";
+  position: absolute;
+  left: -4.5px;
+  top: -7.5px;
+  width: 0;
+  height: 0;
+  border-left: 4.5px solid transparent;
+  border-right: 4.5px solid transparent;
+  border-top: 5.5px solid #ffffff;
+}
+
 /* 1. VIP BANNER — Icon vương miện, nền Đen, viền cam, chữ cam sáng, có đổ bóng */
 .hmp-marker.pin-vip-banner {
   z-index: 50;
@@ -520,16 +543,11 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.pin-vip-banner .hmp-pin-tail {
-  width: 9px;
-  height: 9px;
-  background: #000000;
-  border: none;
-  border-right: 2px solid #ff9d00;
-  border-bottom: 2px solid #f87c11;
-  transform: rotate(45deg);
-  margin-top: -6px;
-  position: relative;
-  z-index: 2;
+  border-top-color: #f87c11;
+}
+
+.hmp-marker.pin-vip-banner .hmp-pin-tail::after {
+  border-top-color: #000000;
 }
 
 /* 2. VIP 1, 2, 3 & TIN THƯỜNG — Nền trắng chữ đen */
@@ -560,25 +578,15 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.pin-vip3 .hmp-pin-tail,
 .hmp-marker.pin-vip-star .hmp-pin-tail,
 .hmp-marker.pin-basic .hmp-pin-tail {
-  width: 9px;
-  height: 9px;
-  background: #ffffff;
-  border: none;
-  border-right: 1.5px solid #cbd5e1;
-  border-bottom: 1.5px solid #cbd5e1;
-  transform: rotate(45deg);
-  margin-top: -5.5px;
-  position: relative;
-  z-index: 2;
+  border-top-color: #cbd5e1;
 }
 
-.hmp-pin-tail {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 7px solid #ffffff;
-  margin-top: -1px;
+.hmp-marker.pin-vip1 .hmp-pin-tail::after,
+.hmp-marker.pin-vip2 .hmp-pin-tail::after,
+.hmp-marker.pin-vip3 .hmp-pin-tail::after,
+.hmp-marker.pin-vip-star .hmp-pin-tail::after,
+.hmp-marker.pin-basic .hmp-pin-tail::after {
+  border-top-color: #ffffff;
 }
 
 /* Luxury Compact Map Popup Card (.hero-map-popup) */
@@ -3327,10 +3335,11 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail {
-  background: var(--ctt-grad-brand) !important;
   border-top-color: #f15a22 !important;
-  border-right-color: #f15a22 !important;
-  border-bottom-color: #f15a22 !important;
+}
+
+.hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail::after {
+  border-top-color: #f87c11 !important;
 }
 
 /* Landmark Proximity Filter Pills */
