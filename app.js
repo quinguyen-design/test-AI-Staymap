@@ -1566,7 +1566,7 @@ function buildListingCardHTML(item) {
         <div class="lc-utility-bar demo-utility-bar">
           <span>Điện: ${item.elec}</span>
           <span>Nước: ${item.water}</span>
-          <span>${item.otherCost ? `Khác: ${item.otherCost}` : "Chính chủ"}</span>
+          <span>${item.otherCost ? `Chi Phí Khác: ${item.otherCost}` : "Chính chủ"}</span>
         </div>
 
         <div class="lc-card-footer">
@@ -4283,7 +4283,7 @@ function renderStudioPreview() {
             <div class="lc-utility-bar demo-utility-bar">
               <span>Điện: ${elec}</span>
               <span>Nước: ${water}</span>
-              <span>Khác: ${otherCost}</span>
+              <span>Chi Phí Khác: ${otherCost}</span>
             </div>
             <div class="lc-card-footer">
               <div class="lc-card-addr">
