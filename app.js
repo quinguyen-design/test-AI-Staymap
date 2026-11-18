@@ -1225,7 +1225,8 @@ function updateMapPins(catFilter = "all", focusId = null) {
           <div class="hmp-pin-tail"></div>
         </div>
       `,
-      iconAnchor: [0, 0]
+      iconAnchor: [0, 0],
+      popupAnchor: [0, -46]
     });
 
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
@@ -1271,7 +1272,12 @@ function updateMapPins(catFilter = "all", focusId = null) {
           <button type="button" class="hmp-pop-more" onclick="event.stopPropagation(); expandMapFromCompactPopup(${item.id});">Xem Thêm <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
-    `, { maxWidth: 356, className: "ctt-compact-map-popup" });
+    `, {
+      maxWidth: 356,
+      className: "ctt-compact-map-popup",
+      autoPanPaddingTopLeft: [24, 92],
+      autoPanPaddingBottomRight: [24, 64]
+    });
 
     marker.on("click", () => {
       const heroEl = document.getElementById("siteHeaderHero");
