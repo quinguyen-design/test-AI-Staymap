@@ -5660,7 +5660,7 @@ function publishStudioListingNow() {
     status: "Đã xuất hóa đơn VAT"
   });
 
-  const newId = Math.max(...PROPERTIES.map((p) => p.id)) + 1;
+  const newId = PROPERTIES.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0) + 1;
   const priceNum = parseFloat(document.getElementById("dPrice")?.value || "6.5");
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
@@ -5697,7 +5697,9 @@ function publishStudioListingNow() {
     category: STUDIO_STATE.catKey,
     categoryLabel: STUDIO_STATE.catLabel,
     title: (document.getElementById("dTitle")?.value.trim() || "CĂN HỘ MỚI ĐĂNG").slice(0, 70),
+    desc: document.getElementById("dDesc")?.value.trim() || "",
     description: document.getElementById("dDesc")?.value.trim() || "",
+    project: getValidStudioComboValue("project") || "",
     price: priceNum,
     priceMillion: priceNum,
     priceText: `${priceNum} Triệu`,
@@ -5737,6 +5739,11 @@ function publishStudioListingNow() {
   };
 
   PROPERTIES.unshift(newProp);
+  try {
+    const saved = JSON.parse(localStorage.getItem("ctt_user_listings_v1") || "[]");
+    const nextSaved = [newProp, ...(Array.isArray(saved) ? saved.filter((x) => x && x.id !== newProp.id) : [])].slice(0, 30);
+    localStorage.setItem("ctt_user_listings_v1", JSON.stringify(nextSaved));
+  } catch (e) {}
   if (z.id === 1 && typeof VIP_EXCLUSIVE_SLIDES !== "undefined" && Array.isArray(VIP_EXCLUSIVE_SLIDES)) {
     VIP_EXCLUSIVE_SLIDES.unshift({
       id: newId,
@@ -5812,6 +5819,17 @@ const PORTAL_DATA = {
       });
     }
   });
+  try {
+    const userSaved = JSON.parse(localStorage.getItem("ctt_user_listings_v1") || "[]");
+    if (Array.isArray(userSaved) && userSaved.length > 0) {
+      userSaved.slice().reverse().forEach((item) => {
+        if (item && item.id && !existingIds.has(item.id)) {
+          existingIds.add(item.id);
+          PROPERTIES.unshift(item);
+        }
+      });
+    }
+  } catch (e) {}
   const poolPhotos = [
     "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
     "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
