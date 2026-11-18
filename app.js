@@ -1444,6 +1444,29 @@ function onMegaProjectChange() {
   updateMegaLiveCount();
 }
 
+function toggleMegaAdvanced() {
+  const wrap = document.getElementById("megaAdvancedWrap");
+  const btn = document.getElementById("btnToggleMegaAdv");
+  if (!wrap) return;
+  const willShow = wrap.style.display === "none";
+  wrap.style.display = willShow ? "block" : "none";
+  if (btn) {
+    btn.innerHTML = willShow
+      ? `<i class="fa-solid fa-minus" style="font-size:10px;color:var(--ctt-orange);"></i> <span>Thu gọn</span>`
+      : `<i class="fa-solid fa-plus" style="font-size:10px;color:var(--ctt-orange);"></i> <span>Lọc nâng cao (Đường, Dự án, Hướng)</span>`;
+  }
+}
+
+function toggleMegaQuickChip(btnEl, kind, val) {
+  if (!btnEl) return;
+  const isActive = btnEl.classList.toggle("active");
+  if (kind === "furniture") {
+    const furnEl = document.getElementById("megaFurnitureSelect");
+    if (furnEl) furnEl.value = isActive ? val : "all";
+  }
+  updateMegaLiveCount();
+}
+
 function getMegaFilterPayload() {
   const kw = document.getElementById("hspSearchInput")?.value.trim() || "";
   const cat = document.getElementById("megaCatSelect")?.value || "all";
@@ -1456,7 +1479,12 @@ function getMegaFilterPayload() {
   const direction = document.getElementById("megaDirectionSelect")?.value || "all";
   const maxPrice = parseFloat(document.getElementById("megaPriceRange")?.value || "50");
   const minArea = parseFloat(document.getElementById("megaAreaRange")?.value || "0");
-  const utilities = Array.from(document.querySelectorAll("#hspMegaPanel .mega-util-chk:checked")).map((c) => c.value);
+  const utilities = Array.from(document.querySelectorAll("#hspMegaPanel .hsp-q-pill.active[onclick*=\"'util'\"]"))
+    .map((btn) => {
+      const m = (btn.getAttribute("onclick") || "").match(/'util',\s*'([^']+)'/);
+      return m ? m[1] : "";
+    })
+    .filter(Boolean);
   return { keyword: kw, category: cat, city, ward, street, project, furniture, beds, direction, maxPrice, minArea, utilities };
 }
 
@@ -1500,13 +1528,14 @@ function updateMegaLiveCount() {
   if (!badge || typeof PROPERTIES === "undefined") return;
   const f = getMegaFilterPayload();
   const count = PROPERTIES.filter((p) => matchesMegaFilter(p, f)).length;
-  badge.textContent = `${count} tin phù hợp`;
+  badge.textContent = `Xem ${count} tin phù hợp`;
 }
 
 function resetMegaSearchFilters() {
   const searchInput = document.getElementById("hspSearchInput");
   if (searchInput) searchInput.value = "";
-  pickMegaCat("all", document.querySelector("#megaCatPills .hsp-q-pill"));
+  const catEl = document.getElementById("megaCatSelect");
+  if (catEl) catEl.value = "all";
   const cityEl = document.getElementById("megaCitySelect");
   if (cityEl) cityEl.value = "TP. Hồ Chí Minh";
   populateMegaWards();
@@ -1516,9 +1545,11 @@ function resetMegaSearchFilters() {
     const el = document.getElementById(id);
     if (el) el.value = "all";
   });
-  document.querySelectorAll("#hspMegaPanel .mega-util-chk").forEach((c) => { c.checked = false; });
-  setQuickPriceFilter(50);
-  setQuickAreaFilter(0);
+  document.querySelectorAll("#hspMegaPanel .hsp-q-pill").forEach((p) => p.classList.remove("active"));
+  const priceEl = document.getElementById("megaPriceRange");
+  if (priceEl) priceEl.value = "50";
+  const areaEl = document.getElementById("megaAreaRange");
+  if (areaEl) areaEl.value = "0";
   if (typeof clearLandmarkFilter === "function") clearLandmarkFilter();
   updateMegaLiveCount();
 }
