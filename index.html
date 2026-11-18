@@ -157,11 +157,12 @@
 
       <!-- Center: Segmented Floating Pill Bar (Airbnb / Zillow Style) -->
       <div class="shn-search">
+        <form role="search" autocomplete="off" onsubmit="event.preventDefault();executeMegaSearch();" style="margin:0;">
         <div class="hsp-bar hsp-segmented" id="hspBar">
           <!-- Segment 1: Location / Project Autocomplete -->
           <div class="hsp-seg-field hsp-seg-loc" onclick="openSegPopover('loc', event)">
             <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Dự án</span>
-            <input type="search" id="hspSearchInput" name="ctt_search_loc_q" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" data-lpignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
+            <input type="search" id="hspSearchInput" name="ctt_q_place" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="one-time-code" aria-autocomplete="list" readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
             <div class="hsp-seg-popover" id="segLocPopover" style="min-width:320px;" onclick="event.stopPropagation()"></div>
           </div>
 
@@ -214,6 +215,7 @@
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
+        </form>
 
         <!-- Mẫu 2: Faceted Active Filter Pills (1-click × clear) -->
         <div id="hspActivePillsBar" class="hsp-active-pills-bar" style="display:none;"></div>
@@ -1608,6 +1610,7 @@
 
             <!-- PANEL 1: ĐĂNG NHẬP -->
             <div id="authPanelLogin">
+              <form onsubmit="event.preventDefault();submitStandardLogin();" style="margin:0;">
               <div style="display:flex;flex-direction:column;gap:12px;">
                 <div>
                   <label class="auth-field-label" for="authLoginIdentity"><i class="fa-solid fa-user"></i> Số điện thoại hoặc Email</label>
@@ -1646,6 +1649,7 @@
                   <a href="javascript:void(0)" onclick="switchAuthMode('register')" style="color:var(--ctt-orange);font-weight:800;text-decoration:none;">Đăng ký bảo mật ngay</a>
                 </div>
               </div>
+              </form>
             </div>
 
             <!-- PANEL 1C: ĐĂNG NHẬP QUẢN TRỊ VIÊN (ADMIN GATEWAY) -->
@@ -1659,6 +1663,7 @@
                   <i class="fa-solid fa-lock"></i> Admin Only
                 </span>
               </div>
+              <form onsubmit="event.preventDefault();submitAdminLogin();" style="margin:0;">
               <div style="display:flex;flex-direction:column;gap:12px;">
                 <div>
                   <label class="auth-field-label" for="adminLoginIdentity"><i class="fa-solid fa-user-shield" style="color:var(--ctt-orange);"></i> Tài khoản Admin (Email / Username)</label>
@@ -1683,6 +1688,7 @@
                   <i class="fa-solid fa-shield-halved" style="margin-right:6px;"></i>ĐĂNG NHẬP HỆ THỐNG ADMIN
                 </button>
               </div>
+              </form>
             </div>
 
             <!-- PANEL 1B: QUÊN MẬT KHẨU -->
