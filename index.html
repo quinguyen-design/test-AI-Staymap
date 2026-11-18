@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118f">
+  <link rel="stylesheet" href="styles.css?v=20261118g">
 </head>
 <body>
 
@@ -1051,7 +1051,7 @@
       <div class="ctt-modal-body" style="padding:20px 24px;">
         <div style="display:grid;grid-template-columns:1.32fr 1fr;gap:22px;align-items:start;">
           <!-- LEFT PANE: 4 CONCISE STEPS -->
-          <div style="background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:20px 22px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="min-width:0;background:#fff;border-radius:18px;border:1px solid #e2e8f0;padding:20px 22px;min-height:430px;display:flex;flex-direction:column;justify-content:space-between;">
 
             <!-- STEP 1: VỊ TRÍ -->
             <div class="modal-wizard-slide active" id="modalWizardSlide1">
@@ -1215,7 +1215,7 @@
                   <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(SLXe / Tháng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(Xe / Người / Tháng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
                 </div>
                 <div>
@@ -1238,13 +1238,13 @@
 
             <!-- STEP 3: TIÊU ĐỀ, MÔ TẢ & HÌNH ẢNH -->
             <div class="modal-wizard-slide" id="modalWizardSlide3">
-              <div class="post-step-head">
+              <div class="post-step-head" style="flex-wrap:wrap;gap:8px;">
                 <div class="post-step-title">
                   <span class="step-circle">3</span>
                   <span>Tiêu Đề, Mô Tả & Hình Ảnh</span>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Click Chọn Thông Minh, AI Viết Cực Đỉnh</span>
+                <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+                  <span style="font-size:11px;color:var(--ctt-orange);font-weight:700;">AI Viết Cực Đỉnh</span>
                   <button type="button" id="btnAiAutoWrite" onclick="generateStudioAISeo()" style="padding:4px 11px;border-radius:99px;border:1px solid var(--ctt-orange);background:var(--ctt-grad-brand);color:#ffffff;font-size:11px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>
                   </button>
@@ -1257,18 +1257,15 @@
                   <small id="demoTitleCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/70 ký tự</small>
                 </div>
                 <input type="text" id="dTitle" maxlength="70" class="post-input" value="" oninput="onStudioManualContentEdit()">
-                <div id="demoSeoUrlPreview" style="margin-top:5px;padding:5px 10px;border-radius:8px;background:#f8fafc;border:1px dashed #cbd5e1;font-size:11px;color:#059669;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                  <i class="fa-solid fa-link"></i> URL SEO: https://staymap.vn/#/cho-thue-phong-tro-p-cau-kieu/...
-                </div>
               </div>
 
-              <div style="margin-bottom:12px;">
+              <div style="margin-bottom:10px;">
                 <div class="post-field-label"><span>Mô Tả Chi Tiết <span class="req-star">*</span></span></div>
-                <textarea id="dDesc" rows="9" class="post-input" style="min-height:210px;line-height:1.55;resize:vertical;" oninput="onStudioManualContentEdit()"></textarea>
+                <textarea id="dDesc" rows="5" class="post-input" style="min-height:118px;line-height:1.5;resize:vertical;" oninput="onStudioManualContentEdit()"></textarea>
               </div>
 
-              <div style="padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:12px;">
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
+              <div style="padding:10px 12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:10px;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
                   <div>
                     <div class="post-field-label"><span>Nội Thất</span></div>
                     <select id="dFurniture" class="post-input" onchange="STUDIO_STATE.furniture=this.value;renderStudioPreview()">
@@ -1305,9 +1302,9 @@
                     </select>
                   </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                   <div>
-                    <div class="post-field-label"><span>Mặt Tiền - Lộ Giới Hiện Hữu <small class="util-unit">(m)</small></span></div>
+                    <div class="post-field-label"><span>Mặt Tiền - Lộ Giới <small class="util-unit">(m)</small></span></div>
                     <input type="text" inputmode="decimal" id="dFrontageRoad" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericUnit(this, 'm')">
                   </div>
                   <div>
@@ -1317,57 +1314,61 @@
                 </div>
               </div>
 
-              <div style="margin-bottom:12px;">
-                <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
-                  <span>Hình Ảnh <span class="req-star">*</span></span>
-                  <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
-                </div>
-                <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;margin-bottom:8px;">
-                  <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:16px;"></i>
-                  <span>Tải Ảnh Thực Tế Từ Máy (Bấm Chọn Ảnh Bìa)</span>
-                  <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleStudioPhotoUpload(this)">
-                </label>
-                <div class="post-photo-manager" id="demoPhotos"></div>
-              </div>
-
-              <div style="margin-bottom:12px;">
-                <div class="post-field-label"><span>Video Thực Tế <small class="util-unit">(Không Bắt Buộc)</small></span></div>
-                <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12.5px;font-weight:700;cursor:pointer;">
-                  <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:15px;"></i>
-                  <span id="demoVideoLabel">Tải Video Ngắn Từ Máy (MP4, MOV)</span>
-                  <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleStudioVideoUpload(this)">
-                </label>
-              </div>
-
-              <div class="check-section-box">
-                <div class="post-field-label" style="margin-bottom:8px;"><span>Tiện Ích</span></div>
-                <div class="check-list-grid">
-                  <div>
-                    <label class="check-list-item">
-                      <input type="checkbox" id="chkSchool" onchange="toggleStudioSchoolCode(this.checked)">
-                      <span>Trường Học <small class="util-unit">(Ghi Mã/Ký Hiệu Trường)</small></span>
-                    </label>
-                    <div id="schoolCodeWrap" style="display:none;margin-top:6px;padding-left:24px;">
-                      <input type="text" id="dSchoolCode" class="post-input" style="padding:7px 10px;font-size:12.5px;" placeholder="Nhập Mã / Ký Hiệu Trường..." oninput="renderStudioPreview()">
-                    </div>
+              <div style="display:grid;grid-template-columns:1.45fr 1fr;gap:10px;margin-bottom:10px;align-items:start;">
+                <div>
+                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Hình Ảnh <span class="req-star">*</span></span>
+                    <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
                   </div>
-                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderStudioPreview()"><span>Chợ / Siêu Thị</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderStudioPreview()"><span>Bệnh Viện / Y Tế</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderStudioPreview()"><span>Công Viên</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderStudioPreview()"><span>Xe Bus</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderStudioPreview()"><span>Bank / ATM</span></label>
+                  <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;text-align:center;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:14px;"></i>
+                    <span>Tải Ảnh (4–9 ảnh)</span>
+                    <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleStudioPhotoUpload(this)">
+                  </label>
+                  <div class="post-photo-manager" id="demoPhotos"></div>
+                </div>
+
+                <div>
+                  <div class="post-field-label"><span>Video <small class="util-unit">(Tùy chọn)</small></span></div>
+                  <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;text-align:center;">
+                    <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:14px;"></i>
+                    <span id="demoVideoLabel" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Tải Video (MP4)</span>
+                    <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleStudioVideoUpload(this)">
+                  </label>
                 </div>
               </div>
 
-              <div class="check-section-box" style="margin-bottom:0;">
-                <div class="post-field-label" style="margin-bottom:8px;"><span>Dịch Vụ</span></div>
-                <div class="check-list-grid">
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderStudioPreview()"><span>Nhà Xe / Hầm Xe Rộng</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderStudioPreview()"><span>Khu Giặt / Phơi / Sấy</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderStudioPreview()"><span>Bảo Vệ / Camera An Ninh</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderStudioPreview()"><span>Hệ Thống PCCC</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderStudioPreview()"><span>Thang Máy</span></label>
-                  <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderStudioPreview()"><span>Quản Lý / Kiểm Tra Khu Vực Chung</span></label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="check-section-box" style="margin-bottom:0;padding:10px 12px;">
+                  <div class="post-field-label" style="margin-bottom:6px;"><span>Tiện Ích</span></div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <div>
+                      <label class="check-list-item">
+                        <input type="checkbox" id="chkSchool" onchange="toggleStudioSchoolCode(this.checked)">
+                        <span>Trường Học <small class="util-unit">(Mã trường)</small></span>
+                      </label>
+                      <div id="schoolCodeWrap" style="display:none;margin-top:5px;padding-left:22px;">
+                        <input type="text" id="dSchoolCode" class="post-input" style="padding:6px 9px;font-size:12px;" placeholder="Nhập Mã / Ký Hiệu Trường..." oninput="renderStudioPreview()">
+                      </div>
+                    </div>
+                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderStudioPreview()"><span>Chợ / Siêu Thị</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderStudioPreview()"><span>Bệnh Viện / Y Tế</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderStudioPreview()"><span>Công Viên</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderStudioPreview()"><span>Xe Bus</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderStudioPreview()"><span>Bank / ATM</span></label>
+                  </div>
+                </div>
+
+                <div class="check-section-box" style="margin-bottom:0;padding:10px 12px;">
+                  <div class="post-field-label" style="margin-bottom:6px;"><span>Dịch Vụ</span></div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderStudioPreview()"><span>Nhà Xe / Hầm Xe Rộng</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderStudioPreview()"><span>Khu Giặt / Phơi / Sấy</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderStudioPreview()"><span>Bảo Vệ / Camera An Ninh</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderStudioPreview()"><span>Hệ Thống PCCC</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderStudioPreview()"><span>Thang Máy</span></label>
+                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderStudioPreview()"><span>Quản Lý Khu Vực Chung</span></label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1439,8 +1440,8 @@
               <div id="previewPriceBreakdown" style="font-size:12.5px;color:#475569;line-height:1.6;">
                 Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4)
               </div>
-              <label style="display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#334155;cursor:pointer;">
-                <input type="checkbox" id="agreePostTerms" style="margin-top:2px;width:15px;height:15px;accent-color:var(--ctt-orange);cursor:pointer;">
+              <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#334155;cursor:pointer;text-align:center;">
+                <input type="checkbox" id="agreePostTerms" style="width:15px;height:15px;accent-color:var(--ctt-orange);cursor:pointer;flex-shrink:0;">
                 <span>Tôi đã kiểm tra thông tin & đồng ý với <strong>Điều khoản đăng tin</strong> của ChoThueTot.vn</span>
               </label>
               <div style="margin-top:12px;text-align:center;">
@@ -1798,6 +1799,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118f"></script>
+  <script src="app.js?v=20261118g"></script>
 </body>
 </html>

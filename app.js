@@ -3944,50 +3944,90 @@ function buildStudioAiDraft() {
   updateStudioTitleCount();
 
   const hookByCat = {
-    "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ, dọn vào ở ngay",
-    "Nhà Nguyên Căn": "không gian rộng rãi, riêng tư tuyệt đối, phù hợp gia đình hoặc làm văn phòng",
-    "Căn Hộ Chung Cư": "thiết kế hiện đại, thoáng sáng tự nhiên, tiện nghi chuẩn sống xanh",
-    "Mặt Bằng Văn Phòng": "vị trí đắc địa, mặt bằng vuông vức, tối ưu nhận diện thương hiệu",
-    "Đất - Xưởng, Kho - Bãi": "mặt bằng thông thoáng, giao thông thuận tiện, sẵn sàng vận hành ngay",
-    "HomeStay / AirBnb": "phong cách tinh tế, đầy đủ tiện nghi nghỉ dưỡng, vị trí trung tâm"
+    "Phòng Trọ / CHDV": "không gian riêng tư, sạch sẽ và yên tĩnh, rất phù hợp cho nhân viên văn phòng hoặc sinh viên ở lâu dài",
+    "Nhà Nguyên Căn": "không gian rộng rãi và riêng tư tuyệt đối, thích hợp cho gia đình sinh sống hoặc kết hợp làm văn phòng công ty",
+    "Căn Hộ Chung Cư": "thiết kế hiện đại, thoáng sáng tự nhiên và an ninh cao, mang lại cảm giác thoải mái ngay khi dọn vào",
+    "Mặt Bằng Văn Phòng": "vị trí dễ nhận diện, mặt bằng vuông vức thuận tiện bố trí showroom, cửa hàng hoặc văn phòng giao dịch",
+    "Đất - Xưởng, Kho - Bãi": "khuôn viên thông thoáng, giao thông thuận tiện cho xe tải ra vào và sẵn sàng đưa vào vận hành ngay",
+    "HomeStay / AirBnb": "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm"
   };
-  const catHook = hookByCat[STUDIO_STATE.catLabel] || "vị trí thuận tiện, sẵn sàng bàn giao ngay";
+  const catHook = hookByCat[STUDIO_STATE.catLabel] || "vị trí thuận tiện đi lại, sẵn sàng bàn giao ngay";
 
-  const lines = [];
-  lines.push(`🔥 CHÍNH CHỦ CHO THUÊ ${STUDIO_STATE.catLabel.toUpperCase()} TẠI ${fullAddr ? fullAddr.toUpperCase() : "TRUNG TÂM"} — ${catHook}!`);
-  lines.push(
-    `• Diện tích & Bố trí: ${area ? `${area}m²` : "Rộng thoáng"} (${STUDIO_STATE.beds}, ${STUDIO_STATE.baths})` +
-    `${price ? ` | Giá thuê chỉ ${price} triệu/tháng` : ""}` +
-    `${STUDIO_STATE.deposit ? ` | Cọc ${STUDIO_STATE.deposit.toLowerCase()}` : ""}.`
+  const paragraphs = [];
+
+  // Đoạn 1: Mở đầu tự nhiên như người thật viết
+  const addrPhrase = fullAddr ? `tại ${fullAddr}` : (ward ? `tại khu vực ${ward}` : "tại khu vực trung tâm");
+  paragraphs.push(
+    `Chính chủ đang cần cho thuê ${STUDIO_STATE.catLabel.toLowerCase()} ${addrPhrase} — ${catHook}.`
   );
 
-  const specBits = [
-    furn ? `Nội thất ${furn.toLowerCase()}` : "",
-    floors ? `Kết cấu ${floors.toLowerCase()}` : "",
-    dir ? `Hướng ${dir}` : "",
-    frontage ? `Mặt tiền - lộ giới ${frontage}` : "",
-    road ? `Đường vào ${road}` : "",
-    maxPeople ? `Giới hạn ${maxPeople} người/phòng${extraPerson ? ` (phụ thu từ người thứ ${maxPeople}: ${extraPerson})` : ""}` : ""
-  ].filter(Boolean);
-  if (specBits.length) lines.push(`• Điểm nổi bật: ${specBits.join(" • ")}.`);
+  // Đoạn 2: Diện tích, kết cấu, nội thất, hướng & đường vào (thích nghi theo từng ô đã chọn)
+  const layoutBits = [];
+  if (area) layoutBits.push(`diện tích sử dụng ${area}m²`);
+  layoutBits.push(`bố trí ${STUDIO_STATE.beds}, ${STUDIO_STATE.baths}`);
+  if (floors) layoutBits.push(`kết cấu ${floors.toLowerCase()}`);
+  if (dir) layoutBits.push(`hướng ${dir} đón gió tự nhiên`);
 
-  const costBits = [
-    `Điện: ${elec || "Giá nhà nước"}`,
-    `Nước: ${water || "Giá nhà nước"}`,
-    otherCost ? `Trọn gói chi phí khác: ${otherCost}` : "",
-    internet ? `Internet: ${internet}` : "",
-    laundry ? `Giặt sấy: ${laundry}` : "",
-    trash ? `Thu rác: ${trash}` : "",
-    parking ? `Phí xe: ${parking}` : ""
-  ].filter(Boolean);
-  lines.push(`• Chi phí minh bạch: ${costBits.join(" | ")}.`);
+  let spaceSentence = `Không gian có ${layoutBits.join(", ")}.`;
+  if (furn === "Đầy Đủ") {
+    spaceSentence += " Nội thất đã được trang bị đầy đủ từ A-Z, anh/chị chỉ cần xách vali vào ở ngay.";
+  } else if (furn === "Cơ Bản") {
+    spaceSentence += " Đã có sẵn các hạng mục nội thất cơ bản, rất dễ bài trí thêm theo nhu cầu riêng.";
+  } else if (furn === "Không Có") {
+    spaceSentence += " Hiện trạng bàn giao trống suốt, thuận tiện để tự do thiết kế và sắp xếp đồ đạc.";
+  }
+  if (frontage || road) {
+    const roadBits = [
+      frontage ? `mặt tiền lộ giới ${frontage}` : "",
+      road ? `đường vào nhà rộng ${road}` : ""
+    ].filter(Boolean).join(", ");
+    spaceSentence += ` Lợi thế ${roadBits} giúp việc đi lại và vận chuyển hằng ngày cực kỳ thuận tiện.`;
+  }
+  if (maxPeople) {
+    spaceSentence += ` Không gian phù hợp tối đa ${maxPeople} người ở${extraPerson ? ` (có phụ thu nhẹ ${extraPerson} từ người thứ ${maxPeople})` : " để đảm bảo sinh hoạt thoải mái"}.`;
+  }
+  paragraphs.push(spaceSentence);
 
-  if (utils.length) lines.push(`• Tiện ích kết nối nhanh: ${utils.join(", ")}.`);
-  if (svcs.length) lines.push(`• Dịch vụ & An ninh: ${svcs.join(", ")}.`);
-  lines.push(`📞 Liên hệ ngay${host ? ` ${host}` : ""}${phone ? ` (${phone})` : ""} để xem thực tế và chốt giá tốt nhất hôm nay!`);
+  // Đoạn 3: Tiện ích xung quanh & Dịch vụ tòa nhà (chỉ xuất hiện khi khách có tick chọn)
+  const lifestyleSentences = [];
+  if (utils.length) {
+    lifestyleSentences.push(`Xung quanh kết nối nhanh chóng tới các tiện ích thiết yếu như ${utils.join(", ")}.`);
+  }
+  if (svcs.length) {
+    lifestyleSentences.push(`Khu vực được vận hành chu đáo với ${svcs.join(", ")}, đảm bảo sự an tâm và tiện lợi mỗi ngày.`);
+  }
+  if (lifestyleSentences.length) {
+    paragraphs.push(lifestyleSentences.join(" "));
+  }
+
+  // Đoạn 4: Giá thuê, cọc & chi phí minh bạch
+  const priceIntro = price
+    ? `Giá thuê hiện tại là ${price} triệu/tháng${STUDIO_STATE.deposit ? ` (đặt cọc ${STUDIO_STATE.deposit.toLowerCase()})` : ""}.`
+    : `${STUDIO_STATE.deposit ? `Tiền cọc ${STUDIO_STATE.deposit.toLowerCase()}, giá thuê thương lượng trực tiếp.` : "Giá thuê hợp lý cho khách thiện chí."}`;
+
+  const feeParts = [
+    elec ? `điện ${elec}/kWh` : "điện tính theo giá nhà nước",
+    water ? `nước ${water}/người` : "nước theo giá nhà nước"
+  ];
+  if (otherCost) {
+    feeParts.push(`trọn gói các chi phí dịch vụ khác ${otherCost}/tháng`);
+  } else {
+    if (internet) feeParts.push(`internet ${internet}/phòng`);
+    if (laundry) feeParts.push(`giặt sấy ${laundry}/người`);
+    if (trash) feeParts.push(`thu rác ${trash}/phòng`);
+    if (parking) feeParts.push(`phí gửi xe ${parking}/xe/người/tháng`);
+  }
+  paragraphs.push(`${priceIntro} Mọi chi phí sinh hoạt đều minh bạch ngay từ đầu: ${feeParts.join(", ")}.`);
+
+  // Đoạn 5: Lời mời xem nhà chân thành
+  const contactWho = host ? `cho ${host}` : "trực tiếp với chính chủ";
+  const contactPhone = phone ? ` qua SĐT/Zalo ${phone}` : "";
+  paragraphs.push(
+    `Anh/chị quan tâm vui lòng liên hệ ${contactWho}${contactPhone} để hẹn lịch xem thực tế và trao đổi thêm nhé!`
+  );
 
   const descEl = document.getElementById("dDesc");
-  if (descEl) descEl.value = lines.join("\n");
+  if (descEl) descEl.value = paragraphs.join("\n\n");
 }
 
 function updateStudioAiButtonUI() {
@@ -4202,18 +4242,6 @@ function renderStudioPreview() {
   const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
   const otherCost = otherRaw ? `${otherRaw}k` : "--";
   const title = document.getElementById("dTitle")?.value.trim() || "Chưa nhập tiêu đề tin đăng";
-  const seoPreviewEl = document.getElementById("demoSeoUrlPreview");
-  if (seoPreviewEl) {
-    const previewUrl = buildPropertySeoUrl({
-      id: STUDIO_STATE.editingPropId || 8932,
-      category: STUDIO_STATE.catKey,
-      ward,
-      city,
-      title: title === "Chưa nhập tiêu đề tin đăng" ? `${STUDIO_STATE.catLabel} ${ward}` : title,
-      price: price === "--" ? "" : price
-    });
-    seoPreviewEl.innerHTML = `<i class="fa-solid fa-link"></i> URL SEO: <strong>https://staymap.vn/${previewUrl}</strong>`;
-  }
   const desc = document.getElementById("dDesc")?.value.trim() || "Chưa nhập mô tả chi tiết...";
   const phone = document.getElementById("dPhone")?.value.trim() || "Chưa nhập SĐT";
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
