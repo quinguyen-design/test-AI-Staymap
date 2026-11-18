@@ -560,7 +560,7 @@ button, input, select, textarea, .leaflet-container {
 
 .leaflet-popup-content {
   margin: 0 !important;
-  width: 328px !important;
+  width: 346px !important;
 }
 
 .ctt-compact-map-popup .leaflet-popup-close-button {
@@ -634,17 +634,24 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-pop-price {
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--ctt-orange);
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
   font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+  line-height: 1.15;
   white-space: nowrap;
 }
 
-.hmp-pop-price span {
-  font-size: 11px;
-  font-weight: 600;
+.hmp-pop-price-val {
+  font-size: 16.5px;
+  font-weight: 900;
+  color: var(--ctt-orange);
+  letter-spacing: -0.01em;
+}
+
+.hmp-pop-price-unit {
+  font-size: 11.5px;
+  font-weight: 500;
   color: #64748b;
 }
 
@@ -659,41 +666,27 @@ button, input, select, textarea, .leaflet-container {
   overflow: hidden;
 }
 
-.hmp-pop-loc {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: #64748b;
+.hmp-pop-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 7px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.hmp-pop-specs {
   display: flex;
   align-items: center;
   gap: 4px;
   min-width: 0;
 }
 
-.hmp-pop-loc span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.hmp-pop-loc i {
-  color: var(--ctt-orange);
-  font-size: 10px;
-  flex-shrink: 0;
-}
-
-.hmp-pop-specs {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding-top: 6px;
-  border-top: 1px dashed #e2e8f0;
-}
-
 .hmp-pop-specs span {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 6px;
+  gap: 3px;
+  padding: 3px 5.5px;
   border-radius: 6px;
   background: #f8fafc;
   border: 1px solid #f1f5f9;
@@ -707,6 +700,25 @@ button, input, select, textarea, .leaflet-container {
 .hmp-pop-specs span i {
   color: var(--ctt-orange);
   font-size: 9.5px;
+}
+
+.hmp-pop-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.18s ease;
+}
+
+.hero-map-popup:hover .hmp-pop-more {
+  background: var(--ctt-orange);
 }
 
 /* Custom Cluster Icon */
