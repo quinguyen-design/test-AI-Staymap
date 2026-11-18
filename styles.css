@@ -4518,17 +4518,19 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 }
 .demo-utility-bar {
   display: grid !important;
-  grid-template-columns: 1fr 1fr 1.25fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
   align-items: center;
   text-align: center;
   gap: 0 !important;
-  padding: 7px 6px !important;
+  padding: 6px 4px !important;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 11px !important;
 }
 .demo-utility-bar > span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  min-width: 0;
   padding: 0 6px;
   white-space: nowrap;
   overflow: hidden;

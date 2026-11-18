@@ -2110,7 +2110,7 @@ function buildListingCardHTML(item) {
               const n = parseFloat(String(v || "").replace(/[^0-9.]/g, ""));
               return s + (Number.isFinite(n) && n > 0 ? n : 0);
             }, 0);
-            return sumK > 0 ? `Chi Phí Khác: ${Number(sumK.toFixed(2))}k` : "Chính chủ";
+            return sumK > 0 ? `Chi Phí Khác: ${Number(sumK.toFixed(2))}k` : "Chi Phí Khác: --";
           })()}</span>
         </div>
 
