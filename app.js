@@ -1233,6 +1233,14 @@ function updateMapPins(catFilter = "all", focusId = null) {
       </div>
     `);
 
+    marker.on("click", () => {
+      const heroEl = document.getElementById("siteHeaderHero");
+      if (heroEl && heroEl.classList.contains("is-expanded")) {
+        setTimeout(() => marker.closePopup(), 10);
+        openHeroMapLeftDrawer(item);
+      }
+    });
+
     heroMarkersLayer.addLayer(marker);
     if (item.city === "TP. Hồ Chí Minh") {
       bounds.push([item.lat, item.lng]);
@@ -1296,6 +1304,80 @@ function clearLandmarkFilter() {
   }
 }
 
+function closeHeroMapLeftDrawer() {
+  const drawer = document.getElementById("heroMapLeftDrawer");
+  if (drawer) {
+    drawer.classList.remove("is-open");
+    drawer.innerHTML = "";
+  }
+}
+
+function openHeroMapLeftDrawer(item) {
+  const drawer = document.getElementById("heroMapLeftDrawer");
+  if (!drawer || !item) return;
+  const vip = typeof getPropertyVipDisplay === "function" ? getPropertyVipDisplay(item) : { label: "", badgeClass: "" };
+  const photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice(0, 4);
+  const specParts = [];
+  if (item.area) specParts.push(`${item.area} m²`);
+  if (item.beds && !String(item.beds).startsWith("0")) specParts.push(item.beds);
+  if (item.baths && !String(item.baths).startsWith("0")) specParts.push(item.baths);
+  const specsHtml = specParts.map((s) => `<span style="padding:4px 9px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:11.5px;font-weight:600;color:#334155;">${s}</span>`).join("");
+
+  drawer.innerHTML = `
+    <div style="position:relative;height:190px;flex-shrink:0;background:#0f172a;">
+      <img id="hmdMainImg" src="${photos[0]}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80'">
+      <button type="button" onclick="closeHeroMapLeftDrawer()" title="Đóng bảng thông tin" style="position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(15,23,42,0.82);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      ${vip.label ? `<span class="lc-vip-tag ${vip.badgeClass}" style="position:absolute;top:10px;left:10px;font-size:10px;padding:3px 9px;">${vip.label}</span>` : ""}
+    </div>
+    ${photos.length > 1 ? `
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 16px 0;">
+        ${photos.map((src) => `<img src="${src}" onclick="document.getElementById('hmdMainImg').src=this.src" style="width:100%;height:44px;object-fit:cover;border-radius:7px;cursor:pointer;border:1px solid #e2e8f0;">`).join("")}
+      </div>
+    ` : ""}
+    <div class="hero-map-left-drawer-body">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;">
+        <div class="tabular-nums" style="font-size:20px;font-weight:900;color:var(--ctt-orange);">${item.priceText} <span style="font-size:12px;font-weight:500;color:#64748b;">| Tháng</span></div>
+        <span style="font-size:11px;font-weight:700;color:#475569;background:#f8fafc;border:1px solid #e2e8f0;padding:2px 8px;border-radius:99px;">${item.categoryLabel}</span>
+      </div>
+      <h3 style="font-size:15px;font-weight:800;color:#0f172a;line-height:1.35;margin:0 0 8px;">${item.title}</h3>
+      <div style="font-size:12px;color:#64748b;margin-bottom:10px;display:flex;align-items:flex-start;gap:6px;">
+        <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-top:2px;"></i>
+        <span>${item.fullAddress || `${item.ward}, ${item.city}`}</span>
+      </div>
+      ${specsHtml ? `<div class="tabular-nums" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">${specsHtml}</div>` : ""}
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 10px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:11.5px;color:#475569;margin-bottom:12px;" class="tabular-nums">
+        <div><span style="color:#94a3b8;display:block;font-size:10px;">Điện</span><strong>${item.elec || "Nhà nước"}</strong></div>
+        <div><span style="color:#94a3b8;display:block;font-size:10px;">Nước</span><strong>${item.water || "Nhà nước"}</strong></div>
+        <div><span style="color:#94a3b8;display:block;font-size:10px;">Khác</span><strong>${item.otherCost || "--"}</strong></div>
+      </div>
+      <p style="font-size:12.5px;color:#475569;line-height:1.5;margin:0 0 14px;">${item.desc || ""}</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fffaf5;border:1px solid #fed7aa;border-radius:10px;margin-bottom:12px;">
+        <div>
+          <div style="font-size:10.5px;color:#64748b;">Liên hệ chính chủ</div>
+          <strong style="font-size:13px;color:#0f172a;">${item.host || "Chính chủ"}</strong>
+        </div>
+        <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="padding:6px 12px;border-radius:8px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">
+          <i class="fa-solid fa-phone" style="color:var(--ctt-orange);margin-right:4px;"></i>${item.phone || ""}
+        </a>
+      </div>
+      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="width:100%;padding:11px;border:none;border-radius:10px;background:var(--ctt-grad-brand);color:#fff;font-size:13px;font-weight:800;cursor:pointer;">
+        Xem Chi Tiết Bài Viết <i class="fa-solid fa-arrow-right" style="margin-left:4px;"></i>
+      </button>
+    </div>
+  `;
+  drawer.classList.add("is-open");
+}
+
+function openDetailFromExpandedMap(propId) {
+  const heroEl = document.getElementById("siteHeaderHero");
+  if (heroEl && heroEl.classList.contains("is-expanded")) {
+    toggleExpandHeroMap();
+  }
+  openPropertyDetailView(propId);
+}
+
 function toggleExpandHeroMap() {
   const heroEl = document.getElementById("siteHeaderHero");
   const btnSpan = document.getElementById("expandMapBtnText");
@@ -1303,6 +1385,9 @@ function toggleExpandHeroMap() {
   heroEl.classList.toggle("is-expanded");
   const expanded = heroEl.classList.contains("is-expanded");
   document.body.style.overflow = expanded ? "hidden" : "";
+  if (!expanded) {
+    closeHeroMapLeftDrawer();
+  }
   if (btnSpan) {
     btnSpan.textContent = expanded ? "Thu gọn" : "Mở rộng";
   }
