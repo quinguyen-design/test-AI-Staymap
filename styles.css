@@ -2306,15 +2306,17 @@ button, input, select, textarea, .leaflet-container {
 
 .pd-gal-side {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   gap: 14px;
   height: 100%;
+  min-height: 0;
 }
 
 .pd-gal-item {
   position: relative;
   overflow: hidden;
   height: 100%;
+  min-height: 0;
   cursor: pointer;
 }
 
@@ -4002,9 +4004,37 @@ button, input, select, textarea, .leaflet-container {
   .lc-grid, .news-grid, .seo-container, .footer-container, .pd-content-grid, .post-cat-selector, .post-zone-clean-grid, .post-duration-4grid, .portal-kpi-grid, .auth-portal-grid, .sticker-3grid {
     grid-template-columns: 1fr;
   }
+  .pd-container {
+    padding: 0 16px;
+  }
+  .pd-gallery {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .pd-gal-main {
+    height: 240px;
+  }
+  .pd-gal-side {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 130px;
+    height: 130px;
+  }
+  .pd-cost-4grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
   .shn-list {
     display: none;
   }
+}
+
+body.is-detail-view .sticky-contact-bar {
+  top: auto;
+  bottom: 24px;
+  transform: none;
+}
+body.is-detail-view .sticky-contact-bar .phone-btn,
+body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
+  display: none;
 }
 
 /* ==========================================================================

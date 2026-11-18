@@ -951,6 +951,7 @@ function navigateTo(route, pushHistory = true) {
   else if (route.includes("admin")) document.getElementById("nav-admin")?.classList.add("active");
 
   // Hide all views first
+  document.body.classList.remove("is-detail-view");
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
   const heroEl = document.getElementById("siteHeaderHero");
 
@@ -1839,6 +1840,7 @@ function openPropertyDetailView(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
   window.history.pushState({}, "", `#/cho-thue-${item.category}/${item.id}`);
 
+  document.body.classList.add("is-detail-view");
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
   const detailView = document.getElementById("view-detail");
   detailView.style.display = "block";
@@ -1954,8 +1956,8 @@ function openPropertyDetailView(propId) {
                   <div style="font-size:18px;font-weight:900;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
                 </div>
                 <div>
-                  <div style="font-size:11px;color:#64748b;font-weight:700;">ĐIỆN / NƯỚC</div>
-                  <div style="font-size:18px;font-weight:900;color:#059669;">Minh bạch</div>
+                  <div class="post-label" style="font-size:11px;color:#64748b;font-weight:700;">ĐIỆN / NƯỚC</div>
+                  <div style="font-size:15px;font-weight:900;color:#059669;">${item.elec} • ${item.water}</div>
                 </div>
               </div>
             </div>
@@ -1988,7 +1990,7 @@ function openPropertyDetailView(propId) {
               </h3>
               <span class="sv1-badge-verified">Chống phí ẩn</span>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;" class="tabular-nums">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;" class="tabular-nums pd-cost-4grid">
               <div style="padding:12px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;">
                 <small style="color:#64748b;font-size:11px;display:block;">Tiền thuê cố định</small>
                 <strong style="font-size:15px;color:#0f172a;">${fmtVnd(costs.baseRentVnd)}</strong>
@@ -2072,7 +2074,8 @@ function openPropertyDetailView(propId) {
     </div>
   `;
 
-  window.scrollTo({ top: 380, behavior: "smooth" });
+  const scrollTop = Math.max(0, detailView.offsetTop - 92);
+  window.scrollTo({ top: scrollTop, behavior: "smooth" });
 }
 
 function selectViewingSlot(type, val, pillEl) {
@@ -3717,28 +3720,27 @@ function buildStudioAiDraft() {
   const svcs = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
 
   const locFocus = project || (street ? `Đường ${street}` : ward);
+  const locShort = project || (street ? `${street}, ${ward}` : ward);
+  const priceShort = price ? `Giá ${price}Tr/Th` : "Giá Tốt";
+  const areaShort = area ? `${area}m²` : "";
+  const furnShort = furn && furn !== "Không Có" ? `NT ${furn}` : "";
   const highlightSpec = [
-    area ? `${area}m²` : "",
+    areaShort,
     furn && furn !== "Không Có" ? `Nội Thất ${furn}` : "",
     STUDIO_STATE.beds !== "1 PN" ? STUDIO_STATE.beds : ""
   ].filter(Boolean).join(" ");
 
-  const seoTitle = [
-    `Cho Thuê ${STUDIO_STATE.catLabel}`,
-    locFocus ? `${locFocus}, ${ward}` : ward,
-    highlightSpec,
-    price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"
-  ].filter(Boolean).join(" • ");
-
-  const fitTitle70 = (str) => {
-    if (str.length <= 70) return str;
-    const cut = str.slice(0, 70);
-    const lastSpace = cut.lastIndexOf(" ");
-    return (lastSpace > 45 ? cut.slice(0, lastSpace) : cut).replace(/[•,\-\s]+$/, "");
-  };
+  const titleCandidates = [
+    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locFocus ? `${locFocus}, ${ward}` : ward, highlightSpec, price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"].filter(Boolean).join(" • "),
+    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, furnShort, priceShort].filter(Boolean).join(" • "),
+    [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
+    [`Cho Thuê ${STUDIO_STATE.catLabel}`, street || ward, areaShort, priceShort].filter(Boolean).join(" • "),
+    [`Cho Thuê ${STUDIO_STATE.catLabel}`, ward, priceShort].filter(Boolean).join(" • ")
+  ];
+  const bestTitle = titleCandidates.find((c) => c.length <= 70) || titleCandidates[titleCandidates.length - 1].slice(0, 70);
 
   const titleEl = document.getElementById("dTitle");
-  if (titleEl) titleEl.value = fitTitle70(seoTitle);
+  if (titleEl) titleEl.value = bestTitle;
   updateStudioTitleCount();
 
   const hookByCat = {
@@ -4332,12 +4334,12 @@ function switchMemberTab(tabName, btnEl) {
   if (!container) return;
 
   if (tabName === "listings") {
-    const myProps = PROPERTIES.slice(0, 5);
+    const myProps = PROPERTIES.slice(0, 8);
     container.innerHTML = `
       <div class="portal-table-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
           <div>
-            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Danh Sách Tin Đăng Của Bạn (05 tin)</h3>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Danh Sách Tin Đăng Của Bạn (${String(myProps.length).padStart(2, "0")} tin)</h3>
             <small style="color:#64748b;">Miễn phí 3 lần sửa tin đầu tiên • Bấm Đẩy tin để lên đầu trang chủ & bản đồ</small>
           </div>
           <button type="button" class="hsp-btn-apply" onclick="openPostModal()">
