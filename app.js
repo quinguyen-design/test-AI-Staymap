@@ -4283,7 +4283,7 @@ function buildStudioAiDraft() {
   }
   const svcs = Array.from(document.querySelectorAll("#postModalBackdrop .svc-chk:checked")).map((c) => c.value);
 
-  const variant = Number(STUDIO_STATE.aiVariant || 0);
+  const variant = Number(STUDIO_STATE.aiVariant || 0) % 5;
   const catLower = STUDIO_STATE.catLabel.toLowerCase();
   const isCommercial = STUDIO_STATE.catKey === "mat-bang" || STUDIO_STATE.catKey === "kho-xuong";
   const locFocus = project || (street ? `Đường ${street}` : ward);
@@ -4301,21 +4301,26 @@ function buildStudioAiDraft() {
   const titlePools = [
     [
       [`Cho Thuê ${STUDIO_STATE.catLabel}`, locFocus ? `${locFocus}, ${ward}` : ward, highlightSpec, price ? `Giá Chỉ ${price} Triệu/Tháng` : "Chính Chủ Giá Tốt"].filter(Boolean).join(" • "),
-      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, furnShort, priceShort].filter(Boolean).join(" • "),
-      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
+      [`Cho Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, furnShort, priceShort].filter(Boolean).join(" • ")
     ],
     [
       [STUDIO_STATE.catLabel, bedsTag, locFocus ? `${locFocus}, ${ward}` : ward, areaShort, price ? `Chỉ ${price}Tr/Tháng` : "Chính Chủ"].filter(Boolean).join(" • "),
-      [`Chính Chủ Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
-      [`${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
+      [`Chính Chủ Thuê ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
     ],
     [
       [furn === "Đầy Đủ" ? "Full Nội Thất" : "Vị Trí Đẹp", `${STUDIO_STATE.catLabel}`, locFocus, areaShort, price ? `${price} Triệu/Tháng` : "Giá Tốt"].filter(Boolean).join(" • "),
-      [`${STUDIO_STATE.catLabel} Đẹp`, locShort, areaShort, priceShort].filter(Boolean).join(" • "),
-      [`Cho Thuê ${STUDIO_STATE.catLabel}`, street || ward, areaShort, priceShort].filter(Boolean).join(" • ")
+      [`${STUDIO_STATE.catLabel} Đẹp`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
+    ],
+    [
+      [`[Chính Chủ] ${STUDIO_STATE.catLabel}`, locShort, areaShort, price ? `${price}Tr/Th` : "Dọn Vào Ngay"].filter(Boolean).join(" • "),
+      [`${STUDIO_STATE.catLabel} Trung Tâm`, locShort, priceShort].filter(Boolean).join(" • ")
+    ],
+    [
+      [`Cần Thuê Nhanh ${STUDIO_STATE.catLabel}`, locFocus, areaShort, furnShort, price ? `Chỉ ${price} Triệu` : "Giá Tốt"].filter(Boolean).join(" • "),
+      [`Ưu Đãi ${STUDIO_STATE.catLabel}`, locShort, areaShort, priceShort].filter(Boolean).join(" • ")
     ]
   ];
-  const activePool = titlePools[variant % titlePools.length];
+  const activePool = titlePools[variant];
   const fallbackTitles = [
     [`Cho Thuê ${STUDIO_STATE.catLabel}`, street || ward, areaShort, priceShort].filter(Boolean).join(" • "),
     [`Cho Thuê ${STUDIO_STATE.catLabel}`, ward, priceShort].filter(Boolean).join(" • ")
@@ -4330,27 +4335,45 @@ function buildStudioAiDraft() {
   const hookByCat = {
     "Phòng Trọ / CHDV": [
       "không gian riêng tư, sạch sẽ và yên tĩnh, rất phù hợp cho nhân viên văn phòng hoặc sinh viên ở lâu dài",
-      "môi trường sống văn minh, giờ giấc tự do và tách biệt hoàn toàn, vào ở thoải mái như nhà mình"
+      "môi trường sống văn minh, giờ giấc tự do và tách biệt hoàn toàn, vào ở thoải mái như nhà mình",
+      "thiết kế gọn gàng, đón ánh sáng tự nhiên và đảm bảo an ninh tốt mỗi ngày",
+      "vị trí thuận tiện đi làm, đi học, không chung chủ và sinh hoạt cực kỳ thoải mái",
+      "phòng mới đẹp, thoáng mát, tối ưu từng mét vuông sử dụng cho người ở hiện đại"
     ],
     "Nhà Nguyên Căn": [
       "không gian rộng rãi và riêng tư tuyệt đối, thích hợp cho gia đình sinh sống hoặc kết hợp làm văn phòng công ty",
-      "nhà thoáng sáng, công năng linh hoạt để vừa ở gia đình vừa kinh doanh online hoặc mở studio"
+      "nhà thoáng sáng, công năng linh hoạt để vừa ở gia đình vừa kinh doanh online hoặc mở studio",
+      "kết cấu chắc chắn, khu dân cư an ninh yên tĩnh và thuận tiện di chuyển ra các trục đường chính",
+      "mặt bằng nhà gọn đẹp, dễ bố trí theo nhu cầu gia đình nhiều thế hệ hoặc nhóm chuyên gia",
+      "không gian sinh hoạt tách biệt từng tầng, đáp ứng trọn vẹn nhu cầu an cư lâu dài"
     ],
     "Căn Hộ Chung Cư": [
       "thiết kế hiện đại, thoáng sáng tự nhiên và an ninh thẻ từ 24/7, mang lại trải nghiệm sống tiện nghi ngay khi dọn vào",
-      "tầm nhìn thoáng đãng, cộng đồng cư dân văn minh và thừa hưởng trọn vẹn tiện ích nội khu cao cấp"
+      "tầm nhìn thoáng đãng, cộng đồng cư dân văn minh và thừa hưởng trọn vẹn tiện ích nội khu cao cấp",
+      "căn hộ bố trí hợp lý, tách biệt khu sinh hoạt chung và phòng ngủ yên tĩnh",
+      "không gian chuẩn nghỉ dưỡng giữa lòng phố thị, chỉ cần xách vali vào là tận hưởng ngay",
+      "lựa chọn lý tưởng cho gia đình trẻ hoặc chuyên gia tìm nơi ở đẳng cấp, an toàn"
     ],
     "Mặt Bằng Văn Phòng": [
       "vị trí dễ nhận diện, mặt bằng vuông vức thuận tiện bố trí showroom, spa, cửa hàng hoặc văn phòng giao dịch",
-      "tọa lạc trên trục giao thông sầm uất, dễ đón khách và tối ưu hiệu quả nhận diện thương hiệu"
+      "tọa lạc trên trục giao thông sầm uất, dễ đón khách và tối ưu hiệu quả nhận diện thương hiệu",
+      "không gian chuyên nghiệp, dễ thiết kế layout làm việc hoặc trưng bày sản phẩm theo nhận diện riêng",
+      "khu vực tập trung nhiều văn phòng và cư dân, thuận lợi tiếp cận nguồn khách hàng sẵn có",
+      "mặt bằng sáng thoáng, sẵn sàng bàn giao để doanh nghiệp triển khai vận hành ngay"
     ],
     "Đất - Xưởng, Kho - Bãi": [
       "khuôn viên thông thoáng, giao thông thuận tiện cho xe tải ra vào và sẵn sàng đưa vào vận hành ngay",
-      "mặt bằng rộng rãi, cao ráo sạch sẽ, đáp ứng tốt nhu cầu lưu trữ hàng hóa hoặc sản xuất"
+      "mặt bằng rộng rãi, cao ráo sạch sẽ, đáp ứng tốt nhu cầu lưu trữ hàng hóa hoặc sản xuất",
+      "vị trí kết nối giao thương thuận lợi, tối ưu chi phí vận chuyển và bốc xếp hằng ngày",
+      "hạ tầng hoàn chỉnh, diện tích dễ quy hoạch khu kho chứa và khu điều hành riêng biệt",
+      "không gian rộng mở, phù hợp làm kho trung chuyển, xưởng gia công hoặc bãi tập kết"
     ],
     "HomeStay / AirBnb": [
       "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm",
-      "góc decor chụp ảnh đẹp, check-in linh hoạt và chỉ mất vài phút di chuyển ra các điểm ăn uống nổi tiếng"
+      "góc decor chụp ảnh đẹp, check-in linh hoạt và chỉ mất vài phút di chuyển ra các điểm ăn uống nổi tiếng",
+      "không gian ấm áp như ở nhà, đầy đủ tiện nghi cho kỳ lưu trú ngắn hoặc dài ngày",
+      "thiết kế có gu riêng, yên tĩnh nhưng vẫn nằm sát nhịp sống sôi động của khu vực",
+      "trải nghiệm lưu trú thoải mái, riêng tư và tiện lợi cho khách du lịch lẫn khách công tác"
     ]
   };
   const catHooks = hookByCat[STUDIO_STATE.catLabel] || ["vị trí thuận tiện đi lại, sẵn sàng bàn giao ngay"];
@@ -4358,14 +4381,16 @@ function buildStudioAiDraft() {
 
   const paragraphs = [];
 
-  // Đoạn 1: Mở đầu tự nhiên, giàu ngữ cảnh
+  // Đoạn 1: Mở đầu tự nhiên, 5 văn phong khác nhau
   const addrPhrase = fullAddr ? `tại ${fullAddr}` : (ward ? `tại khu vực ${ward}` : "tại khu vực trung tâm");
   const introTemplates = [
     `Chính chủ đang cần cho thuê ${catLower} ${addrPhrase} — ${catHook}.`,
+    `Nếu anh/chị đang tìm ${catLower} ${addrPhrase}, đây là lựa chọn rất đáng cân nhắc với ${catHook}.`,
     `Cần cho thuê nhanh ${catLower} ${addrPhrase}, nổi bật với ${catHook}.`,
-    `Gửi đến anh/chị lựa chọn ${catLower} chất lượng ${addrPhrase}: ${catHook}.`
+    `Giới thiệu ${catLower} chuẩn đẹp ${addrPhrase}: ${catHook}.`,
+    `Gửi đến anh/chị căn ${catLower} mới cập nhật ${addrPhrase} — ${catHook}.`
   ];
-  paragraphs.push(introTemplates[variant % introTemplates.length]);
+  paragraphs.push(introTemplates[variant]);
 
   // Đoạn 2: Thông số, kết cấu, nội thất & giao thông
   const layoutBits = [];
@@ -4378,12 +4403,23 @@ function buildStudioAiDraft() {
   if (floors) layoutBits.push(`kết cấu ${floors.toLowerCase()}`);
   if (dir) layoutBits.push(`hướng ${dir} đón gió tự nhiên`);
 
-  let spaceSentence = `Không gian có ${layoutBits.join(", ")}.`;
+  const spaceOpeners = [
+    `Không gian có ${layoutBits.join(", ")}.`,
+    `Thông số thực tế gồm ${layoutBits.join(", ")}.`,
+    `Tổng thể được thiết kế với ${layoutBits.join(", ")}.`,
+    `Điểm cộng về không gian: ${layoutBits.join(", ")}.`,
+    `Chi tiết mặt bằng sở hữu ${layoutBits.join(", ")}.`
+  ];
+  let spaceSentence = spaceOpeners[variant];
   if (!isCommercial) {
     if (furn === "Đầy Đủ") {
-      spaceSentence += " Nội thất đã được trang bị đầy đủ từ A-Z, anh/chị chỉ cần xách vali vào ở ngay.";
+      spaceSentence += variant % 2 === 0
+        ? " Nội thất đã được trang bị đầy đủ từ A-Z, anh/chị chỉ cần xách vali vào ở ngay."
+        : " Trang bị sẵn trọn bộ nội thất tiện nghi, giúp tiết kiệm tối đa chi phí mua sắm ban đầu.";
     } else if (furn === "Cơ Bản") {
-      spaceSentence += " Đã có sẵn các hạng mục nội thất cơ bản, rất dễ bài trí thêm theo gu riêng.";
+      spaceSentence += variant % 2 === 0
+        ? " Đã có sẵn các hạng mục nội thất cơ bản, rất dễ bài trí thêm theo gu riêng."
+        : " Bàn giao nội thất cơ bản gọn đẹp, linh hoạt bổ sung theo nhu cầu sử dụng thực tế.";
     } else if (furn === "Không Có") {
       spaceSentence += " Hiện trạng bàn giao trống suốt, thuận tiện để tự do thiết kế và sắp xếp đồ đạc.";
     }
@@ -4403,12 +4439,26 @@ function buildStudioAiDraft() {
   // Đoạn 3: Tiện ích xung quanh & Dịch vụ tòa nhà
   const lifestyleSentences = [];
   if (utils.length) {
-    lifestyleSentences.push(`Xung quanh kết nối nhanh chóng tới các tiện ích thiết yếu như ${utils.join(", ")}.`);
+    const utilOpeners = [
+      `Xung quanh kết nối nhanh chóng tới các tiện ích thiết yếu như ${utils.join(", ")}.`,
+      `Trong bán kính vài phút di chuyển có đầy đủ ${utils.join(", ")}, rất thuận tiện sinh hoạt hằng ngày.`,
+      `Vị trí liền kề ${utils.join(", ")}, giúp tiết kiệm đáng kể thời gian đi lại.`,
+      `Tiện ích ngoại khu phong phú với ${utils.join(", ")} ngay gần nhà.`,
+      `Từ đây dễ dàng tiếp cận ${utils.join(", ")} chỉ trong ít phút.`
+    ];
+    lifestyleSentences.push(utilOpeners[variant]);
   } else if (project) {
     lifestyleSentences.push(`Cư dân tại ${project} được hưởng trọn hạ tầng đồng bộ, công viên cây xanh và tiện ích mua sắm - ẩm thực ngay nội khu.`);
   }
   if (svcs.length) {
-    lifestyleSentences.push(`Khu vực được vận hành chu đáo với ${svcs.join(", ")}, đảm bảo sự an tâm và tiện lợi mỗi ngày.`);
+    const svcOpeners = [
+      `Khu vực được vận hành chu đáo với ${svcs.join(", ")}, đảm bảo sự an tâm và tiện lợi mỗi ngày.`,
+      `Đi kèm đầy đủ dịch vụ quản lý gồm ${svcs.join(", ")} hoạt động ổn định.`,
+      `Tòa nhà hỗ trợ sẵn ${svcs.join(", ")}, mang lại sự yên tâm tuyệt đối khi sinh sống.`,
+      `Hạ tầng dịch vụ đồng bộ: ${svcs.join(", ")}.`,
+      `An ninh và tiện nghi được chăm chút kỹ với ${svcs.join(", ")}.`
+    ];
+    lifestyleSentences.push(svcOpeners[variant]);
   }
   if (lifestyleSentences.length) {
     paragraphs.push(lifestyleSentences.join(" "));
@@ -4431,16 +4481,26 @@ function buildStudioAiDraft() {
     if (trash) feeParts.push(`thu rác ${trash}`);
     if (parking) feeParts.push(`phí gửi xe ${parking}`);
   }
-  paragraphs.push(`${priceIntro} Mọi chi phí sinh hoạt đều công khai minh bạch ngay từ đầu: ${feeParts.join(", ")}.`);
+  const feeIntros = [
+    `${priceIntro} Mọi chi phí sinh hoạt đều công khai minh bạch ngay từ đầu: ${feeParts.join(", ")}.`,
+    `${priceIntro} Các khoản phí hằng tháng rõ ràng, không phát sinh ẩn: ${feeParts.join(", ")}.`,
+    `${priceIntro} Chi tiết chi phí đi kèm gồm ${feeParts.join(", ")}.`,
+    `${priceIntro} Hợp đồng rõ ràng, quy định cụ thể: ${feeParts.join(", ")}.`,
+    `${priceIntro} Mức phí sinh hoạt hợp lý: ${feeParts.join(", ")}.`
+  ];
+  paragraphs.push(feeIntros[variant]);
 
   // Đoạn 5: Lời mời xem nhà chân thành
   const contactWho = host ? `trực tiếp cho ${host}` : "trực tiếp với chính chủ";
   const contactPhone = phone ? ` qua SĐT/Zalo ${phone}` : "";
   const closingTemplates = [
     `Anh/chị quan tâm vui lòng liên hệ ${contactWho}${contactPhone} để hẹn lịch xem thực tế và trao đổi thêm nhé!`,
-    `Nếu phù hợp nhu cầu, anh/chị nhắn Zalo hoặc gọi ${contactWho}${contactPhone} để xem thực tế bất cứ lúc nào ạ!`
+    `Nếu phù hợp nhu cầu, anh/chị nhắn Zalo hoặc gọi ${contactWho}${contactPhone} để xem thực tế bất cứ lúc nào ạ!`,
+    `Liên hệ ngay ${contactWho}${contactPhone} để giữ căn đẹp và thương lượng điều kiện tốt nhất.`,
+    `Mời anh/chị gọi hoặc nhắn Zalo ${contactWho}${contactPhone} — hỗ trợ xem trực tiếp linh hoạt trong ngày.`,
+    `Rất mong được đón tiếp anh/chị đến xem thực tế; vui lòng kết nối ${contactWho}${contactPhone} để đặt lịch hẹn.`
   ];
-  paragraphs.push(closingTemplates[variant % closingTemplates.length]);
+  paragraphs.push(closingTemplates[variant]);
 
   const descEl = document.getElementById("dDesc");
   if (descEl) descEl.value = paragraphs.join("\n\n");
@@ -4450,14 +4510,19 @@ function updateStudioAiButtonUI() {
   const btn = document.getElementById("btnAiAutoWrite");
   if (!btn) return;
   if (STUDIO_STATE.aiAutoSync) {
-    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đổi Văn Phong AI</span>`;
+    const idx = (Number(STUDIO_STATE.aiVariant || 0) % 5) + 1;
+    btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> <span>Đổi Bài AI (${idx}/5)</span>`;
   } else {
     btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> <span>Click Ngay</span>`;
   }
 }
 
 function generateStudioAISeo() {
-  STUDIO_STATE.aiVariant = ((STUDIO_STATE.aiVariant || 0) + 1) % 6;
+  if (!STUDIO_STATE.aiAutoSync) {
+    STUDIO_STATE.aiVariant = 0;
+  } else {
+    STUDIO_STATE.aiVariant = ((STUDIO_STATE.aiVariant || 0) + 1) % 5;
+  }
   STUDIO_STATE.aiAutoSync = true;
   updateStudioAiButtonUI();
   buildStudioAiDraft();

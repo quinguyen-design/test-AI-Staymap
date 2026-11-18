@@ -4207,6 +4207,15 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   font-size: 11px;
   color: #94a3b8;
 }
+#postModalBackdrop input[type="number"]::-webkit-outer-spin-button,
+#postModalBackdrop input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#postModalBackdrop input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
 .addr-composite-box {
   display: flex;
   align-items: center;
