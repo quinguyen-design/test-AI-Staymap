@@ -127,7 +127,7 @@ button, input, select, textarea, .leaflet-container {
   height: 245px;
 }
 .hero-map-left-drawer .lc-card-body {
-  padding: 16px 18px 14px;
+  padding: 20px 18px 14px;
 }
 
 .site-header-hero.hero-is-map.is-compact {
@@ -688,7 +688,9 @@ button, input, select, textarea, .leaflet-container {
 .hmp-pop-price {
   display: flex;
   align-items: baseline;
+  flex-wrap: nowrap;
   gap: 5px;
+  height: 22px;
   font-variant-numeric: tabular-nums;
   line-height: 1.15;
   white-space: nowrap;
@@ -2232,7 +2234,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .lc-card-body {
-  padding: 14px 16px 15px;
+  padding: 18px 16px 15px;
   display: flex;
   flex-direction: column;
   flex: 1;

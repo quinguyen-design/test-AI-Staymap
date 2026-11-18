@@ -2152,7 +2152,7 @@ function buildListingCardHTML(item) {
         </div>
       </div>
 
-      <div class="lc-card-body" style="${stObj ? "padding-top:20px;" : ""}">
+      <div class="lc-card-body">
         <div class="lc-card-toprow">
           <div class="lc-card-price tabular-nums">
             ${item.priceText} <span>| Tháng</span>
