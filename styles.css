@@ -460,41 +460,78 @@ button, input, select, textarea, .leaflet-container {
   transition: all 0.2s ease;
 }
 
-/* 1. VIP BANNER (Banner Đặc Quyền) — Luxury Gold/Obsidian Gradient + Crown Icon (giống 4173) */
+/* 1. VIP ĐẶC QUYỀN — Nền đen, chữ cam thương hiệu (đồng bộ .tag-dacquyen) */
 .hmp-marker.pin-vip-banner {
   z-index: 50;
 }
 
 .hmp-marker.pin-vip-banner .hmp-pill {
-  background: linear-gradient(135deg, #0f172a 0%, #7c2d12 50%, #f15a22 100%);
-  border: 2px solid #f15a22;
-  color: #ffffff;
+  background: #000000;
+  border: 1.5px solid rgba(241, 90, 34, 0.75);
+  color: var(--ctt-orange);
   font-weight: 800;
-  box-shadow: 0 8px 22px rgba(245, 158, 11, 0.6), 0 2px 6px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .hmp-marker.pin-vip-banner .hmp-pin-tail {
+  border-top-color: #000000;
+}
+
+/* 2. VIP 1 — Nền xám ánh kim, chữ cam + viền cam (đồng bộ .tag-vip1) */
+.hmp-marker.pin-vip1 {
+  z-index: 40;
+}
+
+.hmp-marker.pin-vip1 .hmp-pill {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%);
+  border: 1.5px solid #f15a22;
+  color: #f15a22;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(241, 90, 34, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.hmp-marker.pin-vip1 .hmp-pin-tail {
   border-top-color: #f15a22;
 }
 
-/* 2. CÁC VIP 1, 2, 3 (Spotlight, Featured, Prime) — Icon 1★ + Nền trắng chữ cam */
-.hmp-marker.pin-vip-star {
+/* 3. VIP 2 — Nền xám ánh kim, chữ đen + viền cam nhạt (đồng bộ .tag-vip2) */
+.hmp-marker.pin-vip2 {
   z-index: 30;
 }
 
-.hmp-marker.pin-vip-star .hmp-pill {
-  background: #ffffff;
-  border: 1.5px solid #fdba74;
-  color: #f37201;
+.hmp-marker.pin-vip2 .hmp-pill {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%);
+  border: 1.5px solid #fb923c;
+  color: #1e293b;
   font-weight: 800;
-  box-shadow: 0 5px 14px rgba(243, 114, 1, 0.2), 0 2px 4px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 3px 10px rgba(251, 146, 60, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
+.hmp-marker.pin-vip2 .hmp-pin-tail {
+  border-top-color: #fb923c;
+}
+
+/* 4. VIP 3 — Nền xám ánh kim, chữ đen + viền xám (đồng bộ .tag-vip3) */
+.hmp-marker.pin-vip3,
+.hmp-marker.pin-vip-star {
+  z-index: 25;
+}
+
+.hmp-marker.pin-vip3 .hmp-pill,
+.hmp-marker.pin-vip-star .hmp-pill {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 52%, #cbd5e1 100%);
+  border: 1px solid rgba(148, 163, 184, 0.85);
+  color: #1e293b;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.hmp-marker.pin-vip3 .hmp-pin-tail,
 .hmp-marker.pin-vip-star .hmp-pin-tail {
-  border-top-color: #fdba74;
+  border-top-color: #94a3b8;
 }
 
-/* 3. TIN THƯỜNG (Tin Cơ Bản) — Nền trắng chữ đen */
+/* 5. TIN THƯỜNG (Tin Cơ Bản) — Nền trắng chữ đen */
 .hmp-marker.pin-basic {
   z-index: 15;
 }
@@ -502,7 +539,7 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.pin-basic .hmp-pill {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
-  color: #111827;
+  color: #0f172a;
   font-weight: 700;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
 }

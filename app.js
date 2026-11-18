@@ -1175,17 +1175,23 @@ function updateMapPins(catFilter = "all", focusId = null) {
     const priceShort = item.priceText.replace(" Triệu", "tr");
     const labelText = `${shortCat} - ${priceShort}`;
 
-    // Determine exact 6-tier map pin style:
-    // 1. VIP Banner (Banner Đặc Quyền): pin-vip-banner + Crown icon (like 4173)
-    // 2. VIP 1, 2, 3 (Spotlight, Featured, Prime): pin-vip-star + 1★ icon + White bg, Orange text
-    // 3. Tin thường (Tin Cơ Bản): pin-basic + No icon + White bg, Black text
-    let pinClass = "pin-vip-star";
-    let pinIconHtml = '<i class="fa-solid fa-star" style="color:#f15a22;font-size:10px;"></i>';
+    const vipInfo = typeof getPropertyVipDisplay === "function" ? getPropertyVipDisplay(item) : { badgeClass: "", label: "" };
+    let pinClass = "pin-basic";
+    let pinIconHtml = "";
 
-    if (item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
+    if (vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
-      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#f15a22;font-size:10px;"></i>';
-    } else if (item.tier === "basic" || item.mapTier === "basic" || item.zoneId === 4 || idx >= list.length - 4) {
+      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">✦</span>';
+    } else if (vipInfo.badgeClass === "tag-vip1" || item.mapTier === "vip1" || item.zoneId === 2 || item.tier === "spotlight") {
+      pinClass = "pin-vip1";
+      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">✦</span>';
+    } else if (vipInfo.badgeClass === "tag-vip2" || item.mapTier === "vip2" || item.zoneId === 3 || item.tier === "featured") {
+      pinClass = "pin-vip2";
+      pinIconHtml = '<span style="color:#f15a22;font-size:10px;">•</span>';
+    } else if (vipInfo.badgeClass === "tag-vip3" || item.mapTier === "vip3" || item.zoneId === 5 || item.tier === "prime") {
+      pinClass = "pin-vip3";
+      pinIconHtml = "";
+    } else {
       pinClass = "pin-basic";
       pinIconHtml = "";
     }
