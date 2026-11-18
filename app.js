@@ -3664,11 +3664,11 @@ const STUDIO_CITIES = [
 ];
 
 const STUDIO_PROJECTS = [
-  { value: "Vinhomes Central Park", label: "Vinhomes Central Park", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "208" },
-  { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park", city: "TP. Hồ Chí Minh", ward: "P. Long Bình", street: "Nguyễn Xiển", streetNumber: "512" },
-  { value: "The Sun Avenue", label: "The Sun Avenue", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Mai Chí Thọ", streetNumber: "28" },
-  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. Thảo Điền", street: "Xa Lộ Hà Nội", streetNumber: "159" },
-  { value: "Saigon Pearl", label: "Saigon Pearl", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "92" }
+  { value: "Vinhomes Central Park", label: "Vinhomes Central Park", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "208", coords: [10.7949, 106.7219] },
+  { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park", city: "TP. Hồ Chí Minh", ward: "P. Long Bình", street: "Nguyễn Xiển", streetNumber: "512", coords: [10.8421, 106.8364] },
+  { value: "The Sun Avenue", label: "The Sun Avenue", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Mai Chí Thọ", streetNumber: "28", coords: [10.7876, 106.7484] },
+  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. Thảo Điền", street: "Xa Lộ Hà Nội", streetNumber: "159", coords: [10.8021, 106.7405] },
+  { value: "Saigon Pearl", label: "Saigon Pearl", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "92", coords: [10.7905, 106.7186] }
 ];
 
 function getSelectedStudioProject() {
@@ -3797,6 +3797,8 @@ function pickStudioComboItem(kind, val) {
         streetEl.value = proj.street;
         streetEl.dataset.prevValid = proj.street;
       }
+      STUDIO_STATE.houseNumber = "";
+      STUDIO_STATE.isEditingAddress = false;
     }
   }
   syncStudioAddressDisplay();
@@ -3896,18 +3898,21 @@ function syncStudioAddressDisplay() {
   const suffixEl = document.getElementById("dAddressSuffix");
   const hasProject = Boolean(getValidStudioComboValue("project"));
   if (addrEl) {
-    addrEl.placeholder = hasProject
-      ? "Tòa / Block / Mã Căn (không bắt buộc) - VD: Tòa C1 - 12.05"
-      : "Số Nhà Chuẩn, Ghim Đúng Map - VD: 168/86";
+    addrEl.placeholder = "Số Nhà Chuẩn, Ghim Đúng Map - VD: 168/86";
   }
   const suffix = getStudioLockedSuffix();
   const hasPrefix = Boolean((STUDIO_STATE.houseNumber || "").trim());
-  if (!STUDIO_STATE.isEditingAddress && hasPrefix && addrEl) {
+  if (!STUDIO_STATE.isEditingAddress && (hasPrefix || hasProject) && addrEl) {
     addrEl.value = buildStudioFullAddress();
     if (suffixEl) suffixEl.textContent = "";
-  } else if (suffixEl) {
-    suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
-    suffixEl.classList.toggle("has-prefix", hasPrefix);
+  } else {
+    if (!STUDIO_STATE.isEditingAddress && !hasPrefix && !hasProject && addrEl) {
+      addrEl.value = "";
+    }
+    if (suffixEl) {
+      suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
+      suffixEl.classList.toggle("has-prefix", hasPrefix);
+    }
   }
   renderStudioPreview();
 }
@@ -4693,8 +4698,9 @@ function publishStudioListingNow() {
 
   const wardVal = document.getElementById("dWard")?.value || "P. Cầu Kiệu";
   const cityVal = document.getElementById("dCity")?.value || "TP. Hồ Chí Minh";
-  const baseCoords = STUDIO_WARD_COORDS[wardVal] || [10.7965, 106.6825];
-  const jitter = ((newId % 7) - 3) * 0.0008;
+  const projObj = getSelectedStudioProject();
+  const baseCoords = projObj?.coords || STUDIO_WARD_COORDS[wardVal] || [10.7965, 106.6825];
+  const jitter = projObj?.coords ? 0 : ((newId % 7) - 3) * 0.0008;
 
   const utilitiesList = Array.from(document.querySelectorAll("#postModalBackdrop .util-chk:checked")).map((c) => c.value);
   if (document.getElementById("chkSchool")?.checked) {
