@@ -3414,23 +3414,52 @@ const STUDIO_PROMO_CODES = {
   CHOTHUE50K: { code: "CHOTHUE50K", type: "fixed", value: 50000, desc: "Giảm 50.000đ" }
 };
 
-function onStudioPromoInput(val) {
-  const clean = (val || "").trim().toUpperCase();
-  const statusEl = document.getElementById("promoCodeStatus");
-  if (!clean) {
-    STUDIO_STATE.promoCode = "";
-    if (statusEl) statusEl.textContent = "";
-    renderStudioPreview();
-    return;
+function syncStudioPromoUI(isLocked) {
+  const inputEl = document.getElementById("dPromoCode");
+  const btnEl = document.getElementById("btnPromoAction");
+  if (inputEl) {
+    inputEl.readOnly = Boolean(isLocked);
+    inputEl.style.background = isLocked ? "#f0fdf4" : "#ffffff";
+    inputEl.style.borderColor = isLocked ? "#86efac" : "";
+    inputEl.style.color = isLocked ? "#059669" : "#0f172a";
   }
-  if (STUDIO_PROMO_CODES[clean]) {
-    STUDIO_STATE.promoCode = clean;
-    if (statusEl) {
-      statusEl.textContent = `✓ Đã áp dụng ${STUDIO_PROMO_CODES[clean].desc}`;
-      statusEl.style.color = "#059669";
+  if (btnEl) {
+    if (isLocked) {
+      btnEl.textContent = "HỦY";
+      btnEl.className = "hsp-btn-reset";
+      btnEl.style.cssText = "white-space:nowrap;padding:10px 16px;font-size:12.5px;font-weight:800;color:#dc2626;border-color:#fca5a5;background:#fef2f2;";
+    } else {
+      btnEl.textContent = "Áp dụng";
+      btnEl.className = "hsp-btn-apply";
+      btnEl.style.cssText = "white-space:nowrap;padding:10px 16px;font-size:12.5px;";
     }
-    renderStudioPreview();
   }
+}
+
+function onStudioPromoInput(val) {
+  if (STUDIO_STATE.promoCode) return;
+  const statusEl = document.getElementById("promoCodeStatus");
+  if (statusEl && !(val || "").trim()) {
+    statusEl.textContent = "";
+  }
+}
+
+function handleStudioPromoAction() {
+  if (STUDIO_STATE.promoCode) {
+    cancelStudioPromoCode();
+  } else {
+    applyStudioPromoCode();
+  }
+}
+
+function cancelStudioPromoCode() {
+  const inputEl = document.getElementById("dPromoCode");
+  const statusEl = document.getElementById("promoCodeStatus");
+  STUDIO_STATE.promoCode = "";
+  if (inputEl) inputEl.value = "";
+  if (statusEl) statusEl.textContent = "";
+  syncStudioPromoUI(false);
+  renderStudioPreview();
 }
 
 function applyStudioPromoCode() {
@@ -3443,6 +3472,7 @@ function applyStudioPromoCode() {
       statusEl.textContent = "Vui lòng nhập mã (VD: STAYMAP10)";
       statusEl.style.color = "#d97706";
     }
+    syncStudioPromoUI(false);
     renderStudioPreview();
     return;
   }
@@ -3453,6 +3483,7 @@ function applyStudioPromoCode() {
       statusEl.textContent = "Mã không hợp lệ (Thử: STAYMAP10, VIP20, CHOTHUE50K)";
       statusEl.style.color = "#dc2626";
     }
+    syncStudioPromoUI(false);
     renderStudioPreview();
     return;
   }
@@ -3462,6 +3493,7 @@ function applyStudioPromoCode() {
     statusEl.textContent = `✓ Đã áp dụng ${promo.desc}`;
     statusEl.style.color = "#059669";
   }
+  syncStudioPromoUI(true);
   renderStudioPreview();
 }
 
@@ -4540,6 +4572,7 @@ function initStudioPostListing(preselectedZoneId = null) {
   if (promoEl) promoEl.value = "";
   const promoStatusEl = document.getElementById("promoCodeStatus");
   if (promoStatusEl) promoStatusEl.textContent = "";
+  syncStudioPromoUI(false);
   const vLbl = document.getElementById("demoVideoLabel");
   if (vLbl) vLbl.textContent = "Tải Video Ngắn Từ Máy (MP4, MOV)";
   populateStudioWards();
