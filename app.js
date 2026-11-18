@@ -1233,6 +1233,15 @@ function updateMapPins(catFilter = "all", focusId = null) {
     const vipTagHtml = vipInfo.label
       ? `<span class="lc-vip-tag hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
       : "";
+    const popStickerMap = {
+      urgent: { name: "Giảm Sâu", cls: "sticker-urgent", icon: "fa-bolt" },
+      hot: { name: "HOT", cls: "sticker-hot", icon: "fa-fire" },
+      promo: { name: "Ưu Đãi", cls: "sticker-promo", icon: "fa-gift" }
+    };
+    const popStObj = item.sticker ? popStickerMap[item.sticker] : null;
+    const popStickerHtml = popStObj
+      ? `<span class="sticker-pill ${popStObj.cls} hmp-pop-sticker"><i class="fa-solid ${popStObj.icon}"></i> ${popStObj.name}</span>`
+      : "";
     marker.bindPopup(`
       <div class="hero-map-popup ${isBanner ? "is-vip-banner" : ""}" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">
         <div class="hmp-pop-top">
@@ -1245,6 +1254,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
             <div class="hmp-pop-price tabular-nums">
               <span class="hmp-pop-price-val">${item.priceText}</span>
               <span class="hmp-pop-price-unit">| Tháng</span>
+              ${popStickerHtml}
             </div>
             <div class="hmp-pop-title">${item.title}</div>
           </div>
