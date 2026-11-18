@@ -1175,14 +1175,10 @@
                 <span style="font-size:11.5px;color:var(--ctt-orange);font-weight:700;">Đúng Thông Số - Chuẩn Bảng Tính</span>
               </div>
 
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;align-items:start;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;align-items:start;">
                 <div>
                   <div class="post-field-label"><span>Giá Thuê <small class="util-unit">(Triệu / Tháng)</small> <span class="req-star">*</span></span></div>
                   <input type="number" step="0.1" id="dPrice" class="post-input tabular-nums" value="" oninput="renderStudioPreview()">
-                </div>
-                <div>
-                  <div class="post-field-label"><span>Diện Tích <small class="util-unit">(m²)</small> <span class="req-star">*</span></span></div>
-                  <input type="number" id="dArea" class="post-input tabular-nums" value="" oninput="renderStudioPreview()">
                 </div>
                 <div>
                   <div class="post-field-label"><span>Tiền Cọc</span></div>
@@ -1194,7 +1190,11 @@
                 </div>
               </div>
 
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;align-items:start;">
+                <div>
+                  <div class="post-field-label"><span>Diện Tích <small class="util-unit">(m²)</small> <span class="req-star">*</span></span></div>
+                  <input type="number" id="dArea" class="post-input tabular-nums" value="" oninput="renderStudioPreview()">
+                </div>
                 <div>
                   <div class="post-field-label"><span>Phòng Ngủ</span></div>
                   <input type="text" inputmode="numeric" id="dBeds" class="post-input tabular-nums" value="1" placeholder="1" oninput="onStudioRoomCountInput('beds', this)" onblur="onStudioRoomCountBlur('beds', this)">
