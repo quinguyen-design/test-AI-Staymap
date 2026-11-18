@@ -64,8 +64,8 @@ const VIP_EXCLUSIVE_SLIDES = [
     area: "500m²",
     beds: "2 VP",
     baths: "3 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     phone: "0918 779 333",
     phoneMasked: "0918 779 ***",
     lat: 10.7438,
@@ -193,8 +193,8 @@ const PROPERTIES = [
     area: 68,
     beds: "3 PN",
     baths: "3 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.7625,
     lng: 106.6685,
@@ -256,8 +256,8 @@ const PROPERTIES = [
     area: 85,
     beds: "4 PN",
     baths: "3 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.8125,
     lng: 106.6785,
@@ -287,8 +287,8 @@ const PROPERTIES = [
     area: 110,
     beds: "2 VP",
     baths: "2 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.8025,
     lng: 106.6515,
@@ -319,7 +319,7 @@ const PROPERTIES = [
     beds: "2 VP",
     baths: "2 WC",
     elec: "Điện 3 pha",
-    water: "QĐ VN",
+    water: "Nhà nước",
     deposit: "3 tháng",
     lat: 10.7685,
     lng: 106.7125,
@@ -491,8 +491,8 @@ const PROPERTIES = [
     area: 54,
     beds: "2 PN",
     baths: "2 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.8188,
     lng: 106.6763,
@@ -519,8 +519,8 @@ const PROPERTIES = [
     area: 130,
     beds: "2 VP",
     baths: "2 WC",
-    elec: "QĐ VN",
-    water: "QĐ VN",
+    elec: "Nhà nước",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.7852,
     lng: 106.6311,
@@ -578,7 +578,7 @@ const PROPERTIES = [
     beds: "1 VP",
     baths: "2 WC",
     elec: "Điện 3 pha",
-    water: "QĐ VN",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.8755,
     lng: 106.6624,
@@ -634,7 +634,7 @@ const PROPERTIES = [
     beds: "1 VP",
     baths: "1 WC",
     elec: "Điện 3 pha",
-    water: "QĐ VN",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.7895,
     lng: 106.6412,
@@ -662,7 +662,7 @@ const PROPERTIES = [
     beds: "1 VP",
     baths: "2 WC",
     elec: "Điện 3 pha",
-    water: "QĐ VN",
+    water: "Nhà nước",
     deposit: "2 tháng",
     lat: 10.7689,
     lng: 106.6215,
@@ -2462,16 +2462,16 @@ function computePropertyMonthlyCost(item) {
   const priceNum = Number(item.price ?? item.priceMillion ?? 0);
   const baseRentVnd = Math.round(priceNum * 1000000);
 
-  const elecStr = String(item.elec || "QĐ VN").trim();
+  const elecStr = String(item.elec || "Nhà nước").trim();
   const isElecState = !elecStr || /nhà nước|qđ\s*vn/i.test(elecStr);
   const elecUnitVnd = isElecState ? 3000 : parseKToVnd(elecStr);
   const elecEstVnd = elecUnitVnd > 0 ? elecUnitVnd * 100 : 300000;
-  const elecNote = isElecState ? "Điện (QĐ VN ~100 kWh)" : `Điện (${elecStr} × 100 kWh)`;
+  const elecNote = isElecState ? "Điện (Nhà nước ~100 kWh)" : `Điện (${elecStr} × 100 kWh)`;
 
-  const waterStr = String(item.water || "QĐ VN").trim();
+  const waterStr = String(item.water || "Nhà nước").trim();
   const isWaterState = !waterStr || /nhà nước|qđ\s*vn/i.test(waterStr);
   const waterEstVnd = isWaterState ? 80000 : (parseKToVnd(waterStr) || 80000);
-  const waterNote = isWaterState ? "Nước (QĐ VN)" : `Nước (${waterStr})`;
+  const waterNote = isWaterState ? "Nước (Nhà nước)" : `Nước (${waterStr})`;
 
   const hasCustomServiceFields = Boolean(item.internet || item.laundry || item.trash || item.parking || item.otherCost);
   const serviceEstVnd = hasCustomServiceFields
@@ -5152,8 +5152,8 @@ function buildStudioAiDraft() {
     : `${deposit ? `Tiền cọc ${deposit.toLowerCase()}, giá thuê thương lượng trực tiếp.` : "Giá thuê hợp lý cho khách thiện chí."}`;
 
   const feeParts = [
-    elec ? `điện ${elec}` : "điện QĐ VN",
-    water ? `nước ${water}` : "nước QĐ VN"
+    elec ? `điện ${elec}` : "điện Nhà nước",
+    water ? `nước ${water}` : "nước Nhà nước"
   ];
   if (otherCost) {
     feeParts.push(`trọn gói các chi phí dịch vụ khác ${otherCost}`);
@@ -5441,8 +5441,8 @@ function renderStudioPreview() {
     const val = parseFloat((document.getElementById(id)?.value || "").replace(/k/gi, "").trim());
     return sum + (Number.isFinite(val) && val > 0 ? val : 0);
   }, 0);
-  const elec = elecRaw ? `${elecRaw}k` : "QĐ VN";
-  const water = waterRaw ? `${waterRaw}k` : "QĐ VN";
+  const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
+  const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
   const otherCost = otherRaw
     ? `${otherRaw}k`
     : (subFeesSumK > 0 ? `${Number(subFeesSumK.toFixed(2))}k` : "--");
@@ -5723,8 +5723,8 @@ function publishStudioListingNow() {
     area: parseInt(document.getElementById("dArea")?.value || "35", 10),
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
-    elec: elecRaw ? `${elecRaw}k` : "QĐ VN",
-    water: waterRaw ? `${waterRaw}k` : "QĐ VN",
+    elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
+    water: waterRaw ? `${waterRaw}k` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
     internet: internetRaw ? `${internetRaw}k` : "",
     laundry: laundryRaw ? `${laundryRaw}k` : "",
@@ -5876,8 +5876,8 @@ const PORTAL_DATA = {
         area: 42,
         beds: "1 PN",
         baths: "1 WC",
-        elec: "QĐ VN",
-        water: "QĐ VN",
+        elec: "Nhà nước",
+        water: "Nhà nước",
         deposit: "1 Tháng",
         furniture: "Đầy Đủ",
         floors: "1 Tầng",
@@ -5909,7 +5909,7 @@ const PORTAL_DATA = {
         area: 55,
         beds: "2 PN",
         baths: "2 WC",
-        elec: "QĐ VN",
+        elec: "Nhà nước",
         water: "100k",
         deposit: "1 Tháng",
         furniture: "Đầy Đủ",
@@ -6883,7 +6883,7 @@ function switchAdminTab(tabName, btnEl) {
               </tr>
               <tr>
                 <td><strong>Chi Phí Cơ Bản</strong></td>
-                <td style="font-size:12px;color:#334155;">Điện (k/kWh hoặc QĐ VN) • Nước (k/Người hoặc QĐ VN)</td>
+                <td style="font-size:12px;color:#334155;">Điện (k/kWh hoặc Nhà nước) • Nước (k/Người hoặc Nhà nước)</td>
               </tr>
               <tr>
                 <td><strong>Chi Phí Khác</strong></td>
