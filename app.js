@@ -2768,6 +2768,7 @@ const DEFAULT_ACCOUNTS = [
     password: "StayMapAdmin@2026",
     role: "admin",
     displayName: "Quản trị viên StayMap",
+    phone: "0906344877",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0001"
   },
@@ -2776,6 +2777,7 @@ const DEFAULT_ACCOUNTS = [
     password: "Qui@1707",
     role: "admin",
     displayName: "Admin Qui Nguyen",
+    phone: "0906344877",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0002"
   },
@@ -2784,6 +2786,7 @@ const DEFAULT_ACCOUNTS = [
     password: "123123",
     role: "member",
     displayName: "Duy Quang",
+    phone: "0909882456",
     verifiedVia: "Thành viên xác thực",
     memberCode: "#CTT-8830"
   }
@@ -2804,8 +2807,11 @@ function getAccountsStore() {
         const merged = parsed.slice();
         DEFAULT_ACCOUNTS.forEach((def) => {
           const defId = normalizeAuthIdentity(def.identity);
-          if (!merged.some((a) => normalizeAuthIdentity(a.identity) === defId)) {
+          const existing = merged.find((a) => normalizeAuthIdentity(a.identity) === defId);
+          if (!existing) {
             merged.push(def);
+          } else if (!existing.phone && def.phone) {
+            existing.phone = def.phone;
           }
         });
         return merged;
@@ -2959,11 +2965,13 @@ function closeAuthModal() {
 }
 
 function completeAuthSession(authData, remember = true) {
+  const inferredPhone = authData.phone || (/^0\d{9}$/.test((authData.identity || "").replace(/\s+/g, "")) ? authData.identity.replace(/\s+/g, "") : "");
   STATE.auth = {
     isLoggedIn: true,
     role: authData.role || "member",
     displayName: authData.displayName || "Thành viên ChoThueTot",
     identity: authData.identity || "",
+    phone: inferredPhone,
     verifiedVia: authData.verifiedVia || "Zalo ZNS"
   };
   REG_STATE.loginAttempts = 0;
@@ -3738,6 +3746,13 @@ function goToModalWizardStep(stepNum, force = false) {
     nextBtn.style.visibility = target === 4 ? "hidden" : "visible";
     nextBtn.innerHTML = `Tiếp theo <i class="fa-solid fa-arrow-right"></i>`;
   }
+  const modalBody = document.querySelector("#postModalBackdrop .ctt-modal-body");
+  if (modalBody) modalBody.scrollTop = 0;
+  const modalDialog = document.querySelector("#postModalBackdrop .ctt-modal-dialog");
+  if (modalDialog) modalDialog.scrollTop = 0;
+  const activeSlide = document.getElementById(`modalWizardSlide${target}`);
+  if (activeSlide) activeSlide.scrollTop = 0;
+  document.getElementById("modalWizardTabs")?.scrollIntoView({ block: "nearest" });
 }
 
 function stepModalWizard(dir) {
@@ -4664,7 +4679,19 @@ function initStudioPostListing(preselectedZoneId = null) {
   if (hostEl) hostEl.value = STATE.auth.displayName || "Chính chủ Minh Quân";
   const phoneEl = document.getElementById("dPhone");
   if (phoneEl) {
-    phoneEl.value = STATE.auth.phone || "";
+    let accountPhone = STATE.auth.phone || "";
+    if (!accountPhone && STATE.auth.identity) {
+      const normId = normalizeAuthIdentity(STATE.auth.identity);
+      const matchedAcc = getAccountsStore().find((a) => normalizeAuthIdentity(a.identity) === normId);
+      if (matchedAcc?.phone) {
+        accountPhone = matchedAcc.phone;
+        STATE.auth.phone = accountPhone;
+      } else if (/^0\d{9}$/.test(normId)) {
+        accountPhone = normId;
+        STATE.auth.phone = accountPhone;
+      }
+    }
+    phoneEl.value = accountPhone;
     sanitizeStudioVnPhone(phoneEl);
   }
   ["dPrice", "dArea", "dElec", "dWater", "dOtherCost", "dInternet", "dLaundry", "dTrash", "dParking", "dExtraPerson", "dTitle", "dDesc", "dFrontageRoad", "dRoadAccess", "dAddress", "dSchoolCode"].forEach((id) => {
