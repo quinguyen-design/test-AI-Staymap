@@ -4687,14 +4687,16 @@ function onStudioRoomCountBlur(kind, inputEl) {
 }
 
 let STUDIO_WATER_TIMER = null;
+let STUDIO_LAUNDRY_TIMER = null;
 
 function openStudioWaterUnitList() {
   clearTimeout(STUDIO_WATER_TIMER);
   const listEl = document.getElementById("dWaterUnitList");
   if (!listEl) return;
+  const activeUnit = STUDIO_STATE.waterUnit || "nguoi";
   listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
     const unit = idx === 0 ? "m3" : "nguoi";
-    btn.classList.toggle("is-active", STUDIO_STATE.waterUnit === unit);
+    btn.classList.toggle("is-active", activeUnit === unit);
   });
   listEl.classList.add("is-open");
 }
@@ -4722,6 +4724,45 @@ function selectStudioWaterUnit(unit) {
 
 function onStudioWaterInput(inputEl) {
   document.getElementById("dWaterUnitList")?.classList.remove("is-open");
+  sanitizeStudioNumericK(inputEl);
+}
+
+function openStudioLaundryUnitList() {
+  clearTimeout(STUDIO_LAUNDRY_TIMER);
+  const listEl = document.getElementById("dLaundryUnitList");
+  if (!listEl) return;
+  const activeUnit = STUDIO_STATE.laundryUnit || "nguoi";
+  const order = ["nguoi", "lan", "kg", "phong"];
+  listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
+    btn.classList.toggle("is-active", activeUnit === order[idx]);
+  });
+  listEl.classList.add("is-open");
+}
+
+function closeStudioLaundryUnitDelay() {
+  clearTimeout(STUDIO_LAUNDRY_TIMER);
+  STUDIO_LAUNDRY_TIMER = setTimeout(() => {
+    document.getElementById("dLaundryUnitList")?.classList.remove("is-open");
+  }, 150);
+}
+
+function selectStudioLaundryUnit(unit) {
+  clearTimeout(STUDIO_LAUNDRY_TIMER);
+  STUDIO_STATE.laundryUnit = unit;
+  const labelMap = { nguoi: "(Người)", lan: "(1 Lần)", kg: "(Kg)", phong: "(Phòng)" };
+  const labelEl = document.getElementById("dLaundryUnitLabel");
+  if (labelEl) {
+    labelEl.textContent = labelMap[unit] || "(Người)";
+    labelEl.style.display = "inline";
+  }
+  document.getElementById("dLaundryUnitList")?.classList.remove("is-open");
+  const inputEl = document.getElementById("dLaundry");
+  if (inputEl) inputEl.focus();
+  renderStudioPreview();
+}
+
+function onStudioLaundryInput(inputEl) {
+  document.getElementById("dLaundryUnitList")?.classList.remove("is-open");
   sanitizeStudioNumericK(inputEl);
 }
 
@@ -5511,11 +5552,17 @@ function initStudioPostListing(preselectedZoneId = null) {
   if (bedsEl) bedsEl.value = "1";
   const bathsEl = document.getElementById("dBaths");
   if (bathsEl) bathsEl.value = "1";
-  STUDIO_STATE.waterUnit = "";
+  STUDIO_STATE.waterUnit = "nguoi";
   const waterUnitEl = document.getElementById("dWaterUnitLabel");
   if (waterUnitEl) {
-    waterUnitEl.textContent = "";
-    waterUnitEl.style.display = "none";
+    waterUnitEl.textContent = "(Người)";
+    waterUnitEl.style.display = "inline";
+  }
+  STUDIO_STATE.laundryUnit = "nguoi";
+  const laundryUnitEl = document.getElementById("dLaundryUnitLabel");
+  if (laundryUnitEl) {
+    laundryUnitEl.textContent = "(Người)";
+    laundryUnitEl.style.display = "inline";
   }
   const agreeEl = document.getElementById("agreePostTerms");
   if (agreeEl) agreeEl.checked = false;
@@ -5567,7 +5614,7 @@ function renderStudioPreview() {
     return sum + (Number.isFinite(val) && val > 0 ? val : 0);
   }, 0);
   const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
-  const waterUnitSuffix = STUDIO_STATE.waterUnit === "m3" ? "/m³" : STUDIO_STATE.waterUnit === "nguoi" ? "/Người" : "";
+  const waterUnitSuffix = STUDIO_STATE.waterUnit === "m3" ? "/m³" : "/Người";
   const water = waterRaw ? `${waterRaw}k${waterUnitSuffix}` : "Nhà nước";
   const otherCost = otherRaw
     ? `${otherRaw}k`
@@ -5850,10 +5897,10 @@ function publishStudioListingNow() {
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
     elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
-    water: waterRaw ? `${waterRaw}k${STUDIO_STATE.waterUnit === "m3" ? "/m³" : STUDIO_STATE.waterUnit === "nguoi" ? "/Người" : ""}` : "Nhà nước",
+    water: waterRaw ? `${waterRaw}k${STUDIO_STATE.waterUnit === "m3" ? "/m³" : "/Người"}` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
     internet: internetRaw ? `${internetRaw}k` : "",
-    laundry: laundryRaw ? `${laundryRaw}k` : "",
+    laundry: laundryRaw ? `${laundryRaw}k/${({ nguoi: "Người", lan: "1 Lần", kg: "Kg", phong: "Phòng" }[STUDIO_STATE.laundryUnit || "nguoi"])}` : "",
     trash: trashRaw ? `${trashRaw}k` : "",
     parking: parkingRaw ? `${parkingRaw}k` : "",
     maxPeople: document.getElementById("dMaxPeople")?.value || "",

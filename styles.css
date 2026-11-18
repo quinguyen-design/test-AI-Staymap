@@ -4969,7 +4969,8 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   font-weight: 500;
   opacity: 1;
 }
-#postModalBackdrop #dWater {
+#postModalBackdrop #dWater,
+#postModalBackdrop #dLaundry {
   padding-right: 14px;
 }
 #postModalBackdrop #dWater::placeholder {
