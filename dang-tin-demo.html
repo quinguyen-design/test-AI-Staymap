@@ -624,11 +624,11 @@
                   <input type="text" inputmode="decimal" id="dLaundry" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Thu Rác <small class="util-unit">(Phòng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Phí Rác <small class="util-unit">(Phòng)</small></span></div>
                   <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(Xe / Người / Tháng)</small></span></div>
+                  <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(Xe / Người)</small></span></div>
                   <input type="text" inputmode="decimal" id="dParking" class="post-input tabular-nums" value="" oninput="sanitizeNumericK(this)">
                 </div>
                 <div>
@@ -1324,7 +1324,7 @@
         otherCost ? `Trọn gói chi phí khác: ${otherCost}` : "",
         internet ? `Internet: ${internet}` : "",
         laundry ? `Giặt sấy: ${laundry}` : "",
-        trash ? `Thu rác: ${trash}` : "",
+        trash ? `Phí rác: ${trash}` : "",
         parking ? `Phí xe: ${parking}` : ""
       ].filter(Boolean);
       lines.push(`• Chi phí minh bạch: ${costBits.join(" | ")}.`);

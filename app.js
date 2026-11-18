@@ -5279,7 +5279,7 @@ function buildStudioAiDraft() {
   } else {
     if (internet) feeParts.push(`internet ${internet}`);
     if (laundry) feeParts.push(`giặt sấy ${laundry}`);
-    if (trash) feeParts.push(`thu rác ${trash}`);
+    if (trash) feeParts.push(`phí rác ${trash}`);
     if (parking) feeParts.push(`phí gửi xe ${parking}`);
   }
   const feeIntros = [
@@ -7014,7 +7014,7 @@ function switchAdminTab(tabName, btnEl) {
               </tr>
               <tr>
                 <td><strong>Chi Phí Khác</strong></td>
-                <td style="font-size:12px;color:#334155;"><strong>Trọn Gói Chi Phí Khác</strong> (loại trừ 4 mục lẻ) hoặc tách: Internet, Giặt Sấy, Thu Rác, Phí Xe (Xe/Người/Tháng)</td>
+                <td style="font-size:12px;color:#334155;"><strong>Trọn Gói Chi Phí Khác</strong> (loại trừ 4 mục lẻ) hoặc tách: Internet, Giặt Sấy, Phí Rác, Phí Xe (Xe/Người)</td>
               </tr>
               <tr>
                 <td><strong>Giới Hạn Người</strong></td>
