@@ -5,6 +5,17 @@
    6-Tier Pricing & VietQR Wallet + Smart Post Listing Modal
    ========================================================================== */
 
+function formatPhone433(raw) {
+  const digits = String(raw || "").replace(/\D/g, "");
+  if (digits.length === 10) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7, 10)}`;
+  }
+  if (digits.length === 11) {
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7, 11)}`;
+  }
+  return String(raw || "").trim() || "0906 344 877";
+}
+
 // 1. BANNER ĐẶC QUYỀN (.sv1) — 3 EXCLUSIVE VIP SHOWCASE SLIDES
 const VIP_EXCLUSIVE_SLIDES = [
   {
@@ -1381,8 +1392,8 @@ function openHeroMapLeftDrawer(item) {
   }
   const actionRowHtml = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 18px 16px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
-      <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:10px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
-        <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i>${item.phone || ""}
+      <a href="tel:${(item.phone || "").replace(/\D/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:10px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
+        <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i>${formatPhone433(item.phone)}
       </a>
       <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border:none;border-radius:10px;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
         Xem Thêm <i class="fa-solid fa-arrow-right"></i>
@@ -2813,8 +2824,8 @@ function openPropertyDetailView(propId) {
               </div>
             </div>
 
-            <button type="button" onclick="copyHostPhoneNow(this, '${item.phone}')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;box-shadow:0 10px 24px rgba(241,90,34,0.35);display:flex;align-items:center;justify-content:center;gap:10px;">
-              <i class="fa-solid fa-phone-volume"></i> ${item.phone} • Gọi ngay
+            <button type="button" onclick="copyHostPhoneNow(this, '${formatPhone433(item.phone)}')" style="width:100%;padding:14px;border-radius:14px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;box-shadow:0 10px 24px rgba(241,90,34,0.35);display:flex;align-items:center;justify-content:center;gap:10px;" class="tabular-nums">
+              <i class="fa-solid fa-phone-volume"></i> ${formatPhone433(item.phone)} • Gọi ngay
             </button>
 
             <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0f172a;background:#f8fafc;color:#0f172a;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;text-decoration:none;">
@@ -2905,7 +2916,7 @@ function submitZaloViewingSchedule(propId) {
       `• Mã tin: #${item.id} (${item.ward}, ${item.city})\n` +
       `• Thời gian hẹn: ${STATE.selectedViewingDate} — ${STATE.selectedViewingTime}\n` +
       `• SĐT khách thuê: ${phone}\n` +
-      `• Chủ nhà (${item.host} - ${item.phone}) đã nhận thông báo từ ChoThueTot.vn!`
+      `• Chủ nhà (${item.host} - ${formatPhone433(item.phone)}) đã nhận thông báo từ ChoThueTot.vn!`
   );
 }
 
@@ -3363,7 +3374,7 @@ const DEFAULT_ACCOUNTS = [
     password: "StayMapAdmin@2026",
     role: "admin",
     displayName: "Quản trị viên StayMap",
-    phone: "0906344877",
+    phone: "0906 344 877",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0001"
   },
@@ -3372,7 +3383,7 @@ const DEFAULT_ACCOUNTS = [
     password: "Qui@1707",
     role: "admin",
     displayName: "Admin Qui Nguyen",
-    phone: "0906344877",
+    phone: "0906 344 877",
     verifiedVia: "Admin 2FA",
     memberCode: "#ADM-0002"
   },
@@ -3381,7 +3392,7 @@ const DEFAULT_ACCOUNTS = [
     password: "123123",
     role: "member",
     displayName: "Duy Quang",
-    phone: "0909882456",
+    phone: "0909 882 456",
     verifiedVia: "Thành viên xác thực",
     memberCode: "#CTT-8830"
   }
@@ -5786,7 +5797,7 @@ function publishStudioListingNow() {
     lng: Number((baseCoords[1] - jitter).toFixed(4)),
     verified: true,
     isVipPin: z.id === 1,
-    phone: document.getElementById("dPhone")?.value || "0906344877",
+    phone: formatPhone433(document.getElementById("dPhone")?.value || "0906 344 877"),
     host: document.getElementById("dHost")?.value || "Chính chủ Minh Quân",
     image: coverPhoto,
     gallery: STUDIO_STATE.photos.slice(),
@@ -5880,6 +5891,7 @@ const PORTAL_DATA = {
     if (Array.isArray(userSaved) && userSaved.length > 0) {
       userSaved.slice().reverse().forEach((item) => {
         if (item && item.id && !existingIds.has(item.id)) {
+          item.phone = formatPhone433(item.phone);
           existingIds.add(item.id);
           PROPERTIES.unshift(item);
         }
@@ -5928,7 +5940,7 @@ const PORTAL_DATA = {
         lng: 106.6798,
         verified: true,
         isVipPin: false,
-        phone: "0906344877",
+        phone: "0906 344 877",
         host: "Chính chủ Minh Quân",
         image: poolPhotos[2],
         gallery: [poolPhotos[2], poolPhotos[0], poolPhotos[1], poolPhotos[3]]
@@ -5961,7 +5973,7 @@ const PORTAL_DATA = {
         lng: 106.6849,
         verified: true,
         isVipPin: false,
-        phone: "0906344877",
+        phone: "0906 344 877",
         host: "Duy Quang",
         image: poolPhotos[3],
         gallery: [poolPhotos[3], poolPhotos[4], poolPhotos[5], poolPhotos[1]]
@@ -6310,7 +6322,7 @@ function switchMemberTab(tabName, btnEl) {
           <tbody>
             ${PORTAL_DATA.appointments.map((a) => `
               <tr>
-                <td><strong>${a.guestName}</strong><br><small style="color:#0284c7;">SĐT Zalo: ${a.guestPhone}</small></td>
+                <td><strong>${a.guestName}</strong><br><small class="tabular-nums" style="color:#0284c7;">SĐT Zalo: ${formatPhone433(a.guestPhone)}</small></td>
                 <td><a href="javascript:void(0)" onclick="openPropertyDetailView(${a.propId})" style="color:#0f172a;font-weight:700;text-decoration:none;">#${a.propId} • ${a.propTitle}</a></td>
                 <td><strong>${a.slot}</strong></td>
                 <td>
@@ -6411,7 +6423,7 @@ function switchMemberTab(tabName, btnEl) {
     `;
   } else {
     const curName = STATE.auth?.displayName || "Chính chủ Minh Quân";
-    const curPhone = STATE.auth?.phone || "0906344877";
+    const curPhone = formatPhone433(STATE.auth?.phone || "0906 344 877");
     const curEmail = STATE.auth?.email || (STATE.auth?.identity?.includes("@") ? STATE.auth.identity : "thanhvien@staymap.vn");
     container.innerHTML = `
       <div class="portal-table-card">
