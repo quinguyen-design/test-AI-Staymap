@@ -3491,8 +3491,12 @@ function applyStudioPromoCode() {
   if (inputEl) inputEl.value = clean;
   STUDIO_STATE.promoCode = clean;
   if (statusEl) {
-    statusEl.textContent = `✓ Đã áp dụng ${promo.desc}`;
-    statusEl.style.color = "#059669";
+    const discountBadge = promo.type === "percent"
+      ? `${promo.value}%`
+      : `${new Intl.NumberFormat("vi-VN").format(promo.value)}đ`;
+    statusEl.innerHTML = `<i class="fa-solid fa-check"></i> ĐÃ GIẢM ${discountBadge}`;
+    statusEl.style.color = "var(--ctt-orange)";
+    statusEl.style.fontWeight = "800";
   }
   syncStudioPromoUI(true);
   renderStudioPreview();
@@ -4817,7 +4821,7 @@ function renderStudioPreview() {
         discountNotes.push(`Mã ${pricing.promoObj.code}: -${fmt(pricing.promoDiscount)}`);
       }
       const discountNoteHtml = discountNotes.length
-        ? `<div style="font-size:11px;color:#059669;margin-top:1px;">(${discountNotes.join(" + ")})</div>`
+        ? `<div style="font-size:11px;color:var(--ctt-orange);margin-top:1px;">(${discountNotes.join(" + ")})</div>`
         : `<div style="font-size:11px;color:#94a3b8;margin-top:1px;">(Chưa có % giảm ngày hoặc mã khuyến mãi)</div>`;
       breakdownEl.innerHTML = `
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
@@ -4834,7 +4838,7 @@ function renderStudioPreview() {
             <span>Ưu đãi giảm giá:</span>
             ${discountNoteHtml}
           </div>
-          <strong class="tabular-nums" style="color:${pricing.totalDiscount > 0 ? "#059669" : "#64748b"};white-space:nowrap;">${pricing.totalDiscount > 0 ? `-${fmt(pricing.totalDiscount)}` : "0đ"}</strong>
+          <strong class="tabular-nums" style="color:${pricing.totalDiscount > 0 ? "var(--ctt-orange)" : "#64748b"};white-space:nowrap;">${pricing.totalDiscount > 0 ? `-${fmt(pricing.totalDiscount)}` : "0đ"}</strong>
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
           <span>Thuế VAT (8%):</span>
