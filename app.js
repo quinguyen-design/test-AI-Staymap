@@ -1241,12 +1241,12 @@ function updateMapPins(catFilter = "all", focusId = null) {
             ${vipTagHtml}
           </div>
           <div class="hmp-pop-body">
+            ${bannerLocText ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${bannerLocText}</span></div>` : ""}
             <div class="hmp-pop-price tabular-nums">
               <span class="hmp-pop-price-val">${item.priceText}</span>
               <span class="hmp-pop-price-unit">| Tháng</span>
             </div>
             <div class="hmp-pop-title">${item.title}</div>
-            ${bannerLocText ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${bannerLocText}</span></div>` : ""}
           </div>
         </div>
         <div class="hmp-pop-footer">
