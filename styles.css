@@ -14,7 +14,7 @@
   --ctt-orange-border: #ffd6be;
   --ctt-grad-brand: linear-gradient(135deg, #f15a22 0%, #f37201 50%, #ff9d00 100%);
   --ctt-grad-luxury: linear-gradient(135deg, #1a1412 0%, #2b1810 45%, #3d1e10 100%);
-  --ctt-grad-gold: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+  --ctt-grad-gold: linear-gradient(135deg, #f15a22 0%, #f15a22 50%, #f15a22 100%);
   
   /* Luxury Neutral & Surface Tokens */
   --bg-page: #f6f7f9;
@@ -27,11 +27,11 @@
   --border-dashed: #e2e8f0;
 
   /* VIP Tier Zoned Accents */
-  --vip-diamond: #f59e0b;
-  --vip-top1: #ef4444;
+  --vip-diamond: #f15a22;
+  --vip-top1: #f15a22;
   --vip-top2: #f37201;
-  --vip-top3: #0ea5e9;
-  --verified-green: #10b981;
+  --vip-top3: #f15a22;
+  --verified-green: #f15a22;
 
   /* Shadows & 3D Depth */
   --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.05);
@@ -181,7 +181,7 @@ button, input, select, textarea, .leaflet-container {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.5px;
-  color: #ffd700;
+  color: #f15a22;
   background: rgba(243, 114, 1, 0.22);
   border: 1px solid rgba(255, 215, 0, 0.45);
   text-transform: uppercase;
@@ -213,12 +213,12 @@ button, input, select, textarea, .leaflet-container {
 
 .shb-wallet-pill:hover {
   transform: translateY(-2px);
-  border-color: #ffd700;
+  border-color: #f15a22;
   background: rgba(15, 23, 42, 0.9);
 }
 
 .shb-wallet-pill .wallet-amount {
-  color: #ffd700;
+  color: #f15a22;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -392,7 +392,7 @@ button, input, select, textarea, .leaflet-container {
 
 .map-style-btn.active {
   background: rgba(255, 255, 255, 0.18);
-  color: #ffd700;
+  color: #f15a22;
 }
 
 .map-expand-btn {
@@ -465,15 +465,15 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .hmp-marker.pin-vip-banner .hmp-pill {
-  background: linear-gradient(135deg, #1e1b4b 0%, #7c2d12 50%, #f59e0b 100%);
-  border: 2px solid #ffd700;
+  background: linear-gradient(135deg, #0f172a 0%, #7c2d12 50%, #f15a22 100%);
+  border: 2px solid #f15a22;
   color: #ffffff;
   font-weight: 800;
   box-shadow: 0 8px 22px rgba(245, 158, 11, 0.6), 0 2px 6px rgba(0, 0, 0, 0.28);
 }
 
 .hmp-marker.pin-vip-banner .hmp-pin-tail {
-  border-top-color: #ffd700;
+  border-top-color: #f15a22;
 }
 
 /* 2. CÁC VIP 1, 2, 3 (Spotlight, Featured, Prime) — Icon 1★ + Nền trắng chữ cam */
@@ -1256,7 +1256,7 @@ button, input, select, textarea, .leaflet-container {
   padding: 7px 18px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #ffd700;
+  color: #f15a22;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -1266,7 +1266,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .sv1-luxury-pill i {
-  color: #ffd700;
+  color: #f15a22;
   filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
 }
 
@@ -1388,9 +1388,9 @@ button, input, select, textarea, .leaflet-container {
   gap: 5px;
   padding: 5px 12px;
   border-radius: 999px;
-  background: #ecfdf5;
-  color: #059669;
-  border: 1px solid #a7f3d0;
+  background: #fffaf5;
+  color: #f15a22;
+  border: 1px solid #fed7aa;
   font-size: 11px;
   font-weight: 800;
 }
@@ -1561,7 +1561,7 @@ button, input, select, textarea, .leaflet-container {
   border-radius: var(--radius-pill);
   background: rgba(15, 23, 42, 0.76);
   backdrop-filter: blur(12px);
-  color: #ffd700;
+  color: #f15a22;
   font-size: 11.5px;
   font-weight: 800;
   border: 1px solid rgba(255, 215, 0, 0.45);
@@ -1727,7 +1727,7 @@ button, input, select, textarea, .leaflet-container {
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.84);
   backdrop-filter: blur(8px);
-  color: #ffd700;
+  color: #f15a22;
   font-size: 11.5px;
   font-weight: 700;
   border: 1px solid rgba(255, 215, 0, 0.45);
@@ -1944,7 +1944,7 @@ button, input, select, textarea, .leaflet-container {
 .lc-vip-tag.tag-top1 {
   background: rgba(15, 23, 42, 0.84);
   backdrop-filter: blur(8px);
-  color: #ffd700;
+  color: #f15a22;
   border: 1px solid rgba(255, 215, 0, 0.45);
 }
 
@@ -1998,7 +1998,7 @@ button, input, select, textarea, .leaflet-container {
 
 .lc-fav-btn:hover,
 .lc-fav-btn.active {
-  background: #ef4444;
+  background: #f15a22;
   border-color: #fff;
   color: #fff;
   transform: scale(1.08);
@@ -2095,7 +2095,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .lc-utility-bar i {
-  color: #10b981;
+  color: #f15a22;
   font-size: 10px;
 }
 
@@ -2550,7 +2550,7 @@ button, input, select, textarea, .leaflet-container {
 
 /* 3D Luxury Pricing Page (/bao-gia.html) */
 .price-hero-area {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #431407 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #0f172a 50%, #431407 100%);
   color: #ffffff;
   text-align: center;
   padding: 56px 24px;
@@ -2614,7 +2614,7 @@ button, input, select, textarea, .leaflet-container {
 .p-card-v3.super-vip {
   background: linear-gradient(160deg, #0f172a 0%, #1e293b 65%, #3b1d0e 100%);
   color: #ffffff;
-  border: 2px solid #ffd700;
+  border: 2px solid #f15a22;
   box-shadow: 0 24px 55px rgba(245, 158, 11, 0.25);
 }
 
@@ -2679,7 +2679,7 @@ button, input, select, textarea, .leaflet-container {
 
 .p-card-v3.super-vip .p-price-tag {
   background: rgba(255, 215, 0, 0.18);
-  color: #ffd700;
+  color: #f15a22;
 }
 
 .p-features-list {
@@ -2700,7 +2700,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .p-features-list li i {
-  color: #10b981;
+  color: #f15a22;
 }
 
 .p-btn-main {
@@ -2749,8 +2749,8 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .comp-table th.super {
-  background: #451a03;
-  color: #ffd700;
+  background: #0f172a;
+  color: #f15a22;
 }
 
 .comp-table th.highlight {
@@ -2957,12 +2957,12 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .phone-btn .icon-circle {
-  background: #2ecc71;
+  background: #f15a22;
   animation: quickAlo 1.6s infinite ease-in-out;
 }
 
 .zalo-btn-footer .icon-circle {
-  background: #0068ff;
+  background: #0f172a;
 }
 
 .zalo-btn-footer .icon-circle img {
@@ -3090,7 +3090,7 @@ button, input, select, textarea, .leaflet-container {
   position: absolute;
   top: -8px;
   right: 4px;
-  background: #ef4444;
+  background: #f15a22;
   color: #fff;
   font-size: 9px;
   font-weight: 800;
@@ -3115,7 +3115,7 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.is-hovered .hmp-pill {
   background: var(--ctt-grad-brand) !important;
   color: #ffffff !important;
-  border-color: #ffd700 !important;
+  border-color: #f15a22 !important;
   box-shadow: 0 0 0 6px rgba(243, 114, 1, 0.32), 0 10px 24px rgba(0, 0, 0, 0.45) !important;
 }
 
@@ -3227,7 +3227,7 @@ button, input, select, textarea, .leaflet-container {
 .compare-tray-chip-price {
   font-size: 11px;
   font-weight: 700;
-  color: #ffd700;
+  color: #f15a22;
 }
 
 .compare-tray-remove {
@@ -3240,7 +3240,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .compare-tray-remove:hover {
-  color: #ef4444;
+  color: #f15a22;
 }
 
 /* Standardized Zalo Viewing Schedule Box in Property Detail */
@@ -3284,7 +3284,7 @@ button, input, select, textarea, .leaflet-container {
   margin-top: 14px;
   padding: 12px 16px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #fffbeb 0%, #fff3eb 100%);
+  background: linear-gradient(135deg, #fffaf5 0%, #fff3eb 100%);
   border: 1px solid #fed7aa;
   display: flex;
   align-items: center;
@@ -3814,7 +3814,7 @@ button, input, select, textarea, .leaflet-container {
 #view-admin .portal-nav-btn:hover,
 #view-admin .portal-nav-btn.active {
   background: rgba(243, 114, 1, 0.24) !important;
-  color: #ffd700 !important;
+  color: #f15a22 !important;
   border: 1px solid rgba(255, 215, 0, 0.35);
 }
 
@@ -3983,7 +3983,7 @@ button, input, select, textarea, .leaflet-container {
   border-radius: 8px;
   background: rgba(255, 215, 0, 0.14);
   border: 1px solid rgba(255, 215, 0, 0.3);
-  color: #ffd700;
+  color: #f15a22;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4019,9 +4019,9 @@ button, input, select, textarea, .leaflet-container {
   display: none;
   padding: 9px 11px;
   border-radius: 10px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  color: #f15a22;
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
@@ -4031,9 +4031,9 @@ button, input, select, textarea, .leaflet-container {
   display: none;
   padding: 9px 11px;
   border-radius: 10px;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  color: #065f46;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
   font-size: 12px;
   font-weight: 700;
   line-height: 1.4;
@@ -4063,7 +4063,7 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .header-user-pill:hover {
-  border-color: #ffd700;
+  border-color: #f15a22;
   transform: translateY(-1px);
 }
 
@@ -4348,7 +4348,7 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   flex-shrink: 0;
 }
 .req-star {
-  color: #ef4444;
+  color: #f15a22;
   font-weight: 900;
   margin-left: 2px;
 }
@@ -4591,9 +4591,9 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   margin-top: 12px;
   padding: 9px 12px;
   border-radius: 10px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background: #fffaf5;
+  border: 1px solid #fed7aa;
+  color: #f15a22;
   font-size: 12px;
   font-weight: 700;
 }

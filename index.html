@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118ar">
+  <link rel="stylesheet" href="styles.css?v=20261119a">
 </head>
 <body>
 
@@ -39,7 +39,7 @@
       <div class="shb-actions">
         <!-- Upgraded Instant VietQR Wallet Pill (Hidden until logged in) -->
         <button type="button" id="headerWalletPill" class="shb-wallet-pill" style="display:none;" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR +11%">
-          <i class="fa-solid fa-wallet" style="color:#ffd700;"></i>
+          <i class="fa-solid fa-wallet" style="color:#f15a22;"></i>
           <span>Ví: <strong class="wallet-amount js-wallet-balance">550.000đ</strong></span>
           <span class="wallet-topup-tag">+11%</span>
         </button>
@@ -60,20 +60,20 @@
           <div class="header-user-dropdown" id="headerUserDropdown">
             <div class="header-user-dd-head">
               <strong id="headerDropdownFullName" style="display:block;font-size:13px;color:#0f172a;">Thành viên</strong>
-              <small id="headerDropdownVerified" style="font-size:11px;color:#059669;font-weight:700;">Đã xác thực</small>
+              <small id="headerDropdownVerified" style="font-size:11px;color:#f15a22;font-weight:700;">Đã xác thực</small>
             </div>
             <button type="button" class="header-user-dd-item" onclick="closeHeaderUserDropdown();navigateTo('/tai-khoan.html')">
-              <i class="fa-solid fa-user-check" style="color:#059669;"></i> Hồ sơ & Quản lý tin đăng
+              <i class="fa-solid fa-user-check" style="color:#f15a22;"></i> Hồ sơ & Quản lý tin đăng
             </button>
             <button type="button" class="header-user-dd-item" onclick="closeHeaderUserDropdown();openWalletModal()">
               <i class="fa-solid fa-wallet" style="color:var(--ctt-orange);"></i> Ví đăng tin & Nạp VietQR (+11%)
             </button>
-            <button type="button" id="dropdownAdminLink" class="header-user-dd-item" style="display:none;color:#0284c7;" onclick="closeHeaderUserDropdown();navigateTo('/admin.html')">
-              <i class="fa-solid fa-shield-halved" style="color:#0284c7;"></i> Trung tâm Quản trị Admin
+            <button type="button" id="dropdownAdminLink" class="header-user-dd-item" style="display:none;color:#f15a22;" onclick="closeHeaderUserDropdown();navigateTo('/admin.html')">
+              <i class="fa-solid fa-shield-halved" style="color:#f15a22;"></i> Trung tâm Quản trị Admin
             </button>
             <div style="height:1px;background:#f1f5f9;margin:4px 0;"></div>
-            <button type="button" class="header-user-dd-item" style="color:#dc2626;" onclick="closeHeaderUserDropdown();logoutAccount()">
-              <i class="fa-solid fa-right-from-bracket" style="color:#dc2626;"></i> Đăng xuất tài khoản
+            <button type="button" class="header-user-dd-item" style="color:#f15a22;" onclick="closeHeaderUserDropdown();logoutAccount()">
+              <i class="fa-solid fa-right-from-bracket" style="color:#f15a22;"></i> Đăng xuất tài khoản
             </button>
           </div>
         </div>
@@ -664,10 +664,10 @@
           </tr>
           <tr>
             <td class="feature-label">Hiển thị trên Bản đồ</td>
-            <td><i class="fa-solid fa-crown" style="color:#f59e0b;"></i> <strong>Ghim VIP Luxury (Vàng Kim)</strong></td>
-            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
-            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
-            <td><i class="fa-solid fa-star" style="color:#f59e0b;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><i class="fa-solid fa-crown" style="color:#f15a22;"></i> <strong>Ghim VIP Luxury (Vàng Kim)</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f15a22;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f15a22;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
+            <td><i class="fa-solid fa-star" style="color:#f15a22;"></i> <strong style="color:var(--ctt-orange);">Icon 1★ • Nền trắng chữ cam</strong></td>
             <td><strong>Nền trắng chữ đen</strong></td>
             <td style="color:#94a3b8;"><i class="fa-solid fa-ban"></i> Không hiển thị</td>
           </tr>
@@ -755,7 +755,7 @@
               MQ
             </div>
             <h3 id="memberSidebarName" style="font-size:16.5px;font-weight:900;color:#0f172a;">Chính chủ Minh Quân</h3>
-            <div id="memberSidebarBadge" style="font-size:12px;color:#059669;font-weight:700;margin-top:3px;">
+            <div id="memberSidebarBadge" style="font-size:12px;color:#f15a22;font-weight:700;margin-top:3px;">
               <i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & SĐT
             </div>
             <div id="memberSidebarMeta" style="font-size:11.5px;color:#64748b;margin-top:4px;">ID Thành viên: #CTT-8829 • Hạng Vàng</div>
@@ -765,9 +765,9 @@
           <div style="margin-top:16px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
               <span style="font-size:11px;color:#cbd5e1;">Số dư Ví đăng tin:</span>
-              <span style="font-size:10px;background:#f59e0b;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight:800;">+11% Tháng 11</span>
+              <span style="font-size:10px;background:#f15a22;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight:800;">+11% Tháng 11</span>
             </div>
-            <div style="font-size:22px;font-weight:900;color:#ffd700;margin-bottom:10px;" class="js-wallet-balance tabular-nums">550.000đ</div>
+            <div style="font-size:22px;font-weight:900;color:#f15a22;margin-bottom:10px;" class="js-wallet-balance tabular-nums">550.000đ</div>
             <button type="button" onclick="openWalletModal()" style="width:100%;padding:8px;border-radius:9px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;">
               <i class="fa-solid fa-qrcode"></i> Nạp thêm qua VietQR
             </button>
@@ -775,19 +775,19 @@
 
           <ul class="portal-nav-list">
             <li><button type="button" class="portal-nav-btn active" onclick="switchMemberTab('listings', this)"><span><i class="fa-solid fa-list-check"></i> Quản lý Tin đăng</span> <span id="memberNavCountListings" style="font-size:11px;background:#fff3eb;color:var(--ctt-orange);padding:2px 7px;border-radius:99px;">8</span></button></li>
-            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span id="memberNavCountAppts" style="font-size:11px;background:#ecfdf5;color:#059669;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span id="memberNavCountAppts" style="font-size:11px;background:#fffaf5;color:#f15a22;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('wallet', this)"><span><i class="fa-solid fa-receipt"></i> Lịch sử Ví & Hóa đơn VAT</span></button></li>
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('seo-tools', this)"><span><i class="fa-solid fa-link"></i> Công cụ SEO Link & Chia sẻ</span></button></li>
             <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('profile', this)"><span><i class="fa-regular fa-id-card"></i> Hồ sơ & Đổi mật khẩu</span></button></li>
             <li id="memberSwitchAdminItem" style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;display:none;">
-              <button type="button" class="portal-nav-btn" onclick="navigateTo('/admin.html')" style="color:#0284c7;">
-                <span><i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> Chuyển sang Admin</span>
+              <button type="button" class="portal-nav-btn" onclick="navigateTo('/admin.html')" style="color:#f15a22;">
+                <span><i class="fa-solid fa-user-shield" style="color:#f15a22;"></i> Chuyển sang Admin</span>
                 <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
               </button>
             </li>
             <li style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
-              <button type="button" class="portal-nav-btn" onclick="logoutAccount()" style="color:#dc2626;">
-                <span><i class="fa-solid fa-right-from-bracket" style="color:#dc2626;"></i> Đăng xuất tài khoản</span>
+              <button type="button" class="portal-nav-btn" onclick="logoutAccount()" style="color:#f15a22;">
+                <span><i class="fa-solid fa-right-from-bracket" style="color:#f15a22;"></i> Đăng xuất tài khoản</span>
               </button>
             </li>
           </ul>
@@ -799,22 +799,22 @@
           <div class="portal-kpi-grid tabular-nums">
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">TIN ĐANG QUẢN LÝ</small>
-              <div id="memberKpiActive" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">08 <span style="font-size:12px;color:#059669;font-weight:700;">(5 Tin VIP)</span></div>
+              <div id="memberKpiActive" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">08 <span style="font-size:12px;color:#f15a22;font-weight:700;">(5 Tin VIP)</span></div>
               <small style="color:#64748b;font-size:11px;">100% chuẩn SEO URL & Bản đồ</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT XEM TIN (30 NGÀY)</small>
-              <div id="memberKpiViews" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">4.820 <span style="font-size:12px;color:#059669;font-weight:700;">+38%</span></div>
+              <div id="memberKpiViews" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">4.820 <span style="font-size:12px;color:#f15a22;font-weight:700;">+38%</span></div>
               <small style="color:#64748b;font-size:11px;">Từ Bản đồ 3D & Google SEO</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT BẤM GỌI & ZALO</small>
-              <div id="memberKpiCalls" style="font-size:26px;font-weight:900;color:var(--ctt-orange);margin:4px 0;">142 <span style="font-size:12px;color:#059669;font-weight:700;">khách thật</span></div>
+              <div id="memberKpiCalls" style="font-size:26px;font-weight:900;color:var(--ctt-orange);margin:4px 0;">142 <span style="font-size:12px;color:#f15a22;font-weight:700;">khách thật</span></div>
               <small style="color:#64748b;font-size:11px;">Tỷ lệ chuyển đổi 9.4%</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">QUYỀN SỬA TIN MIỄN PHÍ</small>
-              <div id="memberKpiFreeEdits" style="font-size:26px;font-weight:900;color:#059669;margin:4px 0;">03 / 03</div>
+              <div id="memberKpiFreeEdits" style="font-size:26px;font-weight:900;color:#f15a22;margin:4px 0;">03 / 03</div>
               <small style="color:#64748b;font-size:11px;">Áp dụng cho mỗi tin đăng mới</small>
             </div>
           </div>
@@ -834,26 +834,26 @@
         <!-- Left Sidebar: Admin Control Menu -->
         <aside class="portal-sidebar" style="background:#0f172a;border-color:#1e293b;color:#fff;">
           <div style="padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);">
-            <span style="font-size:10px;font-weight:800;letter-spacing:1.2px;color:#ffd700;text-transform:uppercase;display:block;margin-bottom:4px;">SYSTEM CONTROL CENTER</span>
+            <span style="font-size:10px;font-weight:800;letter-spacing:1.2px;color:#f15a22;text-transform:uppercase;display:block;margin-bottom:4px;">SYSTEM CONTROL CENTER</span>
             <h3 id="adminSidebarTitle" style="font-size:17px;font-weight:900;color:#fff;">CHOTHUETOT ADMIN</h3>
             <small id="adminSidebarSub" style="color:#94a3b8;font-size:11.5px;">Quản trị viên cấp cao • Toàn quyền</small>
           </div>
 
           <ul class="portal-nav-list">
-            <li><button type="button" class="portal-nav-btn active" style="color:#fff;" onclick="switchAdminTab('moderation', this)"><span><i class="fa-solid fa-shield-check" style="color:#ffd700;"></i> Duyệt tin & Kiểm duyệt AI</span> <span id="adminNavBadgeQueue" style="font-size:10.5px;background:#ef4444;color:#fff;padding:2px 7px;border-radius:99px;">4 chờ</span></button></li>
+            <li><button type="button" class="portal-nav-btn active" style="color:#fff;" onclick="switchAdminTab('moderation', this)"><span><i class="fa-solid fa-shield-check" style="color:#f15a22;"></i> Duyệt tin & Kiểm duyệt AI</span> <span id="adminNavBadgeQueue" style="font-size:10.5px;background:#f15a22;color:#fff;padding:2px 7px;border-radius:99px;">4 chờ</span></button></li>
             <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('all-listings', this)"><span><i class="fa-solid fa-layer-group" style="color:#f97316;"></i> Quản lý Toàn bộ Tin đăng</span></button></li>
-            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#38bdf8;"></i> Doanh thu VIP & VAT 8%</span></button></li>
-            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#34d399;"></i> Quản lý Tài khoản & Cấp quyền</span></button></li>
-            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('seo-config', this)"><span><i class="fa-solid fa-magnifying-glass-chart" style="color:#a78bfa;"></i> Cấu hình SEO Link & Vị trí</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#f15a22;"></i> Doanh thu VIP & VAT 8%</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#f15a22;"></i> Quản lý Tài khoản & Cấp quyền</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('seo-config', this)"><span><i class="fa-solid fa-magnifying-glass-chart" style="color:#f15a22;"></i> Cấu hình SEO Link & Vị trí</span></button></li>
             <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('post-schema', this)"><span><i class="fa-solid fa-table-list" style="color:var(--ctt-orange);"></i> Tổng Hợp Mục Đăng Tin</span></button></li>
             <li style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
-              <button type="button" class="portal-nav-btn" style="color:#ffd700;" onclick="navigateTo('/tai-khoan.html')">
-                <span><i class="fa-solid fa-user-check" style="color:#ffd700;"></i> Xem trang Thành viên</span>
+              <button type="button" class="portal-nav-btn" style="color:#f15a22;" onclick="navigateTo('/tai-khoan.html')">
+                <span><i class="fa-solid fa-user-check" style="color:#f15a22;"></i> Xem trang Thành viên</span>
               </button>
             </li>
             <li style="margin-top:6px;">
-              <button type="button" class="portal-nav-btn" style="color:#f87171;" onclick="logoutAccount()">
-                <span><i class="fa-solid fa-right-from-bracket" style="color:#f87171;"></i> Đăng xuất Admin</span>
+              <button type="button" class="portal-nav-btn" style="color:#f15a22;" onclick="logoutAccount()">
+                <span><i class="fa-solid fa-right-from-bracket" style="color:#f15a22;"></i> Đăng xuất Admin</span>
               </button>
             </li>
           </ul>
@@ -864,22 +864,22 @@
           <div class="portal-kpi-grid tabular-nums">
             <div class="portal-kpi-card" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
               <small style="color:#94a3b8;font-size:11px;font-weight:700;">DOANH THU GÓI VIP + VAT (THÁNG 11)</small>
-              <div id="adminKpiRevenue" style="font-size:24px;font-weight:900;color:#ffd700;margin:4px 0;">186.450.000đ</div>
-              <small style="color:#34d399;font-size:11.5px;font-weight:700;">▲ +24.8% • Đã gồm VAT 8% & Nhãn dán</small>
+              <div id="adminKpiRevenue" style="font-size:24px;font-weight:900;color:#f15a22;margin:4px 0;">186.450.000đ</div>
+              <small style="color:#f15a22;font-size:11.5px;font-weight:700;">▲ +24.8% • Đã gồm VAT 8% & Nhãn dán</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11px;font-weight:700;">TIN CHỜ DUYỆT (AI PRE-CHECK)</small>
-              <div id="adminKpiQueue" style="font-size:24px;font-weight:900;color:#ef4444;margin:4px 0;">04 tin mới</div>
+              <div id="adminKpiQueue" style="font-size:24px;font-weight:900;color:#f15a22;margin:4px 0;">04 tin mới</div>
               <small style="color:#64748b;font-size:11.5px;">Điểm AI trung bình: 96/100</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TIN ĐANG HOẠT ĐỘNG</small>
               <div id="adminKpiActiveVip" style="font-size:24px;font-weight:900;color:#0f172a;margin:4px 0;">22 tin</div>
-              <small style="color:#059669;font-size:11.5px;font-weight:700;">Đủ 6 Loại hình • 6 Khu vực</small>
+              <small style="color:#f15a22;font-size:11.5px;font-weight:700;">Đủ 6 Loại hình • 6 Khu vực</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TÀI KHOẢN HỆ THỐNG</small>
-              <div id="adminKpiUsers" style="font-size:24px;font-weight:900;color:#0284c7;margin:4px 0;">04 tài khoản</div>
+              <div id="adminKpiUsers" style="font-size:24px;font-weight:900;color:#f15a22;margin:4px 0;">04 tài khoản</div>
               <small style="color:#64748b;font-size:11.5px;">2 Admin • 2 Chủ nhà xác thực</small>
             </div>
           </div>
@@ -1519,19 +1519,19 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;" class="tabular-nums">
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(200000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 200.000đ</strong>
-            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 222.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 222.000đ (+11%)</div>
           </button>
           <button type="button" class="zone-pkg-card selected" onclick="topUpWalletInstant(500000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 500.000đ</strong>
-            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 555.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 555.000đ (+11%)</div>
           </button>
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(1000000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 1.000.000đ</strong>
-            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 1.110.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 1.110.000đ (+11%)</div>
           </button>
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(2000000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 2.000.000đ</strong>
-            <div style="font-size:11.5px;color:#059669;font-weight:800;">Nhận 2.220.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 2.220.000đ (+11%)</div>
           </button>
         </div>
         <small style="color:#64748b;font-size:11.5px;">Hỗ trợ VietQR 45 Ngân hàng, Ví MoMo & VNPay tự động 24/7.</small>
@@ -1556,12 +1556,12 @@
           <!-- Left: Member Benefits & Security Trust -->
           <div class="auth-left-card">
             <div>
-              <span style="font-size:10.5px;font-weight:800;color:#ffd700;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">THÀNH VIÊN CHOTHUETOT.VN</span>
+              <span style="font-size:10.5px;font-weight:800;color:#f15a22;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">THÀNH VIÊN CHOTHUETOT.VN</span>
               <h4 style="font-size:18px;font-weight:900;margin-bottom:8px;line-height:1.3;">Quản lý tin đăng thông minh & Minh bạch</h4>
               <p style="font-size:12px;color:#cbd5e1;line-height:1.55;margin-bottom:12px;">
                 Đăng nhập hoặc đăng ký xác thực để mở khóa đầy đủ công cụ cho Chủ nhà, Môi giới & Quản trị viên:
               </p>
-              <div id="authModalNotice" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.5);color:#fde68a;font-size:12px;font-weight:700;"></div>
+              <div id="authModalNotice" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,0.18);border:1px solid rgba(245,158,11,0.5);color:#fed7aa;font-size:12px;font-weight:700;"></div>
               <div class="auth-benefit-list">
                 <div class="auth-benefit-item">
                   <span class="auth-benefit-icon"><i class="fa-solid fa-map-location-dot"></i></span>
@@ -1583,9 +1583,9 @@
             </div>
             <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);">
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                <span class="auth-security-pill"><i class="fa-solid fa-shield-halved" style="color:#34d399;"></i> Zalo ZNS OTP</span>
-                <span class="auth-security-pill"><i class="fa-brands fa-google" style="color:#ffd700;"></i> Google OAuth 2.0</span>
-                <span class="auth-security-pill"><i class="fa-solid fa-lock" style="color:#38bdf8;"></i> 2FA Ready</span>
+                <span class="auth-security-pill"><i class="fa-solid fa-shield-halved" style="color:#f15a22;"></i> Zalo ZNS OTP</span>
+                <span class="auth-security-pill"><i class="fa-brands fa-google" style="color:#f15a22;"></i> Google OAuth 2.0</span>
+                <span class="auth-security-pill"><i class="fa-solid fa-lock" style="color:#f15a22;"></i> 2FA Ready</span>
               </div>
               <p style="font-size:11.5px;color:#94a3b8;line-height:1.5;margin:0;">
                 Hệ thống bảo vệ phiên đăng nhập & chống đăng tin ảo trên toàn bộ nền tảng StayMap.vn.
@@ -1641,7 +1641,7 @@
                     <img src="assets/zalo.svg" alt="Zalo" style="width:17px;height:17px;"> Zalo
                   </button>
                   <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;" onclick="loginWithGoogleQuick()">
-                    <i class="fa-brands fa-google" style="color:#ea4335;font-size:15px;"></i> Google
+                    <i class="fa-brands fa-google" style="color:#f15a22;font-size:15px;"></i> Google
                   </button>
                 </div>
                 <div style="text-align:center;font-size:12px;color:#64748b;margin-top:2px;">
@@ -1731,11 +1731,11 @@
             <!-- PANEL 2: ĐĂNG KÝ BẢO MẬT (2 PHƯƠNG THỨC) -->
             <div id="authPanelRegister" style="display:none;">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-                <button type="button" id="regMethodZaloBtn" onclick="switchRegisterMethod('zalo')" style="padding:10px 8px;border-radius:10px;border:1.5px solid #0284c7;background:#f0f9ff;color:#0369a1;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <button type="button" id="regMethodZaloBtn" onclick="switchRegisterMethod('zalo')" style="padding:10px 8px;border-radius:10px;border:1.5px solid #f15a22;background:#f8fafc;color:#475569;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                   <img src="assets/zalo.svg" alt="Zalo" style="width:16px;height:16px;"> 1. SĐT (Mã qua Zalo)
                 </button>
                 <button type="button" id="regMethodGoogleBtn" onclick="switchRegisterMethod('google')" style="padding:10px 8px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;color:#475569;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                  <i class="fa-brands fa-google" style="color:#ea4335;"></i> 2. Email liên kết Google
+                  <i class="fa-brands fa-google" style="color:#f15a22;"></i> 2. Email liên kết Google
                 </button>
               </div>
 
@@ -1749,12 +1749,12 @@
                   <label class="auth-field-label" for="regZaloPhone"><i class="fa-solid fa-phone"></i> Số điện thoại Zalo</label>
                   <div style="display:flex;gap:8px;">
                     <input type="tel" id="regZaloPhone" class="post-input" style="flex:1;" placeholder="10 số, VD: 0906344877">
-                    <button type="button" id="btnSendZaloOtp" onclick="sendZaloRegisterOtp()" style="padding:0 14px;border-radius:10px;border:none;background:#0284c7;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+                    <button type="button" id="btnSendZaloOtp" onclick="sendZaloRegisterOtp()" style="padding:0 14px;border-radius:10px;border:none;background:#f15a22;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
                       Gửi mã Zalo
                     </button>
                   </div>
                 </div>
-                <div id="regZaloOtpBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;font-size:11.5px;line-height:1.45;"></div>
+                <div id="regZaloOtpBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#fffaf5;border:1px solid #fed7aa;color:#9a3412;font-size:11.5px;line-height:1.45;"></div>
                 <div>
                   <label class="auth-field-label" for="regZaloOtpInput"><i class="fa-solid fa-comment-sms"></i> Mã OTP 6 số từ Zalo ZNS</label>
                   <input type="text" id="regZaloOtpInput" class="post-input tabular-nums" maxlength="6" placeholder="Nhập mã OTP 6 số">
@@ -1767,7 +1767,7 @@
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
                     <div style="flex:1;height:5px;border-radius:99px;background:#e2e8f0;overflow:hidden;">
-                      <div id="regZaloStrengthBar" style="width:0%;height:100%;background:#ef4444;transition:width 0.2s,background 0.2s;"></div>
+                      <div id="regZaloStrengthBar" style="width:0%;height:100%;background:#f15a22;transition:width 0.2s,background 0.2s;"></div>
                     </div>
                     <small id="regZaloStrengthLabel" style="font-size:11px;font-weight:700;color:#64748b;">Chưa nhập</small>
                   </div>
@@ -1793,7 +1793,7 @@
                     </button>
                   </div>
                 </div>
-                <div id="regGoogleCodeBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:11.5px;line-height:1.45;"></div>
+                <div id="regGoogleCodeBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#fffaf5;border:1px solid #fed7aa;color:#0f172a;font-size:11.5px;line-height:1.45;"></div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
                   <div>
                     <label class="auth-field-label" for="regGoogleName"><i class="fa-solid fa-user"></i> Họ và tên</label>
@@ -1812,7 +1812,7 @@
                   </div>
                   <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
                     <div style="flex:1;height:5px;border-radius:99px;background:#e2e8f0;overflow:hidden;">
-                      <div id="regGoogleStrengthBar" style="width:0%;height:100%;background:#ef4444;transition:width 0.2s,background 0.2s;"></div>
+                      <div id="regGoogleStrengthBar" style="width:0%;height:100%;background:#f15a22;transition:width 0.2s,background 0.2s;"></div>
                     </div>
                     <small id="regGoogleStrengthLabel" style="font-size:11px;font-weight:700;color:#64748b;">Chưa nhập</small>
                   </div>
@@ -1842,7 +1842,7 @@
         <i class="fa-solid fa-scale-balanced"></i>
       </span>
       <div>
-        <div style="font-size:12.5px;font-weight:800;color:#ffd700;">So sánh BĐS</div>
+        <div style="font-size:12.5px;font-weight:800;color:#f15a22;">So sánh BĐS</div>
         <small style="font-size:11px;color:#cbd5e1;" id="compareTrayCountText">Đã chọn 0/3 phòng</small>
       </div>
     </div>
@@ -1878,6 +1878,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118at"></script>
+  <script src="app.js?v=20261119a"></script></script>
 </body>
 </html>

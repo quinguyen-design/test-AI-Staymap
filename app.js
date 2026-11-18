@@ -1180,11 +1180,11 @@ function updateMapPins(catFilter = "all", focusId = null) {
     // 2. VIP 1, 2, 3 (Spotlight, Featured, Prime): pin-vip-star + 1★ icon + White bg, Orange text
     // 3. Tin thường (Tin Cơ Bản): pin-basic + No icon + White bg, Black text
     let pinClass = "pin-vip-star";
-    let pinIconHtml = '<i class="fa-solid fa-star" style="color:#f59e0b;font-size:10px;"></i>';
+    let pinIconHtml = '<i class="fa-solid fa-star" style="color:#f15a22;font-size:10px;"></i>';
 
     if (item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
-      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ffd700;font-size:10px;"></i>';
+      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#f15a22;font-size:10px;"></i>';
     } else if (item.tier === "basic" || item.mapTier === "basic" || item.zoneId === 4 || idx >= list.length - 4) {
       pinClass = "pin-basic";
       pinIconHtml = "";
@@ -1931,7 +1931,7 @@ function switchSv1Thumb(thumbIdx) {
 function revealSv1Phone(btnEl, fullPhone) {
   const span = btnEl.querySelector(".phone-text");
   if (span) {
-    span.innerHTML = `${fullPhone} • <span style="color:#ffd700;">Đã sao chép</span>`;
+    span.innerHTML = `${fullPhone} • <span style="color:#f15a22;">Đã sao chép</span>`;
     navigator.clipboard?.writeText(fullPhone.replace(/\s+/g, ""));
   }
 }
@@ -2573,7 +2573,7 @@ function openPropertyDetailView(propId) {
                 </div>
                 <div>
                   <div class="post-label" style="font-size:11px;color:#64748b;font-weight:700;">ĐIỆN / NƯỚC</div>
-                  <div style="font-size:15px;font-weight:900;color:#059669;">${item.elec} • ${item.water}</div>
+                  <div style="font-size:15px;font-weight:900;color:#f15a22;">${item.elec} • ${item.water}</div>
                 </div>
               </div>
             </div>
@@ -2636,7 +2636,7 @@ function openPropertyDetailView(propId) {
           <div class="pd-seo-tags-box">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
               <strong style="font-size:13px;color:#0f172a;"><i class="fa-solid fa-tags" style="color:var(--ctt-orange);margin-right:6px;"></i>Từ khóa & Đường dẫn SEO liên quan (Vị trí & Giá thành)</strong>
-              <small style="font-size:11px;color:#059669;font-family:monospace;">${seoHashUrl.replace("#", "")}</small>
+              <small style="font-size:11px;color:#f15a22;font-family:monospace;">${seoHashUrl.replace("#", "")}</small>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;">
               <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${toVietnameseSlug(item.ward)}')" class="pd-seo-tag-pill"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> Cho thuê ${item.categoryLabel} ${item.ward}</a>
@@ -2656,7 +2656,7 @@ function openPropertyDetailView(propId) {
               </div>
               <div>
                 <div style="font-size:16px;font-weight:900;color:#0f172a;">${item.host}</div>
-                <div style="font-size:12px;color:#059669;font-weight:700;"><i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & Chủ nhà</div>
+                <div style="font-size:12px;color:#f15a22;font-weight:700;"><i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & Chủ nhà</div>
               </div>
             </div>
 
@@ -2664,14 +2664,14 @@ function openPropertyDetailView(propId) {
               <i class="fa-solid fa-phone-volume"></i> ${item.phone} • Gọi ngay
             </button>
 
-            <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0068ff;background:#f0f7ff;color:#0068ff;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;text-decoration:none;">
+            <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0f172a;background:#f8fafc;color:#0f172a;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;text-decoration:none;">
               <img src="assets/zalo.svg" alt="Zalo" style="width:20px;height:20px;"> Nhắn Zalo nhận video phòng thực tế
             </a>
 
             <div class="pd-schedule-box">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                 <strong style="font-size:13px;color:#0f172a;"><i class="fa-regular fa-calendar-check" style="color:var(--ctt-orange);margin-right:6px;"></i>Đặt lịch hẹn xem phòng trực tiếp</strong>
-                <span style="font-size:10.5px;font-weight:700;color:#059669;">Miễn phí 100%</span>
+                <span style="font-size:10.5px;font-weight:700;color:#f15a22;">Miễn phí 100%</span>
               </div>
 
               <small style="display:block;font-size:11px;color:#64748b;font-weight:700;margin-bottom:5px;">1. Chọn ngày xem phòng:</small>
@@ -2690,12 +2690,12 @@ function openPropertyDetailView(propId) {
 
               <input type="tel" inputmode="numeric" maxlength="10" id="schedTenantPhone" value="${defaultSchedPhone}" class="hsp-select tabular-nums" style="background:#fff;margin-bottom:10px;font-size:12.5px;" placeholder="Nhập SĐT Zalo 10 số của bạn...">
 
-              <button type="button" onclick="submitZaloViewingSchedule(${item.id})" style="width:100%;padding:11px;border-radius:12px;border:none;background:#0f172a;color:#ffd700;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <button type="button" onclick="submitZaloViewingSchedule(${item.id})" style="width:100%;padding:11px;border-radius:12px;border:none;background:#0f172a;color:#f15a22;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
                 <i class="fa-solid fa-paper-plane"></i> Gửi lịch hẹn qua Zalo Chủ Nhà
               </button>
             </div>
 
-            <div style="margin-top:14px;padding:12px;border-radius:12px;background:#fef2f2;border:1px solid #fecaca;font-size:12px;color:#991b1b;line-height:1.5;">
+            <div style="margin-top:14px;padding:12px;border-radius:12px;background:#fffaf5;border:1px solid #fed7aa;font-size:12px;color:#9a3412;line-height:1.5;">
               <i class="fa-solid fa-shield-heart"></i> <strong>Khuyến cáo an toàn ChoThueTot:</strong> Tuyệt đối không chuyển khoản đặt cọc trước khi đến xem nhà trực tiếp và kiểm tra hợp đồng.
             </div>
           </div>
@@ -2823,7 +2823,7 @@ function renderPricingPage() {
             .map(
               (p) => `
             <div style="display:flex;justify-content:space-between;background:rgba(255,255,255,0.85);color:#1e293b;padding:4px 8px;border-radius:6px;font-weight:700;">
-              <span>${p.days} ngày ${p.save ? `<small style="color:#ef4444;">(${p.save})</small>` : ""}</span>
+              <span>${p.days} ngày ${p.save ? `<small style="color:#f15a22;">(${p.save})</small>` : ""}</span>
               <strong style="color:var(--ctt-orange);">${new Intl.NumberFormat("vi-VN").format(p.price)}đ</strong>
             </div>
           `
@@ -3130,7 +3130,7 @@ function openCompareModal() {
           ${selectedItems
             .map((i) => {
               const c = computePropertyMonthlyCost(i);
-              return `<td><strong style="font-size:16px;color:#059669;">~ ${new Intl.NumberFormat("vi-VN").format(c.estTotalVnd)} VNĐ</strong><br><small style="color:#64748b;">(Gồm thuê + điện + nước + phí DV)</small></td>`;
+              return `<td><strong style="font-size:16px;color:#f15a22;">~ ${new Intl.NumberFormat("vi-VN").format(c.estTotalVnd)} VNĐ</strong><br><small style="color:#64748b;">(Gồm thuê + điện + nước + phí DV)</small></td>`;
             })
             .join("")}
         </tr>
@@ -3664,14 +3664,14 @@ function switchRegisterMethod(method) {
   if (googlePanel) googlePanel.style.display = isGoogle ? "flex" : "none";
 
   if (zaloBtn) {
-    zaloBtn.style.borderColor = isGoogle ? "#e2e8f0" : "#0284c7";
-    zaloBtn.style.background = isGoogle ? "#fff" : "#f0f9ff";
-    zaloBtn.style.color = isGoogle ? "#475569" : "#0369a1";
+    zaloBtn.style.borderColor = isGoogle ? "#e2e8f0" : "#f15a22";
+    zaloBtn.style.background = isGoogle ? "#fff" : "#f8fafc";
+    zaloBtn.style.color = isGoogle ? "#475569" : "#475569";
   }
   if (googleBtn) {
-    googleBtn.style.borderColor = isGoogle ? "#ea4335" : "#e2e8f0";
-    googleBtn.style.background = isGoogle ? "#fef2f2" : "#fff";
-    googleBtn.style.color = isGoogle ? "#b91c1c" : "#475569";
+    googleBtn.style.borderColor = isGoogle ? "#f15a22" : "#e2e8f0";
+    googleBtn.style.background = isGoogle ? "#fffaf5" : "#fff";
+    googleBtn.style.color = isGoogle ? "#9a3412" : "#475569";
   }
 }
 
@@ -3694,11 +3694,11 @@ function evaluatePasswordStrength(pwd) {
   if (/[^A-Za-z0-9]/.test(pwd)) score++;
 
   const levels = [
-    { label: "Quá yếu (<8 ký tự)", color: "#ef4444" },
+    { label: "Quá yếu (<8 ký tự)", color: "#f15a22" },
     { label: "Yếu", color: "#f97316" },
-    { label: "Trung bình", color: "#f59e0b" },
-    { label: "Mạnh (Đạt chuẩn)", color: "#10b981" },
-    { label: "Rất mạnh (2FA Ready)", color: "#059669" }
+    { label: "Trung bình", color: "#f15a22" },
+    { label: "Mạnh (Đạt chuẩn)", color: "#f15a22" },
+    { label: "Rất mạnh (2FA Ready)", color: "#f15a22" }
   ];
   return {
     score,
@@ -3771,7 +3771,7 @@ function sendZaloRegisterOtp() {
 
   const banner = document.getElementById("regZaloOtpBanner");
   if (banner) {
-    banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã gửi mã OTP 6 số qua <strong>Zalo ZNS</strong> tới SĐT <strong>${phoneRaw}</strong> (Hiệu lực 5 phút).<br><span style="color:#047857;">Mã kiểm thử Zalo ZNS: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${otp}</strong></span>`;
+    banner.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã gửi mã OTP 6 số qua <strong>Zalo ZNS</strong> tới SĐT <strong>${phoneRaw}</strong> (Hiệu lực 5 phút).<br><span style="color:#f15a22;">Mã kiểm thử Zalo ZNS: <strong class="tabular-nums" style="font-size:13px;letter-spacing:1px;">${otp}</strong></span>`;
     banner.style.display = "block";
   }
   startOtpButtonCooldown(document.getElementById("btnSendZaloOtp"), "Gửi mã Zalo", "zaloCooldown");
