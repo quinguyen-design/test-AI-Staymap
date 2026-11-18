@@ -1423,15 +1423,52 @@ function pickSegCategory(val, label, btnEl) {
   updateMegaLiveCount();
 }
 
-function pickSegPrice(val, label, btnEl) {
+let MEGA_PRICE_STATE = { min: 0, max: 999, label: "Tất cả giá" };
+
+function pickSegPriceRange(minVal, maxVal, label, btnEl) {
+  MEGA_PRICE_STATE = { min: Number(minVal) || 0, max: Number(maxVal) || 999, label };
   const sel = document.getElementById("megaPriceRange");
-  if (sel) sel.value = String(val);
+  if (sel) {
+    const key = `${MEGA_PRICE_STATE.min}-${MEGA_PRICE_STATE.max}`;
+    if (Array.from(sel.options).some((o) => o.value === key)) {
+      sel.value = key;
+    }
+  }
   const disp = document.getElementById("segPriceDisplay");
   if (disp) disp.textContent = label;
   document.querySelectorAll("#segPricePopover .hsp-seg-item").forEach((b) => b.classList.remove("active"));
   btnEl?.classList.add("active");
   closeAllSegPopovers();
   updateMegaLiveCount();
+}
+
+function applyCustomSegPrice() {
+  const minRaw = parseFloat(document.getElementById("segPriceMinInput")?.value || "0");
+  const maxRaw = parseFloat(document.getElementById("segPriceMaxInput")?.value || "0");
+  const minVal = Number.isFinite(minRaw) && minRaw > 0 ? minRaw : 0;
+  const maxVal = Number.isFinite(maxRaw) && maxRaw > 0 ? maxRaw : 999;
+  if (minVal === 0 && maxVal === 999) {
+    pickSegPriceRange(0, 999, "Tất cả giá", document.querySelector("#segPricePopover .hsp-seg-item"));
+    return;
+  }
+  const label = maxVal >= 999
+    ? `Trên ${minVal} Triệu`
+    : (minVal > 0 ? `${minVal} - ${maxVal} Triệu` : `Dưới ${maxVal} Triệu`);
+  pickSegPriceRange(minVal, maxVal, label, null);
+}
+
+function onMegaPriceSelectChange(selEl) {
+  const raw = selEl?.value || "0-999";
+  const [minStr, maxStr] = raw.split("-");
+  const label = selEl?.options?.[selEl.selectedIndex]?.text || "Tất cả giá";
+  MEGA_PRICE_STATE = { min: parseFloat(minStr) || 0, max: parseFloat(maxStr) || 999, label };
+  const disp = document.getElementById("segPriceDisplay");
+  if (disp) disp.textContent = label;
+  updateMegaLiveCount();
+}
+
+function pickSegPrice(val, label, btnEl) {
+  pickSegPriceRange(0, val >= 50 ? 999 : val, label, btnEl);
 }
 
 function initMegaSearchPanel() {
@@ -1594,7 +1631,8 @@ function getMegaFilterPayload() {
   const furniture = document.getElementById("megaFurnitureSelect")?.value || "all";
   const beds = document.getElementById("megaBedsSelect")?.value || "all";
   const direction = document.getElementById("megaDirectionSelect")?.value || "all";
-  const maxPrice = parseFloat(document.getElementById("megaPriceRange")?.value || "50");
+  const minPrice = MEGA_PRICE_STATE.min || 0;
+  const maxPrice = MEGA_PRICE_STATE.max || 999;
   const minArea = parseFloat(document.getElementById("megaAreaRange")?.value || "0");
   const utilities = Array.from(document.querySelectorAll("#hspMegaPanel .hsp-q-pill.active[onclick*=\"'util'\"]"))
     .map((btn) => {
@@ -1602,7 +1640,7 @@ function getMegaFilterPayload() {
       return m ? m[1] : "";
     })
     .filter(Boolean);
-  return { keyword: kw, category: cat, city, ward, street, project, furniture, beds, direction, maxPrice, minArea, utilities };
+  return { keyword: kw, category: cat, city, ward, street, project, furniture, beds, direction, minPrice, maxPrice, priceLabel: MEGA_PRICE_STATE.label, minArea, utilities };
 }
 
 function matchesMegaFilter(p, f) {
@@ -1624,7 +1662,8 @@ function matchesMegaFilter(p, f) {
     if (f.beds === "4+ PN" ? pBeds < 4 : p.beds !== f.beds) return false;
   }
   if (f.direction && f.direction !== "all" && p.direction && p.direction !== f.direction) return false;
-  if (f.maxPrice && f.maxPrice < 50 && p.price > f.maxPrice) return false;
+  if (f.minPrice && f.minPrice > 0 && p.price < f.minPrice) return false;
+  if (f.maxPrice && f.maxPrice < 999 && p.price > f.maxPrice) return false;
   if (f.minArea && f.minArea > 0 && p.area < f.minArea) return false;
   if (f.utilities && f.utilities.length) {
     const allTags = `${(p.utilities || []).join(" ")} ${(p.services || []).join(" ")} ${p.desc || ""}`.toLowerCase();
@@ -1655,7 +1694,11 @@ function clearSingleMegaFilter(kind, val) {
     pickSegCategory("all", "Tất cả loại hình", document.querySelector("#segCatPopover .hsp-seg-item"));
     return;
   } else if (kind === "price") {
-    pickSegPrice(50, "Tất cả giá", document.querySelector("#segPricePopover .hsp-seg-item"));
+    const minIn = document.getElementById("segPriceMinInput");
+    const maxIn = document.getElementById("segPriceMaxInput");
+    if (minIn) minIn.value = "";
+    if (maxIn) maxIn.value = "";
+    pickSegPriceRange(0, 999, "Tất cả giá", document.querySelector("#segPricePopover .hsp-seg-item"));
     return;
   } else if (kind === "area") {
     const el = document.getElementById("megaAreaRange");
@@ -1689,7 +1732,9 @@ function renderActiveFilterPills(f) {
     const catDisp = document.getElementById("segCatDisplay")?.textContent || f.category;
     pills.push({ kind: "category", val: f.category, label: catDisp });
   }
-  if (f.maxPrice && f.maxPrice < 50) pills.push({ kind: "price", val: f.maxPrice, label: `Dưới ${f.maxPrice}Tr` });
+  if ((f.minPrice && f.minPrice > 0) || (f.maxPrice && f.maxPrice < 999)) {
+    pills.push({ kind: "price", val: "price", label: f.priceLabel || `Dưới ${f.maxPrice}Tr` });
+  }
   if (f.minArea && f.minArea > 0) pills.push({ kind: "area", val: f.minArea, label: `Từ ${f.minArea}m²` });
   if (f.furniture && f.furniture !== "all") pills.push({ kind: "furniture", val: f.furniture, label: `NT ${f.furniture}` });
   if (f.utilities && f.utilities.length) {
@@ -1744,8 +1789,13 @@ function resetMegaSearchFilters() {
     if (el) el.value = "all";
   });
   document.querySelectorAll("#hspMegaPanel .hsp-q-pill").forEach((p) => p.classList.remove("active"));
+  MEGA_PRICE_STATE = { min: 0, max: 999, label: "Tất cả giá" };
+  const minIn = document.getElementById("segPriceMinInput");
+  const maxIn = document.getElementById("segPriceMaxInput");
+  if (minIn) minIn.value = "";
+  if (maxIn) maxIn.value = "";
   const priceEl = document.getElementById("megaPriceRange");
-  if (priceEl) priceEl.value = "50";
+  if (priceEl) priceEl.value = "0-999";
   const areaEl = document.getElementById("megaAreaRange");
   if (areaEl) areaEl.value = "0";
   if (typeof clearLandmarkFilter === "function") clearLandmarkFilter();

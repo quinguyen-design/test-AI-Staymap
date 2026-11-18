@@ -184,16 +184,26 @@
 
           <div class="hsp-seg-divider"></div>
 
-          <!-- Segment 3: Price 1-Click Popover -->
+          <!-- Segment 3: Price Range Popover (Presets + Trên 20Tr + Custom Min/Max) -->
           <div class="hsp-seg-field hsp-seg-price" onclick="openSegPopover('price', event)">
             <span class="hsp-seg-label">Mức giá</span>
             <span class="hsp-seg-val tabular-nums" id="segPriceDisplay">Tất cả giá</span>
-            <div class="hsp-seg-popover" id="segPricePopover" onclick="event.stopPropagation()">
-              <button type="button" class="hsp-seg-item active" onclick="pickSegPrice(50, 'Tất cả giá', this)">Tất cả giá</button>
-              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(3.5, 'Dưới 3.5 Triệu', this)">Dưới 3.5 Triệu</button>
-              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(7, 'Dưới 7 Triệu', this)">Dưới 7 Triệu</button>
-              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(12, 'Dưới 12 Triệu', this)">Dưới 12 Triệu</button>
-              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(20, 'Dưới 20 Triệu', this)">Dưới 20 Triệu</button>
+            <div class="hsp-seg-popover" id="segPricePopover" style="min-width:255px;" onclick="event.stopPropagation()">
+              <button type="button" class="hsp-seg-item active" onclick="pickSegPriceRange(0, 999, 'Tất cả giá', this)">Tất cả giá</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPriceRange(0, 3.5, 'Dưới 3.5 Triệu', this)">Dưới 3.5 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPriceRange(3.5, 7, '3.5 - 7 Triệu', this)">3.5 - 7 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPriceRange(7, 15, '7 - 15 Triệu', this)">7 - 15 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPriceRange(15, 20, '15 - 20 Triệu', this)">15 - 20 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPriceRange(20, 999, 'Trên 20 Triệu', this)">Trên 20 Triệu</button>
+              <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;">
+                <div style="font-size:11px;color:#64748b;margin-bottom:5px;">Hoặc tự nhập khoảng giá (Triệu):</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <input type="number" id="segPriceMinInput" min="0" step="0.5" placeholder="Từ" style="width:68px;padding:6px 8px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;color:#334155;outline:none;">
+                  <span style="color:#94a3b8;font-size:12px;">–</span>
+                  <input type="number" id="segPriceMaxInput" min="0" step="0.5" placeholder="Đến" style="width:68px;padding:6px 8px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;color:#334155;outline:none;">
+                  <button type="button" onclick="applyCustomSegPrice()" style="flex:1;padding:6px 8px;border:none;border-radius:8px;background:var(--ctt-grad-brand);color:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">Chọn</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -255,12 +265,13 @@
             </div>
             <div>
               <label for="megaPriceRange" class="hsp-sec-title" style="margin-bottom:4px;">Mức giá</label>
-              <select id="megaPriceRange" class="hsp-select" onchange="updateMegaLiveCount()">
-                <option value="50" selected>Tất cả giá</option>
-                <option value="3.5">Dưới 3.5 Triệu</option>
-                <option value="7">Dưới 7 Triệu</option>
-                <option value="12">Dưới 12 Triệu</option>
-                <option value="20">Dưới 20 Triệu</option>
+              <select id="megaPriceRange" class="hsp-select" onchange="onMegaPriceSelectChange(this)">
+                <option value="0-999" selected>Tất cả giá</option>
+                <option value="0-3.5">Dưới 3.5 Triệu</option>
+                <option value="3.5-7">3.5 - 7 Triệu</option>
+                <option value="7-15">7 - 15 Triệu</option>
+                <option value="15-20">15 - 20 Triệu</option>
+                <option value="20-999">Trên 20 Triệu</option>
               </select>
             </div>
             <div>
@@ -1879,6 +1890,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118as"></script>
+  <script src="app.js?v=20261118at"></script>
 </body>
 </html>
