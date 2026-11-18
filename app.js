@@ -1250,7 +1250,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
             <span><i class="fa-solid fa-bed"></i> ${item.beds ?? 1}</span>
             <span><i class="fa-solid fa-bath"></i> ${item.baths ?? 1}</span>
           </div>
-          <button type="button" class="hmp-pop-more" onclick="event.stopPropagation(); expandMapFromCompactPopup(${item.id});">Xem Thêm <i class="fa-solid fa-arrow-right"></i></button>
+          <button type="button" class="hmp-pop-more" onclick="event.stopPropagation(); expandMapFromCompactPopup(${item.id});">Xem Thêm</button>
         </div>
       </div>
     `, { maxWidth: 356, className: "ctt-compact-map-popup" });
