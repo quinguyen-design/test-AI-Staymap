@@ -1008,7 +1008,7 @@ function navigateTo(route, pushHistory = true) {
     updateMapPins("all");
     updateDocumentSeoMeta(
       "Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng, HomeStay",
-      "CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng, HomeStay/AirBnb minh bạch 100%."
+      "CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng, HomeStay/Aribnb minh bạch 100%."
     );
   } else if (
     route.includes("cho-thue") ||
@@ -1735,7 +1735,7 @@ function openCategoryView(route) {
     catName = "Đất - Xưởng, Kho - Bãi";
   } else if (route.includes("homestay")) {
     catKey = "homestay-airbnb";
-    catName = "HomeStay / AirBnb";
+    catName = "HomeStay / Aribnb";
   } else if (route.includes("spotlight")) {
     tierFilter = "spotlight";
     catName = "Spotlight — TOP 1 Hiển Thị";
@@ -4383,7 +4383,7 @@ function buildStudioAiDraft() {
       "hạ tầng hoàn chỉnh, diện tích dễ quy hoạch khu kho chứa và khu điều hành riêng biệt",
       "không gian rộng mở, phù hợp làm kho trung chuyển, xưởng gia công hoặc bãi tập kết"
     ],
-    "HomeStay / AirBnb": [
+    "HomeStay / Aribnb": [
       "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm",
       "góc decor chụp ảnh đẹp, check-in linh hoạt và chỉ mất vài phút di chuyển ra các điểm ăn uống nổi tiếng",
       "không gian ấm áp như ở nhà, đầy đủ tiện nghi cho kỳ lưu trú ngắn hoặc dài ngày",
@@ -5131,7 +5131,7 @@ const PORTAL_DATA = {
   ]
 };
 
-// Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/AirBnb listings
+// Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/Aribnb listings
 (function enrichPropertiesAndPortals() {
   const poolPhotos = [
     "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
@@ -5144,7 +5144,7 @@ const PORTAL_DATA = {
     "https://chothuetot.vn/assets/images/properties/album_1791022210_7592.webp"
   ];
 
-  // Add 2 authentic HomeStay / AirBnb listings if not present
+  // Add 2 authentic HomeStay / Aribnb listings if not present
   if (!PROPERTIES.some((p) => p.category === "homestay-airbnb")) {
     PROPERTIES.push(
       {
@@ -5155,7 +5155,7 @@ const PORTAL_DATA = {
         badgeClass: "tag-vip1",
         sticker: "hot",
         category: "homestay-airbnb",
-        categoryLabel: "HomeStay / AirBnb",
+        categoryLabel: "HomeStay / Aribnb",
         title: "HomeStay Indochine Studio Full Nội Thất View Kênh Nhiêu Lộc — Lê Văn Sỹ",
         price: 8.5,
         priceText: "8.5 Triệu",
@@ -5188,8 +5188,8 @@ const PORTAL_DATA = {
         badgeClass: "tag-vip2",
         sticker: "promo",
         category: "homestay-airbnb",
-        categoryLabel: "HomeStay / AirBnb",
-        title: "Căn Hộ AirBnb 2PN Ban Công Rộng Sát Phan Xích Long — Nhận Khách Ngắn & Dài Hạn",
+        categoryLabel: "HomeStay / Aribnb",
+        title: "Căn Hộ Aribnb 2PN Ban Công Rộng Sát Phan Xích Long — Nhận Khách Ngắn & Dài Hạn",
         price: 11.5,
         priceText: "11.5 Triệu",
         ward: "P. Cầu Kiệu",
@@ -5894,7 +5894,7 @@ function switchAdminTab(tabName, btnEl) {
               <option value="can-ho-chung-cu" ${catF === "can-ho-chung-cu" ? "selected" : ""}>Căn Hộ Chung Cư</option>
               <option value="mat-bang-van-phong" ${catF === "mat-bang-van-phong" ? "selected" : ""}>Mặt Bằng Văn Phòng</option>
               <option value="bai-dat-kho-xuong" ${catF === "bai-dat-kho-xuong" ? "selected" : ""}>Đất - Xưởng, Kho - Bãi</option>
-              <option value="homestay-airbnb" ${catF === "homestay-airbnb" ? "selected" : ""}>HomeStay / AirBnb</option>
+              <option value="homestay-airbnb" ${catF === "homestay-airbnb" ? "selected" : ""}>HomeStay / Aribnb</option>
             </select>
           </div>
         </div>
@@ -6064,7 +6064,7 @@ function switchAdminTab(tabName, btnEl) {
       { type: "SEO Loại hình + Giá thành", url: "/cho-thue-phong-tro-gia-duoi-4-trieu", title: "Cho Thuê Phòng Trọ / CHDV — Dưới 4 Triệu/tháng", status: "Indexed • 100/100" },
       { type: "SEO Nhà nguyên căn + Vị trí", url: "/cho-thue-nha-nguyen-can-p-hoa-hung", title: "Cho Thuê Nhà Nguyên Căn Tại P. Hòa Hưng (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
       { type: "SEO Căn hộ + Giá thành", url: "/cho-thue-can-ho-chung-cu-gia-tu-4-den-7-trieu", title: "Cho Thuê Căn Hộ Chung Cư — Từ 4 - 7 Triệu/tháng", status: "Indexed • 100/100" },
-      { type: "SEO HomeStay / AirBnb", url: "/cho-thue-homestay-airbnb-p-nhieu-loc", title: "Cho Thuê HomeStay / AirBnb Tại P. Nhiêu Lộc (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
+      { type: "SEO HomeStay / Aribnb", url: "/cho-thue-homestay-airbnb-p-nhieu-loc", title: "Cho Thuê HomeStay / Aribnb Tại P. Nhiêu Lộc (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
       { type: "SEO Khu vực Hà Nội", url: "/cho-thue-can-ho-chung-cu-tp-ha-noi", title: "Cho Thuê Căn Hộ Chung Cư Tại TP. Hà Nội", status: "Indexed • 100/100" }
     ];
     container.innerHTML = `
