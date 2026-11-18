@@ -3319,7 +3319,7 @@ button, input, select, textarea, .leaflet-container {
   background: var(--ctt-grad-brand) !important;
   color: #ffffff !important;
   border-color: #f15a22 !important;
-  box-shadow: 0 0 0 6px rgba(243, 114, 1, 0.32), 0 10px 24px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
 .hmp-marker.is-hovered .hmp-pin-tail {
