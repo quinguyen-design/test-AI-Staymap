@@ -3653,12 +3653,20 @@ const STUDIO_CITIES = [
   { value: "TP. Cần Thơ", label: "TP. Cần Thơ" }
 ];
 
-const STUDIO_COMBO_TIMERS = { city: null, ward: null, street: null };
+const STUDIO_PROJECTS = [
+  { value: "", label: "Không thuộc dự án" },
+  { value: "Vinhomes Central Park", label: "Vinhomes Central Park" },
+  { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park" },
+  { value: "The Sun Avenue", label: "The Sun Avenue" },
+  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền" },
+  { value: "Saigon Pearl", label: "Saigon Pearl" }
+];
+
+const STUDIO_COMBO_TIMERS = { city: null, ward: null, street: null, project: null };
 
 function getStudioComboItems(kind) {
-  if (kind === "city") {
-    return STUDIO_CITIES;
-  }
+  if (kind === "city") return STUDIO_CITIES;
+  if (kind === "project") return STUDIO_PROJECTS;
   if (kind === "ward") {
     const city = (document.getElementById("dCity")?.value || "").trim();
     if (city && STUDIO_WARDS_BY_CITY[city]) {
@@ -3671,9 +3679,22 @@ function getStudioComboItems(kind) {
   return Array.from(new Set(list)).map((s) => ({ value: s, label: s }));
 }
 
+function getStudioComboEls(kind) {
+  const map = {
+    city: ["dCity", "dCitySuggestList"],
+    ward: ["dWard", "dWardSuggestList"],
+    street: ["dStreet", "dStreetSuggestList"],
+    project: ["dProject", "dProjectSuggestList"]
+  };
+  const [inputId, listId] = map[kind] || ["dStreet", "dStreetSuggestList"];
+  return {
+    inputEl: document.getElementById(inputId),
+    listEl: document.getElementById(listId)
+  };
+}
+
 function renderStudioComboList(kind, query = "") {
-  const listId = kind === "city" ? "dCitySuggestList" : kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList";
-  const listEl = document.getElementById(listId);
+  const { listEl } = getStudioComboEls(kind);
   if (!listEl) return;
   const items = getStudioComboItems(kind);
   const qNorm = toVietnameseSlug(query);
@@ -3686,7 +3707,7 @@ function renderStudioComboList(kind, query = "") {
   } else {
     listEl.innerHTML = filtered
       .map(
-        (it) => `<button type="button" class="ctt-combo-item" onmousedown="event.preventDefault();pickStudioComboItem('${kind}', '${it.value.replace(/'/g, "\\'")}')"><span>${it.label}</span><i class="fa-solid fa-check" style="font-size:10px;opacity:0.35;"></i></button>`
+        (it) => `<button type="button" class="ctt-combo-item" onmousedown="event.preventDefault();pickStudioComboItem('${kind}', '${it.value.replace(/'/g, "\\'")}')">${it.label}</button>`
       )
       .join("");
   }
@@ -3695,23 +3716,18 @@ function renderStudioComboList(kind, query = "") {
 
 function openStudioCombo(kind) {
   clearTimeout(STUDIO_COMBO_TIMERS[kind]);
-  const inputId = kind === "city" ? "dCity" : kind === "ward" ? "dWard" : "dStreet";
-  const inputEl = document.getElementById(inputId);
+  const { inputEl } = getStudioComboEls(kind);
   renderStudioComboList(kind, inputEl?.value || "");
 }
 
 function filterStudioCombo(kind) {
-  const inputId = kind === "city" ? "dCity" : kind === "ward" ? "dWard" : "dStreet";
-  const inputEl = document.getElementById(inputId);
+  const { inputEl } = getStudioComboEls(kind);
   renderStudioComboList(kind, inputEl?.value || "");
   syncStudioAddressDisplay();
 }
 
 function pickStudioComboItem(kind, val) {
-  const inputId = kind === "city" ? "dCity" : kind === "ward" ? "dWard" : "dStreet";
-  const listId = kind === "city" ? "dCitySuggestList" : kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList";
-  const inputEl = document.getElementById(inputId);
-  const listEl = document.getElementById(listId);
+  const { inputEl, listEl } = getStudioComboEls(kind);
   if (inputEl) inputEl.value = val;
   if (listEl) listEl.classList.remove("is-open");
   if (kind === "city") {
@@ -3730,8 +3746,7 @@ function pickStudioComboItem(kind, val) {
 
 function closeStudioComboDelay(kind) {
   STUDIO_COMBO_TIMERS[kind] = setTimeout(() => {
-    const listId = kind === "city" ? "dCitySuggestList" : kind === "ward" ? "dWardSuggestList" : "dStreetSuggestList";
-    const listEl = document.getElementById(listId);
+    const { listEl } = getStudioComboEls(kind);
     if (listEl) listEl.classList.remove("is-open");
   }, 150);
 }
@@ -4288,11 +4303,6 @@ function initStudioPostListing(preselectedZoneId = null) {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
-  const projEl = document.getElementById("dProject");
-  if (projEl) {
-    projEl.style.color = "#94a3b8";
-    projEl.style.fontSize = "13px";
-  }
   const bedsEl = document.getElementById("dBeds");
   if (bedsEl) bedsEl.value = "1 PN";
   const bathsEl = document.getElementById("dBaths");

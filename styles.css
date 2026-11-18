@@ -4553,9 +4553,11 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .ctt-combo-wrap .post-input {
   padding-right: 30px;
 }
+#postModalBackdrop .ctt-combo-wrap .post-input::placeholder,
 .ctt-combo-wrap .post-input::placeholder {
   font-size: 13px;
   color: #94a3b8;
+  font-weight: 500;
   opacity: 1;
 }
 .ctt-combo-arrow {
@@ -4592,14 +4594,12 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   background: transparent;
   padding: 8px 10px;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 500;
   color: #0f172a;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: background 0.12s ease;
+  display: block;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 .ctt-combo-item:hover {
   background: #fffaf5;

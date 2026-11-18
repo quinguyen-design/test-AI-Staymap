@@ -1100,12 +1100,11 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Dự Án</span></div>
-                  <select id="dProject" class="post-input" style="color:#94a3b8;font-size:13px;" onchange="this.style.color=this.value?'#0f172a':'#94a3b8';this.style.fontSize=this.value?'13.5px':'13px';onStudioLocationChange()">
-                    <option value="" style="color:#94a3b8;">Không thuộc dự án</option>
-                    <option value="Vinhomes Central Park">Vinhomes Central Park</option>
-                    <option value="Vinhomes Grand Park">Vinhomes Grand Park</option>
-                    <option value="The Sun Avenue">The Sun Avenue</option>
-                  </select>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" id="dProject" class="post-input" value="" placeholder="Không thuộc dự án" autocomplete="off" onfocus="openStudioCombo('project')" onclick="openStudioCombo('project')" oninput="filterStudioCombo('project')" onblur="closeStudioComboDelay('project')">
+                    <i class="fa-solid fa-chevron-down ctt-combo-arrow"></i>
+                    <div id="dProjectSuggestList" class="ctt-combo-list"></div>
+                  </div>
                 </div>
               </div>
 
@@ -1804,6 +1803,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118l"></script>
+  <script src="app.js?v=20261118n"></script>
 </body>
 </html>
