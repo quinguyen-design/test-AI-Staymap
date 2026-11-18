@@ -1320,23 +1320,127 @@ function initStickyNav() {
   });
 }
 
-function initMegaSearchPanel() {
+function closeAllSegPopovers() {
+  ["segLocPopover", "segCatPopover", "segPricePopover"].forEach((id) => {
+    document.getElementById(id)?.classList.remove("is-open");
+  });
+  document.querySelectorAll(".hsp-seg-field").forEach((f) => f.classList.remove("is-active"));
+}
+
+function openSegPopover(kind, e) {
+  e?.stopPropagation();
+  const map = { loc: "segLocPopover", cat: "segCatPopover", price: "segPricePopover" };
+  const targetId = map[kind];
+  const pop = document.getElementById(targetId);
+  if (!pop) return;
+  const wasOpen = pop.classList.contains("is-open");
+  closeAllSegPopovers();
+  document.getElementById("hspMegaPanel")?.classList.remove("is-open");
+  if (!wasOpen || kind === "loc") {
+    if (kind === "loc") {
+      renderSegLocSuggestions(document.getElementById("hspSearchInput")?.value || "");
+      document.getElementById("hspSearchInput")?.focus();
+    }
+    pop.classList.add("is-open");
+    pop.closest(".hsp-seg-field")?.classList.add("is-active");
+  }
+}
+
+function renderSegLocSuggestions(query = "") {
+  const pop = document.getElementById("segLocPopover");
+  if (!pop) return;
+  const qNorm = typeof toVietnameseSlug === "function" ? toVietnameseSlug(query) : query.trim().toLowerCase();
+  const match = (txt) => !qNorm || (typeof toVietnameseSlug === "function" ? toVietnameseSlug(txt).includes(qNorm) : txt.toLowerCase().includes(qNorm));
+
+  const projects = (typeof STUDIO_PROJECTS !== "undefined" ? STUDIO_PROJECTS : []).filter((p) => match(p.label)).slice(0, 4);
+  const wards = (typeof STUDIO_WARDS_BY_CITY !== "undefined" ? Object.values(STUDIO_WARDS_BY_CITY).flat() : []).filter((w) => match(w.label)).slice(0, 5);
+  const streets = (typeof STUDIO_STREETS_BY_WARD !== "undefined" ? Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat())) : []).filter((s) => match(s)).slice(0, 5);
+
+  let html = "";
+  if (projects.length) {
+    html += `<div class="hsp-seg-group">Dự án</div>`;
+    html += projects.map((p) => `<button type="button" class="hsp-seg-item" onclick="pickSegLocation('project', '${p.value.replace(/'/g, "\\'")}', '${p.label.replace(/'/g, "\\'")}')"><span><i class="fa-solid fa-building" style="color:var(--ctt-orange);margin-right:6px;"></i>${p.label}</span><small style="color:#94a3b8;">${p.ward}</small></button>`).join("");
+  }
+  if (wards.length) {
+    html += `<div class="hsp-seg-group">Phường / Xã</div>`;
+    html += wards.map((w) => `<button type="button" class="hsp-seg-item" onclick="pickSegLocation('ward', '${w.value.replace(/'/g, "\\'")}', '${w.label.replace(/'/g, "\\'")}')"><span><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:6px;"></i>${w.label}</span></button>`).join("");
+  }
+  if (streets.length) {
+    html += `<div class="hsp-seg-group">Tên đường</div>`;
+    html += streets.map((s) => `<button type="button" class="hsp-seg-item" onclick="pickSegLocation('street', '${s.replace(/'/g, "\\'")}', '${s.replace(/'/g, "\\'")}')"><span><i class="fa-solid fa-road" style="color:#64748b;margin-right:6px;"></i>Đường ${s}</span></button>`).join("");
+  }
+  if (!html) {
+    html = `<div style="padding:10px 12px;font-size:12px;color:#94a3b8;">Nhấn Enter hoặc nút Tìm để tìm theo từ khóa vừa nhập.</div>`;
+  }
+  pop.innerHTML = html;
+}
+
+function pickSegLocation(kind, val, label) {
   const input = document.getElementById("hspSearchInput");
+  if (input) {
+    input.value = label;
+    input.dataset.pickedLabel = label;
+  }
+  if (kind === "project") {
+    const projEl = document.getElementById("megaProjectSelect");
+    if (projEl) {
+      projEl.value = val;
+      onMegaProjectChange();
+    }
+  } else if (kind === "ward") {
+    const wardEl = document.getElementById("megaWardSelect");
+    if (wardEl) {
+      wardEl.value = val;
+      onMegaWardChange();
+    }
+  } else if (kind === "street") {
+    const streetEl = document.getElementById("megaStreetSelect");
+    if (streetEl) streetEl.value = val;
+  }
+  closeAllSegPopovers();
+  updateMegaLiveCount();
+}
+
+function pickSegCategory(val, label, btnEl) {
+  const sel = document.getElementById("megaCatSelect");
+  if (sel) sel.value = val;
+  const disp = document.getElementById("segCatDisplay");
+  if (disp) disp.textContent = label;
+  document.querySelectorAll("#segCatPopover .hsp-seg-item").forEach((b) => b.classList.remove("active"));
+  btnEl?.classList.add("active");
+  closeAllSegPopovers();
+  updateMegaLiveCount();
+}
+
+function pickSegPrice(val, label, btnEl) {
+  const sel = document.getElementById("megaPriceRange");
+  if (sel) sel.value = String(val);
+  const disp = document.getElementById("segPriceDisplay");
+  if (disp) disp.textContent = label;
+  document.querySelectorAll("#segPricePopover .hsp-seg-item").forEach((b) => b.classList.remove("active"));
+  btnEl?.classList.add("active");
+  closeAllSegPopovers();
+  updateMegaLiveCount();
+}
+
+function initMegaSearchPanel() {
   const trigger = document.getElementById("hspFilterTrigger");
   const panel = document.getElementById("hspMegaPanel");
   const bar = document.getElementById("hspBar");
 
-  const openPanel = (e) => {
+  const toggleMega = (e) => {
     e?.stopPropagation();
-    panel.classList.add("is-open");
-    bar.classList.add("is-open");
+    closeAllSegPopovers();
+    const willOpen = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open", willOpen);
+    bar?.classList.toggle("is-open", willOpen);
   };
 
-  input?.addEventListener("focus", openPanel);
-  trigger?.addEventListener("click", openPanel);
+  trigger?.addEventListener("click", toggleMega);
   panel?.addEventListener("click", (e) => e.stopPropagation());
 
   document.addEventListener("click", () => {
+    closeAllSegPopovers();
     panel?.classList.remove("is-open");
     bar?.classList.remove("is-open");
   });
@@ -1468,7 +1572,9 @@ function toggleMegaQuickChip(btnEl, kind, val) {
 }
 
 function getMegaFilterPayload() {
-  const kw = document.getElementById("hspSearchInput")?.value.trim() || "";
+  const searchInput = document.getElementById("hspSearchInput");
+  const rawKw = searchInput?.value.trim() || "";
+  const kw = rawKw && rawKw === searchInput?.dataset.pickedLabel ? "" : rawKw;
   const cat = document.getElementById("megaCatSelect")?.value || "all";
   const city = document.getElementById("megaCitySelect")?.value || "all";
   const ward = document.getElementById("megaWardSelect")?.value || "all";
@@ -1533,7 +1639,15 @@ function updateMegaLiveCount() {
 
 function resetMegaSearchFilters() {
   const searchInput = document.getElementById("hspSearchInput");
-  if (searchInput) searchInput.value = "";
+  if (searchInput) {
+    searchInput.value = "";
+    delete searchInput.dataset.pickedLabel;
+  }
+  const segCatDisp = document.getElementById("segCatDisplay");
+  if (segCatDisp) segCatDisp.textContent = "Tất cả loại hình";
+  const segPriceDisp = document.getElementById("segPriceDisplay");
+  if (segPriceDisp) segPriceDisp.textContent = "Tất cả giá";
+  document.querySelectorAll("#segCatPopover .hsp-seg-item, #segPricePopover .hsp-seg-item").forEach((b, idx) => b.classList.toggle("active", idx === 0));
   const catEl = document.getElementById("megaCatSelect");
   if (catEl) catEl.value = "all";
   const cityEl = document.getElementById("megaCitySelect");

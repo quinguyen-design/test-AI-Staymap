@@ -811,6 +811,115 @@ button, input, select, textarea, .leaflet-container {
   transform: scale(1.06);
 }
 
+/* Segmented Floating Pill Bar (Airbnb / Zillow Style) */
+.hsp-bar.hsp-segmented {
+  padding: 5px 6px 5px 14px;
+  gap: 0;
+  justify-content: space-between;
+}
+.hsp-seg-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.16s ease;
+  min-width: 0;
+}
+.hsp-seg-field:hover,
+.hsp-seg-field.is-active {
+  background: #f8fafc;
+}
+.hsp-seg-loc {
+  flex: 1.5;
+  padding-left: 4px;
+}
+.hsp-seg-cat {
+  flex: 1;
+}
+.hsp-seg-price {
+  flex: 0.9;
+}
+.hsp-seg-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748b;
+  line-height: 1.2;
+}
+.hsp-seg-val {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+.hsp-seg-loc .hsp-input {
+  padding: 1px 0 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #1e293b;
+}
+.hsp-seg-loc .hsp-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+.hsp-seg-divider {
+  width: 1px;
+  height: 26px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+.hsp-seg-popover {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  min-width: 240px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+  padding: 8px;
+  z-index: 750;
+}
+.hsp-seg-popover.is-open {
+  display: block;
+}
+.hsp-seg-item {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.hsp-seg-item:hover,
+.hsp-seg-item.active {
+  background: #fffaf5;
+  color: var(--ctt-orange);
+}
+.hsp-seg-group {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  padding: 6px 11px 3px;
+}
+
 /* Wide 760px Mega-Search Panel (Fixes the old 280px narrow broken dropdown!) */
 .hsp-panel {
   position: absolute;

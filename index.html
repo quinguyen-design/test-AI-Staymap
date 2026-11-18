@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118ao">
+  <link rel="stylesheet" href="styles.css?v=20261118aq">
 </head>
 <body>
 
@@ -155,13 +155,50 @@
         </ul>
       </div>
 
-      <!-- Center: Search Input + Wide 760px 2-Column Mega-Filter Panel -->
+      <!-- Center: Segmented Floating Pill Bar (Airbnb / Zillow Style) -->
       <div class="shn-search">
-        <div class="hsp-bar" id="hspBar">
-          <i class="fa-solid fa-location-dot hsp-bar-icon"></i>
-          <input type="text" id="hspSearchInput" class="hsp-input" placeholder="Bạn muốn tìm thuê nhà ở đâu? (Nhập đường, phường, quận...)" autocomplete="off">
-          <button type="button" class="hsp-filter-trigger" id="hspFilterTrigger">
-            <i class="fa-solid fa-sliders"></i> Bộ lọc thông minh
+        <div class="hsp-bar hsp-segmented" id="hspBar">
+          <!-- Segment 1: Location / Project Autocomplete -->
+          <div class="hsp-seg-field hsp-seg-loc" onclick="openSegPopover('loc', event)">
+            <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Dự án</span>
+            <input type="text" id="hspSearchInput" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="off" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
+            <div class="hsp-seg-popover" id="segLocPopover" style="min-width:320px;" onclick="event.stopPropagation()"></div>
+          </div>
+
+          <div class="hsp-seg-divider"></div>
+
+          <!-- Segment 2: Category 1-Click Popover -->
+          <div class="hsp-seg-field hsp-seg-cat" onclick="openSegPopover('cat', event)">
+            <span class="hsp-seg-label">Loại hình</span>
+            <span class="hsp-seg-val" id="segCatDisplay">Tất cả loại hình</span>
+            <div class="hsp-seg-popover" id="segCatPopover" onclick="event.stopPropagation()">
+              <button type="button" class="hsp-seg-item active" onclick="pickSegCategory('all', 'Tất cả loại hình', this)">Tất cả loại hình</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('phong-tro', 'Phòng trọ / CHDV', this)">Phòng trọ / CHDV</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('nha-o', 'Nhà nguyên căn', this)">Nhà nguyên căn</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('can-ho-chung-cu', 'Căn hộ chung cư', this)">Căn hộ chung cư</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('mat-bang-van-phong', 'Mặt bằng văn phòng', this)">Mặt bằng văn phòng</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('bai-dat-kho-xuong', 'Đất - Xưởng, Kho - Bãi', this)">Đất - Xưởng, Kho - Bãi</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('homestay-airbnb', 'HomeStay / Aribnb', this)">HomeStay / Aribnb</button>
+            </div>
+          </div>
+
+          <div class="hsp-seg-divider"></div>
+
+          <!-- Segment 3: Price 1-Click Popover -->
+          <div class="hsp-seg-field hsp-seg-price" onclick="openSegPopover('price', event)">
+            <span class="hsp-seg-label">Mức giá</span>
+            <span class="hsp-seg-val tabular-nums" id="segPriceDisplay">Tất cả giá</span>
+            <div class="hsp-seg-popover" id="segPricePopover" onclick="event.stopPropagation()">
+              <button type="button" class="hsp-seg-item active" onclick="pickSegPrice(50, 'Tất cả giá', this)">Tất cả giá</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(3.5, 'Dưới 3.5 Triệu', this)">Dưới 3.5 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(7, 'Dưới 7 Triệu', this)">Dưới 7 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(12, 'Dưới 12 Triệu', this)">Dưới 12 Triệu</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegPrice(20, 'Dưới 20 Triệu', this)">Dưới 20 Triệu</button>
+            </div>
+          </div>
+
+          <button type="button" class="hsp-filter-trigger" id="hspFilterTrigger" style="padding:7px 12px;font-weight:600;border-color:#e2e8f0;background:#f8fafc;color:#475569;">
+            <i class="fa-solid fa-sliders" style="color:var(--ctt-orange);"></i> Lọc
           </button>
           <button type="button" class="hsp-submit" onclick="executeMegaSearch()" title="Tìm kiếm ngay">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -1839,6 +1876,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118ap"></script>
+  <script src="app.js?v=20261118aq"></script>
 </body>
 </html>
