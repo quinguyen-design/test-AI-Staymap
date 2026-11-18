@@ -1226,20 +1226,26 @@ function updateMapPins(catFilter = "all", focusId = null) {
     });
 
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
+    const shortLoc = item.ward || item.district || item.city || "";
+    const vipTagHtml = vipInfo.label
+      ? `<span class="hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
+      : "";
     marker.bindPopup(`
-      <div class="hero-map-popup">
-        <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
+      <div class="hero-map-popup" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">
+        <div class="hmp-pop-thumb">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
+          ${vipTagHtml}
+        </div>
         <div class="hmp-pop-body">
-          ${getPropertyVipDisplay(item).label ? `<span class="lc-vip-tag ${getPropertyVipDisplay(item).badgeClass}" style="position:static;display:inline-block;margin-bottom:4px;font-size:9.5px;padding:2px 7px;">${getPropertyVipDisplay(item).label}</span>` : `<span class="hmp-pop-badge">${item.categoryLabel}</span>`}
           <div class="hmp-pop-title">${item.title}</div>
-          <div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i> ${item.ward}, ${item.city}</div>
+          ${shortLoc ? `<div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i><span>${shortLoc}</span></div>` : ""}
           <div class="hmp-pop-footer">
             <div class="hmp-pop-price">${item.priceText}/Th</div>
-            <a href="javascript:void(0)" onclick="openPropertyDetailView(${item.id})" class="hmp-pop-link">Xem chi tiết</a>
+            <span class="hmp-pop-link">Xem <i class="fa-solid fa-arrow-right"></i></span>
           </div>
         </div>
       </div>
-    `);
+    `, { maxWidth: 330, className: "ctt-compact-map-popup" });
 
     marker.on("click", () => {
       const heroEl = document.getElementById("siteHeaderHero");
