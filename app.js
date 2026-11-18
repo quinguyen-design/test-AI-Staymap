@@ -1181,7 +1181,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
 
     if (vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
-      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ff7b3a;font-size:10px;"></i>';
+      pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ff9d00;font-size:10px;"></i>';
     } else if (vipInfo.badgeClass === "tag-vip1" || item.mapTier === "vip1" || item.zoneId === 2 || item.tier === "spotlight") {
       pinClass = "pin-vip1";
       pinIconHtml = "";
