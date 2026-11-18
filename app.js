@@ -1228,7 +1228,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
     const shortLoc = item.ward || item.district || item.city || "";
     const vipTagHtml = vipInfo.label
-      ? `<span class="hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
+      ? `<span class="lc-vip-tag hmp-pop-vip ${vipInfo.badgeClass}">${vipInfo.label}</span>`
       : "";
     marker.bindPopup(`
       <div class="hero-map-popup" onclick="openPropertyDetailView(${item.id})" role="button" tabindex="0">

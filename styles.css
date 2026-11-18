@@ -611,7 +611,7 @@ button, input, select, textarea, .leaflet-container {
   display: block;
 }
 
-.hmp-pop-vip {
+.lc-vip-tag.hmp-pop-vip {
   position: absolute;
   top: 6px;
   left: 6px;
@@ -621,7 +621,6 @@ button, input, select, textarea, .leaflet-container {
   padding: 2px 6px;
   border-radius: 999px;
   line-height: 1.2;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.28);
 }
 
 .hmp-pop-body {
