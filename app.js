@@ -3419,15 +3419,16 @@ function syncStudioPromoUI(isLocked) {
   const btnEl = document.getElementById("btnPromoAction");
   if (inputEl) {
     inputEl.readOnly = Boolean(isLocked);
-    inputEl.style.background = isLocked ? "#f0fdf4" : "#ffffff";
-    inputEl.style.borderColor = isLocked ? "#86efac" : "";
-    inputEl.style.color = isLocked ? "#059669" : "#0f172a";
+    inputEl.style.background = isLocked ? "#fffaf5" : "#ffffff";
+    inputEl.style.borderColor = isLocked ? "var(--ctt-orange)" : "";
+    inputEl.style.boxShadow = isLocked ? "0 6px 16px rgba(241, 90, 34, 0.14)" : "";
+    inputEl.style.color = isLocked ? "var(--ctt-orange)" : "#0f172a";
   }
   if (btnEl) {
     if (isLocked) {
       btnEl.textContent = "HỦY";
       btnEl.className = "hsp-btn-reset";
-      btnEl.style.cssText = "white-space:nowrap;padding:10px 16px;font-size:12.5px;font-weight:800;color:#dc2626;border-color:#fca5a5;background:#fef2f2;";
+      btnEl.style.cssText = "white-space:nowrap;padding:10px 18px;font-size:12.5px;font-weight:800;color:#f8fafc;background:rgba(15, 23, 42, 0.9);border:1px solid rgba(255, 255, 255, 0.22);border-radius:10px;";
     } else {
       btnEl.textContent = "Áp dụng";
       btnEl.className = "hsp-btn-apply";
