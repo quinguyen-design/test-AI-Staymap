@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261118e">
+  <link rel="stylesheet" href="styles.css?v=20261118f">
 </head>
 <body>
 
@@ -107,6 +107,9 @@
         <button type="button" class="map-filter-chip" onclick="filterMapCategory('bai-dat-kho-xuong', this)">
           <i class="fa-solid fa-warehouse"></i> Kho xưởng <span class="chip-count" id="mapCountKhoXuong">4</span>
         </button>
+        <button type="button" class="map-filter-chip" onclick="filterMapCategory('homestay-airbnb', this)">
+          <i class="fa-solid fa-umbrella-beach"></i> HomeStay / AirBnb <span class="chip-count" id="mapCountHomestay">2</span>
+        </button>
       </div>
 
       <div class="map-hud-right">
@@ -143,11 +146,12 @@
           <i class="fa-solid fa-chevron-down" style="font-size:11px;"></i>
         </a>
         <ul class="shn-dropdown">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')"><span><i class="fa-solid fa-door-open" style="color:var(--ctt-orange);width:20px;"></i> Phòng trọ</span> <i class="fa-solid fa-angle-right"></i></a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')"><span><i class="fa-solid fa-house-chimney" style="color:var(--ctt-orange);width:20px;"></i> Nhà ở nguyên căn</span> <i class="fa-solid fa-angle-right"></i></a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')"><span><i class="fa-solid fa-building" style="color:var(--ctt-orange);width:20px;"></i> Căn hộ, chung cư</span> <i class="fa-solid fa-angle-right"></i></a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')"><span><i class="fa-solid fa-shop" style="color:var(--ctt-orange);width:20px;"></i> Mặt bằng, văn phòng</span> <i class="fa-solid fa-angle-right"></i></a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')"><span><i class="fa-solid fa-warehouse" style="color:var(--ctt-orange);width:20px;"></i> Bãi, Đất, Kho, Xưởng</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro')"><span><i class="fa-solid fa-door-open" style="color:var(--ctt-orange);width:20px;"></i> Phòng trọ / CHDV</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can')"><span><i class="fa-solid fa-house-chimney" style="color:var(--ctt-orange);width:20px;"></i> Nhà nguyên căn</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu')"><span><i class="fa-solid fa-building" style="color:var(--ctt-orange);width:20px;"></i> Căn hộ chung cư</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong')"><span><i class="fa-solid fa-shop" style="color:var(--ctt-orange);width:20px;"></i> Mặt bằng văn phòng</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai')"><span><i class="fa-solid fa-warehouse" style="color:var(--ctt-orange);width:20px;"></i> Đất - Xưởng, Kho - Bãi</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')"><span><i class="fa-solid fa-umbrella-beach" style="color:var(--ctt-orange);width:20px;"></i> HomeStay / AirBnb</span> <i class="fa-solid fa-angle-right"></i></a></li>
         </ul>
       </div>
 
@@ -181,11 +185,12 @@
                 <div class="hsp-sec-title"><span><i class="fa-solid fa-list"></i> Loại hình bất động sản</span></div>
                 <select id="megaCatSelect" class="hsp-select">
                   <option value="all">Tất cả loại hình cho thuê</option>
-                  <option value="phong-tro">Phòng trọ & Studio</option>
-                  <option value="nha-o">Nhà ở nguyên căn</option>
-                  <option value="can-ho-chung-cu">Căn hộ, chung cư</option>
-                  <option value="mat-bang-van-phong">Mặt bằng, văn phòng</option>
-                  <option value="bai-dat-kho-xuong">Bãi, Đất, Kho, Xưởng</option>
+                  <option value="phong-tro">Phòng trọ / CHDV</option>
+                  <option value="nha-o">Nhà nguyên căn</option>
+                  <option value="can-ho-chung-cu">Căn hộ chung cư</option>
+                  <option value="mat-bang-van-phong">Mặt bằng văn phòng</option>
+                  <option value="bai-dat-kho-xuong">Đất - Xưởng, Kho - Bãi</option>
+                  <option value="homestay-airbnb">HomeStay / AirBnb</option>
                 </select>
               </div>
 
@@ -389,8 +394,10 @@
             <button type="button" class="lc-quick-tab active" onclick="filterTierSection('spotlight', 'all', this)">Tất cả</button>
             <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'phong-tro', this)">Phòng trọ</button>
             <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'can-ho-chung-cu', this)">Căn hộ</button>
-            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'nha-o', this)">Nhà ở</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'nha-o', this)">Nhà nguyên căn</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'mat-bang-van-phong', this)">Mặt bằng</button>
             <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'bai-dat-kho-xuong', this)">Kho xưởng</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('spotlight', 'homestay-airbnb', this)">HomeStay</button>
             <select class="lc-sort-select" onchange="sortTierSection('spotlight', this.value)" aria-label="Sắp xếp tin Spotlight">
               <option value="default">Sắp xếp: Mặc định VIP</option>
               <option value="price-asc">Giá: Thấp → Cao</option>
@@ -412,7 +419,7 @@
 
     <!-- MID-PAGE HORIZONTAL PROMO BANNER (Real mid_banner.webp) -->
     <section class="lc-banner-row-section">
-      <a href="javascript:void(0)" onclick="openAuthModal()" class="lc-banner-row-card" title="Đăng ký tài khoản nhận ngay 100.000đ vào Ví đăng tin">
+      <a href="javascript:void(0)" onclick="handleMidPromoBannerClick()" class="lc-banner-row-card" title="Ưu đãi thành viên & Nạp Ví đăng tin nhận +11%">
         <img src="assets/mid_banner.webp" alt="Đăng ký tài khoản nhận ngay 100.000đ">
       </a>
     </section>
@@ -433,7 +440,15 @@
             <button type="button" class="lc-quick-tab active" onclick="filterTierSection('featured', 'all', this)">Tất cả</button>
             <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'phong-tro', this)">Phòng trọ</button>
             <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'can-ho-chung-cu', this)">Căn hộ</button>
-            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'nha-o', this)">Nhà ở</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'nha-o', this)">Nhà nguyên căn</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'mat-bang-van-phong', this)">Mặt bằng</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('featured', 'homestay-airbnb', this)">HomeStay</button>
+            <select class="lc-sort-select" onchange="sortTierSection('featured', this.value)" aria-label="Sắp xếp tin Featured">
+              <option value="default">Sắp xếp: Mặc định VIP</option>
+              <option value="price-asc">Giá: Thấp → Cao</option>
+              <option value="price-desc">Giá: Cao → Thấp</option>
+              <option value="area-desc">Diện tích: Lớn nhất</option>
+            </select>
           </div>
         </div>
 
@@ -457,6 +472,19 @@
               <h3>Prime</h3>
               <p>Tiết kiệm chi phí, hiệu quả duy trì</p>
             </div>
+          </div>
+
+          <div class="lc-header-actions">
+            <button type="button" class="lc-quick-tab active" onclick="filterTierSection('prime', 'all', this)">Tất cả</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('prime', 'phong-tro', this)">Phòng trọ</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('prime', 'bai-dat-kho-xuong', this)">Kho xưởng</button>
+            <button type="button" class="lc-quick-tab" onclick="filterTierSection('prime', 'homestay-airbnb', this)">HomeStay</button>
+            <select class="lc-sort-select" onchange="sortTierSection('prime', this.value)" aria-label="Sắp xếp tin Prime">
+              <option value="default">Sắp xếp: Mặc định VIP</option>
+              <option value="price-asc">Giá: Thấp → Cao</option>
+              <option value="price-desc">Giá: Cao → Thấp</option>
+              <option value="area-desc">Diện tích: Lớn nhất</option>
+            </select>
           </div>
         </div>
 
@@ -503,11 +531,11 @@
 
         <div class="cat-filter-controls">
           <select id="catBarPrice" class="cat-select" onchange="applyCategoryBarFilter()">
-            <option value="999">-- Mức giá thuê --</option>
-            <option value="3.5">Dưới 3.5 Triệu/tháng</option>
-            <option value="6">Dưới 6 Triệu/tháng</option>
-            <option value="12">Dưới 12 Triệu/tháng</option>
-            <option value="25">Dưới 25 Triệu/tháng</option>
+            <option value="all">-- Mức giá thuê --</option>
+            <option value="duoi-4-trieu">Dưới 4 Triệu/tháng</option>
+            <option value="tu-4-den-7-trieu">Từ 4 - 7 Triệu/tháng</option>
+            <option value="tu-7-den-15-trieu">Từ 7 - 15 Triệu/tháng</option>
+            <option value="tren-15-trieu">Trên 15 Triệu/tháng</option>
           </select>
 
           <select id="catBarArea" class="cat-select" onchange="applyCategoryBarFilter()">
@@ -526,11 +554,13 @@
           <span id="catResultCount" class="sv1-badge-verified" style="padding:8px 14px;font-size:12px;">16 tin đăng</span>
         </div>
       </div>
+      <div id="catSeoQuickLinksBar" style="max-width:1440px;margin:12px auto 0;padding:10px 40px 0;border-top:1px dashed #e2e8f0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;"></div>
     </div>
 
     <div class="lc-section">
       <div class="lc-wrap">
         <div class="lc-grid" id="categoryListingsGrid"></div>
+        <div id="categorySeoFooterBox" style="margin-top:28px;padding:22px 26px;background:#fff;border-radius:18px;border:1px solid #e2e8f0;"></div>
       </div>
     </div>
   </section>
@@ -701,10 +731,11 @@
           </div>
 
           <ul class="portal-nav-list">
-            <li><button type="button" class="portal-nav-btn active" onclick="switchMemberTab('listings', this)"><span><i class="fa-solid fa-list-check"></i> Quản lý Tin đăng</span> <span style="font-size:11px;background:#fff3eb;color:var(--ctt-orange);padding:2px 7px;border-radius:99px;">5</span></button></li>
-            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span style="font-size:11px;background:#ecfdf5;color:#059669;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
-            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('wallet', this)"><span><i class="fa-solid fa-receipt"></i> Lịch sử Ví & Hóa đơn</span></button></li>
-            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('profile', this)"><span><i class="fa-regular fa-id-card"></i> Hồ sơ & Bảo mật</span></button></li>
+            <li><button type="button" class="portal-nav-btn active" onclick="switchMemberTab('listings', this)"><span><i class="fa-solid fa-list-check"></i> Quản lý Tin đăng</span> <span id="memberNavCountListings" style="font-size:11px;background:#fff3eb;color:var(--ctt-orange);padding:2px 7px;border-radius:99px;">8</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('appointments', this)"><span><i class="fa-regular fa-calendar-check"></i> Lịch hẹn khách Zalo</span> <span id="memberNavCountAppts" style="font-size:11px;background:#ecfdf5;color:#059669;padding:2px 7px;border-radius:99px;">3 mới</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('wallet', this)"><span><i class="fa-solid fa-receipt"></i> Lịch sử Ví & Hóa đơn VAT</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('seo-tools', this)"><span><i class="fa-solid fa-link"></i> Công cụ SEO Link & Chia sẻ</span></button></li>
+            <li><button type="button" class="portal-nav-btn" onclick="switchMemberTab('profile', this)"><span><i class="fa-regular fa-id-card"></i> Hồ sơ & Đổi mật khẩu</span></button></li>
             <li id="memberSwitchAdminItem" style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;display:none;">
               <button type="button" class="portal-nav-btn" onclick="navigateTo('/admin.html')" style="color:#0284c7;">
                 <span><i class="fa-solid fa-user-shield" style="color:#0284c7;"></i> Chuyển sang Admin</span>
@@ -722,26 +753,26 @@
         <!-- Right Main Content: Member Dashboard -->
         <div>
           <!-- 4 Member KPIs -->
-          <div class="portal-kpi-grid" class="tabular-nums">
+          <div class="portal-kpi-grid tabular-nums">
             <div class="portal-kpi-card">
-              <small style="color:#64748b;font-size:11.5px;font-weight:700;">TIN ĐANG HIỂN THỊ</small>
-              <div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">05 <span style="font-size:12px;color:#059669;font-weight:700;">(3 Tin VIP)</span></div>
-              <small style="color:#64748b;font-size:11px;">100% đã duyệt xác minh</small>
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">TIN ĐANG QUẢN LÝ</small>
+              <div id="memberKpiActive" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">08 <span style="font-size:12px;color:#059669;font-weight:700;">(5 Tin VIP)</span></div>
+              <small style="color:#64748b;font-size:11px;">100% chuẩn SEO URL & Bản đồ</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT XEM TIN (30 NGÀY)</small>
-              <div style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">4.820 <span style="font-size:12px;color:#059669;font-weight:700;">+38%</span></div>
-              <small style="color:#64748b;font-size:11px;">Từ Bản đồ 3D & Spotlight</small>
+              <div id="memberKpiViews" style="font-size:26px;font-weight:900;color:#0f172a;margin:4px 0;">4.820 <span style="font-size:12px;color:#059669;font-weight:700;">+38%</span></div>
+              <small style="color:#64748b;font-size:11px;">Từ Bản đồ 3D & Google SEO</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11.5px;font-weight:700;">LƯỢT BẤM GỌI & ZALO</small>
-              <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);margin:4px 0;">142 <span style="font-size:12px;color:#059669;font-weight:700;">khách thật</span></div>
+              <div id="memberKpiCalls" style="font-size:26px;font-weight:900;color:var(--ctt-orange);margin:4px 0;">142 <span style="font-size:12px;color:#059669;font-weight:700;">khách thật</span></div>
               <small style="color:#64748b;font-size:11px;">Tỷ lệ chuyển đổi 9.4%</small>
             </div>
             <div class="portal-kpi-card">
-              <small style="color:#64748b;font-size:11.5px;font-weight:700;">LẦN SỬA TIN MIỄN PHÍ</small>
-              <div style="font-size:26px;font-weight:900;color:#059669;margin:4px 0;">03 / 03</div>
-              <small style="color:#64748b;font-size:11px;">Quyền lợi thành viên VIP</small>
+              <small style="color:#64748b;font-size:11.5px;font-weight:700;">QUYỀN SỬA TIN MIỄN PHÍ</small>
+              <div id="memberKpiFreeEdits" style="font-size:26px;font-weight:900;color:#059669;margin:4px 0;">03 / 03</div>
+              <small style="color:#64748b;font-size:11px;">Áp dụng cho mỗi tin đăng mới</small>
             </div>
           </div>
 
@@ -761,14 +792,16 @@
         <aside class="portal-sidebar" style="background:#0f172a;border-color:#1e293b;color:#fff;">
           <div style="padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.1);">
             <span style="font-size:10px;font-weight:800;letter-spacing:1.2px;color:#ffd700;text-transform:uppercase;display:block;margin-bottom:4px;">SYSTEM CONTROL CENTER</span>
-            <h3 style="font-size:17px;font-weight:900;color:#fff;">CHOTHUETOT ADMIN</h3>
-            <small style="color:#94a3b8;font-size:11.5px;">Quản trị viên cấp cao • Toàn quyền</small>
+            <h3 id="adminSidebarTitle" style="font-size:17px;font-weight:900;color:#fff;">CHOTHUETOT ADMIN</h3>
+            <small id="adminSidebarSub" style="color:#94a3b8;font-size:11.5px;">Quản trị viên cấp cao • Toàn quyền</small>
           </div>
 
           <ul class="portal-nav-list">
-            <li><button type="button" class="portal-nav-btn active" style="color:#fff;" onclick="switchAdminTab('moderation', this)"><span><i class="fa-solid fa-shield-check" style="color:#ffd700;"></i> Duyệt tin & Kiểm duyệt AI</span> <span style="font-size:10.5px;background:#ef4444;color:#fff;padding:2px 7px;border-radius:99px;">4 chờ</span></button></li>
-            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#38bdf8;"></i> Doanh thu VIP & Ví VietQR</span></button></li>
-            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#34d399;"></i> Quản lý Chủ nhà & CCCD</span></button></li>
+            <li><button type="button" class="portal-nav-btn active" style="color:#fff;" onclick="switchAdminTab('moderation', this)"><span><i class="fa-solid fa-shield-check" style="color:#ffd700;"></i> Duyệt tin & Kiểm duyệt AI</span> <span id="adminNavBadgeQueue" style="font-size:10.5px;background:#ef4444;color:#fff;padding:2px 7px;border-radius:99px;">4 chờ</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('all-listings', this)"><span><i class="fa-solid fa-layer-group" style="color:#f97316;"></i> Quản lý Toàn bộ Tin đăng</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('revenue', this)"><span><i class="fa-solid fa-chart-pie" style="color:#38bdf8;"></i> Doanh thu VIP & VAT 8%</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('users', this)"><span><i class="fa-solid fa-users-gear" style="color:#34d399;"></i> Quản lý Tài khoản & Cấp quyền</span></button></li>
+            <li><button type="button" class="portal-nav-btn" style="color:#cbd5e1;" onclick="switchAdminTab('seo-config', this)"><span><i class="fa-solid fa-magnifying-glass-chart" style="color:#a78bfa;"></i> Cấu hình SEO Link & Vị trí</span></button></li>
             <li style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);">
               <button type="button" class="portal-nav-btn" style="color:#ffd700;" onclick="navigateTo('/tai-khoan.html')">
                 <span><i class="fa-solid fa-user-check" style="color:#ffd700;"></i> Xem trang Thành viên</span>
@@ -786,24 +819,24 @@
         <div>
           <div class="portal-kpi-grid tabular-nums">
             <div class="portal-kpi-card" style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
-              <small style="color:#94a3b8;font-size:11px;font-weight:700;">DOANH THU GÓI VIP (THÁNG 11)</small>
-              <div style="font-size:24px;font-weight:900;color:#ffd700;margin:4px 0;">186.450.000đ</div>
-              <small style="color:#34d399;font-size:11.5px;font-weight:700;">▲ +24.8% so với tháng 10</small>
+              <small style="color:#94a3b8;font-size:11px;font-weight:700;">DOANH THU GÓI VIP + VAT (THÁNG 11)</small>
+              <div id="adminKpiRevenue" style="font-size:24px;font-weight:900;color:#ffd700;margin:4px 0;">186.450.000đ</div>
+              <small style="color:#34d399;font-size:11.5px;font-weight:700;">▲ +24.8% • Đã gồm VAT 8% & Nhãn dán</small>
             </div>
             <div class="portal-kpi-card">
               <small style="color:#64748b;font-size:11px;font-weight:700;">TIN CHỜ DUYỆT (AI PRE-CHECK)</small>
-              <div style="font-size:24px;font-weight:900;color:#ef4444;margin:4px 0;">04 tin mới</div>
+              <div id="adminKpiQueue" style="font-size:24px;font-weight:900;color:#ef4444;margin:4px 0;">04 tin mới</div>
               <small style="color:#64748b;font-size:11.5px;">Điểm AI trung bình: 96/100</small>
             </div>
             <div class="portal-kpi-card">
-              <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TIN VIP ĐANG CHẠY</small>
-              <div style="font-size:24px;font-weight:900;color:#0f172a;margin:4px 0;">342 tin</div>
-              <small style="color:#059669;font-size:11.5px;font-weight:700;">18 Banner Đặc Quyền • 94 Spotlight</small>
+              <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TIN ĐANG HOẠT ĐỘNG</small>
+              <div id="adminKpiActiveVip" style="font-size:24px;font-weight:900;color:#0f172a;margin:4px 0;">22 tin</div>
+              <small style="color:#059669;font-size:11.5px;font-weight:700;">Đủ 6 Loại hình • 6 Khu vực</small>
             </div>
             <div class="portal-kpi-card">
-              <small style="color:#64748b;font-size:11px;font-weight:700;">NẠP VÍ VIETQR TỰ ĐỘNG (24H)</small>
-              <div style="font-size:24px;font-weight:900;color:#0284c7;margin:4px 0;">42.800.000đ</div>
-              <small style="color:#64748b;font-size:11.5px;">Đã tặng +11% khuyến mãi</small>
+              <small style="color:#64748b;font-size:11px;font-weight:700;">TỔNG TÀI KHOẢN HỆ THỐNG</small>
+              <div id="adminKpiUsers" style="font-size:24px;font-weight:900;color:#0284c7;margin:4px 0;">04 tài khoản</div>
+              <small style="color:#64748b;font-size:11.5px;">2 Admin • 2 Chủ nhà xác thực</small>
             </div>
           </div>
 
@@ -814,58 +847,85 @@
   </section>
 
   <!-- ========================================================================
-       SEO WARD LINKS MATRIX (.seo-links-section)
+       SEO MATRIX: 6 LOẠI HÌNH × VỊ TRÍ PHƯỜNG/XÃ × GIÁ THÀNH (.seo-links-section)
        ======================================================================== -->
   <section class="seo-links-section">
-    <div class="seo-container">
+    <div style="max-width:1440px;margin:0 auto 20px;padding:0 40px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+        <div>
+          <span style="font-size:11px;font-weight:800;color:var(--ctt-orange);letter-spacing:1px;text-transform:uppercase;">HỆ THỐNG TỪ KHÓA & ĐƯỜNG DẪN THÂN THIỆN CHUẨN SEO GOOGLE</span>
+          <h2 style="font-size:20px;font-weight:900;color:#0f172a;margin:2px 0 0;">Tìm Kiếm Nhanh Theo Loại Hình, Vị Trí Phường/Xã & Mức Giá Thuê</h2>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;" class="tabular-nums">
+          <a href="javascript:void(0)" onclick="navigateTo('/tim-kiem-gia-duoi-4-trieu')" class="seo-price-chip">Giá dưới 4 Triệu</a>
+          <a href="javascript:void(0)" onclick="navigateTo('/tim-kiem-gia-tu-4-den-7-trieu')" class="seo-price-chip">Giá 4 - 7 Triệu</a>
+          <a href="javascript:void(0)" onclick="navigateTo('/tim-kiem-gia-tu-7-den-15-trieu')" class="seo-price-chip">Giá 7 - 15 Triệu</a>
+          <a href="javascript:void(0)" onclick="navigateTo('/tim-kiem-gia-tren-15-trieu')" class="seo-price-chip">Giá trên 15 Triệu</a>
+          <a href="javascript:void(0)" onclick="navigateTo('/khu-vuc-tp-ho-chi-minh')" class="seo-price-chip">Khu vực TP.HCM</a>
+          <a href="javascript:void(0)" onclick="navigateTo('/khu-vuc-tp-ha-noi')" class="seo-price-chip">Khu vực Hà Nội</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="seo-container seo-6col-grid">
       <div class="seo-col">
-        <h3 class="seo-title">Cho thuê Phòng trọ</h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro')" style="color:inherit;text-decoration:none;">Phòng Trọ / CHDV</a></h3>
         <ul class="seo-list">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Cầu Kiệu</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Hạnh Thông</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Gia Định</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Tân Sơn Nhì</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/phong-tro.html')">Phòng trọ P. Diên Hồng</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro-p-cau-kieu')">Phòng trọ P. Cầu Kiệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro-p-hanh-thong')">Phòng trọ P. Hạnh Thông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro-p-gia-dinh')">Phòng trọ P. Gia Định</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro-gia-duoi-4-trieu')">Phòng trọ dưới 4 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-phong-tro-gia-tu-4-den-7-trieu')">CHDV 4 - 7 triệu/tháng</a></li>
         </ul>
       </div>
       <div class="seo-col">
-        <h3 class="seo-title">Cho thuê Nhà nguyên căn</h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can')" style="color:inherit;text-decoration:none;">Nhà Nguyên Căn</a></h3>
         <ul class="seo-list">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. An Đông</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Hạnh Thông</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Phú Nhuận</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Cầu Ông Lãnh</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/nha-o.html')">Nhà nguyên căn P. Phú Lâm</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can-p-an-dong')">Nhà nguyên căn P. An Đông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can-p-hoa-hung')">Nhà nguyên căn P. Hòa Hưng</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can-p-cau-ong-lanh')">Nhà nguyên căn P. Cầu Ông Lãnh</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can-gia-tu-7-den-15-trieu')">Nhà nguyên căn 7 - 15 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-nha-nguyen-can-gia-tren-15-trieu')">Nhà mặt tiền trên 15 triệu</a></li>
         </ul>
       </div>
       <div class="seo-col">
-        <h3 class="seo-title">Cho thuê Căn hộ, Studio</h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu')" style="color:inherit;text-decoration:none;">Căn Hộ Chung Cư</a></h3>
         <ul class="seo-list">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ Studio Phan Xích Long</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ P. Nhiêu Lộc</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ Xã Nhà Bè</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ P. Nghĩa Đô (Hà Nội)</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/can-ho-chung-cu.html')">Căn hộ dịch vụ Bình Thạnh</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu-p-cau-kieu')">Căn hộ Studio P. Cầu Kiệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu-p-nhieu-loc')">Căn hộ P. Nhiêu Lộc</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu-tp-ha-noi')">Căn hộ chung cư Hà Nội</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu-gia-tu-4-den-7-trieu')">Căn hộ Studio 4 - 7 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu-gia-tu-7-den-15-trieu')">Căn hộ 2PN 7 - 15 triệu</a></li>
         </ul>
       </div>
       <div class="seo-col">
-        <h3 class="seo-title">Mặt bằng & Văn phòng</h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong')" style="color:inherit;text-decoration:none;">Mặt Bằng Văn Phòng</a></h3>
         <ul class="seo-list">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Mặt bằng P. Tân Sơn Nhất</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Shophouse P. Tân Phú</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Kiot kinh doanh Phú Nhuận</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Văn phòng đại diện Quận 1</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/mat-bang-van-phong.html')">Mặt bằng dọc tuyến Metro</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong-p-tan-son-nhat')">Mặt bằng P. Tân Sơn Nhất</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong-p-tan-phu')">Shophouse P. Tân Phú</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong-p-cau-kieu')">Kiot kinh doanh Phú Nhuận</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong-gia-tu-7-den-15-trieu')">Mặt bằng 7 - 15 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong-gia-tren-15-trieu')">Văn phòng trên 15 triệu</a></li>
         </ul>
       </div>
       <div class="seo-col">
-        <h3 class="seo-title">Bãi đất & Kho xưởng</h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai')" style="color:inherit;text-decoration:none;">Đất - Xưởng, Kho - Bãi</a></h3>
         <ul class="seo-list">
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng P. Tân Hưng (Q.7)</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng P. Thới An (Q.12)</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng Âu Cơ Tân Bình</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho bãi P. Bình Trị Đông</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/bai-dat-kho-xuong.html')">Kho xưởng Xã Đông Thạnh</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai-p-tan-hung')">Kho xưởng P. Tân Hưng (Q.7)</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai-p-thoi-an')">Kho xưởng P. Thới An (Q.12)</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai-p-binh-tri-dong')">Kho bãi P. Bình Trị Đông</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai-gia-tu-7-den-15-trieu')">Kho nhỏ 7 - 15 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai-gia-tren-15-trieu')">Kho xưởng lớn trên 15 triệu</a></li>
+        </ul>
+      </div>
+      <div class="seo-col">
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')" style="color:inherit;text-decoration:none;">HomeStay / AirBnb</a></h3>
+        <ul class="seo-list">
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-p-cau-kieu')">HomeStay P. Cầu Kiệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-p-nhieu-loc')">AirBnb View Kênh Nhiêu Lộc</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-tp-ha-noi')">HomeStay Phố Cổ Hà Nội</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-gia-tu-4-den-7-trieu')">HomeStay 4 - 7 triệu/tháng</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-gia-tu-7-den-15-trieu')">Căn hộ AirBnb 7 - 15 triệu</a></li>
         </ul>
       </div>
     </div>
@@ -1197,6 +1257,9 @@
                   <small id="demoTitleCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/70 ký tự</small>
                 </div>
                 <input type="text" id="dTitle" maxlength="70" class="post-input" value="" oninput="onStudioManualContentEdit()">
+                <div id="demoSeoUrlPreview" style="margin-top:5px;padding:5px 10px;border-radius:8px;background:#f8fafc;border:1px dashed #cbd5e1;font-size:11px;color:#059669;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                  <i class="fa-solid fa-link"></i> URL SEO: https://staymap.vn/#/cho-thue-phong-tro-p-cau-kieu/...
+                </div>
               </div>
 
               <div style="margin-bottom:12px;">
@@ -1735,6 +1798,6 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="app.js?v=20261118e"></script>
+  <script src="app.js?v=20261118f"></script>
 </body>
 </html>

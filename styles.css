@@ -4440,4 +4440,102 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 @media (max-width: 1080px) {
   .demo-header-row { flex-wrap: wrap; }
   .demo-header-right { flex-wrap: wrap; }
+  .seo-6col-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+/* ==========================================================================
+   SEO MATRIX (6-COL), IMAGE CLARITY, & PORTAL ENHANCEMENTS
+   ========================================================================== */
+.seo-6col-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .seo-6col-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+.seo-price-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.16s ease;
+}
+.seo-price-chip:hover,
+.seo-price-chip.active {
+  border-color: var(--ctt-orange);
+  background: #fffaf5;
+  color: var(--ctt-orange);
+  transform: translateY(-1px);
+}
+.pd-seo-tags-box {
+  margin-top: 22px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+.pd-seo-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+.pd-seo-tag-pill:hover {
+  border-color: var(--ctt-orange);
+  color: var(--ctt-orange);
+  background: #fffaf5;
+}
+.lc-card-img {
+  height: 204px;
+  aspect-ratio: 16 / 10;
+  background: #f1f5f9;
+}
+.lc-card-img img,
+.pd-gallery img,
+.sv1-r-main img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  image-rendering: -webkit-optimize-contrast;
+}
+.portal-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.portal-filter-pill {
+  padding: 6px 13px;
+  border-radius: 99px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.portal-filter-pill:hover,
+.portal-filter-pill.active {
+  background: var(--ctt-orange);
+  border-color: var(--ctt-orange);
+  color: #fff;
 }

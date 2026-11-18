@@ -716,145 +716,136 @@ const PRICING_TIERS = [
   {
     zoneId: 1,
     name: "Banner Đặc Quyền",
-    tag: "Vàng • 50.000đ/ngày",
-    desc: "Đẳng cấp chuyên nghiệp — Vị trí Slide VIP 1 độc quyền ngay đầu trang chủ",
+    tag: "Đặc Quyền • 50.000đ/ngày",
+    desc: "Đẳng cấp chuyên nghiệp — Vị trí Slide 3D độc quyền ngay đầu trang chủ (.sv1)",
     icon: "fa-crown",
     cardClass: "super-vip",
-    badge: "ĐỘC QUYỀN VIP",
+    badge: "✦ ĐẶC QUYỀN",
     packages: [
-      { days: 1, price: 50000, save: "" },
+      { days: 3, price: 150000, save: "" },
       { days: 7, price: 332500, save: "-5%" },
       { days: 15, price: 675000, save: "-10%" },
       { days: 30, price: 1200000, save: "-20%" }
     ],
     features: [
-      "Mục tiêu: Chuyên nghiệp & Thương hiệu lớn",
-      "Hiển thị: Slide 3D Banner Trang Chủ (.sv1)",
-      "List thứ tự: Hàng đầu tuyệt đối (Top 1)",
-      "Sửa tin: Có (Miễn phí 3 lần đầu)",
-      "Duyệt tin: Ưu tiên duyệt ngay lập tức",
-      "Đẩy tin: Luôn giữ vị trí Top đầu",
-      "Dán nhãn: Huy hiệu Vương Miện Vàng 3D",
-      "CSKH & Voucher: Hỗ trợ 1-1 ưu tiên"
+      "Hiển thị: Slide 3D Banner Đặc Quyền Trang Chủ & Top 1 Spotlight",
+      "Bản đồ 3D: Ghim Vương Miện Vàng Kim nổi bật nhất",
+      "Huy hiệu: ✦ ĐẶC QUYỀN (Nền đen chữ cam thương hiệu)",
+      "Nhãn dán: Tùy chọn Giảm Sâu / HOT / Ưu Đãi (+1.000đ/ngày)",
+      "SEO ưu tiên: Index tự động SEO Vị trí & SEO Giá thành",
+      "Sửa tin: Miễn phí 3 lần đầu • Duyệt tự động tức thì"
     ]
   },
   {
     zoneId: 2,
     name: "TOP 1 Hiển Thị",
-    tag: "Bạc • 35.000đ/ngày",
-    desc: "Dành cho Môi giới chuyên nghiệp & Chủ tòa nhà dịch vụ",
+    tag: "VIP 1 • 35.000đ/ngày",
+    desc: "Dành cho Môi giới chuyên nghiệp & Chủ tòa nhà CHDV muốn bứt phá khách gọi",
     icon: "fa-fire",
     cardClass: "vip1",
-    badge: "SPOTLIGHT",
+    badge: "✦ VIP 1",
     packages: [
-      { days: 1, price: 35000, save: "" },
+      { days: 3, price: 105000, save: "" },
       { days: 7, price: 232750, save: "-5%" },
       { days: 15, price: 472500, save: "-10%" },
       { days: 30, price: 840000, save: "-20%" }
     ],
     features: [
-      "Mục tiêu: Hiển thị bứt phá",
-      "Hiển thị: Khu vực Spotlight Trang Chủ",
-      "List thứ tự: Ưu tiên cao (Top 2)",
-      "Sửa tin: Có (Miễn phí 3 lần)",
-      "Duyệt tin: Nhanh trong 5 phút",
-      "Đẩy tin: Tự động đẩy tin mỗi ngày",
-      "Dán nhãn: Nhãn Spotlight Cam Rực",
-      "CSKH & Voucher: Tặng kèm mã giảm giá"
+      "Hiển thị: Khu vực Spotlight (TOP 1 Hiển Thị) Trang Chủ",
+      "Bản đồ 3D: Ghim 1★ Nền trắng chữ cam nổi bật",
+      "Huy hiệu: ✦ VIP 1 (Bạc ánh kim viền cam thương hiệu)",
+      "Nhãn dán: Tùy chọn Giảm Sâu / HOT / Ưu Đãi (+1.000đ/ngày)",
+      "SEO ưu tiên: Tối ưu đường dẫn SEO Phường/Xã & Giá thuê",
+      "Sửa tin: Miễn phí 3 lần đầu • Tự động đẩy tin mỗi ngày"
     ]
   },
   {
     zoneId: 3,
     name: "TOP 2 Nổi Bật",
-    tag: "Nổi bật • 25.000đ/ngày",
-    desc: "Nhiều người dùng lựa chọn nhất — Chốt khách nhanh mỗi ngày",
+    tag: "VIP 2 • 25.000đ/ngày",
+    desc: "Được lựa chọn nhiều nhất — Tối ưu chi phí và lượng khách liên hệ mỗi ngày",
     icon: "fa-star",
     cardClass: "popular",
-    badge: "PHỔ BIẾN NHẤT",
+    badge: "• VIP 2",
     packages: [
-      { days: 1, price: 25000, save: "" },
+      { days: 3, price: 75000, save: "" },
       { days: 7, price: 166250, save: "-5%" },
       { days: 15, price: 337500, save: "-10%" },
       { days: 30, price: 600000, save: "-20%" }
     ],
     features: [
-      "Mục tiêu: Tối ưu chi phí / Lượt gọi cao",
-      "Hiển thị: Khu vực Featured Trang Chủ",
-      "List thứ tự: Ưu tiên (Top 3)",
-      "Sửa tin: Có (Miễn phí 3 lần)",
-      "Duyệt tin: Nhanh",
-      "Đẩy tin: Có đẩy tin định kỳ",
-      "Dán nhãn: Nhãn Featured Nổi Bật",
-      "CSKH & Voucher: Có"
+      "Hiển thị: Khu vực Featured (TOP 2 Nổi Bật) Trang Chủ",
+      "Bản đồ 3D: Ghim 1★ Nền trắng chữ cam",
+      "Huy hiệu: • VIP 2 (Bạc ánh kim viền cam nhạt)",
+      "Nhãn dán: Tùy chọn Giảm Sâu / HOT / Ưu Đãi (+1.000đ/ngày)",
+      "SEO chuẩn: Tự động tạo URL thân thiện theo vị trí & giá",
+      "Sửa tin: Miễn phí 3 lần đầu • Duyệt nhanh"
     ]
   },
   {
-    zoneId: 10,
+    zoneId: 5,
     name: "TOP 3 Hiệu Quả",
-    tag: "Quan tâm • 15.000đ/ngày",
-    desc: "Tiết kiệm chi phí, duy trì hiển thị bền vững tại khu vực Prime",
+    tag: "VIP 3 • 15.000đ/ngày",
+    desc: "Tiết kiệm chi phí, duy trì hiển thị bền vững tại khu vực Prime Trang Chủ",
     icon: "fa-thumbs-up",
     cardClass: "pkg-4",
-    badge: "",
+    badge: "VIP 3",
     packages: [
-      { days: 1, price: 15000, save: "" },
+      { days: 3, price: 45000, save: "" },
       { days: 7, price: 99750, save: "-5%" },
       { days: 15, price: 202500, save: "-10%" },
       { days: 30, price: 360000, save: "-20%" }
     ],
     features: [
-      "Mục tiêu: Tiết kiệm & Hiệu quả",
-      "Hiển thị: Khu vực Prime Trang Chủ",
-      "List thứ tự: Luôn trên tin thường",
-      "Sửa tin: Có (Miễn phí 3 lần)",
-      "Duyệt tin: Có",
-      "Đẩy tin: Có",
-      "Dán nhãn: Nhãn Prime Xanh",
-      "CSKH & Voucher: Có"
+      "Hiển thị: Khu vực Prime (TOP 3 Hiệu Quả) Trang Chủ",
+      "Bản đồ 3D: Ghim 1★ Nền trắng chữ cam",
+      "Huy hiệu: VIP 3 (Bạc ánh kim tiêu chuẩn)",
+      "Nhãn dán: Tùy chọn Giảm Sâu / HOT / Ưu Đãi (+1.000đ/ngày)",
+      "SEO chuẩn: Liên kết danh mục & từ khóa khu vực",
+      "Sửa tin: Miễn phí 3 lần đầu"
     ]
   },
   {
     zoneId: 4,
     name: "Tin Cơ Bản",
     tag: "Cơ bản • Chỉ 1.000đ/ngày",
-    desc: "Dành cho cá nhân chính chủ muốn duy trì tin dài hạn giá siêu rẻ",
+    desc: "Dành cho chính chủ muốn duy trì tin trên Bản đồ & Danh mục với chi phí siêu rẻ",
     icon: "fa-file-lines",
     cardClass: "pkg-5",
-    badge: "SIÊU TIẾT KIỆM",
+    badge: "TIẾT KIỆM",
     packages: [
-      { days: 15, price: 14250, save: "-5%" },
-      { days: 30, price: 27000, save: "-10%" },
-      { days: 45, price: 38250, save: "-15%" },
-      { days: 60, price: 48000, save: "-20%" }
+      { days: 3, price: 3000, save: "" },
+      { days: 7, price: 6650, save: "-5%" },
+      { days: 15, price: 13500, save: "-10%" },
+      { days: 30, price: 24000, save: "-20%" }
     ],
     features: [
-      "Mục tiêu: Đăng tin cơ bản chi phí thấp",
-      "Hiển thị: Danh mục & Tìm kiếm",
-      "List thứ tự: Tin thường",
-      "Sửa tin: Có (Miễn phí 3 lần)",
-      "Duyệt tin: Có",
-      "Đẩy tin: Có",
-      "Dán nhãn: Có (Ưu đãi xuyên suốt)",
-      "CSKH & Voucher: Có"
+      "Hiển thị: Trang Danh mục, Tìm kiếm & SEO vị trí",
+      "Bản đồ 3D: Có lên Bản đồ (Ghim nền trắng chữ đen)",
+      "Huy hiệu VIP: Không gắn huy hiệu VIP",
+      "Nhãn dán: Được phép gắn Nhãn Dán (+1.000đ/ngày)",
+      "SEO chuẩn: Có URL thân thiện theo loại hình & vị trí",
+      "Sửa tin: Miễn phí 3 lần đầu"
     ]
   },
   {
     zoneId: 13,
     name: "Đăng Tin Miễn Phí",
-    tag: "Dùng thử • 0đ (3 Ngày)",
-    desc: "Trải nghiệm đăng tin miễn phí 100% dành cho thành viên mới",
+    tag: "Trải nghiệm • 0đ (3 Ngày)",
+    desc: "Trải nghiệm đăng tin miễn phí 100% dành cho thành viên mới làm quen hệ thống",
     icon: "fa-gift",
     cardClass: "pkg-6",
     badge: "MIỄN PHÍ 0Đ",
     packages: [
-      { days: 3, price: 0, save: "FREE" }
+      { days: 3, price: 0, save: "Miễn phí" }
     ],
     features: [
-      "Mục tiêu: Trải nghiệm nền tảng ChoThueTot",
-      "Hiển thị: Trang danh mục theo khu vực",
-      "Thời gian hiển thị: 3 ngày miễn phí",
-      "Hỗ trợ định vị bản đồ thông minh",
-      "Không cần thẻ tín dụng khi bắt đầu"
+      "Hiển thị: Trang Danh mục & Tìm kiếm (3 ngày)",
+      "Bản đồ 3D: Không hiển thị trên Bản đồ",
+      "Huy hiệu VIP & Nhãn dán: Không hỗ trợ",
+      "SEO cơ bản: Có đường dẫn bài viết thân thiện",
+      "Nâng cấp: Có thể nâng cấp lên gói VIP bất kỳ lúc nào",
+      "Chi phí: 0đ (Miễn phí hoàn toàn)"
     ]
   }
 ];
@@ -934,63 +925,124 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+function toVietnameseSlug(str) {
+  return String(str || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getPriceBracketSlug(priceMillion) {
+  const p = Number(priceMillion || 0);
+  if (p > 0 && p < 4) return "gia-duoi-4-trieu";
+  if (p >= 4 && p <= 7) return "gia-tu-4-den-7-trieu";
+  if (p > 7 && p <= 15) return "gia-tu-7-den-15-trieu";
+  if (p > 15) return "gia-tren-15-trieu";
+  return "gia-thoa-thuan";
+}
+
+function buildPropertySeoUrl(item) {
+  const catSlugMap = {
+    "phong-tro": "cho-thue-phong-tro",
+    "nha-o": "cho-thue-nha-nguyen-can",
+    "can-ho-chung-cu": "cho-thue-can-ho-chung-cu",
+    "mat-bang-van-phong": "cho-thue-mat-bang-van-phong",
+    "bai-dat-kho-xuong": "cho-thue-dat-xuong-kho-bai",
+    "homestay-airbnb": "cho-thue-homestay-airbnb"
+  };
+  const baseCat = catSlugMap[item.category] || `cho-thue-${toVietnameseSlug(item.category)}`;
+  const wardSlug = toVietnameseSlug(item.ward || "");
+  const citySlug = toVietnameseSlug(item.city || "");
+  const titleSlug = toVietnameseSlug(item.title || "bat-dong-san").slice(0, 58);
+  const priceSlug = item.price ? `gia-${String(item.price).replace(".", "-")}-trieu` : "gia-tot";
+  return `#/${baseCat}-${wardSlug}-${citySlug}/${titleSlug}-${priceSlug}-id${item.id}`;
+}
+
+function updateDocumentSeoMeta(title, desc) {
+  if (title) document.title = `${title} | CHOTHUETOT.VN`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc && desc) metaDesc.setAttribute("content", desc);
+}
+
+function handleMidPromoBannerClick() {
+  if (STATE.auth && STATE.auth.isLoggedIn) {
+    openWalletModal();
+  } else {
+    openAuthModal("Đăng nhập hoặc đăng ký tài khoản để nhận ưu đãi nạp Ví +11% ngay hôm nay!");
+  }
+}
+
 function navigateTo(route, pushHistory = true) {
-  if (!route || route === "#") route = "/";
-  STATE.currentRoute = route;
+  if (!route.startsWith("/")) route = "/" + route;
   if (pushHistory) {
-    window.history.pushState({ route }, "", "#" + route);
+    window.history.pushState({}, "", `#${route}`);
   }
 
-  // Update active menu state
   document.querySelectorAll(".shn-list > li").forEach((li) => li.classList.remove("active"));
-  if (route === "/") document.getElementById("nav-home")?.classList.add("active");
+  if (route === "/" || route === "/index.html") document.getElementById("nav-home")?.classList.add("active");
   else if (route.includes("bao-gia")) document.getElementById("nav-pricing")?.classList.add("active");
   else if (route.includes("tin-tuc")) document.getElementById("nav-news")?.classList.add("active");
   else if (route.includes("uu-dai")) document.getElementById("nav-promo")?.classList.add("active");
   else if (route.includes("tai-khoan")) document.getElementById("nav-member")?.classList.add("active");
   else if (route.includes("admin")) document.getElementById("nav-admin")?.classList.add("active");
 
-  // Hide all views first
   document.body.classList.remove("is-detail-view");
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
   const heroEl = document.getElementById("siteHeaderHero");
 
-  // Route matching
+  // Check if route is a Property Detail URL (ends with -id1234, -1234, or /1234)
+  const detailIdMatch = route.match(/-id(\d+)$/) || route.match(/\/(\d+)$/) || route.match(/-(\d{3,6})$/);
+  if (detailIdMatch && (route.includes("cho-thue") || route.includes("phong-tro") || route.includes("nha-") || route.includes("can-ho") || route.includes("mat-bang") || route.includes("kho-xuong") || route.includes("homestay"))) {
+    const propId = parseInt(detailIdMatch[1], 10);
+    openPropertyDetailView(propId);
+    return;
+  }
+
   if (route === "/" || route === "/index.html") {
     heroEl.classList.remove("is-compact");
     document.getElementById("view-home").style.display = "block";
     updateMapPins("all");
+    updateDocumentSeoMeta(
+      "Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng, HomeStay",
+      "CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng, HomeStay/AirBnb minh bạch 100%."
+    );
   } else if (
+    route.includes("cho-thue") ||
     route.includes("phong-tro") ||
     route.includes("nha-o") ||
-    route.includes("can-ho-chung-cu") ||
-    route.includes("mat-bang-van-phong") ||
-    route.includes("bai-dat-kho-xuong") ||
-    route.includes("homestay-airbnb") ||
+    route.includes("nha-nguyen-can") ||
+    route.includes("can-ho") ||
+    route.includes("mat-bang") ||
+    route.includes("bai-dat") ||
+    route.includes("dat-xuong") ||
+    route.includes("homestay") ||
     route.includes("spotlight") ||
     route.includes("featured") ||
     route.includes("prime") ||
-    route.includes("search")
+    route.includes("search") ||
+    route.includes("tim-kiem") ||
+    route.includes("khu-vuc")
   ) {
-    const idMatch = route.match(/-(\d+)$/) || route.match(/\/(\d+)$/);
-    if (idMatch) {
-      const propId = parseInt(idMatch[1], 10);
-      openPropertyDetailView(propId);
-    } else {
-      heroEl.classList.remove("is-compact");
-      openCategoryView(route);
-    }
+    heroEl.classList.remove("is-compact");
+    openCategoryView(route);
   } else if (route.includes("bao-gia")) {
     heroEl.classList.add("is-compact");
     document.getElementById("view-pricing").style.display = "block";
+    updateDocumentSeoMeta("Bảng Giá Dịch Vụ Đăng Tin BĐS & Gói VIP", "Bảng giá 6 gói đăng tin BĐS cho thuê minh bạch tại ChoThueTot.vn.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("tin-tuc")) {
     heroEl.classList.add("is-compact");
     document.getElementById("view-news").style.display = "block";
+    updateDocumentSeoMeta("Tin Tức & Cẩm Nang Thuê Nhà An Toàn 2026", "Cẩm nang thuê phòng trọ, pháp lý tạm trú VNeID và quy hoạch TOD Metro.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("uu-dai")) {
     heroEl.classList.add("is-compact");
     document.getElementById("view-promo").style.display = "block";
+    updateDocumentSeoMeta("Ưu Đãi Thành Viên & Khuyến Mãi Nạp Ví VietQR +11%", "Nhận ngay +11% khi nạp Ví đăng tin VietQR và giảm tới 20% gói VIP 30 ngày.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("hop-tac")) {
     heroEl.classList.add("is-compact");
@@ -998,45 +1050,38 @@ function navigateTo(route, pushHistory = true) {
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("tai-khoan")) {
     if (!STATE.auth.isLoggedIn) {
-      STATE.pendingAuthRoute = "/tai-khoan.html";
+      openAuthModal("Vui lòng đăng nhập tài khoản Thành viên để quản lý tin đăng & lịch hẹn.");
       heroEl.classList.remove("is-compact");
       document.getElementById("view-home").style.display = "block";
-      updateMapPins("all");
-      if (pushHistory) window.history.replaceState({ route: "/" }, "", "#/");
-      openAuthModal("Vui lòng đăng nhập để truy cập trang Hồ sơ Thành viên.");
       return;
     }
     heroEl.classList.add("is-compact");
     document.getElementById("view-member").style.display = "block";
-    switchMemberTab("listings");
+    syncMemberSidebarAndKpis();
+    switchMemberTab(STATE.activeMemberTab || "listings");
+    updateDocumentSeoMeta("Quản Lý Tài Khoản & Tin Đăng Thành Viên", "Hệ thống quản lý tin đăng, lịch hẹn khách Zalo, hóa đơn VAT và công cụ SEO Link.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("admin")) {
     if (!STATE.auth.isLoggedIn || STATE.auth.role !== "admin") {
-      STATE.pendingAuthRoute = "/admin.html";
+      openAuthModal("Khu vực dành riêng cho Quản trị viên (Admin). Vui lòng đăng nhập tài khoản Admin.");
       heroEl.classList.remove("is-compact");
       document.getElementById("view-home").style.display = "block";
-      updateMapPins("all");
-      if (pushHistory) window.history.replaceState({ route: "/" }, "", "#/");
-      openAuthModal("Khu vực nội bộ: Vui lòng đăng nhập bằng tài khoản Quản trị viên (Admin).");
       return;
     }
     heroEl.classList.add("is-compact");
     document.getElementById("view-admin").style.display = "block";
-    switchAdminTab("moderation");
+    syncAdminKpis();
+    switchAdminTab(STATE.activeAdminTab || "moderation");
+    updateDocumentSeoMeta("Trung Tâm Quản Trị Hệ Thống Admin | ChoThueTot.vn", "Kiểm duyệt tin đăng AI, quản lý doanh thu VIP, tài khoản thành viên và cấu hình SEO.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
-  } else if (route.includes("dang-tin")) {
-    document.getElementById("view-home").style.display = "block";
-    openPostModal();
   } else {
+    heroEl.classList.remove("is-compact");
     document.getElementById("view-home").style.display = "block";
   }
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-// ==========================================================================
-// 1. LUXURY INTERACTIVE HERO MAP (Real MapTiler Key + 3D Pins + Theme Switcher)
-// ==========================================================================
 function initHeroMap() {
   const mapEl = document.getElementById("heroMap");
   if (!mapEl || typeof L === "undefined") return;
@@ -1163,7 +1208,7 @@ function updateMapPins(catFilter = "all", focusId = null) {
       <div class="hero-map-popup">
         <img src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&auto=format&fit=crop&q=80'">
         <div class="hmp-pop-body">
-          <span class="hmp-pop-badge">${item.badge}</span>
+          ${getPropertyVipDisplay(item).label ? `<span class="lc-vip-tag ${getPropertyVipDisplay(item).badgeClass}" style="position:static;display:inline-block;margin-bottom:4px;font-size:9.5px;padding:2px 7px;">${getPropertyVipDisplay(item).label}</span>` : `<span class="hmp-pop-badge">${item.categoryLabel}</span>`}
           <div class="hmp-pop-title">${item.title}</div>
           <div class="hmp-pop-loc"><i class="fa-solid fa-location-dot"></i> ${item.ward}, ${item.city}</div>
           <div class="hmp-pop-footer">
@@ -1321,7 +1366,8 @@ function updateMapFilterChipCounts() {
     mapCountCanHo: mapVisible.filter((p) => p.category === "can-ho-chung-cu").length,
     mapCountNhaO: mapVisible.filter((p) => p.category === "nha-o").length,
     mapCountMatBang: mapVisible.filter((p) => p.category === "mat-bang-van-phong").length,
-    mapCountKhoXuong: mapVisible.filter((p) => p.category === "bai-dat-kho-xuong").length
+    mapCountKhoXuong: mapVisible.filter((p) => p.category === "bai-dat-kho-xuong").length,
+    mapCountHomestay: mapVisible.filter((p) => p.category === "homestay-airbnb").length
   };
   Object.entries(countMap).forEach(([id, val]) => {
     const el = document.getElementById(id);
@@ -1355,7 +1401,7 @@ function renderSv1Slider() {
   container.innerHTML = `
     <div class="sv1-left">
       <div class="sv1-verified-row">
-        <span class="sv1-badge-vip"><i class="fa-solid fa-crown"></i> BANNER ĐẶC QUYỀN • VIP 1</span>
+        <span class="lc-vip-tag tag-dacquyen" style="position:static;padding:4px 11px;font-size:11px;">✦ ĐẶC QUYỀN</span>
         <span class="sv1-badge-verified"><i class="fa-solid fa-shield-check"></i> ĐÃ XÁC MINH THỰC TẾ</span>
       </div>
       <div class="sv1-loc">
@@ -1626,60 +1672,177 @@ function getTierPriorityRank(item) {
 // ==========================================================================
 // 5. CATEGORY & SEARCH VIEW (/phong-tro.html, /nha-o.html, /search.html...)
 // ==========================================================================
+const SEO_WARD_LOOKUP = [
+  { slug: "p-cau-kieu", ward: "P. Cầu Kiệu", city: "TP. Hồ Chí Minh" },
+  { slug: "p-hanh-thong", ward: "P. Hạnh Thông", city: "TP. Hồ Chí Minh" },
+  { slug: "p-gia-dinh", ward: "P. Gia Định", city: "TP. Hồ Chí Minh" },
+  { slug: "p-tan-son-nhi", ward: "P. Tân Sơn Nhì", city: "TP. Hồ Chí Minh" },
+  { slug: "p-dien-hong", ward: "P. Diên Hồng", city: "TP. Hồ Chí Minh" },
+  { slug: "p-an-dong", ward: "P. An Đông", city: "TP. Hồ Chí Minh" },
+  { slug: "p-hoa-hung", ward: "P. Hòa Hưng", city: "TP. Hồ Chí Minh" },
+  { slug: "p-cau-ong-lanh", ward: "P. Cầu Ông Lãnh", city: "TP. Hồ Chí Minh" },
+  { slug: "p-nhieu-loc", ward: "P. Nhiêu Lộc", city: "TP. Hồ Chí Minh" },
+  { slug: "p-tan-son-nhat", ward: "P. Tân Sơn Nhất", city: "TP. Hồ Chí Minh" },
+  { slug: "p-tan-phu", ward: "P. Tân Phú", city: "TP. Hồ Chí Minh" },
+  { slug: "p-tan-hung", ward: "P. Tân Hưng", city: "TP. Hồ Chí Minh" },
+  { slug: "p-thoi-an", ward: "P. Thới An", city: "TP. Hồ Chí Minh" },
+  { slug: "p-binh-tri-dong", ward: "P. Bình Trị Đông", city: "TP. Hồ Chí Minh" },
+  { slug: "p-nghia-do", ward: "P. Nghĩa Đô", city: "TP. Hà Nội" },
+  { slug: "p-dong-da", ward: "P. Đống Đa", city: "TP. Hà Nội" },
+  { slug: "p-cau-giay", ward: "P. Cầu Giấy", city: "TP. Hà Nội" },
+  { slug: "p-hoan-kiem", ward: "P. Hoàn Kiếm", city: "TP. Hà Nội" },
+  { slug: "p-thanh-xuan", ward: "P. Thanh Xuân", city: "TP. Hà Nội" }
+];
+
+const SEO_PRICE_BRACKETS = {
+  "duoi-4-trieu": { label: "Dưới 4 Triệu/tháng", min: 0, max: 4 },
+  "tu-4-den-7-trieu": { label: "Từ 4 - 7 Triệu/tháng", min: 4, max: 7 },
+  "tu-7-den-15-trieu": { label: "Từ 7 - 15 Triệu/tháng", min: 7, max: 15 },
+  "tren-15-trieu": { label: "Trên 15 Triệu/tháng", min: 15, max: 9999 }
+};
+
 function openCategoryView(route) {
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
   const catView = document.getElementById("view-category");
   catView.style.display = "block";
+  STATE.lastCategoryRoute = route;
 
-  let title = "Tất cả tin cho thuê bất động sản";
-  let subtitle = "Sắp xếp ưu tiên từ Banner Đặc Quyền → VIP 1 → VIP 2 → VIP 3 → Tin thường → Tin miễn phí";
   let catKey = "all";
+  let catName = "Bất Động Sản Cho Thuê";
   let tierFilter = null;
 
   if (route.includes("phong-tro")) {
-    title = "Cho Thuê Phòng Trọ Chính Chủ, Giá Rẻ Mới Nhất 2026";
     catKey = "phong-tro";
-  } else if (route.includes("nha-o")) {
-    title = "Cho Thuê Nhà Ở Nguyên Căn, Hẻm Xe Hơi & Mặt Tiền";
+    catName = "Phòng Trọ / CHDV";
+  } else if (route.includes("nha-o") || route.includes("nha-nguyen-can")) {
     catKey = "nha-o";
-  } else if (route.includes("can-ho-chung-cu")) {
-    title = "Cho Thuê Căn Hộ Chung Cư, Studio & Duplex Cao Cấp";
+    catName = "Nhà Nguyên Căn";
+  } else if (route.includes("can-ho")) {
     catKey = "can-ho-chung-cu";
-  } else if (route.includes("mat-bang-van-phong")) {
-    title = "Cho Thuê Mặt Bằng Kinh Doanh, Shophouse & Văn Phòng";
+    catName = "Căn Hộ Chung Cư";
+  } else if (route.includes("mat-bang")) {
     catKey = "mat-bang-van-phong";
-  } else if (route.includes("bai-dat-kho-xuong")) {
-    title = "Cho Thuê Bãi Đất, Kho Xưởng Chuẩn Công Nghiệp";
+    catName = "Mặt Bằng Văn Phòng";
+  } else if (route.includes("bai-dat") || route.includes("dat-xuong")) {
     catKey = "bai-dat-kho-xuong";
-  } else if (route.includes("homestay-airbnb")) {
-    title = "Cho Thuê HomeStay, AirBnb & Căn Hộ Nghỉ Dưỡng";
+    catName = "Đất - Xưởng, Kho - Bãi";
+  } else if (route.includes("homestay")) {
     catKey = "homestay-airbnb";
+    catName = "HomeStay / AirBnb";
   } else if (route.includes("spotlight")) {
-    title = "Spotlight — Đỉnh Cao Hiển Thị, Dẫn Đầu Vị Thế";
-    subtitle = "Chỉ hiển thị các tin thuộc hạng TOP 1 Spotlight (Không bao gồm tin thường & miễn phí)";
     tierFilter = "spotlight";
+    catName = "Spotlight — TOP 1 Hiển Thị";
   } else if (route.includes("featured")) {
-    title = "Featured — Nổi Bật Mỗi Ngày, Khách Chốt Thuê Ngay";
-    subtitle = "Chỉ hiển thị các tin thuộc hạng TOP 2 Featured (Không bao gồm tin thường & miễn phí)";
     tierFilter = "featured";
+    catName = "Featured — TOP 2 Nổi Bật";
   } else if (route.includes("prime")) {
-    title = "Prime — Tiết Kiệm Chi Phí, Hiệu Quả Duy Trì";
-    subtitle = "Chỉ hiển thị các tin thuộc hạng TOP 3 Prime (Không bao gồm tin thường & miễn phí)";
     tierFilter = "prime";
+    catName = "Prime — TOP 3 Hiệu Quả";
   } else if (route.includes("search")) {
-    title = `Kết quả tìm kiếm: "${STATE.searchFilter.keyword || STATE.searchFilter.ward !== "all" ? STATE.searchFilter.ward : "Tất cả khu vực"}"`;
     catKey = STATE.searchFilter.category || "all";
   }
 
-  document.getElementById("catViewTitle").textContent = title;
-  document.getElementById("catViewSubtitle").textContent = subtitle;
+  // Detect SEO Ward / City in URL
+  const matchedWardObj = SEO_WARD_LOOKUP.find((w) => route.includes(w.slug));
+  let seoCity = "all";
+  if (matchedWardObj) seoCity = matchedWardObj.city;
+  else if (route.includes("tp-ha-noi") || route.includes("ha-noi")) seoCity = "TP. Hà Nội";
+  else if (route.includes("tp-ho-chi-minh")) seoCity = "TP. Hồ Chí Minh";
+
+  // Detect SEO Price Bracket in URL
+  const matchedPriceKey = Object.keys(SEO_PRICE_BRACKETS).find((k) => route.includes(k)) || "all";
+  const priceBracket = matchedPriceKey !== "all" ? SEO_PRICE_BRACKETS[matchedPriceKey] : null;
+
+  // Sync select controls with parsed SEO URL
+  const priceSel = document.getElementById("catBarPrice");
+  if (priceSel) priceSel.value = matchedPriceKey;
+  const citySel = document.getElementById("catBarCity");
+  if (citySel) citySel.value = seoCity;
+  const areaSel = document.getElementById("catBarArea");
+  if (areaSel && !route.includes("search")) areaSel.value = "0";
+
+  // Build SEO H1 Title & Subtitle
+  const titleParts = [`Cho Thuê ${catName}`];
+  if (matchedWardObj) titleParts.push(`Tại ${matchedWardObj.ward} (${matchedWardObj.city})`);
+  else if (seoCity !== "all") titleParts.push(`Tại ${seoCity}`);
+  if (priceBracket) titleParts.push(`— ${priceBracket.label}`);
+  if (route.includes("search") && STATE.searchFilter.keyword) {
+    titleParts.push(`• Từ khóa "${STATE.searchFilter.keyword}"`);
+  }
+
+  const finalTitle = titleParts.join(" ");
+  const finalSub = `Chuẩn SEO Vị Trí & Giá Thành • Xếp hạng ưu tiên từ Banner Đặc Quyền → VIP 1 → VIP 2 → VIP 3 → Tin Cơ Bản → Miễn Phí`;
+
+  document.getElementById("catViewTitle").textContent = finalTitle;
+  document.getElementById("catViewSubtitle").textContent = finalSub;
+  updateDocumentSeoMeta(finalTitle, `${finalTitle}. Minh bạch giá điện nước, tổng chi phí thực tế hàng tháng và bản đồ 3D chính chủ.`);
+
+  STATE.activeCategoryContext = {
+    catKey,
+    catName,
+    tierFilter,
+    ward: matchedWardObj ? matchedWardObj.ward : (route.includes("search") ? STATE.searchFilter.ward : "all"),
+    city: seoCity !== "all" ? seoCity : (route.includes("search") ? STATE.searchFilter.city : "all"),
+    priceKey: matchedPriceKey,
+    isSearchRoute: route.includes("search")
+  };
+
+  renderCategoryQuickSeoBar();
+  applyCategoryBarFilter(false);
+}
+
+function renderCategoryQuickSeoBar() {
+  const bar = document.getElementById("catSeoQuickLinksBar");
+  if (!bar) return;
+  const ctx = STATE.activeCategoryContext || { catKey: "all", catName: "Bất Động Sản" };
+  const baseSlug = ctx.catKey === "all" ? "cho-thue-bat-dong-san" : `cho-thue-${ctx.catKey === "nha-o" ? "nha-nguyen-can" : ctx.catKey === "bai-dat-kho-xuong" ? "dat-xuong-kho-bai" : ctx.catKey}`;
+
+  const wardLinks = [
+    { label: "Tất cả khu vực", url: `/${baseSlug}` },
+    { label: "P. Cầu Kiệu", url: `/${baseSlug}-p-cau-kieu` },
+    { label: "P. Hòa Hưng", url: `/${baseSlug}-p-hoa-hung` },
+    { label: "P. Nhiêu Lộc", url: `/${baseSlug}-p-nhieu-loc` },
+    { label: "P. Gia Định", url: `/${baseSlug}-p-gia-dinh` },
+    { label: "TP. Hà Nội", url: `/${baseSlug}-tp-ha-noi` }
+  ];
+  const priceLinks = [
+    { key: "duoi-4-trieu", label: "Dưới 4 Triệu", url: `/${baseSlug}-gia-duoi-4-trieu` },
+    { key: "tu-4-den-7-trieu", label: "4 - 7 Triệu", url: `/${baseSlug}-gia-tu-4-den-7-trieu` },
+    { key: "tu-7-den-15-trieu", label: "7 - 15 Triệu", url: `/${baseSlug}-gia-tu-7-den-15-trieu` },
+    { key: "tren-15-trieu", label: "Trên 15 Triệu", url: `/${baseSlug}-gia-tren-15-trieu` }
+  ];
+
+  bar.innerHTML = `
+    <span style="font-size:11.5px;font-weight:800;color:#0f172a;"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> SEO Vị trí:</span>
+    ${wardLinks.map((w) => `<a href="javascript:void(0)" onclick="navigateTo('${w.url}')" class="seo-price-chip">${w.label}</a>`).join("")}
+    <span style="font-size:11.5px;font-weight:800;color:#0f172a;margin-left:8px;"><i class="fa-solid fa-tag" style="color:var(--ctt-orange);"></i> SEO Giá thành:</span>
+    ${priceLinks.map((p) => `<a href="javascript:void(0)" onclick="navigateTo('${p.url}')" class="seo-price-chip ${ctx.priceKey === p.key ? "active" : ""}">${p.label}</a>`).join("")}
+  `;
+}
+
+function applyCategoryBarFilter(updateUrl = true) {
+  const ctx = STATE.activeCategoryContext || { catKey: "all", catName: "Bất Động Sản", tierFilter: null, ward: "all", city: "all", priceKey: "all", isSearchRoute: false };
+  const priceKey = document.getElementById("catBarPrice")?.value || "all";
+  const areaMin = parseFloat(document.getElementById("catBarArea")?.value || "0");
+  const cityVal = document.getElementById("catBarCity")?.value || "all";
+  const bracket = priceKey !== "all" ? SEO_PRICE_BRACKETS[priceKey] : null;
+
+  if (updateUrl) {
+    const baseSlug = ctx.catKey === "all" ? "tim-kiem" : `cho-thue-${ctx.catKey === "nha-o" ? "nha-nguyen-can" : ctx.catKey === "bai-dat-kho-xuong" ? "dat-xuong-kho-bai" : ctx.catKey}`;
+    const cityPart = cityVal !== "all" ? `-${toVietnameseSlug(cityVal)}` : "";
+    const pricePart = priceKey !== "all" ? `-gia-${priceKey}` : "";
+    window.history.replaceState({}, "", `#/${baseSlug}${cityPart}${pricePart}`);
+  }
 
   let filtered = PROPERTIES.filter((p) => {
-    if (tierFilter && p.tier !== tierFilter) return false;
-    if (catKey !== "all" && p.category !== catKey) return false;
-    if (route.includes("search")) {
-      if (STATE.searchFilter.city && STATE.searchFilter.city !== "all" && p.city !== STATE.searchFilter.city) return false;
-      if (STATE.searchFilter.ward && STATE.searchFilter.ward !== "all" && p.ward !== STATE.searchFilter.ward) return false;
+    if (p.isHidden) return false;
+    if (ctx.tierFilter && p.tier !== ctx.tierFilter) return false;
+    if (ctx.catKey !== "all" && p.category !== ctx.catKey) return false;
+    if (ctx.ward && ctx.ward !== "all" && p.ward !== ctx.ward) return false;
+    if (cityVal !== "all" && p.city !== cityVal) return false;
+    if (bracket && (p.price < bracket.min || p.price > bracket.max)) return false;
+    if (areaMin > 0 && p.area < areaMin) return false;
+    if (ctx.isSearchRoute) {
       if (STATE.searchFilter.maxPrice && p.price > STATE.searchFilter.maxPrice) return false;
       if (STATE.searchFilter.minArea && p.area < STATE.searchFilter.minArea) return false;
       if (
@@ -1695,7 +1858,6 @@ function openCategoryView(route) {
     return true;
   });
 
-  // Sort strictly by priority: VIP Banner -> VIP 1 -> VIP 2 -> VIP 3 -> Tin thường -> Tin miễn phí
   filtered.sort((a, b) => getTierPriorityRank(a) - getTierPriorityRank(b));
 
   document.getElementById("catResultCount").textContent = `${filtered.length} tin đăng phù hợp`;
@@ -1703,27 +1865,27 @@ function openCategoryView(route) {
     ? filtered.map(buildListingCardHTML).join("")
     : `<div style="grid-column:1/-1;text-align:center;padding:48px 20px;background:#fff;border-radius:16px;border:1px solid #e2e8f0;">
          <i class="fa-solid fa-magnifying-glass" style="font-size:32px;color:#cbd5e1;margin-bottom:10px;"></i>
-         <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:6px;">Chưa tìm thấy tin đăng khớp điều kiện lọc</h3>
-         <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Bạn hãy thử nới rộng khoảng giá hoặc chọn Tất cả Phường/Xã nhé.</p>
-         <button type="button" class="hsp-btn-apply" onclick="navigateTo('/')">Quay lại Trang chủ</button>
+         <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:6px;">Chưa có tin đăng trong phân khúc này</h3>
+         <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Bạn có thể bấm Đặt lại bộ lọc để xem toàn bộ danh sách tin đã xác minh.</p>
+         <button type="button" class="hsp-btn-apply" onclick="navigateTo('/cho-thue-phong-tro')">Đặt lại bộ lọc & Xem tất cả</button>
        </div>`;
-  updateMapPins(catKey);
-}
 
-function applyCategoryBarFilter() {
-  const priceLimit = parseFloat(document.getElementById("catBarPrice")?.value || "999");
-  const areaMin = parseFloat(document.getElementById("catBarArea")?.value || "0");
-  const city = document.getElementById("catBarCity")?.value || "all";
+  const seoBox = document.getElementById("categorySeoFooterBox");
+  if (seoBox) {
+    const locLabel = ctx.ward && ctx.ward !== "all" ? `${ctx.ward}, ${cityVal !== "all" ? cityVal : "TP. Hồ Chí Minh"}` : (cityVal !== "all" ? cityVal : "TP. Hồ Chí Minh & Hà Nội");
+    const priceLabel = bracket ? bracket.label.toLowerCase() : "mọi phân khúc giá từ bình dân đến cao cấp";
+    seoBox.innerHTML = `
+      <h3 style="font-size:16px;font-weight:900;color:#0f172a;margin-bottom:6px;">
+        <i class="fa-solid fa-circle-info" style="color:var(--ctt-orange);margin-right:6px;"></i>
+        Thông tin thị trường & Kinh nghiệm thuê ${ctx.catName} tại ${locLabel} (${priceLabel})
+      </h3>
+      <p style="font-size:13px;color:#475569;line-height:1.65;margin:0;">
+        Danh sách <strong>${filtered.length} tin cho thuê ${ctx.catName}</strong> tại khu vực <strong>${locLabel}</strong> với mức giá <strong>${priceLabel}</strong> trên <strong>ChoThueTot.vn (Staymap.vn)</strong> đều được định vị trực tiếp trên Bản đồ 3D và công khai bảng tính chi phí Điện, Nước, Dịch vụ thực tế hàng tháng. Người thuê dễ dàng lọc theo Phường/Xã sáp nhập mới, so sánh tổng chi phí trọn gói và đặt lịch hẹn xem nhà trực tiếp qua Zalo chính chủ miễn phí 100%.
+      </p>
+    `;
+  }
 
-  const filtered = PROPERTIES.filter((p) => {
-    if (p.price > priceLimit) return false;
-    if (p.area < areaMin) return false;
-    if (city !== "all" && p.city !== city) return false;
-    return true;
-  });
-
-  document.getElementById("catResultCount").textContent = `${filtered.length} tin đăng phù hợp`;
-  document.getElementById("categoryListingsGrid").innerHTML = filtered.map(buildListingCardHTML).join("");
+  updateMapPins(ctx.catKey);
 }
 
 // ==========================================================================
@@ -1838,7 +2000,12 @@ function copyHostPhoneNow(btnEl, phone) {
 
 function openPropertyDetailView(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
-  window.history.pushState({}, "", `#/cho-thue-${item.category}/${item.id}`);
+  const seoHashUrl = buildPropertySeoUrl(item);
+  window.history.pushState({}, "", seoHashUrl);
+  updateDocumentSeoMeta(
+    `${item.title} - ${item.priceText}/tháng tại ${item.ward}`,
+    `Cho thuê ${item.categoryLabel} tại ${item.fullAddress}. Giá ${item.priceText}/tháng, diện tích ${item.area}m², điện ${item.elec}, nước ${item.water}.`
+  );
 
   document.body.classList.add("is-detail-view");
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
@@ -2015,6 +2182,20 @@ function openPropertyDetailView(propId) {
               </strong>
             </div>
           </div>
+
+          <!-- SEO Link, SEO Vị trí & SEO Giá thành Tag Cloud -->
+          <div class="pd-seo-tags-box">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+              <strong style="font-size:13px;color:#0f172a;"><i class="fa-solid fa-tags" style="color:var(--ctt-orange);margin-right:6px;"></i>Từ khóa & Đường dẫn SEO liên quan (Vị trí & Giá thành)</strong>
+              <small style="font-size:11px;color:#059669;font-family:monospace;">${seoHashUrl.replace("#", "")}</small>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${toVietnameseSlug(item.ward)}')" class="pd-seo-tag-pill"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> Cho thuê ${item.categoryLabel} ${item.ward}</a>
+              <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${toVietnameseSlug(item.city)}')" class="pd-seo-tag-pill"><i class="fa-solid fa-city" style="color:var(--ctt-orange);"></i> ${item.categoryLabel} ${item.city}</a>
+              <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${getPriceBracketSlug(item.price)}')" class="pd-seo-tag-pill"><i class="fa-solid fa-tag" style="color:var(--ctt-orange);"></i> ${item.categoryLabel} ${SEO_PRICE_BRACKETS[getPriceBracketSlug(item.price).replace("gia-", "")]?.label || "Giá tốt"}</a>
+              <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${toVietnameseSlug(item.ward)}-${getPriceBracketSlug(item.price)}')" class="pd-seo-tag-pill"><i class="fa-solid fa-magnifying-glass-dollar" style="color:var(--ctt-orange);"></i> Thuê ${item.categoryLabel} ${item.ward} tầm giá ${item.priceText}</a>
+            </div>
+          </div>
         </div>
 
         <!-- Right Sticky Contact & Booking Sidebar -->
@@ -2069,6 +2250,25 @@ function openPropertyDetailView(propId) {
               <i class="fa-solid fa-shield-heart"></i> <strong>Khuyến cáo an toàn ChoThueTot:</strong> Tuyệt đối không chuyển khoản đặt cọc trước khi đến xem nhà trực tiếp và kiểm tra hợp đồng.
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Similar Properties Section (PropTech 2026 Standard) -->
+      <div style="margin-top:36px;padding-top:28px;border-top:1px solid #e2e8f0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <span style="font-size:11px;font-weight:800;color:var(--ctt-orange);text-transform:uppercase;letter-spacing:1px;">GỢI Ý CÙNG PHÂN KHÚC & KHU VỰC</span>
+            <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin:2px 0 0;">Bất Động Sản Tương Tự Dành Cho Bạn</h3>
+          </div>
+          <a href="javascript:void(0)" onclick="navigateTo('/cho-thue-${item.category}-${toVietnameseSlug(item.ward)}')" style="font-size:13px;font-weight:800;color:var(--ctt-orange);text-decoration:none;">
+            Xem thêm tại ${item.ward} <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="lc-grid">
+          ${PROPERTIES.filter((p) => p.id !== item.id && !p.isHidden && (p.category === item.category || p.ward === item.ward))
+            .slice(0, 4)
+            .map(buildListingCardHTML)
+            .join("")}
         </div>
       </div>
     </div>
@@ -2480,8 +2680,8 @@ function openCompareModal() {
           <td class="feature-label" style="color:var(--ctt-orange);">Tổng chi phí thực tế dự kiến / tháng</td>
           ${selectedItems
             .map((i) => {
-              const total = i.price * 1000000 + 550000;
-              return `<td><strong style="font-size:16px;color:#059669;">~ ${new Intl.NumberFormat("vi-VN").format(total)} VNĐ</strong><br><small style="color:#64748b;">(Gồm thuê + điện + nước + phí DV)</small></td>`;
+              const c = computePropertyMonthlyCost(i);
+              return `<td><strong style="font-size:16px;color:#059669;">~ ${new Intl.NumberFormat("vi-VN").format(c.estTotalVnd)} VNĐ</strong><br><small style="color:#64748b;">(Gồm thuê + điện + nước + phí DV)</small></td>`;
             })
             .join("")}
         </tr>
@@ -4002,6 +4202,18 @@ function renderStudioPreview() {
   const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
   const otherCost = otherRaw ? `${otherRaw}k` : "--";
   const title = document.getElementById("dTitle")?.value.trim() || "Chưa nhập tiêu đề tin đăng";
+  const seoPreviewEl = document.getElementById("demoSeoUrlPreview");
+  if (seoPreviewEl) {
+    const previewUrl = buildPropertySeoUrl({
+      id: STUDIO_STATE.editingPropId || 8932,
+      category: STUDIO_STATE.catKey,
+      ward,
+      city,
+      title: title === "Chưa nhập tiêu đề tin đăng" ? `${STUDIO_STATE.catLabel} ${ward}` : title,
+      price: price === "--" ? "" : price
+    });
+    seoPreviewEl.innerHTML = `<i class="fa-solid fa-link"></i> URL SEO: <strong>https://staymap.vn/${previewUrl}</strong>`;
+  }
   const desc = document.getElementById("dDesc")?.value.trim() || "Chưa nhập mô tả chi tiết...";
   const phone = document.getElementById("dPhone")?.value.trim() || "Chưa nhập SĐT";
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
@@ -4208,6 +4420,15 @@ function publishStudioListingNow() {
 
   STATE.walletBalance -= grandTotal;
   updateWalletUI();
+  PORTAL_DATA.transactions.unshift({
+    code: `#VIP-${Math.floor(10000 + Math.random() * 89999)}`,
+    time: "Vừa xong",
+    desc: `Đăng gói ${z.name} (${dur.label})${stObj ? ` + Nhãn ${stObj.name}` : ""} + VAT 8%`,
+    amount: -grandTotal,
+    type: "debit",
+    vat: vatTotal,
+    status: "Đã xuất hóa đơn VAT"
+  });
 
   const newId = Math.max(...PROPERTIES.map((p) => p.id)) + 1;
   const priceNum = parseFloat(document.getElementById("dPrice")?.value || "6.5");
@@ -4323,84 +4544,427 @@ function publishStudioListingNow() {
 }
 
 // ==========================================================================
-// 12. MEMBER ACCOUNT PORTAL (#view-member) & ADMIN CONTROL CENTER (#view-admin)
+// 12. DATA NORMALIZATION, SEO GALLERY ENRICHMENT, MEMBER PORTAL & ADMIN CENTER
 // ==========================================================================
+const PORTAL_DATA = {
+  memberFilter: "all",
+  adminSearchKw: "",
+  adminCatFilter: "all",
+  adminTierFilter: "all",
+  appointments: [
+    { id: 101, guestName: "Nguyễn Hoàng Nam", guestPhone: "0908612489", propId: 2078, propTitle: "Kiot & Phòng Studio cao cấp Phan Xích Long", slot: "Ngày mai • Chiều (14h-17h)", status: "pending" },
+    { id: 102, guestName: "Trần Thanh Thảo", guestPhone: "0938119204", propId: 4169, propTitle: "Phòng Studio ban công thoáng Phan Xích Long", slot: "Cuối tuần • Sáng (09h-11h)", status: "pending" },
+    { id: 103, guestName: "Lê Minh Khôi", guestPhone: "0914882310", propId: 4170, propTitle: "Penthouse Mini & CHDV View Kênh Nhiêu Lộc", slot: "Hôm nay • Tối (18h-20h)", status: "confirmed" }
+  ],
+  transactions: [
+    { code: "#VQR-99241", time: "18/11/2026 09:15", desc: "Nạp Ví tự động qua VietQR (+11% Khuyến mãi Tháng 11)", amount: 555000, type: "credit", vat: 0, status: "Hoàn tất tự động" },
+    { code: "#VIP-88102", time: "17/11/2026 14:20", desc: "Đăng gói Banner Đặc Quyền (7 ngày) + Nhãn HOT + VAT 8% cho tin #2078", amount: -366660, type: "debit", vat: 27160, status: "Đã xuất hóa đơn VAT" }
+  ]
+};
+
+// Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/AirBnb listings
+(function enrichPropertiesAndPortals() {
+  const poolPhotos = [
+    "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791011814_9782.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791013825_7889.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791011017_2480.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791022806_6372.webp",
+    "https://chothuetot.vn/assets/images/properties/album_1791022210_7592.webp"
+  ];
+
+  // Add 2 authentic HomeStay / AirBnb listings if not present
+  if (!PROPERTIES.some((p) => p.category === "homestay-airbnb")) {
+    PROPERTIES.push(
+      {
+        id: 8921,
+        tier: "spotlight",
+        zoneId: 2,
+        badge: "✦ VIP 1",
+        badgeClass: "tag-vip1",
+        sticker: "hot",
+        category: "homestay-airbnb",
+        categoryLabel: "HomeStay / AirBnb",
+        title: "HomeStay Indochine Studio Full Nội Thất View Kênh Nhiêu Lộc — Lê Văn Sỹ",
+        price: 8.5,
+        priceText: "8.5 Triệu",
+        ward: "P. Nhiêu Lộc",
+        city: "TP. Hồ Chí Minh",
+        fullAddress: "118 Lê Văn Sỹ, P. Nhiêu Lộc, TP. Hồ Chí Minh",
+        area: 42,
+        beds: "1 PN",
+        baths: "1 WC",
+        elec: "Nhà nước",
+        water: "Nhà nước",
+        deposit: "1 Tháng",
+        furniture: "Đầy Đủ",
+        floors: "1 Tầng",
+        direction: "Đông Nam",
+        lat: 10.7862,
+        lng: 106.6798,
+        verified: true,
+        isVipPin: false,
+        phone: "0906344877",
+        host: "Chính chủ Minh Quân",
+        image: poolPhotos[2],
+        gallery: [poolPhotos[2], poolPhotos[0], poolPhotos[1], poolPhotos[3]]
+      },
+      {
+        id: 8922,
+        tier: "featured",
+        zoneId: 3,
+        badge: "• VIP 2",
+        badgeClass: "tag-vip2",
+        sticker: "promo",
+        category: "homestay-airbnb",
+        categoryLabel: "HomeStay / AirBnb",
+        title: "Căn Hộ AirBnb 2PN Ban Công Rộng Sát Phan Xích Long — Nhận Khách Ngắn & Dài Hạn",
+        price: 11.5,
+        priceText: "11.5 Triệu",
+        ward: "P. Cầu Kiệu",
+        city: "TP. Hồ Chí Minh",
+        fullAddress: "68 Hoa Sứ, P. Cầu Kiệu, TP. Hồ Chí Minh",
+        area: 55,
+        beds: "2 PN",
+        baths: "2 WC",
+        elec: "Nhà nước",
+        water: "100k",
+        deposit: "1 Tháng",
+        furniture: "Đầy Đủ",
+        floors: "1 Tầng",
+        direction: "Nam",
+        lat: 10.7978,
+        lng: 106.6849,
+        verified: true,
+        isVipPin: false,
+        phone: "0906344877",
+        host: "Duy Quang",
+        image: poolPhotos[3],
+        gallery: [poolPhotos[3], poolPhotos[4], poolPhotos[5], poolPhotos[1]]
+      }
+    );
+  }
+
+  const stickerSampleById = { 2078: "hot", 4169: "promo", 4170: "urgent", 4175: "hot", 4181: "promo" };
+
+  PROPERTIES.forEach((p, idx) => {
+    if (p.id === 2078) p.zoneId = 1;
+    const vip = getPropertyVipDisplay(p);
+    p.badge = vip.label || "Tin Cơ Bản";
+    p.badgeClass = vip.badgeClass || "";
+    if (!p.sticker && stickerSampleById[p.id]) {
+      p.sticker = stickerSampleById[p.id];
+    }
+    if (!Array.isArray(p.gallery) || p.gallery.length < 4) {
+      const start = p.image || poolPhotos[idx % poolPhotos.length];
+      p.gallery = [
+        start,
+        poolPhotos[(idx + 1) % poolPhotos.length],
+        poolPhotos[(idx + 2) % poolPhotos.length],
+        poolPhotos[(idx + 3) % poolPhotos.length]
+      ];
+    }
+    if (typeof p.freeEditsLeft !== "number") {
+      p.freeEditsLeft = 3;
+    }
+  });
+})();
+
+// Hook topUpWalletInstant & submitZaloViewingSchedule to record into PORTAL_DATA
+const _origTopUpWallet = topUpWalletInstant;
+topUpWalletInstant = function (amount) {
+  const bonus = Math.round(amount * 0.11);
+  PORTAL_DATA.transactions.unshift({
+    code: `#VQR-${Math.floor(10000 + Math.random() * 89999)}`,
+    time: "Vừa xong",
+    desc: `Nạp Ví tự động VietQR (+11% thưởng: +${new Intl.NumberFormat("vi-VN").format(bonus)}đ)`,
+    amount: amount + bonus,
+    type: "credit",
+    vat: 0,
+    status: "Hoàn tất tự động"
+  });
+  _origTopUpWallet(amount);
+  if (document.getElementById("view-member")?.style.display === "block" && STATE.activeMemberTab === "wallet") {
+    switchMemberTab("wallet");
+  }
+};
+
+const _origSubmitZaloSched = submitZaloViewingSchedule;
+submitZaloViewingSchedule = function (propId) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
+  const phoneEl = document.getElementById("schedTenantPhone");
+  const phone = (phoneEl?.value || "").replace(/\D/g, "").trim();
+  if (/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
+    PORTAL_DATA.appointments.unshift({
+      id: Date.now(),
+      guestName: STATE.auth?.isLoggedIn ? STATE.auth.displayName : "Khách thuê đặt lịch",
+      guestPhone: phone,
+      propId: item.id,
+      propTitle: item.title,
+      slot: `${STATE.selectedViewingDate} • ${STATE.selectedViewingTime}`,
+      status: "pending"
+    });
+  }
+  _origSubmitZaloSched(propId);
+};
+
+function syncMemberSidebarAndKpis() {
+  const name = STATE.auth?.displayName || "Chính chủ Minh Quân";
+  const code = STATE.auth?.memberCode || "#CTT-8829";
+  const roleLabel = STATE.auth?.role === "admin" ? "Quản trị viên Admin" : "Hạng Vàng Chính Chủ";
+  const verifiedVia = STATE.auth?.verifiedVia || "CCCD & SĐT Zalo";
+
+  const avEl = document.getElementById("memberSidebarAvatar");
+  if (avEl) avEl.textContent = getInitials(name);
+  const nameEl = document.getElementById("memberSidebarName");
+  if (nameEl) nameEl.textContent = name;
+  const badgeEl = document.getElementById("memberSidebarBadge");
+  if (badgeEl) badgeEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Đã xác thực ${verifiedVia}`;
+  const metaEl = document.getElementById("memberSidebarMeta");
+  if (metaEl) metaEl.textContent = `Mã: ${code} • ${roleLabel}`;
+
+  const myProps = PROPERTIES.slice(0, 10);
+  const vipCount = myProps.filter((p) => p.tier === "spotlight" || p.tier === "featured" || p.tier === "prime").length;
+  const navCnt = document.getElementById("memberNavCountListings");
+  if (navCnt) navCnt.textContent = String(myProps.length);
+  const apptCnt = document.getElementById("memberNavCountAppts");
+  if (apptCnt) apptCnt.textContent = `${PORTAL_DATA.appointments.filter((a) => a.status === "pending").length} mới`;
+
+  const kpiActive = document.getElementById("memberKpiActive");
+  if (kpiActive) {
+    kpiActive.innerHTML = `${String(myProps.filter((p) => !p.isHidden).length).padStart(2, "0")} <span style="font-size:12px;color:#059669;font-weight:700;">(${vipCount} Tin VIP)</span>`;
+  }
+}
+
+function openEditListingModal(propId) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  openPostModal();
+  STUDIO_STATE.editingPropId = item.id;
+  STUDIO_STATE.catKey = item.category;
+  STUDIO_STATE.catLabel = item.categoryLabel;
+  STUDIO_STATE.beds = item.beds || "1 PN";
+  STUDIO_STATE.baths = item.baths || "1 WC";
+  STUDIO_STATE.deposit = item.deposit || "1 Tháng";
+  STUDIO_STATE.photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice();
+  STUDIO_STATE.selectedZoneId = item.zoneId || (item.tier === "spotlight" ? 2 : item.tier === "featured" ? 3 : 5);
+  STUDIO_STATE.selectedSticker = item.sticker || null;
+
+  const cityEl = document.getElementById("dCity");
+  if (cityEl) {
+    cityEl.value = item.city || "TP. Hồ Chí Minh";
+    populateStudioWards();
+  }
+  const wardEl = document.getElementById("dWard");
+  if (wardEl) {
+    wardEl.value = item.ward || "P. Cầu Kiệu";
+    populateStudioStreets();
+  }
+  const streetEl = document.getElementById("dStreet");
+  if (streetEl && streetEl.options.length > 1) streetEl.selectedIndex = 1;
+  STUDIO_STATE.houseNumber = (item.fullAddress || "142").split(",")[0];
+  const addrEl = document.getElementById("dAddress");
+  if (addrEl) addrEl.value = item.fullAddress || "";
+  const hostEl = document.getElementById("dHost");
+  if (hostEl) hostEl.value = item.host || STATE.auth.displayName || "Chính chủ Minh Quân";
+  const phoneEl = document.getElementById("dPhone");
+  if (phoneEl) {
+    phoneEl.value = (item.phone || "0906344877").replace(/\D/g, "");
+    sanitizeStudioVnPhone(phoneEl);
+  }
+  const priceEl = document.getElementById("dPrice");
+  if (priceEl) priceEl.value = item.price || 7.5;
+  const areaEl = document.getElementById("dArea");
+  if (areaEl) areaEl.value = item.area || 35;
+  const depEl = document.getElementById("dDeposit");
+  if (depEl) depEl.value = item.deposit || "1 Tháng";
+  const titleEl = document.getElementById("dTitle");
+  if (titleEl) titleEl.value = (item.title || "").slice(0, 70);
+  const descEl = document.getElementById("dDesc");
+  if (descEl) descEl.value = item.description || `Chính chủ cho thuê ${item.title} tại ${item.fullAddress}.`;
+
+  updateStudioTitleCount();
+  renderStudioPhotosManager();
+  pickStudioZone(STUDIO_STATE.selectedZoneId);
+  renderStudioPreview();
+}
+
+function boostMemberListingNow(propId) {
+  const idx = PROPERTIES.findIndex((p) => p.id === Number(propId));
+  if (idx < 0) return;
+  const [item] = PROPERTIES.splice(idx, 1);
+  PROPERTIES.unshift(item);
+  renderAllHomeGrids();
+  updateMapPins("all", item.id);
+  switchMemberTab("listings");
+  alert(`🚀 ĐÃ ĐẨY TIN #${item.id} LÊN ĐẦU BẢNG!\n• Tin đăng đã được ưu tiên lên vị trí số 1 và làm mới ghim Bản đồ 3D.`);
+}
+
+function toggleHideMemberListing(propId) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  item.isHidden = !item.isHidden;
+  renderAllHomeGrids();
+  updateMapPins("all");
+  syncMemberSidebarAndKpis();
+  switchMemberTab("listings");
+}
+
+function copyPropertySeoLink(propId, btnEl) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  const fullUrl = `${window.location.origin}/${buildPropertySeoUrl(item)}`;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(fullUrl).catch(() => {});
+  }
+  if (btnEl) {
+    const oldHtml = btnEl.innerHTML;
+    btnEl.innerHTML = `<i class="fa-solid fa-check" style="color:#059669;"></i> Đã copy SEO Link`;
+    setTimeout(() => { btnEl.innerHTML = oldHtml; }, 1800);
+  }
+}
+
+function filterMemberListings(mode, btnEl) {
+  PORTAL_DATA.memberFilter = mode;
+  switchMemberTab("listings");
+}
+
+function saveMemberProfileSettings() {
+  const nameVal = document.getElementById("memProfileName")?.value.trim() || "";
+  const phoneVal = document.getElementById("memProfilePhone")?.value.replace(/\D/g, "").trim() || "";
+  const emailVal = document.getElementById("memProfileEmail")?.value.trim() || "";
+  const newPwd = document.getElementById("memProfileNewPwd")?.value || "";
+
+  if (!nameVal) {
+    alert("Vui lòng nhập Họ và tên hiển thị.");
+    return;
+  }
+  STATE.auth.displayName = nameVal;
+  if (phoneVal) STATE.auth.phone = phoneVal;
+  if (emailVal) STATE.auth.email = emailVal;
+
+  const store = getAccountsStore();
+  const idx = store.findIndex((a) => normalizeAuthIdentity(a.identity) === normalizeAuthIdentity(STATE.auth.identity || STATE.auth.phone || STATE.auth.email));
+  if (idx >= 0) {
+    store[idx].displayName = nameVal;
+    if (newPwd && newPwd.length >= 6) {
+      store[idx].password = newPwd;
+    }
+    saveAccountsStore(store);
+  }
+  try {
+    localStorage.setItem("ctt_auth_session", JSON.stringify(STATE.auth));
+  } catch (_) {}
+
+  updateAuthUI();
+  syncMemberSidebarAndKpis();
+  alert(`✅ Đã cập nhật hồ sơ thành công cho tài khoản "${nameVal}"${newPwd && newPwd.length >= 6 ? " (Đã đổi mật khẩu mới)" : ""}!`);
+}
+
 function switchMemberTab(tabName, btnEl) {
+  STATE.activeMemberTab = tabName;
   if (btnEl) {
     document.querySelectorAll("#view-member .portal-nav-btn").forEach((b) => b.classList.remove("active"));
     btnEl.classList.add("active");
   }
+  syncMemberSidebarAndKpis();
   const container = document.getElementById("memberPortalMainContent");
   if (!container) return;
 
   if (tabName === "listings") {
-    const myProps = PROPERTIES.slice(0, 8);
+    const allMyProps = PROPERTIES.slice(0, 10);
+    const fMode = PORTAL_DATA.memberFilter || "all";
+    const myProps = allMyProps.filter((p) => {
+      if (fMode === "vip") return p.tier === "spotlight" || p.tier === "featured" || p.tier === "prime";
+      if (fMode === "active") return !p.isHidden;
+      if (fMode === "hidden") return Boolean(p.isHidden);
+      return true;
+    });
+
     container.innerHTML = `
       <div class="portal-table-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:12px;">
           <div>
             <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Danh Sách Tin Đăng Của Bạn (${String(myProps.length).padStart(2, "0")} tin)</h3>
-            <small style="color:#64748b;">Miễn phí 3 lần sửa tin đầu tiên • Bấm Đẩy tin để lên đầu trang chủ & bản đồ</small>
+            <small style="color:#64748b;">Tích hợp tự động URL chuẩn SEO (Loại hình + Vị trí + Giá) • Miễn phí 3 lần sửa tin đầu tiên</small>
           </div>
-          <button type="button" class="hsp-btn-apply" onclick="openPostModal()">
+          <button type="button" class="hsp-btn-apply" onclick="STUDIO_STATE.editingPropId=null;openPostModal()">
             <i class="fa-solid fa-plus"></i> Đăng tin mới ngay
           </button>
+        </div>
+
+        <div class="portal-filter-bar">
+          <button type="button" class="portal-filter-pill ${fMode === "all" ? "active" : ""}" onclick="filterMemberListings('all')">Tất cả (${allMyProps.length})</button>
+          <button type="button" class="portal-filter-pill ${fMode === "vip" ? "active" : ""}" onclick="filterMemberListings('vip')">Tin VIP (${allMyProps.filter((p) => p.tier !== "basic" && p.tier !== "free").length})</button>
+          <button type="button" class="portal-filter-pill ${fMode === "active" ? "active" : ""}" onclick="filterMemberListings('active')">Đang hiển thị (${allMyProps.filter((p) => !p.isHidden).length})</button>
+          <button type="button" class="portal-filter-pill ${fMode === "hidden" ? "active" : ""}" onclick="filterMemberListings('hidden')">Đã ẩn / Đã cho thuê (${allMyProps.filter((p) => p.isHidden).length})</button>
         </div>
 
         <table class="portal-table tabular-nums">
           <thead>
             <tr>
-              <th>Bất động sản</th>
-              <th>Gói hiển thị</th>
+              <th>Bất động sản & Đường dẫn SEO</th>
+              <th>Hạng gói & Nhãn</th>
               <th>Hiệu quả (Xem / Gọi)</th>
               <th>Quyền sửa miễn phí</th>
-              <th>Thao tác nhanh</th>
+              <th>Thao tác quản lý</th>
             </tr>
           </thead>
           <tbody>
             ${myProps
-              .map(
-                (p, idx) => `
-              <tr>
+              .map((p, idx) => {
+                const vip = getPropertyVipDisplay(p);
+                const seoUrl = buildPropertySeoUrl(p);
+                return `
+              <tr style="${p.isHidden ? "opacity:0.55;background:#f8fafc;" : ""}">
                 <td>
                   <div style="display:flex;align-items:center;gap:12px;">
-                    <img src="${p.image}" alt="${p.title}" style="width:68px;height:48px;border-radius:8px;object-fit:cover;">
-                    <div>
-                      <strong style="color:#0f172a;display:block;font-size:13px;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
-                      <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg</span>
-                      <small style="color:#64748b;"> • ${p.ward}, ${p.city}</small>
+                    <img src="${p.image}" alt="${p.title}" style="width:72px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+                    <div style="min-width:0;">
+                      <strong style="color:#0f172a;display:block;font-size:13px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
+                      <div>
+                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg</span>
+                        <small style="color:#64748b;"> • ${p.area}m² • ${p.ward}, ${p.city}</small>
+                      </div>
+                      <small style="display:block;color:#059669;font-family:monospace;font-size:10.5px;max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${seoUrl.replace("#", "")}</small>
                     </div>
                   </div>
                 </td>
                 <td>
-                  <span style="padding:4px 10px;border-radius:99px;background:#fff3eb;color:var(--ctt-orange);font-size:11px;font-weight:800;border:1px solid #fed7aa;">
-                    ${idx === 0 ? "Banner Đặc Quyền" : p.tier.toUpperCase()}
-                  </span>
-                  <small style="display:block;color:#059669;font-size:11px;margin-top:3px;">Còn ${14 - idx * 2} ngày</small>
+                  ${vip.label ? `<span class="lc-vip-tag ${vip.badgeClass}" style="position:static;display:inline-block;font-size:10px;padding:3px 9px;">${vip.label}</span>` : `<span style="padding:3px 8px;border-radius:99px;background:#f1f5f9;color:#475569;font-size:11px;font-weight:700;">Tin Cơ Bản</span>`}
+                  <small style="display:block;color:${p.isHidden ? "#dc2626" : "#059669"};font-size:11px;font-weight:700;margin-top:4px;">${p.isHidden ? "Đã ẩn / Đã thuê" : `Đang chạy • Còn ${15 - (idx % 5) * 2} ngày`}</small>
                 </td>
                 <td>
-                  <strong>${980 - idx * 140} lượt xem</strong>
-                  <small style="display:block;color:#059669;font-weight:700;">${38 - idx * 6} lượt gọi & Zalo</small>
+                  <strong>${1120 - idx * 115} lượt xem</strong>
+                  <small style="display:block;color:#059669;font-weight:700;">${42 - idx * 4} lượt gọi & Zalo</small>
                 </td>
                 <td>
-                  <span style="color:#059669;font-weight:800;">Còn ${3 - (idx % 2)}/3 lần</span>
+                  <span style="color:#059669;font-weight:800;">Còn ${p.freeEditsLeft ?? 3}/3 lần</span>
                 </td>
                 <td>
-                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                    <button type="button" onclick="alert('Đã đẩy tin #${p.id} lên vị trí đầu bảng và làm mới ghim Bản đồ 3D!')" style="padding:6px 10px;border-radius:8px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11.5px;font-weight:800;cursor:pointer;">
-                      <i class="fa-solid fa-arrow-up-from-bracket"></i> Đẩy tin
+                  <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                    <button type="button" onclick="boostMemberListingNow(${p.id})" style="padding:5px 9px;border-radius:8px;border:1px solid var(--ctt-orange);background:var(--ctt-orange-soft);color:var(--ctt-orange);font-size:11px;font-weight:800;cursor:pointer;" title="Đẩy tin lên đầu trang">
+                      <i class="fa-solid fa-arrow-up-from-bracket"></i> Đẩy Top
                     </button>
-                    <button type="button" onclick="openPostModal()" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
-                      <i class="fa-regular fa-pen-to-square"></i> Sửa tin
+                    <button type="button" onclick="openEditListingModal(${p.id})" style="padding:5px 9px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11px;font-weight:700;cursor:pointer;" title="Sửa nội dung & gói VIP">
+                      <i class="fa-regular fa-pen-to-square"></i> Sửa
                     </button>
-                    <button type="button" onclick="openPropertyDetailView(${p.id})" style="padding:6px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
+                    <button type="button" onclick="copyPropertySeoLink(${p.id}, this)" style="padding:5px 9px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11px;font-weight:700;cursor:pointer;" title="Copy đường dẫn SEO">
+                      <i class="fa-solid fa-link"></i> SEO Link
+                    </button>
+                    <button type="button" onclick="toggleHideMemberListing(${p.id})" style="padding:5px 9px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#64748b;font-size:11px;font-weight:700;cursor:pointer;">
+                      ${p.isHidden ? "Hiện lại" : "Ẩn tin"}
+                    </button>
+                    <button type="button" onclick="openPropertyDetailView(${p.id})" style="padding:5px 9px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-size:11px;font-weight:700;cursor:pointer;">
                       Xem
                     </button>
                   </div>
                 </td>
               </tr>
-            `
-              )
+            `;
+              })
               .join("")}
           </tbody>
         </table>
@@ -4409,8 +4973,8 @@ function switchMemberTab(tabName, btnEl) {
   } else if (tabName === "appointments") {
     container.innerHTML = `
       <div class="portal-table-card">
-        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:6px;">Lịch Hẹn Xem Phòng Từ Khách Thuê Qua Zalo (03 lịch mới)</h3>
-        <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Khách thuê đặt lịch trực tiếp từ trang bài viết của bạn trên ChoThueTot.vn</p>
+        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:6px;">Lịch Hẹn Xem Phòng Từ Khách Thuê Qua Zalo (${String(PORTAL_DATA.appointments.length).padStart(2, "0")} lịch)</h3>
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Đồng bộ trực tiếp khi khách thuê bấm "Gửi lịch hẹn qua Zalo Chủ Nhà" trên Trang Bài Viết của bạn</p>
         <table class="portal-table tabular-nums">
           <thead>
             <tr>
@@ -4422,27 +4986,26 @@ function switchMemberTab(tabName, btnEl) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><strong>Nguyễn Hoàng Nam</strong><br><small style="color:#0284c7;">SĐT Zalo: 0908 612 489</small></td>
-              <td>#2078 • Kiot & Phòng Studio Phan Xích Long</td>
-              <td><strong>Ngày mai • Chiều (14:00 - 17:00)</strong></td>
-              <td><span style="padding:4px 9px;border-radius:99px;background:#fef3c7;color:#b45309;font-size:11px;font-weight:800;">Chờ xác nhận</span></td>
-              <td><button type="button" onclick="this.textContent='Đã xác nhận Zalo ✓';this.style.background='#059669';" class="hsp-btn-apply" style="padding:7px 14px;font-size:11.5px;">Xác nhận lịch hẹn</button></td>
-            </tr>
-            <tr>
-              <td><strong>Trần Thanh Thảo</strong><br><small style="color:#0284c7;">SĐT Zalo: 0938 119 204</small></td>
-              <td>#2079 • Căn hộ Duplex Ban Công Rộng</td>
-              <td><strong>Cuối tuần • Sáng (09:00 - 11:00)</strong></td>
-              <td><span style="padding:4px 9px;border-radius:99px;background:#fef3c7;color:#b45309;font-size:11px;font-weight:800;">Chờ xác nhận</span></td>
-              <td><button type="button" onclick="this.textContent='Đã xác nhận Zalo ✓';this.style.background='#059669';" class="hsp-btn-apply" style="padding:7px 14px;font-size:11.5px;">Xác nhận lịch hẹn</button></td>
-            </tr>
-            <tr>
-              <td><strong>Lê Minh Khôi</strong><br><small style="color:#0284c7;">SĐT Zalo: 0914 882 310</small></td>
-              <td>#2081 • Phòng trọ gác cao Hạnh Thông</td>
-              <td><strong>Hôm nay • Tối (18:00 - 20:00)</strong></td>
-              <td><span style="padding:4px 9px;border-radius:99px;background:#ecfdf5;color:#059669;font-size:11px;font-weight:800;">Đã chốt xem</span></td>
-              <td><a href="https://zalo.me/0906344877" target="_blank" style="color:#0284c7;font-weight:800;font-size:12px;">Mở khung chat Zalo</a></td>
-            </tr>
+            ${PORTAL_DATA.appointments.map((a) => `
+              <tr>
+                <td><strong>${a.guestName}</strong><br><small style="color:#0284c7;">SĐT Zalo: ${a.guestPhone}</small></td>
+                <td><a href="javascript:void(0)" onclick="openPropertyDetailView(${a.propId})" style="color:#0f172a;font-weight:700;text-decoration:none;">#${a.propId} • ${a.propTitle}</a></td>
+                <td><strong>${a.slot}</strong></td>
+                <td>
+                  ${a.status === "confirmed"
+                    ? `<span style="padding:4px 9px;border-radius:99px;background:#ecfdf5;color:#059669;font-size:11px;font-weight:800;">Đã chốt lịch</span>`
+                    : `<span style="padding:4px 9px;border-radius:99px;background:#fef3c7;color:#b45309;font-size:11px;font-weight:800;">Chờ xác nhận</span>`}
+                </td>
+                <td>
+                  <div style="display:flex;gap:8px;align-items:center;">
+                    <button type="button" onclick="this.textContent='Đã xác nhận Zalo ✓';this.style.background='#059669';" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;">
+                      ${a.status === "confirmed" ? "Đã xác nhận ✓" : "Xác nhận hẹn"}
+                    </button>
+                    <a href="https://zalo.me/${a.guestPhone.replace(/\D/g, "")}" target="_blank" style="color:#0284c7;font-weight:800;font-size:12px;text-decoration:none;">Chat Zalo</a>
+                  </div>
+                </td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
@@ -4450,10 +5013,10 @@ function switchMemberTab(tabName, btnEl) {
   } else if (tabName === "wallet") {
     container.innerHTML = `
       <div class="portal-table-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <div>
-            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Lịch Sử Giao Dịch Ví Đăng Tin & Khuyến Mãi +11%</h3>
-            <small style="color:#64748b;">Tự động cộng tiền trong 3 giây qua hệ thống ngân hàng VietQR 24/7</small>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Lịch Sử Giao Dịch Ví Đăng Tin & Hóa Đơn Thuế VAT (8%)</h3>
+            <small style="color:#64748b;">Tự động cộng +11% khi nạp VietQR và khấu trừ minh bạch kèm VAT 8% khi xuất bản tin đăng</small>
           </div>
           <button type="button" class="hsp-btn-apply" onclick="openWalletModal()"><i class="fa-solid fa-qrcode"></i> Nạp thêm Ví (+11%)</button>
         </div>
@@ -4463,133 +5026,350 @@ function switchMemberTab(tabName, btnEl) {
               <th>Mã GD</th>
               <th>Thời gian</th>
               <th>Nội dung giao dịch</th>
+              <th>Thuế VAT (8%)</th>
               <th>Số tiền</th>
               <th>Trạng thái</th>
             </tr>
           </thead>
           <tbody>
+            ${PORTAL_DATA.transactions.map((t) => `
+              <tr>
+                <td><strong>${t.code}</strong></td>
+                <td>${t.time}</td>
+                <td>${t.desc}</td>
+                <td>${t.vat ? new Intl.NumberFormat("vi-VN").format(t.vat) + "đ" : "-"}</td>
+                <td><strong style="color:${t.type === "credit" ? "#059669" : "#ef4444"};">${t.type === "credit" ? "+" : ""}${new Intl.NumberFormat("vi-VN").format(t.amount)}đ</strong></td>
+                <td><span style="color:#059669;font-weight:800;">${t.status}</span></td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (tabName === "seo-tools") {
+    const myProps = PROPERTIES.slice(0, 6);
+    container.innerHTML = `
+      <div class="portal-table-card">
+        <div style="margin-bottom:16px;">
+          <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Công Cụ Tối Ưu SEO Link, SEO Vị Trí & SEO Giá Thành Cho Tin Đăng</h3>
+          <small style="color:#64748b;">Mỗi tin đăng tự động sinh 3 lớp đường dẫn thân thiện (SEO Bài viết, SEO Phường/Xã, SEO Phân khúc giá) giúp lên Top Google nhanh chóng</small>
+        </div>
+        <table class="portal-table tabular-nums">
+          <thead>
             <tr>
-              <td><strong>#VQR-99241</strong></td>
-              <td>16/11/2026 09:15</td>
-              <td>Nạp Ví tự động qua VietQR (+11% Khuyến mãi Tháng 11)</td>
-              <td><strong style="color:#059669;">+555.000đ</strong></td>
-              <td><span style="color:#059669;font-weight:800;">Hoàn tất tự động</span></td>
+              <th>Mã & Tiêu đề tin</th>
+              <th>SEO Vị trí (Phường/Xã)</th>
+              <th>SEO Giá thành</th>
+              <th>Đường dẫn thân thiện (Friendly URL)</th>
+              <th>Chia sẻ nhanh</th>
             </tr>
-            <tr>
-              <td><strong>#VIP-88102</strong></td>
-              <td>15/11/2026 14:20</td>
-              <td>Đăng gói Banner Đặc Quyền (7 ngày - Giảm 5%) cho tin #2078</td>
-              <td><strong style="color:#ef4444;">-332.500đ</strong></td>
-              <td><span style="color:#059669;font-weight:800;">Đã xuất bản</span></td>
-            </tr>
+          </thead>
+          <tbody>
+            ${myProps.map((p) => {
+              const seoUrl = buildPropertySeoUrl(p);
+              const wardUrl = `/cho-thue-${p.category}-${toVietnameseSlug(p.ward)}`;
+              const priceUrl = `/cho-thue-${p.category}-${getPriceBracketSlug(p.price)}`;
+              return `
+                <tr>
+                  <td><strong>#${p.id}</strong> • ${p.title.slice(0, 38)}...</td>
+                  <td><a href="javascript:void(0)" onclick="navigateTo('${wardUrl}')" class="pd-seo-tag-pill">${p.ward}</a></td>
+                  <td><a href="javascript:void(0)" onclick="navigateTo('${priceUrl}')" class="pd-seo-tag-pill">${p.priceText}/thg</a></td>
+                  <td><code style="font-size:11px;color:#059669;background:#f0fdf4;padding:4px 8px;border-radius:6px;display:inline-block;max-width:310px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${seoUrl.replace("#", "")}</code></td>
+                  <td>
+                    <button type="button" onclick="copyPropertySeoLink(${p.id}, this)" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;">
+                      <i class="fa-solid fa-copy"></i> Copy Link
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
           </tbody>
         </table>
       </div>
     `;
   } else {
+    const curName = STATE.auth?.displayName || "Chính chủ Minh Quân";
+    const curPhone = STATE.auth?.phone || "0906344877";
+    const curEmail = STATE.auth?.email || (STATE.auth?.identity?.includes("@") ? STATE.auth.identity : "thanhvien@staymap.vn");
     container.innerHTML = `
       <div class="portal-table-card">
-        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:16px;">Thông Tin Hồ Sơ Chủ Nhà & Xác Thực Định Danh CCCD</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px;">
+        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:16px;">Thông Tin Hồ Sơ Tài Khoản & Bảo Mật Mật Khẩu</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;">
           <div>
-            <label class="post-field-label">Họ và tên hiển thị trên Bài viết</label>
-            <input type="text" class="post-input" value="Chính chủ Minh Quân">
+            <label class="post-field-label">Họ và tên hiển thị trên Bài viết *</label>
+            <input type="text" id="memProfileName" class="post-input" value="${curName}">
           </div>
           <div>
-            <label class="post-field-label">Số điện thoại & Zalo nhận khách</label>
-            <input type="text" class="post-input tabular-nums" value="0906 344 877">
+            <label class="post-field-label">Số điện thoại & Zalo nhận khách *</label>
+            <input type="tel" id="memProfilePhone" class="post-input tabular-nums" value="${curPhone}">
           </div>
           <div>
-            <label class="post-field-label">Email nhận hóa đơn & thông báo</label>
-            <input type="email" class="post-input" value="minhquan.building@chothuetot.vn">
+            <label class="post-field-label">Email nhận hóa đơn VAT & thông báo</label>
+            <input type="email" id="memProfileEmail" class="post-input" value="${curEmail}">
           </div>
           <div>
-            <label class="post-field-label">Trạng thái xác thực Chính chủ</label>
+            <label class="post-field-label">Đổi mật khẩu mới (Để trống nếu giữ nguyên)</label>
+            <input type="password" id="memProfileNewPwd" class="post-input" placeholder="Nhập mật khẩu mới ≥ 6 ký tự...">
+          </div>
+          <div style="grid-column:1/-1;">
+            <label class="post-field-label">Trạng thái định danh Chính chủ & Quyền tài khoản</label>
             <div style="padding:10px 14px;border-radius:10px;background:#ecfdf5;border:1px solid #a7f3d0;color:#059669;font-weight:800;font-size:13px;">
-              <i class="fa-solid fa-shield-check"></i> Đã xác thực CCCD gắn chip & SĐT Chính chủ
+              <i class="fa-solid fa-shield-check"></i> Đã xác thực (${STATE.auth?.verifiedVia || "Thành viên xác thực"}) • Quyền: ${(STATE.auth?.role || "member").toUpperCase()}
             </div>
           </div>
         </div>
-        <button type="button" class="hsp-btn-apply" style="margin-top:18px;" onclick="alert('Đã lưu thông tin hồ sơ thành viên!')">Lưu thay đổi hồ sơ</button>
+        <button type="button" class="hsp-btn-apply" style="margin-top:18px;" onclick="saveMemberProfileSettings()">
+          <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi hồ sơ
+        </button>
       </div>
     `;
   }
 }
 
+// ==========================================================================
+// ADMIN CONTROL CENTER (5 FULL MODULES)
+// ==========================================================================
+function syncAdminKpis() {
+  const accounts = getAccountsStore();
+  const activeProps = PROPERTIES.filter((p) => !p.isHidden);
+  const kpiActive = document.getElementById("adminKpiActiveVip");
+  if (kpiActive) kpiActive.textContent = `${activeProps.length} tin`;
+  const kpiUsers = document.getElementById("adminKpiUsers");
+  if (kpiUsers) kpiUsers.textContent = `${String(accounts.length).padStart(2, "0")} tài khoản`;
+  const titleEl = document.getElementById("adminSidebarTitle");
+  if (titleEl && STATE.auth?.displayName) titleEl.textContent = STATE.auth.displayName.toUpperCase();
+}
+
+function adminChangeListingTier(propId, newZoneIdStr) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  const z = STUDIO_ZONES.find((x) => x.id === Number(newZoneIdStr));
+  if (!item || !z) return;
+  item.zoneId = z.id;
+  item.tier = z.tier;
+  item.mapTier = z.mapTier;
+  item.badge = z.badge || z.name;
+  item.badgeClass = z.badgeClass;
+  item.isVipPin = z.id === 1;
+  renderAllHomeGrids();
+  updateMapPins("all");
+  updateMapFilterChipCounts();
+  switchAdminTab(STATE.activeAdminTab || "moderation");
+}
+
+function adminChangeListingSticker(propId, stickerVal) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  item.sticker = stickerVal || null;
+  renderAllHomeGrids();
+  switchAdminTab(STATE.activeAdminTab || "moderation");
+}
+
+function adminDeleteListingNow(propId) {
+  const idx = PROPERTIES.findIndex((p) => p.id === Number(propId));
+  if (idx < 0) return;
+  PROPERTIES.splice(idx, 1);
+  renderAllHomeGrids();
+  updateMapPins("all");
+  updateMapFilterChipCounts();
+  syncAdminKpis();
+  switchAdminTab(STATE.activeAdminTab || "all-listings");
+}
+
+function approveAdminListing(propId, btnEl) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (item) item.verified = true;
+  btnEl.innerHTML = '<i class="fa-solid fa-check-double"></i> Đã duyệt lên sóng';
+  btnEl.style.background = "#0f172a";
+  btnEl.style.color = "#ffd700";
+}
+
+function adminCreateAccountNow() {
+  const idVal = (document.getElementById("admNewIdentity")?.value || "").trim();
+  const nameVal = (document.getElementById("admNewName")?.value || "").trim();
+  const pwdVal = (document.getElementById("admNewPwd")?.value || "").trim();
+  const roleVal = document.getElementById("admNewRole")?.value || "member";
+  if (!idVal || !nameVal || !pwdVal) {
+    alert("Vui lòng nhập đầy đủ Tên đăng nhập/Email/SĐT, Họ tên hiển thị và Mật khẩu.");
+    return;
+  }
+  upsertAccountRecord({
+    identity: idVal,
+    password: pwdVal,
+    role: roleVal,
+    displayName: nameVal,
+    verifiedVia: roleVal === "admin" ? "Admin 2FA" : "Admin cấp phát",
+    memberCode: roleVal === "admin" ? `#ADM-${Math.floor(100 + Math.random() * 899)}` : `#CTT-${Math.floor(1000 + Math.random() * 8999)}`
+  });
+  syncAdminKpis();
+  switchAdminTab("users");
+  alert(`✅ Đã tạo tài khoản "${idVal}" (${roleVal.toUpperCase()}) thành công!`);
+}
+
+function adminToggleUserRole(identity) {
+  const list = getAccountsStore();
+  const idx = list.findIndex((a) => normalizeAuthIdentity(a.identity) === normalizeAuthIdentity(identity));
+  if (idx < 0) return;
+  list[idx].role = list[idx].role === "admin" ? "member" : "admin";
+  saveAccountsStore(list);
+  switchAdminTab("users");
+}
+
 function switchAdminTab(tabName, btnEl) {
+  STATE.activeAdminTab = tabName;
   if (btnEl) {
     document.querySelectorAll("#view-admin .portal-nav-btn").forEach((b) => b.classList.remove("active"));
     btnEl.classList.add("active");
   }
+  syncAdminKpis();
   const container = document.getElementById("adminPortalMainContent");
   if (!container) return;
 
   if (tabName === "moderation") {
-    const queue = PROPERTIES.slice(0, 4);
+    const queue = PROPERTIES.slice(0, 6);
     container.innerHTML = `
       <div class="portal-table-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <div>
-            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Hàng Đợi Kiểm Duyệt Tin Đăng & Gói VIP (AI Pre-Verified)</h3>
-            <small style="color:#64748b;">Hệ thống AI đã tự động chấm điểm độ nét ảnh thật và kiểm tra trùng lặp địa chỉ</small>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Hàng Đợi Kiểm Duyệt Tin Đăng, Đổi Hạng VIP & Gắn Nhãn Dán</h3>
+            <small style="color:#64748b;">Admin có thể đổi hạng gói hiển thị (6 khu vực) hoặc gắn Nhãn Dán trực tiếp cho bất kỳ tin nào</small>
           </div>
           <span style="padding:6px 14px;border-radius:99px;background:#ecfdf5;color:#059669;font-size:12px;font-weight:800;">
-            <i class="fa-solid fa-robot"></i> AI Auto-Check: Bật
+            <i class="fa-solid fa-robot"></i> AI Pre-Check: Hoạt động 100%
           </span>
         </div>
 
         <table class="portal-table tabular-nums">
           <thead>
             <tr>
-              <th>Tin đăng chờ duyệt</th>
+              <th>Tin đăng</th>
               <th>Chủ nhà / SĐT</th>
-              <th>Gói đăng ký</th>
-              <th>Điểm AI Check</th>
+              <th>Đổi Gói Hiển Thị (6 Khu vực)</th>
+              <th>Nhãn Dán</th>
               <th>Quyết định của Admin</th>
             </tr>
           </thead>
           <tbody>
-            ${queue
-              .map(
-                (p, idx) => `
-              <tr id="adminModRow${p.id}">
-                <td>
-                  <div style="display:flex;align-items:center;gap:12px;">
-                    <img src="${p.image}" alt="${p.title}" style="width:68px;height:48px;border-radius:8px;object-fit:cover;">
-                    <div>
-                      <strong style="color:#0f172a;display:block;font-size:13px;max-width:270px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
-                      <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg • ${p.area}m²</span>
-                      <small style="color:#64748b;"> • ${p.ward}</small>
+            ${queue.map((p) => {
+              const curZoneId = p.zoneId || (p.tier === "spotlight" ? 2 : p.tier === "featured" ? 3 : p.tier === "prime" ? 5 : 4);
+              return `
+                <tr id="adminModRow${p.id}">
+                  <td>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <img src="${p.image}" alt="${p.title}" style="width:68px;height:48px;border-radius:8px;object-fit:cover;">
+                      <div>
+                        <strong style="color:#0f172a;display:block;font-size:13px;max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
+                        <span style="color:var(--ctt-orange);font-weight:800;font-size:12.5px;">${p.priceText}/thg • ${p.area}m²</span>
+                        <small style="color:#64748b;"> • ${p.ward}, ${p.city}</small>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <strong>${p.host}</strong>
-                  <small style="display:block;color:#64748b;">${p.phone}</small>
-                </td>
-                <td>
-                  <span style="padding:4px 10px;border-radius:99px;background:#0f172a;color:#ffd700;font-size:11px;font-weight:800;">
-                    ${idx === 0 ? "Banner Đặc Quyền (50k/ngày)" : idx === 1 ? "TOP 1 Spotlight (35k/ngày)" : "TOP 2 Featured (25k/ngày)"}
-                  </span>
-                </td>
-                <td>
-                  <strong style="color:#059669;">${98 - idx}% Ảnh thật</strong>
-                  <small style="display:block;color:#64748b;">Điện nước minh bạch</small>
-                </td>
-                <td>
-                  <div style="display:flex;gap:6px;">
-                    <button type="button" onclick="approveAdminListing(${p.id}, this)" style="padding:7px 12px;border-radius:8px;border:none;background:#059669;color:#fff;font-size:11.5px;font-weight:800;cursor:pointer;">
-                      <i class="fa-solid fa-check"></i> Duyệt xuất bản
-                    </button>
-                    <button type="button" onclick="openPropertyDetailView(${p.id})" style="padding:7px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
-                      Xem bài
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            `
-              )
-              .join("")}
+                  </td>
+                  <td>
+                    <strong>${p.host}</strong>
+                    <small style="display:block;color:#64748b;">${p.phone}</small>
+                  </td>
+                  <td>
+                    <select class="post-input" style="padding:6px 8px;font-size:12px;" onchange="adminChangeListingTier(${p.id}, this.value)">
+                      ${STUDIO_ZONES.map((z) => `<option value="${z.id}" ${curZoneId === z.id ? "selected" : ""}>${z.name}</option>`).join("")}
+                    </select>
+                  </td>
+                  <td>
+                    <select class="post-input" style="padding:6px 8px;font-size:12px;" onchange="adminChangeListingSticker(${p.id}, this.value)">
+                      <option value="" ${!p.sticker ? "selected" : ""}>-- Không nhãn --</option>
+                      <option value="hot" ${p.sticker === "hot" ? "selected" : ""}>HOT</option>
+                      <option value="urgent" ${p.sticker === "urgent" ? "selected" : ""}>Giảm Sâu</option>
+                      <option value="promo" ${p.sticker === "promo" ? "selected" : ""}>Ưu Đãi</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <button type="button" onclick="approveAdminListing(${p.id}, this)" style="padding:7px 12px;border-radius:8px;border:none;background:#059669;color:#fff;font-size:11.5px;font-weight:800;cursor:pointer;">
+                        <i class="fa-solid fa-check"></i> Duyệt
+                      </button>
+                      <button type="button" onclick="openEditListingModal(${p.id})" style="padding:7px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
+                        Sửa
+                      </button>
+                      <button type="button" onclick="openPropertyDetailView(${p.id})" style="padding:7px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
+                        Xem
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (tabName === "all-listings") {
+    const kw = (PORTAL_DATA.adminSearchKw || "").toLowerCase();
+    const catF = PORTAL_DATA.adminCatFilter || "all";
+    const list = PROPERTIES.filter((p) => {
+      if (catF !== "all" && p.category !== catF) return false;
+      if (kw && !String(p.id).includes(kw) && !p.title.toLowerCase().includes(kw) && !p.ward.toLowerCase().includes(kw)) return false;
+      return true;
+    });
+
+    container.innerHTML = `
+      <div class="portal-table-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Toàn Bộ Tin Đăng Trên Hệ Thống (${list.length}/${PROPERTIES.length} tin)</h3>
+            <small style="color:#64748b;">Tra cứu theo mã tin, tiêu đề, khu vực và quản lý đường dẫn chuẩn SEO</small>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input type="text" class="post-input" style="width:220px;padding:7px 12px;font-size:12.5px;" placeholder="Tìm mã tin, tên đường, phường..." value="${PORTAL_DATA.adminSearchKw || ""}" oninput="PORTAL_DATA.adminSearchKw=this.value;switchAdminTab('all-listings')">
+            <select class="post-input" style="width:180px;padding:7px 10px;font-size:12.5px;" onchange="PORTAL_DATA.adminCatFilter=this.value;switchAdminTab('all-listings')">
+              <option value="all" ${catF === "all" ? "selected" : ""}>Tất cả 6 loại hình</option>
+              <option value="phong-tro" ${catF === "phong-tro" ? "selected" : ""}>Phòng Trọ / CHDV</option>
+              <option value="nha-o" ${catF === "nha-o" ? "selected" : ""}>Nhà Nguyên Căn</option>
+              <option value="can-ho-chung-cu" ${catF === "can-ho-chung-cu" ? "selected" : ""}>Căn Hộ Chung Cư</option>
+              <option value="mat-bang-van-phong" ${catF === "mat-bang-van-phong" ? "selected" : ""}>Mặt Bằng Văn Phòng</option>
+              <option value="bai-dat-kho-xuong" ${catF === "bai-dat-kho-xuong" ? "selected" : ""}>Đất - Xưởng, Kho - Bãi</option>
+              <option value="homestay-airbnb" ${catF === "homestay-airbnb" ? "selected" : ""}>HomeStay / AirBnb</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="portal-table tabular-nums">
+          <thead>
+            <tr>
+              <th>Mã & Bất động sản</th>
+              <th>Danh mục & Vị trí</th>
+              <th>Giá & Điện/Nước</th>
+              <th>Hạng VIP</th>
+              <th>Thao tác Admin</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map((p) => {
+              const vip = getPropertyVipDisplay(p);
+              return `
+                <tr>
+                  <td>
+                    <strong style="color:#0f172a;display:block;font-size:13px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">#${p.id} • ${p.title}</strong>
+                    <small style="color:#059669;font-family:monospace;font-size:10.5px;">${buildPropertySeoUrl(p).replace("#", "").slice(0, 48)}...</small>
+                  </td>
+                  <td>
+                    <strong>${p.categoryLabel}</strong>
+                    <small style="display:block;color:#64748b;">${p.ward}, ${p.city}</small>
+                  </td>
+                  <td>
+                    <strong style="color:var(--ctt-orange);">${p.priceText}/thg</strong>
+                    <small style="display:block;color:#64748b;">${p.elec} • ${p.water}</small>
+                  </td>
+                  <td>
+                    ${vip.label ? `<span class="lc-vip-tag ${vip.badgeClass}" style="position:static;font-size:10px;padding:3px 8px;">${vip.label}</span>` : `<span style="font-size:11px;color:#64748b;">Cơ bản</span>`}
+                  </td>
+                  <td>
+                    <div style="display:flex;gap:5px;">
+                      <button type="button" onclick="openEditListingModal(${p.id})" style="padding:5px 9px;border-radius:7px;border:1px solid #cbd5e1;background:#fff;font-size:11px;font-weight:700;cursor:pointer;">Sửa</button>
+                      <button type="button" onclick="openPropertyDetailView(${p.id})" style="padding:5px 9px;border-radius:7px;border:1px solid #cbd5e1;background:#fff;font-size:11px;font-weight:700;cursor:pointer;">Xem</button>
+                      <button type="button" onclick="adminDeleteListingNow(${p.id})" style="padding:5px 9px;border-radius:7px;border:1px solid #fecaca;background:#fef2f2;color:#dc2626;font-size:11px;font-weight:700;cursor:pointer;">Xóa</button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join("")}
           </tbody>
         </table>
       </div>
@@ -4597,95 +5377,160 @@ function switchAdminTab(tabName, btnEl) {
   } else if (tabName === "revenue") {
     container.innerHTML = `
       <div class="portal-table-card">
-        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:14px;">Báo Cáo Doanh Thu Theo 6 Gói VIP & Đối Soát VietQR (Tháng 11/2026)</h3>
+        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:14px;">Báo Cáo Doanh Thu Theo 6 Gói Hiển Thị, Nhãn Dán & Thuế VAT 8% (Tháng 11/2026)</h3>
         <table class="portal-table tabular-nums">
           <thead>
             <tr>
-              <th>Hạng gói VIP</th>
-              <th>Đơn giá / Ngày</th>
+              <th>Hạng gói & Dịch vụ</th>
+              <th>Đơn giá chuẩn</th>
               <th>Số tin đang chạy</th>
-              <th>Doanh thu tháng 11</th>
-              <th>Tỷ trọng</th>
+              <th>Doanh thu trước thuế</th>
+              <th>Thuế VAT (8%)</th>
+              <th>Tổng thu (Gồm VAT)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong style="color:var(--ctt-orange);"><i class="fa-solid fa-crown"></i> 1. Banner Đặc Quyền (.sv1)</strong></td>
+              <td><span class="lc-vip-tag tag-dacquyen" style="position:static;font-size:10px;padding:3px 9px;">✦ ĐẶC QUYỀN</span> <strong>Banner Đặc Quyền (.sv1)</strong></td>
               <td>50.000đ/ngày</td>
               <td>18 tin VIP</td>
-              <td><strong>64.800.000đ</strong></td>
-              <td>34.8%</td>
+              <td>60.000.000đ</td>
+              <td>4.800.000đ</td>
+              <td><strong style="color:var(--ctt-orange);">64.800.000đ</strong></td>
             </tr>
             <tr>
-              <td><strong>2. TOP 1 Hiển Thị (Spotlight)</strong></td>
+              <td><span class="lc-vip-tag tag-vip1" style="position:static;font-size:10px;padding:3px 9px;">✦ VIP 1</span> <strong>TOP 1 Hiển Thị (Spotlight)</strong></td>
               <td>35.000đ/ngày</td>
               <td>94 tin VIP</td>
+              <td>53.935.000đ</td>
+              <td>4.315.000đ</td>
               <td><strong>58.250.000đ</strong></td>
-              <td>31.2%</td>
             </tr>
             <tr>
-              <td><strong>3. TOP 2 Nổi Bật (Featured)</strong></td>
+              <td><span class="lc-vip-tag tag-vip2" style="position:static;font-size:10px;padding:3px 9px;">• VIP 2</span> <strong>TOP 2 Nổi Bật (Featured)</strong></td>
               <td>25.000đ/ngày</td>
               <td>136 tin VIP</td>
+              <td>38.333.000đ</td>
+              <td>3.067.000đ</td>
               <td><strong>41.400.000đ</strong></td>
-              <td>22.2%</td>
             </tr>
             <tr>
-              <td><strong>4. TOP 3 Hiệu Quả (Prime)</strong></td>
+              <td><span class="lc-vip-tag tag-vip3" style="position:static;font-size:10px;padding:3px 9px;">VIP 3</span> <strong>TOP 3 Hiệu Quả (Prime)</strong></td>
               <td>15.000đ/ngày</td>
               <td>94 tin VIP</td>
+              <td>15.000.000đ</td>
+              <td>1.200.000đ</td>
               <td><strong>16.200.000đ</strong></td>
-              <td>8.7%</td>
             </tr>
             <tr>
-              <td><strong>5. Tin Cơ Bản (1.000đ/ngày)</strong></td>
+              <td><strong>5. Tin Cơ Bản & Nhãn Dán (1.000đ/ngày)</strong></td>
               <td>1.000đ/ngày</td>
               <td>412 tin</td>
+              <td>5.370.000đ</td>
+              <td>430.000đ</td>
               <td><strong>5.800.000đ</strong></td>
-              <td>3.1%</td>
             </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (tabName === "users") {
+    const accounts = getAccountsStore();
+    container.innerHTML = `
+      <div class="portal-table-card">
+        <div style="margin-bottom:18px;padding:16px;background:#f8fafc;border-radius:14px;border:1px solid #e2e8f0;">
+          <h4 style="font-size:14.5px;font-weight:900;color:#0f172a;margin:0 0 10px;"><i class="fa-solid fa-user-plus" style="color:var(--ctt-orange);margin-right:6px;"></i>Tạo Nhanh Tài Khoản Thành Viên / Admin Mới</h4>
+          <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1fr 0.8fr auto;gap:10px;align-items:center;">
+            <input type="text" id="admNewIdentity" class="post-input" placeholder="Tên đăng nhập / SĐT / Email">
+            <input type="text" id="admNewName" class="post-input" placeholder="Họ tên hiển thị (VD: Duy Quang)">
+            <input type="text" id="admNewPwd" class="post-input" placeholder="Mật khẩu">
+            <select id="admNewRole" class="post-input">
+              <option value="member">Thành viên (Member)</option>
+              <option value="admin">Quản trị viên (Admin)</option>
+            </select>
+            <button type="button" class="hsp-btn-apply" style="padding:10px 16px;white-space:nowrap;" onclick="adminCreateAccountNow()">
+              <i class="fa-solid fa-plus"></i> Tạo tài khoản
+            </button>
+          </div>
+        </div>
+
+        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:14px;">Danh Sách Tài Khoản Hệ Thống (${accounts.length} tài khoản)</h3>
+        <table class="portal-table tabular-nums">
+          <thead>
+            <tr>
+              <th>Tài khoản (Identity)</th>
+              <th>Tên hiển thị</th>
+              <th>Mã định danh</th>
+              <th>Quyền hạn (Role)</th>
+              <th>Phương thức xác thực</th>
+              <th>Thao tác phân quyền</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${accounts.map((acc) => `
+              <tr>
+                <td><strong>${acc.identity}</strong></td>
+                <td><strong>${acc.displayName}</strong></td>
+                <td><span style="font-family:monospace;color:#64748b;">${acc.memberCode || "#CTT-8888"}</span></td>
+                <td>
+                  <span style="padding:4px 10px;border-radius:99px;background:${acc.role === "admin" ? "#0f172a" : "#ecfdf5"};color:${acc.role === "admin" ? "#ffd700" : "#059669"};font-size:11px;font-weight:800;">
+                    ${acc.role === "admin" ? "ADMIN TOÀN QUYỀN" : "THÀNH VIÊN"}
+                  </span>
+                </td>
+                <td><span style="color:#059669;font-weight:700;"><i class="fa-solid fa-circle-check"></i> ${acc.verifiedVia || "Đã xác thực"}</span></td>
+                <td>
+                  <button type="button" onclick="adminToggleUserRole('${acc.identity}')" style="padding:6px 11px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-size:11.5px;font-weight:700;cursor:pointer;">
+                    <i class="fa-solid fa-repeat"></i> Đổi sang ${acc.role === "admin" ? "Member" : "Admin"}
+                  </button>
+                </td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
     `;
   } else {
+    const seoRoutes = [
+      { type: "SEO Loại hình + Vị trí", url: "/cho-thue-phong-tro-p-cau-kieu", title: "Cho Thuê Phòng Trọ / CHDV Tại P. Cầu Kiệu (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
+      { type: "SEO Loại hình + Giá thành", url: "/cho-thue-phong-tro-gia-duoi-4-trieu", title: "Cho Thuê Phòng Trọ / CHDV — Dưới 4 Triệu/tháng", status: "Indexed • 100/100" },
+      { type: "SEO Nhà nguyên căn + Vị trí", url: "/cho-thue-nha-nguyen-can-p-hoa-hung", title: "Cho Thuê Nhà Nguyên Căn Tại P. Hòa Hưng (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
+      { type: "SEO Căn hộ + Giá thành", url: "/cho-thue-can-ho-chung-cu-gia-tu-4-den-7-trieu", title: "Cho Thuê Căn Hộ Chung Cư — Từ 4 - 7 Triệu/tháng", status: "Indexed • 100/100" },
+      { type: "SEO HomeStay / AirBnb", url: "/cho-thue-homestay-airbnb-p-nhieu-loc", title: "Cho Thuê HomeStay / AirBnb Tại P. Nhiêu Lộc (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
+      { type: "SEO Khu vực Hà Nội", url: "/cho-thue-can-ho-chung-cu-tp-ha-noi", title: "Cho Thuê Căn Hộ Chung Cư Tại TP. Hà Nội", status: "Indexed • 100/100" }
+    ];
     container.innerHTML = `
       <div class="portal-table-card">
-        <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:14px;">Quản Lý Chủ Nhà, Đối Tác Tòa Nhà CHDV & Xác Thực CCCD</h3>
+        <div style="margin-bottom:16px;">
+          <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Trị Hệ Thống SEO Link, SEO Vị Trí & SEO Giá Thành</h3>
+          <small style="color:#64748b;">Tất cả Landing Page danh mục, phường/xã sáp nhập, khoảng giá và bài viết đều có cấu trúc URL không dấu thân thiện</small>
+        </div>
         <table class="portal-table tabular-nums">
           <thead>
             <tr>
-              <th>Thành viên / Đối tác</th>
-              <th>Số điện thoại</th>
-              <th>Số tin đang đăng</th>
-              <th>Số dư Ví</th>
-              <th>Trạng thái CCCD</th>
+              <th>Phân nhóm SEO</th>
+              <th>Đường dẫn thân thiện (Friendly URL)</th>
+              <th>Thẻ H1 & Meta Title tự động</th>
+              <th>Điểm chuẩn SEO</th>
+              <th>Kiểm tra</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><strong>Chính chủ Minh Quân</strong></td>
-              <td>0906 344 877</td>
-              <td>05 tin (3 VIP)</td>
-              <td><strong style="color:var(--ctt-orange);">550.000đ</strong></td>
-              <td><span style="color:#059669;font-weight:800;"><i class="fa-solid fa-circle-check"></i> Đã xác thực</span></td>
-            </tr>
-            <tr>
-              <td><strong>Hệ thống CHDV Q-House</strong></td>
-              <td>0944 397 969</td>
-              <td>14 tin (8 VIP)</td>
-              <td><strong style="color:var(--ctt-orange);">4.250.000đ</strong></td>
-              <td><span style="color:#059669;font-weight:800;"><i class="fa-solid fa-circle-check"></i> Đối tác Vàng</span></td>
-            </tr>
+            ${seoRoutes.map((r) => `
+              <tr>
+                <td><strong>${r.type}</strong></td>
+                <td><code style="font-size:11.5px;color:#059669;background:#f0fdf4;padding:4px 8px;border-radius:6px;">#${r.url}</code></td>
+                <td>${r.title}</td>
+                <td><span style="color:#059669;font-weight:800;"><i class="fa-solid fa-circle-check"></i> ${r.status}</span></td>
+                <td>
+                  <button type="button" onclick="navigateTo('${r.url}')" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;">
+                    Mở trang SEO
+                  </button>
+                </td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       </div>
     `;
   }
-}
-
-function approveAdminListing(propId, btnEl) {
-  btnEl.innerHTML = '<i class="fa-solid fa-check-double"></i> Đã duyệt lên sóng';
-  btnEl.style.background = "#0f172a";
-  btnEl.style.color = "#ffd700";
 }
