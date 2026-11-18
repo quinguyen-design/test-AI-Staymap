@@ -117,36 +117,17 @@ button, input, select, textarea, .leaflet-container {
   display: none;
   flex-direction: column;
 }
-.hero-map-left-drawer.tier-banner {
-  width: 410px;
-}
-.hero-map-left-drawer.tier-basic {
-  width: 350px;
-}
 .site-header-hero.hero-is-map.is-expanded .hero-map-left-drawer.is-open {
   display: flex;
 }
 .hero-map-left-drawer .lc-card {
   box-shadow: 0 18px 42px rgba(15, 23, 42, 0.28);
 }
-.hero-map-left-drawer.tier-banner .lc-card {
-  background: linear-gradient(#ffffff, #ffffff), linear-gradient(135deg, #f15a22 0%, #ff9d00 100%);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  border: 2px solid transparent;
-  box-shadow: 0 16px 38px rgba(241, 90, 34, 0.28), 0 8px 20px rgba(15, 23, 42, 0.28);
-}
-.hero-map-left-drawer.tier-banner .lc-card-img {
-  height: 230px;
-}
-.hero-map-left-drawer.tier-vip123 .lc-card-img {
-  height: 220px;
-}
-.hero-map-left-drawer.tier-basic .lc-card-img {
-  height: 190px;
+.hero-map-left-drawer .lc-card-img {
+  height: 245px;
 }
 .hero-map-left-drawer .lc-card-body {
-  padding: 14px 18px 12px;
+  padding: 16px 18px 14px;
 }
 
 .site-header-hero.hero-is-map.is-compact {

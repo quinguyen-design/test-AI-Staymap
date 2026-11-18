@@ -1307,7 +1307,7 @@ function clearLandmarkFilter() {
 function closeHeroMapLeftDrawer() {
   const drawer = document.getElementById("heroMapLeftDrawer");
   if (drawer) {
-    drawer.classList.remove("is-open", "tier-banner", "tier-vip123", "tier-basic");
+    drawer.classList.remove("is-open");
     drawer.innerHTML = "";
   }
 }
@@ -1315,72 +1315,17 @@ function closeHeroMapLeftDrawer() {
 function openHeroMapLeftDrawer(item) {
   const drawer = document.getElementById("heroMapLeftDrawer");
   if (!drawer || !item) return;
-
-  const isBanner = item.isVipPin || item.mapTier === "banner" || item.zoneId === 1;
-  const isVip123 = !isBanner && (item.tier === "spotlight" || item.tier === "featured" || item.tier === "prime" || item.zoneId === 2 || item.zoneId === 3 || item.zoneId === 5);
-  const tierCls = isBanner ? "tier-banner" : (isVip123 ? "tier-vip123" : "tier-basic");
-
-  drawer.classList.remove("tier-banner", "tier-vip123", "tier-basic");
-  drawer.classList.add(tierCls);
-
-  const photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice(0, isBanner ? 4 : 3);
-  let cardHtml = buildListingCardHTML(item).replace(
+  const cardHtml = buildListingCardHTML(item).replace(
     `onclick="openPropertyDetailView(${item.id})"`,
     `onclick="openDetailFromExpandedMap(${item.id})"`
   );
-
-  // Assign an ID to main image inside card so thumbnail clicks swap it smoothly
-  cardHtml = cardHtml.replace(
-    `<div class="lc-card-img">\n        <img src="`,
-    `<div class="lc-card-img">\n        <img id="hmdMainImg" src="`
-  );
-
-  if (isBanner) {
-    const bannerTopBar = `
-      <div style="background:#000000;color:#fff;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:0.4px;">
-        <span style="color:#ff9d00;"><i class="fa-solid fa-crown" style="margin-right:5px;"></i>ĐẶC QUYỀN VIP</span>
-        <span style="color:#e2e8f0;font-size:10px;font-weight:600;"><i class="fa-solid fa-shield-halved" style="color:var(--ctt-orange);margin-right:4px;"></i>ĐÃ XÁC MINH THỰC TẾ</span>
-      </div>
-    `;
-    cardHtml = cardHtml.replace(`<div class="lc-card-img">`, `${bannerTopBar}<div class="lc-card-img">`);
-  }
-
-  if ((isBanner || isVip123) && photos.length > 1) {
-    const thumbStrip = `
-      <div style="display:grid;grid-template-columns:repeat(${photos.length},1fr);gap:6px;padding:8px 18px 0;background:#ffffff;" onclick="event.stopPropagation()">
-        ${photos.map((src) => `<img src="${src}" onclick="var m=document.getElementById('hmdMainImg');if(m)m.src=this.src;" style="width:100%;height:${isBanner ? 38 : 34}px;object-fit:cover;border-radius:7px;cursor:pointer;border:1px solid #e2e8f0;">`).join("")}
-      </div>
-    `;
-    cardHtml = cardHtml.replace(`<div class="lc-card-body"`, `${thumbStrip}<div class="lc-card-body"`);
-  }
-
-  if (isBanner && item.desc) {
-    const bannerExtra = `
-      <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9;font-size:11.5px;color:#475569;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-        ${item.desc}
-      </div>
-      <div style="margin-top:6px;font-size:11px;color:#64748b;">
-        Chính chủ: <strong style="color:#0f172a;">${item.host || "Chính chủ"}</strong>
-      </div>
-    `;
-    cardHtml = cardHtml.replace(`<div class="lc-card-footer">`, `${bannerExtra}<div class="lc-card-footer">`);
-  }
-
-  const ctaBtnStyle = isBanner || isVip123
-    ? `background:var(--ctt-grad-brand);color:#fff;`
-    : `background:#0f172a;color:#fff;`;
-  const ctaLabel = isBanner ? "Xem Đặc Quyền" : "Xem Thêm";
-  const phoneBtnStyle = isBanner || isVip123
-    ? `background:#0f172a;color:#fff;`
-    : `background:#f8fafc;color:#0f172a;border:1px solid #cbd5e1;`;
-
   const actionRowHtml = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 18px 14px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
-      <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:10px;${phoneBtnStyle}font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 18px 16px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
+      <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:10px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
         <i class="fa-solid fa-phone" style="color:var(--ctt-orange);"></i>${item.phone || ""}
       </a>
-      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border:none;border-radius:10px;${ctaBtnStyle}font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
-        ${ctaLabel} <i class="fa-solid fa-arrow-right"></i>
+      <button type="button" onclick="openDetailFromExpandedMap(${item.id})" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border:none;border-radius:10px;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
+        Xem Thêm <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
   `;
