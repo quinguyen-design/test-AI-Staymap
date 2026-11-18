@@ -4198,6 +4198,11 @@ function initStudioPostListing(preselectedZoneId = null) {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
+  const projEl = document.getElementById("dProject");
+  if (projEl) {
+    projEl.style.color = "#94a3b8";
+    projEl.style.fontSize = "13px";
+  }
   const bedsEl = document.getElementById("dBeds");
   if (bedsEl) bedsEl.value = "1 PN";
   const bathsEl = document.getElementById("dBaths");

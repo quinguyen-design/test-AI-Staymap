@@ -1098,8 +1098,8 @@
                 </div>
                 <div>
                   <div class="post-field-label"><span>Dự Án</span></div>
-                  <select id="dProject" class="post-input" onchange="onStudioLocationChange()">
-                    <option value="">-- Không thuộc dự án --</option>
+                  <select id="dProject" class="post-input" style="color:#94a3b8;font-size:13px;" onchange="this.style.color=this.value?'#0f172a':'#94a3b8';this.style.fontSize=this.value?'13.5px':'13px';onStudioLocationChange()">
+                    <option value="" style="color:#94a3b8;">Không thuộc dự án</option>
                     <option value="Vinhomes Central Park">Vinhomes Central Park</option>
                     <option value="Vinhomes Grand Park">Vinhomes Grand Park</option>
                     <option value="The Sun Avenue">The Sun Avenue</option>
