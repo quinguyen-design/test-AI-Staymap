@@ -4686,6 +4686,45 @@ function onStudioRoomCountBlur(kind, inputEl) {
   renderStudioPreview();
 }
 
+let STUDIO_WATER_TIMER = null;
+
+function openStudioWaterUnitList() {
+  clearTimeout(STUDIO_WATER_TIMER);
+  const listEl = document.getElementById("dWaterUnitList");
+  if (!listEl) return;
+  listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
+    const unit = idx === 0 ? "m3" : "nguoi";
+    btn.classList.toggle("is-active", STUDIO_STATE.waterUnit === unit);
+  });
+  listEl.classList.add("is-open");
+}
+
+function closeStudioWaterUnitDelay() {
+  clearTimeout(STUDIO_WATER_TIMER);
+  STUDIO_WATER_TIMER = setTimeout(() => {
+    document.getElementById("dWaterUnitList")?.classList.remove("is-open");
+  }, 150);
+}
+
+function selectStudioWaterUnit(unit) {
+  clearTimeout(STUDIO_WATER_TIMER);
+  STUDIO_STATE.waterUnit = unit;
+  const labelEl = document.getElementById("dWaterUnitLabel");
+  if (labelEl) {
+    labelEl.textContent = unit === "m3" ? "(m³)" : "(Người)";
+    labelEl.style.display = "inline";
+  }
+  document.getElementById("dWaterUnitList")?.classList.remove("is-open");
+  const inputEl = document.getElementById("dWater");
+  if (inputEl) inputEl.focus();
+  renderStudioPreview();
+}
+
+function onStudioWaterInput(inputEl) {
+  document.getElementById("dWaterUnitList")?.classList.remove("is-open");
+  sanitizeStudioNumericK(inputEl);
+}
+
 function closeStudioComboDelay(kind) {
   STUDIO_COMBO_TIMERS[kind] = setTimeout(() => {
     const { inputEl, listEl } = getStudioComboEls(kind);
@@ -5472,6 +5511,12 @@ function initStudioPostListing(preselectedZoneId = null) {
   if (bedsEl) bedsEl.value = "1";
   const bathsEl = document.getElementById("dBaths");
   if (bathsEl) bathsEl.value = "1";
+  STUDIO_STATE.waterUnit = "";
+  const waterUnitEl = document.getElementById("dWaterUnitLabel");
+  if (waterUnitEl) {
+    waterUnitEl.textContent = "";
+    waterUnitEl.style.display = "none";
+  }
   const agreeEl = document.getElementById("agreePostTerms");
   if (agreeEl) agreeEl.checked = false;
   document.querySelectorAll("#postModalBackdrop .util-chk, #postModalBackdrop .svc-chk, #chkSchool").forEach((c) => {
@@ -5522,7 +5567,8 @@ function renderStudioPreview() {
     return sum + (Number.isFinite(val) && val > 0 ? val : 0);
   }, 0);
   const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
-  const water = waterRaw ? `${waterRaw}k` : "Nhà nước";
+  const waterUnitSuffix = STUDIO_STATE.waterUnit === "m3" ? "/m³" : STUDIO_STATE.waterUnit === "nguoi" ? "/Người" : "";
+  const water = waterRaw ? `${waterRaw}k${waterUnitSuffix}` : "Nhà nước";
   const otherCost = otherRaw
     ? `${otherRaw}k`
     : (subFeesSumK > 0 ? `${Number(subFeesSumK.toFixed(2))}k` : "--");
@@ -5804,7 +5850,7 @@ function publishStudioListingNow() {
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
     elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
-    water: waterRaw ? `${waterRaw}k` : "Nhà nước",
+    water: waterRaw ? `${waterRaw}k${STUDIO_STATE.waterUnit === "m3" ? "/m³" : STUDIO_STATE.waterUnit === "nguoi" ? "/Người" : ""}` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
     internet: internetRaw ? `${internetRaw}k` : "",
     laundry: laundryRaw ? `${laundryRaw}k` : "",
