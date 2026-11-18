@@ -906,6 +906,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
   initHeroMap();
   updateMapFilterChipCounts();
+  initMegaSearchSync();
   initStickyNav();
   initMegaSearchPanel();
   renderSv1Slider();
@@ -1342,19 +1343,189 @@ function initMegaSearchPanel() {
 }
 
 function updateMegaSliderLabels() {
-  const priceVal = document.getElementById("megaPriceRange")?.value || 25;
-  const areaVal = document.getElementById("megaAreaRange")?.value || 15;
+  const priceVal = parseFloat(document.getElementById("megaPriceRange")?.value || "50");
+  const areaVal = parseFloat(document.getElementById("megaAreaRange")?.value || "0");
   const priceLabel = document.getElementById("megaPriceLabel");
   const areaLabel = document.getElementById("megaAreaLabel");
-  if (priceLabel) priceLabel.textContent = `Dưới ${priceVal} Triệu/tháng`;
-  if (areaLabel) areaLabel.textContent = `Từ ${areaVal} m² trở lên`;
+  if (priceLabel) priceLabel.textContent = priceVal >= 50 ? "Tất cả mức giá" : `Dưới ${priceVal} Triệu/tháng`;
+  if (areaLabel) areaLabel.textContent = areaVal <= 0 ? "Tất cả diện tích" : `Từ ${areaVal} m² trở lên`;
+  updateMegaLiveCount();
 }
 
 function setQuickPriceFilter(maxVal, pillEl) {
   const slider = document.getElementById("megaPriceRange");
   if (slider) slider.value = maxVal;
-  document.querySelectorAll(".hsp-q-pill").forEach((p) => p.classList.remove("active"));
+  if (pillEl && pillEl.parentElement) {
+    pillEl.parentElement.querySelectorAll(".hsp-q-pill").forEach((p) => p.classList.remove("active"));
+    pillEl.classList.add("active");
+  }
+  updateMegaSliderLabels();
+}
+
+function setQuickAreaFilter(minVal, pillEl) {
+  const slider = document.getElementById("megaAreaRange");
+  if (slider) slider.value = minVal;
+  if (pillEl && pillEl.parentElement) {
+    pillEl.parentElement.querySelectorAll(".hsp-q-pill").forEach((p) => p.classList.remove("active"));
+    pillEl.classList.add("active");
+  }
+  updateMegaSliderLabels();
+}
+
+function pickMegaCat(catKey, pillEl) {
+  const hiddenInput = document.getElementById("megaCatSelect");
+  if (hiddenInput) hiddenInput.value = catKey || "all";
+  document.querySelectorAll("#megaCatPills .hsp-q-pill").forEach((p) => p.classList.remove("active"));
   pillEl?.classList.add("active");
+  updateMegaLiveCount();
+}
+
+function populateMegaWards() {
+  const city = document.getElementById("megaCitySelect")?.value || "all";
+  const wardEl = document.getElementById("megaWardSelect");
+  if (!wardEl) return;
+  const wards = city !== "all" && STUDIO_WARDS_BY_CITY[city]
+    ? STUDIO_WARDS_BY_CITY[city]
+    : Object.values(STUDIO_WARDS_BY_CITY).flat();
+  wardEl.innerHTML = `<option value="all">Tất cả Phường / Xã</option>` +
+    wards.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
+  populateMegaStreets();
+}
+
+function populateMegaStreets() {
+  const ward = document.getElementById("megaWardSelect")?.value || "all";
+  const streetEl = document.getElementById("megaStreetSelect");
+  if (!streetEl) return;
+  const streets = ward !== "all" && STUDIO_STREETS_BY_WARD[ward]
+    ? STUDIO_STREETS_BY_WARD[ward]
+    : Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat()));
+  streetEl.innerHTML = `<option value="all">Tất cả Tên Đường</option>` +
+    streets.map((s) => `<option value="${s}">${s}</option>`).join("");
+}
+
+function populateMegaProjects() {
+  const projEl = document.getElementById("megaProjectSelect");
+  if (!projEl || typeof STUDIO_PROJECTS === "undefined") return;
+  projEl.innerHTML = `<option value="all">Tất cả Dự Án</option>` +
+    STUDIO_PROJECTS.map((pr) => `<option value="${pr.value}">${pr.label}</option>`).join("");
+}
+
+function onMegaCityChange() {
+  populateMegaWards();
+  updateMegaLiveCount();
+}
+
+function onMegaWardChange() {
+  populateMegaStreets();
+  updateMegaLiveCount();
+}
+
+function onMegaProjectChange() {
+  const projVal = document.getElementById("megaProjectSelect")?.value || "all";
+  if (projVal !== "all" && typeof STUDIO_PROJECTS !== "undefined") {
+    const proj = STUDIO_PROJECTS.find((p) => p.value === projVal);
+    if (proj) {
+      const cityEl = document.getElementById("megaCitySelect");
+      if (cityEl && proj.city) {
+        cityEl.value = proj.city;
+        populateMegaWards();
+      }
+      const wardEl = document.getElementById("megaWardSelect");
+      if (wardEl && proj.ward) {
+        wardEl.value = proj.ward;
+        populateMegaStreets();
+      }
+      const streetEl = document.getElementById("megaStreetSelect");
+      if (streetEl && proj.street) {
+        streetEl.value = proj.street;
+      }
+    }
+  }
+  updateMegaLiveCount();
+}
+
+function getMegaFilterPayload() {
+  const kw = document.getElementById("hspSearchInput")?.value.trim() || "";
+  const cat = document.getElementById("megaCatSelect")?.value || "all";
+  const city = document.getElementById("megaCitySelect")?.value || "all";
+  const ward = document.getElementById("megaWardSelect")?.value || "all";
+  const street = document.getElementById("megaStreetSelect")?.value || "all";
+  const project = document.getElementById("megaProjectSelect")?.value || "all";
+  const furniture = document.getElementById("megaFurnitureSelect")?.value || "all";
+  const beds = document.getElementById("megaBedsSelect")?.value || "all";
+  const direction = document.getElementById("megaDirectionSelect")?.value || "all";
+  const maxPrice = parseFloat(document.getElementById("megaPriceRange")?.value || "50");
+  const minArea = parseFloat(document.getElementById("megaAreaRange")?.value || "0");
+  const utilities = Array.from(document.querySelectorAll("#hspMegaPanel .mega-util-chk:checked")).map((c) => c.value);
+  return { keyword: kw, category: cat, city, ward, street, project, furniture, beds, direction, maxPrice, minArea, utilities };
+}
+
+function matchesMegaFilter(p, f) {
+  if (p.isHidden) return false;
+  if (f.category && f.category !== "all" && p.category !== f.category) return false;
+  if (f.city && f.city !== "all" && p.city !== f.city) return false;
+  if (f.ward && f.ward !== "all" && p.ward !== f.ward) return false;
+  if (f.street && f.street !== "all") {
+    const addr = (p.fullAddress || p.title || "").toLowerCase();
+    if (!addr.includes(f.street.toLowerCase())) return false;
+  }
+  if (f.project && f.project !== "all") {
+    const txt = `${p.project || ""} ${p.fullAddress || ""} ${p.title || ""}`.toLowerCase();
+    if (!txt.includes(f.project.toLowerCase())) return false;
+  }
+  if (f.furniture && f.furniture !== "all" && p.furniture && p.furniture !== f.furniture) return false;
+  if (f.beds && f.beds !== "all") {
+    const pBeds = parseInt(p.beds || "1", 10);
+    if (f.beds === "4+ PN" ? pBeds < 4 : p.beds !== f.beds) return false;
+  }
+  if (f.direction && f.direction !== "all" && p.direction && p.direction !== f.direction) return false;
+  if (f.maxPrice && f.maxPrice < 50 && p.price > f.maxPrice) return false;
+  if (f.minArea && f.minArea > 0 && p.area < f.minArea) return false;
+  if (f.utilities && f.utilities.length) {
+    const allTags = `${(p.utilities || []).join(" ")} ${(p.services || []).join(" ")} ${p.desc || ""}`.toLowerCase();
+    for (const u of f.utilities) {
+      if (!allTags.includes(u.toLowerCase().split("/")[0].trim())) return false;
+    }
+  }
+  if (f.keyword && !f.keyword.startsWith("Gần ")) {
+    const kwLow = f.keyword.toLowerCase();
+    const hay = `${p.title || ""} ${p.ward || ""} ${p.fullAddress || ""}`.toLowerCase();
+    if (!hay.includes(kwLow)) return false;
+  }
+  return true;
+}
+
+function updateMegaLiveCount() {
+  const badge = document.getElementById("megaLiveMatchBadge");
+  if (!badge || typeof PROPERTIES === "undefined") return;
+  const f = getMegaFilterPayload();
+  const count = PROPERTIES.filter((p) => matchesMegaFilter(p, f)).length;
+  badge.textContent = `${count} tin phù hợp`;
+}
+
+function resetMegaSearchFilters() {
+  const searchInput = document.getElementById("hspSearchInput");
+  if (searchInput) searchInput.value = "";
+  pickMegaCat("all", document.querySelector("#megaCatPills .hsp-q-pill"));
+  const cityEl = document.getElementById("megaCitySelect");
+  if (cityEl) cityEl.value = "TP. Hồ Chí Minh";
+  populateMegaWards();
+  const projEl = document.getElementById("megaProjectSelect");
+  if (projEl) projEl.value = "all";
+  ["megaFurnitureSelect", "megaBedsSelect", "megaDirectionSelect"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = "all";
+  });
+  document.querySelectorAll("#hspMegaPanel .mega-util-chk").forEach((c) => { c.checked = false; });
+  setQuickPriceFilter(50);
+  setQuickAreaFilter(0);
+  if (typeof clearLandmarkFilter === "function") clearLandmarkFilter();
+  updateMegaLiveCount();
+}
+
+function initMegaSearchSync() {
+  populateMegaWards();
+  populateMegaProjects();
   updateMegaSliderLabels();
 }
 
@@ -1376,14 +1547,7 @@ function updateMapFilterChipCounts() {
 }
 
 function executeMegaSearch() {
-  const kw = document.getElementById("hspSearchInput")?.value.trim() || "";
-  const cat = document.getElementById("megaCatSelect")?.value || "all";
-  const city = document.getElementById("megaCitySelect")?.value || "TP. Hồ Chí Minh";
-  const ward = document.getElementById("megaWardSelect")?.value || "all";
-  const maxPrice = parseFloat(document.getElementById("megaPriceRange")?.value || "50");
-  const minArea = parseFloat(document.getElementById("megaAreaRange")?.value || "0");
-
-  STATE.searchFilter = { keyword: kw, category: cat, city, ward, maxPrice, minArea };
+  STATE.searchFilter = getMegaFilterPayload();
   document.getElementById("hspMegaPanel")?.classList.remove("is-open");
   navigateTo("/search.html");
 }
@@ -1850,17 +2014,7 @@ function applyCategoryBarFilter(updateUrl = true) {
     if (bracket && (p.price < bracket.min || p.price > bracket.max)) return false;
     if (areaMin > 0 && p.area < areaMin) return false;
     if (ctx.isSearchRoute) {
-      if (STATE.searchFilter.maxPrice && p.price > STATE.searchFilter.maxPrice) return false;
-      if (STATE.searchFilter.minArea && p.area < STATE.searchFilter.minArea) return false;
-      if (
-        STATE.searchFilter.keyword &&
-        !STATE.searchFilter.keyword.startsWith("Gần ") &&
-        !p.title.toLowerCase().includes(STATE.searchFilter.keyword.toLowerCase()) &&
-        !p.ward.toLowerCase().includes(STATE.searchFilter.keyword.toLowerCase()) &&
-        !p.fullAddress.toLowerCase().includes(STATE.searchFilter.keyword.toLowerCase())
-      ) {
-        return false;
-      }
+      if (!matchesMegaFilter(p, { ...STATE.searchFilter, category: "all", city: "all", ward: "all" })) return false;
     }
     return true;
   });
@@ -5223,6 +5377,7 @@ function publishStudioListingNow() {
   renderAllHomeGrids();
   updateMapPins("all", newId);
   updateMapFilterChipCounts();
+  initMegaSearchSync();
   closePostModal();
 
   alert(
@@ -5845,6 +6000,7 @@ function adminChangeListingTier(propId, newZoneIdStr) {
   renderAllHomeGrids();
   updateMapPins("all");
   updateMapFilterChipCounts();
+  initMegaSearchSync();
   switchAdminTab(STATE.activeAdminTab || "moderation");
 }
 
@@ -5863,6 +6019,7 @@ function adminDeleteListingNow(propId) {
   renderAllHomeGrids();
   updateMapPins("all");
   updateMapFilterChipCounts();
+  initMegaSearchSync();
   syncAdminKpis();
   switchAdminTab(STATE.activeAdminTab || "all-listings");
 }
