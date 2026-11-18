@@ -3407,6 +3407,94 @@ const STUDIO_STICKERS = [
   { id: "promo", name: "Ưu Đãi", hint: "Tìm khách hàng mới", cls: "sticker-promo", icon: "fa-gift" }
 ];
 
+const STUDIO_PROMO_CODES = {
+  STAYMAP10: { code: "STAYMAP10", type: "percent", value: 10, desc: "Giảm 10%" },
+  WELCOME15: { code: "WELCOME15", type: "percent", value: 15, desc: "Giảm 15%" },
+  VIP20: { code: "VIP20", type: "percent", value: 20, desc: "Giảm 20%" },
+  CHOTHUE50K: { code: "CHOTHUE50K", type: "fixed", value: 50000, desc: "Giảm 50.000đ" }
+};
+
+function onStudioPromoInput(val) {
+  const clean = (val || "").trim().toUpperCase();
+  const statusEl = document.getElementById("promoCodeStatus");
+  if (!clean) {
+    STUDIO_STATE.promoCode = "";
+    if (statusEl) statusEl.textContent = "";
+    renderStudioPreview();
+    return;
+  }
+  if (STUDIO_PROMO_CODES[clean]) {
+    STUDIO_STATE.promoCode = clean;
+    if (statusEl) {
+      statusEl.textContent = `✓ Đã áp dụng ${STUDIO_PROMO_CODES[clean].desc}`;
+      statusEl.style.color = "#059669";
+    }
+    renderStudioPreview();
+  }
+}
+
+function applyStudioPromoCode() {
+  const inputEl = document.getElementById("dPromoCode");
+  const statusEl = document.getElementById("promoCodeStatus");
+  const clean = (inputEl?.value || "").trim().toUpperCase();
+  if (!clean) {
+    STUDIO_STATE.promoCode = "";
+    if (statusEl) {
+      statusEl.textContent = "Vui lòng nhập mã (VD: STAYMAP10)";
+      statusEl.style.color = "#d97706";
+    }
+    renderStudioPreview();
+    return;
+  }
+  const promo = STUDIO_PROMO_CODES[clean];
+  if (!promo) {
+    STUDIO_STATE.promoCode = "";
+    if (statusEl) {
+      statusEl.textContent = "Mã không hợp lệ (Thử: STAYMAP10, VIP20, CHOTHUE50K)";
+      statusEl.style.color = "#dc2626";
+    }
+    renderStudioPreview();
+    return;
+  }
+  if (inputEl) inputEl.value = clean;
+  STUDIO_STATE.promoCode = clean;
+  if (statusEl) {
+    statusEl.textContent = `✓ Đã áp dụng ${promo.desc}`;
+    statusEl.style.color = "#059669";
+  }
+  renderStudioPreview();
+}
+
+function calcStudioCheckoutPricing(z, dur, stObj, promoCode) {
+  const rawPkgTotal = z.rate * dur.days;
+  const durationDiscount = Math.round(rawPkgTotal * (dur.off / 100));
+  const pkgAfterDur = rawPkgTotal - durationDiscount;
+  const stickerTotal = stObj ? dur.days * 1000 : 0;
+  const baseBeforePromo = pkgAfterDur + stickerTotal;
+  const promoObj = promoCode ? STUDIO_PROMO_CODES[promoCode] || null : null;
+  let promoDiscount = 0;
+  if (promoObj && baseBeforePromo > 0) {
+    promoDiscount = promoObj.type === "percent"
+      ? Math.round(baseBeforePromo * (promoObj.value / 100))
+      : Math.min(baseBeforePromo, promoObj.value);
+  }
+  const totalDiscount = durationDiscount + promoDiscount;
+  const subtotal = Math.max(0, baseBeforePromo - promoDiscount);
+  const vatTotal = Math.round(subtotal * 0.08);
+  const grandTotal = subtotal + vatTotal;
+  return {
+    rawPkgTotal,
+    durationDiscount,
+    stickerTotal,
+    promoObj,
+    promoDiscount,
+    totalDiscount,
+    subtotal,
+    vatTotal,
+    grandTotal
+  };
+}
+
 const STUDIO_WARDS_BY_CITY = {
   "TP. Hồ Chí Minh": [
     { value: "P. Cầu Kiệu", label: "P. Cầu Kiệu (Phú Nhuận)" },
@@ -4447,6 +4535,11 @@ function initStudioPostListing(preselectedZoneId = null) {
   STUDIO_STATE.videoUrl = "";
   STUDIO_STATE.videoName = "";
   STUDIO_STATE.selectedZoneId = preselectedZoneId || null;
+  STUDIO_STATE.promoCode = "";
+  const promoEl = document.getElementById("dPromoCode");
+  if (promoEl) promoEl.value = "";
+  const promoStatusEl = document.getElementById("promoCodeStatus");
+  if (promoStatusEl) promoStatusEl.textContent = "";
   const vLbl = document.getElementById("demoVideoLabel");
   if (vLbl) vLbl.textContent = "Tải Video Ngắn Từ Máy (MP4, MOV)";
   populateStudioWards();
@@ -4680,29 +4773,42 @@ function renderStudioPreview() {
       breakdownEl.innerHTML = `<div style="text-align:center;color:#64748b;">Chưa chọn gói hiển thị (Vui lòng chọn khu vực ở Bước 4).</div>`;
     } else {
       const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
-      const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
-      const stickerTotal = stObj ? dur.days * 1000 : 0;
-      const subtotal = pkgTotal + stickerTotal;
-      const vatTotal = Math.round(subtotal * 0.08);
-      const grandTotal = subtotal + vatTotal;
+      const pricing = calcStudioCheckoutPricing(z, dur, stObj, STUDIO_STATE.promoCode);
       const fmt = (n) => (n === 0 ? "0đ" : new Intl.NumberFormat("vi-VN").format(n) + "đ");
+      const discountNotes = [];
+      if (pricing.durationDiscount > 0) {
+        discountNotes.push(`Giảm ${dur.off}% gói ${dur.label}: -${fmt(pricing.durationDiscount)}`);
+      }
+      if (pricing.promoDiscount > 0 && pricing.promoObj) {
+        discountNotes.push(`Mã ${pricing.promoObj.code}: -${fmt(pricing.promoDiscount)}`);
+      }
+      const discountNoteHtml = discountNotes.length
+        ? `<div style="font-size:11px;color:#059669;margin-top:1px;">(${discountNotes.join(" + ")})</div>`
+        : `<div style="font-size:11px;color:#94a3b8;margin-top:1px;">(Chưa có % giảm ngày hoặc mã khuyến mãi)</div>`;
       breakdownEl.innerHTML = `
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
           <span>Gói hiển thị: <strong>${z.name}</strong> (${dur.label})</span>
-          <strong class="tabular-nums">${fmt(pkgTotal)}</strong>
+          <strong class="tabular-nums">${fmt(pricing.rawPkgTotal)}</strong>
         </div>
         ${stObj ? `
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
           <span>Nhãn Dán: <strong>${stObj.name}</strong> (${dur.label} × 1k)</span>
-          <strong class="tabular-nums">+${fmt(stickerTotal)}</strong>
+          <strong class="tabular-nums">+${fmt(pricing.stickerTotal)}</strong>
         </div>` : ""}
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;gap:8px;">
+          <div>
+            <span>Ưu đãi giảm giá:</span>
+            ${discountNoteHtml}
+          </div>
+          <strong class="tabular-nums" style="color:${pricing.totalDiscount > 0 ? "#059669" : "#64748b"};white-space:nowrap;">${pricing.totalDiscount > 0 ? `-${fmt(pricing.totalDiscount)}` : "0đ"}</strong>
+        </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
           <span>Thuế VAT (8%):</span>
-          <strong class="tabular-nums">${fmt(vatTotal)}</strong>
+          <strong class="tabular-nums">${fmt(pricing.vatTotal)}</strong>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-size:14px;">
           <strong style="color:#0f172a;">Tổng thanh toán:</strong>
-          <strong class="tabular-nums" style="font-size:17px;color:var(--ctt-orange);">${grandTotal === 0 ? "0đ (Miễn phí)" : fmt(grandTotal)}</strong>
+          <strong class="tabular-nums" style="font-size:17px;color:var(--ctt-orange);">${pricing.grandTotal === 0 ? "0đ (Miễn phí)" : fmt(pricing.grandTotal)}</strong>
         </div>
       `;
     }
@@ -4727,11 +4833,9 @@ function publishStudioListingNow() {
 
   const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
   const stObj = STUDIO_STICKERS.find((s) => s.id === STUDIO_STATE.selectedSticker);
-  const pkgTotal = Math.round(z.rate * dur.days * (1 - dur.off / 100));
-  const stickerTotal = stObj ? dur.days * 1000 : 0;
-  const subtotal = pkgTotal + stickerTotal;
-  const vatTotal = Math.round(subtotal * 0.08);
-  const grandTotal = subtotal + vatTotal;
+  const pricing = calcStudioCheckoutPricing(z, dur, stObj, STUDIO_STATE.promoCode);
+  const vatTotal = pricing.vatTotal;
+  const grandTotal = pricing.grandTotal;
 
   if (STATE.walletBalance < grandTotal) {
     alert(`Số dư Ví hiện tại (${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ) chưa đủ để thanh toán ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ (đã gồm VAT 8%). Vui lòng nạp thêm vào Ví.`);
@@ -4744,7 +4848,7 @@ function publishStudioListingNow() {
   PORTAL_DATA.transactions.unshift({
     code: `#VIP-${Math.floor(10000 + Math.random() * 89999)}`,
     time: "Vừa xong",
-    desc: `Đăng gói ${z.name} (${dur.label})${stObj ? ` + Nhãn ${stObj.name}` : ""} + VAT 8%`,
+    desc: `Đăng gói ${z.name} (${dur.label})${stObj ? ` + Nhãn ${stObj.name}` : ""}${pricing.promoObj ? ` + Mã ${pricing.promoObj.code}` : ""} + VAT 8%`,
     amount: -grandTotal,
     type: "debit",
     vat: vatTotal,
