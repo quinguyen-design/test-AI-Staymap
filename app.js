@@ -1315,10 +1315,24 @@ function closeHeroMapLeftDrawer() {
 function openHeroMapLeftDrawer(item) {
   const drawer = document.getElementById("heroMapLeftDrawer");
   if (!drawer || !item) return;
-  const cardHtml = buildListingCardHTML(item).replace(
+  const isBanner = item.isVipPin || item.mapTier === "banner" || item.zoneId === 1;
+  const photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice(0, 4);
+  let cardHtml = buildListingCardHTML(item).replace(
     `onclick="openPropertyDetailView(${item.id})"`,
     `onclick="openDetailFromExpandedMap(${item.id})"`
   );
+  if (isBanner && photos.length > 1) {
+    cardHtml = cardHtml.replace(
+      `<div class="lc-card-img">\n        <img src="`,
+      `<div class="lc-card-img">\n        <img id="hmdMainImg" src="`
+    );
+    const thumbStrip = `
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 18px 0;background:#ffffff;" onclick="event.stopPropagation()">
+        ${photos.map((src, idx) => `<img src="${src}" onclick="var m=document.getElementById('hmdMainImg');if(m)m.src=this.src;this.parentElement.querySelectorAll('img').forEach(function(el){el.style.borderColor='#e2e8f0';});this.style.borderColor='var(--ctt-orange)';" style="width:100%;height:42px;object-fit:cover;border-radius:7px;cursor:pointer;border:1.5px solid ${idx === 0 ? "var(--ctt-orange)" : "#e2e8f0"};">`).join("")}
+      </div>
+    `;
+    cardHtml = cardHtml.replace(`<div class="lc-card-body"`, `${thumbStrip}<div class="lc-card-body"`);
+  }
   const actionRowHtml = `
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 18px 16px;background:#ffffff;border-top:1px solid #f1f5f9;" onclick="event.stopPropagation()">
       <a href="tel:${(item.phone || "").replace(/\s+/g, "")}" class="tabular-nums" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 12px;border-radius:10px;background:#0f172a;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
