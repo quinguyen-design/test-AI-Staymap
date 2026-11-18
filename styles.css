@@ -535,6 +535,8 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.pin-vip3 .hmp-pill,
 .hmp-marker.pin-vip-star .hmp-pill,
 .hmp-marker.pin-basic .hmp-pill {
+  position: relative;
+  z-index: 1;
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
   color: #0f172a;
@@ -547,7 +549,16 @@ button, input, select, textarea, .leaflet-container {
 .hmp-marker.pin-vip3 .hmp-pin-tail,
 .hmp-marker.pin-vip-star .hmp-pin-tail,
 .hmp-marker.pin-basic .hmp-pin-tail {
-  border-top-color: #cbd5e1;
+  width: 9px;
+  height: 9px;
+  background: #ffffff;
+  border: none;
+  border-right: 1.5px solid #cbd5e1;
+  border-bottom: 1.5px solid #cbd5e1;
+  transform: rotate(45deg);
+  margin-top: -5.5px;
+  position: relative;
+  z-index: 2;
 }
 
 .hmp-pin-tail {
@@ -3259,6 +3270,9 @@ button, input, select, textarea, .leaflet-container {
 
 .hmp-marker.is-hovered .hmp-pin-tail {
   border-top-color: var(--ctt-orange) !important;
+  background: var(--ctt-orange) !important;
+  border-right-color: var(--ctt-orange) !important;
+  border-bottom-color: var(--ctt-orange) !important;
 }
 
 /* Landmark Proximity Filter Pills */
