@@ -1186,15 +1186,15 @@ function updateMapPins(catFilter = "all", focusId = null) {
       pinZOffset = 2000;
     } else if (vipInfo.badgeClass === "tag-vip1" || item.mapTier === "vip1" || item.zoneId === 2 || item.tier === "spotlight") {
       pinClass = "pin-vip1";
-      pinIconHtml = "";
+      pinIconHtml = '<i class="fa-solid fa-star" style="color:#0f172a;font-size:10px;"></i>';
       pinZOffset = 600;
     } else if (vipInfo.badgeClass === "tag-vip2" || item.mapTier === "vip2" || item.zoneId === 3 || item.tier === "featured") {
       pinClass = "pin-vip2";
-      pinIconHtml = "";
+      pinIconHtml = '<i class="fa-solid fa-star" style="color:#0f172a;font-size:10px;"></i>';
       pinZOffset = 400;
     } else if (vipInfo.badgeClass === "tag-vip3" || item.mapTier === "vip3" || item.zoneId === 5 || item.tier === "prime") {
       pinClass = "pin-vip3";
-      pinIconHtml = "";
+      pinIconHtml = '<i class="fa-solid fa-star" style="color:#0f172a;font-size:10px;"></i>';
       pinZOffset = 200;
     } else {
       pinClass = "pin-basic";
