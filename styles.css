@@ -3323,7 +3323,7 @@ button, input, select, textarea, .leaflet-container {
   z-index: 9999 !important;
 }
 
-.hmp-marker.is-hovered:not(.pin-basic) .hmp-pill {
+.hmp-marker.pin-vip-banner.is-hovered .hmp-pill {
   background: var(--ctt-grad-brand) !important;
   color: #ffffff !important;
   border-color: #f15a22 !important;
@@ -3334,12 +3334,43 @@ button, input, select, textarea, .leaflet-container {
   color: #000000 !important;
 }
 
-.hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail {
+.hmp-marker.pin-vip-banner.is-hovered .hmp-pin-tail {
   border-top-color: #f15a22 !important;
 }
 
-.hmp-marker.is-hovered:not(.pin-basic) .hmp-pin-tail::after {
+.hmp-marker.pin-vip-banner.is-hovered .hmp-pin-tail::after {
   border-top-color: #f87c11 !important;
+}
+
+.hmp-marker.pin-vip1.is-hovered .hmp-pill,
+.hmp-marker.pin-vip2.is-hovered .hmp-pill,
+.hmp-marker.pin-vip3.is-hovered .hmp-pill,
+.hmp-marker.pin-vip-star.is-hovered .hmp-pill {
+  background: #ffffff !important;
+  color: #f15a22 !important;
+  border-color: #f15a22 !important;
+  box-shadow: 0 8px 20px rgba(241, 90, 34, 0.26) !important;
+}
+
+.hmp-marker.pin-vip1.is-hovered .hmp-pill i,
+.hmp-marker.pin-vip2.is-hovered .hmp-pill i,
+.hmp-marker.pin-vip3.is-hovered .hmp-pill i,
+.hmp-marker.pin-vip-star.is-hovered .hmp-pill i {
+  color: #f15a22 !important;
+}
+
+.hmp-marker.pin-vip1.is-hovered .hmp-pin-tail,
+.hmp-marker.pin-vip2.is-hovered .hmp-pin-tail,
+.hmp-marker.pin-vip3.is-hovered .hmp-pin-tail,
+.hmp-marker.pin-vip-star.is-hovered .hmp-pin-tail {
+  border-top-color: #f15a22 !important;
+}
+
+.hmp-marker.pin-vip1.is-hovered .hmp-pin-tail::after,
+.hmp-marker.pin-vip2.is-hovered .hmp-pin-tail::after,
+.hmp-marker.pin-vip3.is-hovered .hmp-pin-tail::after,
+.hmp-marker.pin-vip-star.is-hovered .hmp-pin-tail::after {
+  border-top-color: #ffffff !important;
 }
 
 /* Landmark Proximity Filter Pills */
