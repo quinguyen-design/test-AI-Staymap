@@ -391,8 +391,9 @@ button, input, select, textarea, .leaflet-container {
 }
 
 .map-style-btn.active {
-  background: rgba(255, 255, 255, 0.18);
-  color: #f15a22;
+  background: var(--ctt-grad-brand);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(241, 90, 34, 0.45);
 }
 
 .map-expand-btn {
