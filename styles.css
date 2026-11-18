@@ -3322,6 +3322,10 @@ button, input, select, textarea, .leaflet-container {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
 }
 
+.hmp-marker.pin-vip-banner.is-hovered .hmp-pill i.fa-crown {
+  color: #000000 !important;
+}
+
 .hmp-marker.is-hovered .hmp-pin-tail {
   border-top-color: var(--ctt-orange) !important;
   background: var(--ctt-orange) !important;
