@@ -4640,13 +4640,6 @@ function renderStudioStickers() {
   if (promoWrap) promoWrap.style.display = noSticker ? "none" : "block";
   if (noSticker) return;
 
-  const totalSticker = STUDIO_STATE.selectedDays * 1000;
-  const hint = document.getElementById("stickerPriceHint");
-  if (hint) {
-    hint.textContent = STUDIO_STATE.selectedSticker
-      ? `+${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ (${STUDIO_STATE.selectedDays} ngày)`
-      : `${new Intl.NumberFormat("vi-VN").format(totalSticker)}đ / ${STUDIO_STATE.selectedDays} ngày`;
-  }
   const grid = document.getElementById("demoStickerGrid");
   if (!grid) return;
   grid.innerHTML = STUDIO_STICKERS.map((st) => `
