@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261120r">
+  <link rel="stylesheet" href="styles.css?v=20261120s">
 </head>
 <body>
 
@@ -1237,12 +1237,12 @@
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-bolt" style="color:var(--ctt-orange);"></i> Điện <small class="util-unit">(kWh)</small></span></div>
-                  <input type="text" inputmode="decimal" id="dElec" class="post-input tabular-nums" value="" placeholder="QĐ VN (Để trống)" oninput="sanitizeStudioNumericK(this)">
+                  <input type="text" inputmode="decimal" id="dElec" class="post-input tabular-nums" value="" placeholder="Nhà nước (Để trống)" oninput="sanitizeStudioNumericK(this)">
                 </div>
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-droplet" style="color:var(--ctt-orange);"></i> Nước <small id="dWaterUnitLabel" class="util-unit">(Người)</small></span></div>
                   <div class="ctt-combo-wrap">
-                    <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="QĐ VN (Để trống)" autocomplete="off" onfocus="openStudioWaterUnitList()" onclick="openStudioWaterUnitList()" onblur="closeStudioWaterUnitDelay()" oninput="onStudioWaterInput(this)">
+                    <input type="text" inputmode="decimal" id="dWater" class="post-input tabular-nums" value="" placeholder="Nhà nước (Để trống)" autocomplete="off" onfocus="openStudioWaterUnitList()" onclick="openStudioWaterUnitList()" onblur="closeStudioWaterUnitDelay()" oninput="onStudioWaterInput(this)">
                     <div id="dWaterUnitList" class="ctt-combo-list">
                       <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioWaterUnit('m3')">Khối (m³)</button>
                       <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioWaterUnit('nguoi')">Người</button>
@@ -1849,7 +1849,7 @@
   <script src="data/listings_1000.js?v=20261120k"></script>
   <script src="data/listings_4000_a.js?v=20261120k"></script>
   <script src="data/listings_4000_b.js?v=20261120k"></script>
-  <script src="data/vn_admin_units_2025.js?v=20261120r"></script>
-  <script src="app.js?v=20261120r"></script>
+  <script src="data/vn_admin_units_2025.js?v=20261120s"></script>
+  <script src="app.js?v=20261120s"></script>
 </body>
 </html>
