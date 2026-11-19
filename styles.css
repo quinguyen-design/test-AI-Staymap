@@ -4629,16 +4629,16 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   align-items: center;
   gap: 6px;
   width: 100%;
-  padding: 0 12px;
+  padding: 0 14px;
   border-radius: 10px;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid #e2e8f0;
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
   cursor: text;
 }
 .addr-composite-box:focus-within {
   border-color: var(--ctt-orange);
-  box-shadow: 0 0 0 3px rgba(241, 90, 34, 0.14);
+  box-shadow: 0 0 0 3px rgba(243, 114, 1, 0.12);
 }
 .addr-composite-box input {
   border: none;
@@ -4647,6 +4647,7 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   padding: 10px 0;
   font-family: inherit;
   font-size: 13.5px;
+  font-weight: 500;
   color: #0f172a;
   flex: 1;
   min-width: 70px;
@@ -4669,7 +4670,8 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   flex-shrink: 1;
 }
 .addr-locked-suffix.has-prefix {
-  color: #334155;
+  font-size: 13.5px;
+  color: #0f172a;
   font-weight: 500;
 }
 
