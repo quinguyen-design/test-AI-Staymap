@@ -5188,3 +5188,6 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     grid-template-columns: 1fr !important;
   }
 }
+
+#postModalBackdrop input[type="search"]::-webkit-search-decoration, #postModalBackdrop input[type="search"]::-webkit-search-cancel-button, #postModalBackdrop input[type="search"]::-webkit-search-results-button, #postModalBackdrop input[type="search"]::-webkit-search-results-decoration { -webkit-appearance: none; display: none; }
+
