@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261120w">
+  <link rel="stylesheet" href="styles.css?v=20261120x">
 </head>
 <body>
 
@@ -1386,33 +1386,32 @@
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                 <div class="check-section-box" style="margin-bottom:0;padding:10px 12px;">
                   <div class="post-field-label" style="margin-bottom:6px;"><span>Tiện Ích</span></div>
-                  <div style="display:flex;flex-direction:column;gap:6px;">
-                    <div>
-                      <label class="check-list-item">
-                        <input type="checkbox" id="chkSchool" onchange="toggleStudioSchoolCode(this.checked)">
-                        <span>Trường Học <small class="util-unit">(Mã trường)</small></span>
-                      </label>
-                      <div id="schoolCodeWrap" style="display:none;margin-top:5px;padding-left:22px;">
-                        <input type="text" id="dSchoolCode" class="post-input" style="padding:6px 9px;font-size:12px;" placeholder="Tên Trường / Mã Trường" oninput="renderStudioPreview()">
-                      </div>
-                    </div>
-                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderStudioPreview()"><span>Chợ / Siêu Thị</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderStudioPreview()"><span>Bệnh Viện / Y Tế</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderStudioPreview()"><span>Công Viên</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderStudioPreview()"><span>Xe Bus</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderStudioPreview()"><span>Bank / ATM</span></label>
+                  <div class="ctt-chip-grid">
+                    <label class="ctt-chip-toggle">
+                      <input type="checkbox" id="chkSchool" onchange="toggleStudioSchoolCode(this.checked)">
+                      <i class="fa-solid fa-graduation-cap"></i>
+                      <span>Trường Học</span>
+                    </label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="util-chk" value="Chợ / Siêu Thị" onchange="renderStudioPreview()"><i class="fa-solid fa-basket-shopping"></i><span>Chợ / Siêu Thị</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="util-chk" value="Bệnh Viện / Y Tế" onchange="renderStudioPreview()"><i class="fa-solid fa-hospital"></i><span>Y Tế / BV</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="util-chk" value="Công Viên" onchange="renderStudioPreview()"><i class="fa-solid fa-tree"></i><span>Công Viên</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="util-chk" value="Xe Bus" onchange="renderStudioPreview()"><i class="fa-solid fa-bus"></i><span>Xe Bus</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="util-chk" value="Bank / ATM" onchange="renderStudioPreview()"><i class="fa-solid fa-building-columns"></i><span>Bank / ATM</span></label>
+                  </div>
+                  <div id="schoolCodeWrap" style="display:none;margin-top:8px;">
+                    <input type="text" id="dSchoolCode" class="post-input" style="padding:6px 10px;font-size:12px;" placeholder="Tên Trường / Mã Trường" oninput="renderStudioPreview()">
                   </div>
                 </div>
 
                 <div class="check-section-box" style="margin-bottom:0;padding:10px 12px;">
                   <div class="post-field-label" style="margin-bottom:6px;"><span>Dịch Vụ</span></div>
-                  <div style="display:flex;flex-direction:column;gap:6px;">
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderStudioPreview()"><span>Nhà Xe / Hầm Xe Rộng</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderStudioPreview()"><span>Khu Giặt / Phơi / Sấy</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderStudioPreview()"><span>Bảo Vệ / Camera An Ninh</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderStudioPreview()"><span>Hệ Thống PCCC</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderStudioPreview()"><span>Thang Máy</span></label>
-                    <label class="check-list-item"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderStudioPreview()"><span>Quản Lý Khu Vực Chung</span></label>
+                  <div class="ctt-chip-grid">
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Nhà Xe / Hầm Xe Rộng" onchange="renderStudioPreview()"><i class="fa-solid fa-square-parking"></i><span>Hầm Xe</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Khu Giặt / Phơi / Sấy" onchange="renderStudioPreview()"><i class="fa-solid fa-shirt"></i><span>Giặt / Sấy</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Bảo Vệ / Camera An Ninh" onchange="renderStudioPreview()"><i class="fa-solid fa-shield-halved"></i><span>An Ninh / Cam</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Hệ Thống PCCC" onchange="renderStudioPreview()"><i class="fa-solid fa-fire-extinguisher"></i><span>PCCC</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Thang Máy" onchange="renderStudioPreview()"><i class="fa-solid fa-elevator"></i><span>Thang Máy</span></label>
+                    <label class="ctt-chip-toggle"><input type="checkbox" class="svc-chk" value="Quản Lý / Kiểm Tra Khu Vực Chung" onchange="renderStudioPreview()"><i class="fa-solid fa-user-check"></i><span>Quản Lý</span></label>
                   </div>
                 </div>
               </div>
@@ -1849,7 +1848,7 @@
   <script src="data/listings_1000.js?v=20261120k"></script>
   <script src="data/listings_4000_a.js?v=20261120k"></script>
   <script src="data/listings_4000_b.js?v=20261120k"></script>
-  <script src="data/vn_admin_units_2025.js?v=20261120w"></script>
-  <script src="app.js?v=20261120w"></script>
+  <script src="data/vn_admin_units_2025.js?v=20261120x"></script>
+  <script src="app.js?v=20261120x"></script>
 </body>
 </html>
