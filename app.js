@@ -3043,7 +3043,7 @@ function openPropertyDetailView(propId) {
             </div>
           </div>
 
-          <!-- Cụm 2: Chi Phí Sinh Hoạt & Quy Định Ở -->
+          <!-- Cụm 2 & 3: Chi Phí Sinh Hoạt, Quy Định Ở & Đặc Điểm Bất Động Sản -->
           <div class="pd-card-box">
             <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 4px;">
               <i class="fa-solid fa-bolt" style="color:var(--ctt-orange);margin-right:8px;"></i>Chi phí sinh hoạt & Quy định ở
@@ -3051,18 +3051,16 @@ function openPropertyDetailView(propId) {
             <div class="pd-specs-grid">
               ${renderSpecGrid(livingCostSpecs)}
             </div>
+            ${propertyFeatureSpecs.length ? `
+            <div style="margin-top:20px;padding-top:18px;border-top:1px solid #f1f5f9;">
+              <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 4px;">
+                <i class="fa-solid fa-house-circle-check" style="color:var(--ctt-orange);margin-right:8px;"></i>Đặc điểm bất động sản
+              </h3>
+              <div class="pd-specs-grid">
+                ${renderSpecGrid(propertyFeatureSpecs)}
+              </div>
+            </div>` : ""}
           </div>
-
-          ${propertyFeatureSpecs.length ? `
-          <!-- Cụm 3: Đặc Điểm Bất Động Sản -->
-          <div class="pd-card-box">
-            <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 4px;">
-              <i class="fa-solid fa-house-circle-check" style="color:var(--ctt-orange);margin-right:8px;"></i>Đặc điểm bất động sản
-            </h3>
-            <div class="pd-specs-grid">
-              ${renderSpecGrid(propertyFeatureSpecs)}
-            </div>
-          </div>` : ""}
 
           <!-- Cụm 4: Mô Tả Chi Tiết & Video -->
           <div class="pd-card-box">
@@ -3085,23 +3083,23 @@ function openPropertyDetailView(propId) {
             <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 14px;">
               <i class="fa-solid fa-sparkles" style="color:var(--ctt-orange);margin-right:8px;"></i>Tiện ích & Dịch vụ
             </h3>
-            <div style="display:grid;grid-template-columns:${utilitiesArr.length && servicesArr.length ? "1fr 1fr" : "1fr"};gap:18px;">
+            <div class="pd-amenity-cols ${utilitiesArr.length && servicesArr.length ? "" : "is-single"}">
               ${utilitiesArr.length ? `
-              <div style="padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;">
-                <div style="font-size:12.5px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
+              <div class="pd-amenity-group">
+                <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
                   <i class="fa-solid fa-location-crosshairs" style="color:var(--ctt-orange);margin-right:6px;"></i>Tiện ích xung quanh
                 </div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  ${utilitiesArr.map((u) => `<span class="sv1-spec-pill"><i class="fa-solid fa-check"></i> ${u}</span>`).join("")}
+                <div class="pd-amenity-grid">
+                  ${utilitiesArr.map((u) => `<div class="pd-amenity-pill" title="${u}"><i class="fa-solid fa-check"></i><span>${u}</span></div>`).join("")}
                 </div>
               </div>` : ""}
               ${servicesArr.length ? `
-              <div style="padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;">
-                <div style="font-size:12.5px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
+              <div class="pd-amenity-group">
+                <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
                   <i class="fa-solid fa-bell-concierge" style="color:var(--ctt-orange);margin-right:6px;"></i>Dịch vụ tòa nhà
                 </div>
-                <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                  ${servicesArr.map((s) => `<span class="sv1-spec-pill"><i class="fa-solid fa-circle-check"></i> ${s}</span>`).join("")}
+                <div class="pd-amenity-grid">
+                  ${servicesArr.map((s) => `<div class="pd-amenity-pill" title="${s}"><i class="fa-solid fa-circle-check"></i><span>${s}</span></div>`).join("")}
                 </div>
               </div>` : ""}
             </div>
@@ -3121,19 +3119,19 @@ function openPropertyDetailView(propId) {
               </div>
             </div>
 
-            <div style="display:grid;gap:8px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:14px;font-size:12.5px;">
-              <div style="display:flex;justify-content:space-between;gap:8px;">
-                <span style="color:#64748b;">Loại hình:</span>
-                <strong style="color:#0f172a;text-align:right;">${item.categoryLabel}</strong>
+            <div style="display:grid;gap:8px;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:14px;font-size:12.5px;min-width:0;">
+              <div style="display:flex;justify-content:space-between;gap:10px;min-width:0;">
+                <span style="color:#64748b;flex-shrink:0;">Loại hình:</span>
+                <strong style="color:#0f172a;text-align:right;word-break:break-word;min-width:0;">${item.categoryLabel}</strong>
               </div>
-              <div style="display:flex;justify-content:space-between;gap:8px;">
-                <span style="color:#64748b;">Khu vực:</span>
-                <strong style="color:#0f172a;text-align:right;">${item.ward}, ${item.city}</strong>
+              <div style="display:flex;justify-content:space-between;gap:10px;min-width:0;">
+                <span style="color:#64748b;flex-shrink:0;">Khu vực:</span>
+                <strong style="color:#0f172a;text-align:right;word-break:break-word;min-width:0;">${item.ward}, ${item.city}</strong>
               </div>
               ${item.project ? `
-              <div style="display:flex;justify-content:space-between;gap:8px;">
-                <span style="color:#64748b;">Dự án:</span>
-                <strong style="color:#0f172a;text-align:right;">${item.project}</strong>
+              <div style="display:flex;justify-content:space-between;gap:10px;min-width:0;">
+                <span style="color:#64748b;flex-shrink:0;">Dự án:</span>
+                <strong style="color:#0f172a;text-align:right;word-break:break-word;min-width:0;">${item.project}</strong>
               </div>` : ""}
             </div>
 
