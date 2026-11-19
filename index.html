@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261119z31">
+  <link rel="stylesheet" href="styles.css?v=20261119z32">
 </head>
 <body>
 
@@ -132,6 +132,12 @@
       </div>
     </div>
 
+    <!-- Floating "Search in this map area" button (Visible when expanded & moved) -->
+    <button type="button" id="mapBoundsSearchBtn" class="map-bounds-search-btn" onclick="searchInCurrentMapBounds()" style="display:none;">
+      <i class="fa-solid fa-crosshairs"></i>
+      <span>Tìm trong vùng bản đồ này</span>
+    </button>
+
     <!-- Left Property Info Drawer (Visible only when Map is Expanded) -->
     <aside id="heroMapLeftDrawer" class="hero-map-left-drawer" aria-label="Thông tin bài đăng trên bản đồ"></aside>
   </header>
@@ -212,7 +218,9 @@
           </div>
 
           <button type="button" class="hsp-filter-trigger" id="hspFilterTrigger" style="padding:7px 12px;font-weight:600;border-color:#e2e8f0;background:#f8fafc;color:#475569;">
-            <i class="fa-solid fa-sliders" style="color:var(--ctt-orange);"></i> Lọc
+            <i class="fa-solid fa-sliders" style="color:var(--ctt-orange);"></i>
+            <span>Lọc</span>
+            <span id="hspFilterBadge" class="hsp-filter-badge" style="display:none;">0</span>
           </button>
           <button type="button" class="hsp-submit" onclick="executeMegaSearch()" title="Tìm kiếm ngay">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -222,135 +230,6 @@
 
         <!-- Mẫu 2: Faceted Active Filter Pills (1-click × clear) -->
         <div id="hspActivePillsBar" class="hsp-active-pills-bar" style="display:none;"></div>
-
-        <!-- Minimalist Airbnb/Zillow-Style Horizontal Smart Filter (Progressive Disclosure) -->
-        <div class="hsp-panel" id="hspMegaPanel" style="width:840px;padding:18px 22px;">
-          <div class="hsp-panel-header" style="padding-bottom:10px;margin-bottom:14px;">
-            <div class="hsp-panel-title" style="font-size:13.5px;font-weight:600;color:#334155;">
-              <i class="fa-solid fa-sliders"></i>
-              <span>Tìm kiếm nhanh</span>
-            </div>
-            <button type="button" id="btnToggleMegaAdv" onclick="toggleMegaAdvanced()" style="border:none;background:transparent;font-size:12px;font-weight:500;color:#64748b;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
-              <i class="fa-solid fa-plus" style="font-size:10px;color:var(--ctt-orange);"></i>
-              <span>Lọc nâng cao (Đường, Dự án, Hướng)</span>
-            </button>
-          </div>
-
-          <!-- Core 4 Horizontal Row (1-click / minimal friction) -->
-          <div style="display:grid;grid-template-columns:1.15fr 1fr 1fr 0.95fr 0.9fr;gap:10px;margin-bottom:12px;">
-            <div>
-              <label for="megaCatSelect" class="hsp-sec-title" style="margin-bottom:4px;">Loại hình</label>
-              <select id="megaCatSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                <option value="all">Tất cả loại hình</option>
-                <option value="phong-tro">Phòng trọ / CHDV</option>
-                <option value="nha-o">Nhà nguyên căn</option>
-                <option value="can-ho-chung-cu">Căn hộ chung cư</option>
-                <option value="mat-bang-van-phong">Mặt bằng văn phòng</option>
-                <option value="bai-dat-kho-xuong">Đất - Xưởng, Kho - Bãi</option>
-                <option value="homestay-airbnb">HomeStay / Aribnb</option>
-              </select>
-            </div>
-            <div>
-              <label for="megaCitySelect" class="hsp-sec-title" style="margin-bottom:4px;">Tỉnh / Thành</label>
-              <select id="megaCitySelect" class="hsp-select" onchange="onMegaCityChange()">
-                <option value="all">Tất cả Tỉnh / Thành</option>
-                <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
-                <option value="TP. Hà Nội">TP. Hà Nội</option>
-                <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
-                <option value="Bình Dương">Bình Dương</option>
-                <option value="Đồng Nai">Đồng Nai</option>
-                <option value="TP. Cần Thơ">TP. Cần Thơ</option>
-              </select>
-            </div>
-            <div>
-              <label for="megaWardSelect" class="hsp-sec-title" style="margin-bottom:4px;">Phường / Xã</label>
-              <select id="megaWardSelect" class="hsp-select" onchange="onMegaWardChange()">
-                <option value="all">Tất cả Phường / Xã</option>
-              </select>
-            </div>
-            <div>
-              <label for="megaPriceRange" class="hsp-sec-title" style="margin-bottom:4px;">Mức giá</label>
-              <select id="megaPriceRange" class="hsp-select" onchange="onMegaPriceSelectChange(this)">
-                <option value="0-999" selected>Tất cả giá</option>
-                <option value="0-3.5">Dưới 3.5 Triệu</option>
-                <option value="3.5-7">3.5 - 7 Triệu</option>
-                <option value="7-15">7 - 15 Triệu</option>
-                <option value="15-20">15 - 20 Triệu</option>
-                <option value="20-999">Trên 20 Triệu</option>
-              </select>
-            </div>
-            <div>
-              <label for="megaAreaRange" class="hsp-sec-title" style="margin-bottom:4px;">Diện tích</label>
-              <select id="megaAreaRange" class="hsp-select" onchange="updateMegaLiveCount()">
-                <option value="0" selected>Tất cả</option>
-                <option value="20">Từ 20 m²</option>
-                <option value="35">Từ 35 m²</option>
-                <option value="60">Từ 60 m²</option>
-                <option value="100">Từ 100 m²</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Progressive Disclosure: Advanced Row (Hidden by default) -->
-          <div id="megaAdvancedWrap" style="display:none;padding:12px 14px;background:#f8fafc;border-radius:12px;border:1px solid #f1f5f9;margin-bottom:12px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.8fr 0.8fr;gap:8px;margin-bottom:10px;">
-              <div>
-                <label for="megaStreetSelect" class="hsp-sec-title" style="margin-bottom:4px;">Tên Đường</label>
-                <select id="megaStreetSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Tất cả Đường</option>
-                </select>
-              </div>
-              <div>
-                <label for="megaProjectSelect" class="hsp-sec-title" style="margin-bottom:4px;">Dự Án</label>
-                <select id="megaProjectSelect" class="hsp-select" onchange="onMegaProjectChange()">
-                  <option value="all">Tất cả Dự Án</option>
-                </select>
-              </div>
-              <div>
-                <label for="megaFurnitureSelect" class="hsp-sec-title" style="margin-bottom:4px;">Nội Thất</label>
-                <select id="megaFurnitureSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Tất cả</option>
-                  <option value="Đầy Đủ">Đầy Đủ</option>
-                  <option value="Cơ Bản">Cơ Bản</option>
-                  <option value="Không Có">Không Có</option>
-                </select>
-              </div>
-              <div>
-                <label for="megaBedsSelect" class="hsp-sec-title" style="margin-bottom:4px;">Phòng Ngủ</label>
-                <select id="megaBedsSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Tất cả</option>
-                  <option value="1 PN">1 PN</option>
-                  <option value="2 PN">2 PN</option>
-                  <option value="3 PN">3 PN</option>
-                  <option value="4+ PN">4+ PN</option>
-                </select>
-              </div>
-              <div>
-                <label for="megaDirectionSelect" class="hsp-sec-title" style="margin-bottom:4px;">Hướng Nhà</label>
-                <select id="megaDirectionSelect" class="hsp-select" onchange="updateMegaLiveCount()">
-                  <option value="all">Tất cả</option>
-                  <option value="Đông">Đông</option>
-                  <option value="Tây">Tây</option>
-                  <option value="Nam">Nam</option>
-                  <option value="Bắc">Bắc</option>
-                  <option value="Đông Bắc">Đông Bắc</option>
-                  <option value="Đông Nam">Đông Nam</option>
-                  <option value="Tây Bắc">Tây Bắc</option>
-                  <option value="Tây Nam">Tây Nam</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="hsp-actions" style="margin-top:4px;padding-top:12px;">
-            <button type="button" class="hsp-btn-reset" style="font-weight:500;color:#64748b;" onclick="resetMegaSearchFilters()">
-              <i class="fa-solid fa-rotate-left"></i> Đặt lại
-            </button>
-            <button type="button" class="hsp-btn-apply" style="font-weight:700;" onclick="executeMegaSearch()">
-              <i class="fa-solid fa-magnifying-glass"></i> <span id="megaLiveMatchBadge" class="tabular-nums">Xem kết quả</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       <!-- Right: Main Menu Links (.shn-list) -->
@@ -373,6 +252,265 @@
     </div>
   </nav>
   <div class="shn-sticky-spacer" id="shnStickySpacer"></div>
+
+  <!-- ========================================================================
+       NEXT-GEN SMART FILTER SLIDE-OVER DRAWER (#hspMegaPanel)
+       1-Click Category Cards, Live Price Histogram + Dual Slider, Segmented Specs,
+       Renter Pain-Point Chips, Sort & 2-Way Map Sync
+       ======================================================================== -->
+  <div id="hspFilterBackdrop" class="sfd-backdrop" onclick="closeSmartFilterDrawer()"></div>
+  <aside id="hspMegaPanel" class="sfd-drawer" role="dialog" aria-modal="true" aria-label="Bộ lọc tìm kiếm nâng cao">
+    <!-- Hidden synced controls for full backward compatibility -->
+    <input type="hidden" id="megaCatSelect" value="all">
+    <input type="hidden" id="megaPriceRange" value="0-999">
+    <input type="hidden" id="megaAreaRange" value="0">
+    <input type="hidden" id="megaBedsSelect" value="all">
+    <input type="hidden" id="megaFurnitureSelect" value="all">
+    <input type="hidden" id="megaDirectionSelect" value="all">
+
+    <div class="sfd-header">
+      <div class="sfd-header-left">
+        <div class="sfd-header-icon"><i class="fa-solid fa-sliders"></i></div>
+        <div>
+          <h3>Bộ lọc tìm kiếm</h3>
+          <span id="sfdHeaderCount" class="sfd-header-sub tabular-nums">Đang đồng bộ kho tin...</span>
+        </div>
+      </div>
+      <button type="button" class="sfd-close-btn" onclick="closeSmartFilterDrawer()" aria-label="Đóng bộ lọc">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="sfd-body">
+      <!-- 1. Loại hình (1-Click Visual Cards) -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Loại hình bất động sản</span>
+        </div>
+        <div class="sfd-cat-grid" id="sfdCatGrid">
+          <button type="button" class="sfd-cat-card active" data-cat="all" onclick="pickDrawerCat('all', 'Tất cả loại hình', this)">
+            <i class="fa-solid fa-border-all"></i><span>Tất cả</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="phong-tro" onclick="pickDrawerCat('phong-tro', 'Phòng trọ / CHDV', this)">
+            <i class="fa-solid fa-door-open"></i><span>Phòng trọ / CHDV</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="nha-o" onclick="pickDrawerCat('nha-o', 'Nhà nguyên căn', this)">
+            <i class="fa-solid fa-house-chimney"></i><span>Nhà nguyên căn</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="can-ho-chung-cu" onclick="pickDrawerCat('can-ho-chung-cu', 'Căn hộ chung cư', this)">
+            <i class="fa-solid fa-building"></i><span>Căn hộ chung cư</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="mat-bang-van-phong" onclick="pickDrawerCat('mat-bang-van-phong', 'Mặt bằng văn phòng', this)">
+            <i class="fa-solid fa-shop"></i><span>Mặt bằng / VP</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="bai-dat-kho-xuong" onclick="pickDrawerCat('bai-dat-kho-xuong', 'Đất - Xưởng, Kho - Bãi', this)">
+            <i class="fa-solid fa-warehouse"></i><span>Đất - Kho xưởng</span>
+          </button>
+          <button type="button" class="sfd-cat-card" data-cat="homestay-airbnb" onclick="pickDrawerCat('homestay-airbnb', 'HomeStay / Aribnb', this)">
+            <i class="fa-solid fa-umbrella-beach"></i><span>HomeStay / Airbnb</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Khoảng giá + Biểu đồ phân bổ tin (Histogram + Dual Range Slider) -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Khoảng giá thuê (Triệu / Tháng)</span>
+          <strong id="sfdPriceReadout" class="sfd-sec-val tabular-nums">Tất cả giá</strong>
+        </div>
+
+        <div class="sfd-hist-wrap" id="sfdPriceHist" aria-hidden="true"></div>
+
+        <div class="sfd-dual-slider">
+          <div class="sfd-track-bg"></div>
+          <div class="sfd-track-fill" id="sfdTrackFill"></div>
+          <input type="range" id="sfdSliderMin" min="0" max="30" step="0.5" value="0" oninput="onSmartPriceSliderInput('min')">
+          <input type="range" id="sfdSliderMax" min="0" max="30" step="0.5" value="30" oninput="onSmartPriceSliderInput('max')">
+        </div>
+
+        <div class="sfd-price-inputs">
+          <div class="sfd-price-box">
+            <label for="sfdMinInput">Tối thiểu</label>
+            <div class="sfd-price-inp-row">
+              <input type="number" id="sfdMinInput" min="0" step="0.5" placeholder="0" class="tabular-nums" oninput="onSmartPriceBoxInput()">
+              <span>Tr</span>
+            </div>
+          </div>
+          <span class="sfd-price-dash">–</span>
+          <div class="sfd-price-box">
+            <label for="sfdMaxInput">Tối đa</label>
+            <div class="sfd-price-inp-row">
+              <input type="number" id="sfdMaxInput" min="0" step="0.5" placeholder="30+" class="tabular-nums" oninput="onSmartPriceBoxInput()">
+              <span>Tr</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sfd-chip-row" id="sfdPricePresets" style="margin-top:10px;">
+          <button type="button" class="sfd-chip active" onclick="pickSmartPricePreset(0, 999, 'Tất cả giá', this)">Tất cả</button>
+          <button type="button" class="sfd-chip" onclick="pickSmartPricePreset(0, 3.5, 'Dưới 3.5 Triệu', this)">Dưới 3.5 Tr</button>
+          <button type="button" class="sfd-chip" onclick="pickSmartPricePreset(3.5, 7, '3.5 - 7 Triệu', this)">3.5 – 7 Tr</button>
+          <button type="button" class="sfd-chip" onclick="pickSmartPricePreset(7, 15, '7 - 15 Triệu', this)">7 – 15 Tr</button>
+          <button type="button" class="sfd-chip" onclick="pickSmartPricePreset(15, 30, '15 - 30 Triệu', this)">15 – 30 Tr</button>
+          <button type="button" class="sfd-chip" onclick="pickSmartPricePreset(20, 999, 'Trên 20 Triệu', this)">Trên 20 Tr</button>
+        </div>
+      </div>
+
+      <!-- 3. Khu vực & Vị trí -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Khu vực & Vị trí</span>
+        </div>
+        <div class="sfd-loc-grid">
+          <div>
+            <label for="megaCitySelect" class="sfd-field-label">Tỉnh / Thành</label>
+            <select id="megaCitySelect" class="hsp-select" onchange="onMegaCityChange()">
+              <option value="all">Tất cả Tỉnh / Thành</option>
+              <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
+              <option value="TP. Hà Nội">TP. Hà Nội</option>
+              <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
+              <option value="Bình Dương">Bình Dương</option>
+              <option value="Đồng Nai">Đồng Nai</option>
+              <option value="TP. Cần Thơ">TP. Cần Thơ</option>
+            </select>
+          </div>
+          <div>
+            <label for="megaWardSelect" class="sfd-field-label">Phường / Xã</label>
+            <select id="megaWardSelect" class="hsp-select" onchange="onMegaWardChange()">
+              <option value="all">Tất cả Phường / Xã</option>
+            </select>
+          </div>
+          <div>
+            <label for="megaStreetSelect" class="sfd-field-label">Tên Đường</label>
+            <select id="megaStreetSelect" class="hsp-select" onchange="updateMegaLiveCount()">
+              <option value="all">Tất cả Đường</option>
+            </select>
+          </div>
+          <div>
+            <label for="megaProjectSelect" class="sfd-field-label">Dự Án</label>
+            <select id="megaProjectSelect" class="hsp-select" onchange="onMegaProjectChange()">
+              <option value="all">Tất cả Dự Án</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Diện tích, Phòng ngủ & Nội thất (1-Click Segmented) -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Diện tích tối thiểu</span>
+        </div>
+        <div class="sfd-seg-group" id="sfdAreaGroup">
+          <button type="button" class="sfd-seg-btn active" data-val="0" onclick="pickDrawerArea(0, this)">Tất cả</button>
+          <button type="button" class="sfd-seg-btn" data-val="20" onclick="pickDrawerArea(20, this)">≥ 20m²</button>
+          <button type="button" class="sfd-seg-btn" data-val="35" onclick="pickDrawerArea(35, this)">≥ 35m²</button>
+          <button type="button" class="sfd-seg-btn" data-val="60" onclick="pickDrawerArea(60, this)">≥ 60m²</button>
+          <button type="button" class="sfd-seg-btn" data-val="100" onclick="pickDrawerArea(100, this)">≥ 100m²</button>
+        </div>
+
+        <div class="sfd-sec-head" style="margin-top:14px;">
+          <span>Số phòng ngủ</span>
+        </div>
+        <div class="sfd-seg-group" id="sfdBedsGroup">
+          <button type="button" class="sfd-seg-btn active" data-val="all" onclick="pickDrawerBeds('all', this)">Tất cả</button>
+          <button type="button" class="sfd-seg-btn" data-val="1 PN" onclick="pickDrawerBeds('1 PN', this)">1 PN</button>
+          <button type="button" class="sfd-seg-btn" data-val="2 PN" onclick="pickDrawerBeds('2 PN', this)">2 PN</button>
+          <button type="button" class="sfd-seg-btn" data-val="3 PN" onclick="pickDrawerBeds('3 PN', this)">3 PN</button>
+          <button type="button" class="sfd-seg-btn" data-val="4+ PN" onclick="pickDrawerBeds('4+ PN', this)">4+ PN</button>
+        </div>
+
+        <div class="sfd-sec-head" style="margin-top:14px;">
+          <span>Nội thất</span>
+        </div>
+        <div class="sfd-seg-group" id="sfdFurnGroup">
+          <button type="button" class="sfd-seg-btn active" data-val="all" onclick="pickDrawerFurniture('all', this)">Tất cả</button>
+          <button type="button" class="sfd-seg-btn" data-val="Đầy Đủ" onclick="pickDrawerFurniture('Đầy Đủ', this)">Đầy Đủ</button>
+          <button type="button" class="sfd-seg-btn" data-val="Cơ Bản" onclick="pickDrawerFurniture('Cơ Bản', this)">Cơ Bản</button>
+          <button type="button" class="sfd-seg-btn" data-val="Không Có" onclick="pickDrawerFurniture('Không Có', this)">Không Có</button>
+        </div>
+      </div>
+
+      <!-- 5. Tiêu chí người thuê & Tiện ích 1 chạm -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Chi phí & Tiện ích nổi bật</span>
+        </div>
+        <div class="sfd-chip-row" id="sfdTraitsGroup">
+          <button type="button" class="sfd-chip hsp-q-pill" data-trait="elec-state" onclick="toggleDrawerTrait(this, 'elec-state')">
+            <i class="fa-solid fa-bolt"></i> Điện Nhà nước
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" data-trait="free-deposit" onclick="toggleDrawerTrait(this, 'free-deposit')">
+            <i class="fa-solid fa-hand-holding-dollar"></i> Miễn cọc
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" data-trait="vip-only" onclick="toggleDrawerTrait(this, 'vip-only')">
+            <i class="fa-solid fa-crown"></i> Tin VIP xác minh
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Ban công')">
+            <i class="fa-solid fa-sun"></i> Ban công
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Thang máy')">
+            <i class="fa-solid fa-elevator"></i> Thang máy
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Máy lạnh')">
+            <i class="fa-solid fa-snowflake"></i> Máy lạnh
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Giờ giấc tự do')">
+            <i class="fa-solid fa-clock"></i> Giờ tự do
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Gác lửng')">
+            <i class="fa-solid fa-layer-group"></i> Có gác
+          </button>
+          <button type="button" class="sfd-chip hsp-q-pill" onclick="toggleMegaQuickChip(this, 'util', 'Thú cưng')">
+            <i class="fa-solid fa-paw"></i> Nuôi thú cưng
+          </button>
+        </div>
+
+        <div class="sfd-sec-head" style="margin-top:14px;">
+          <span>Hướng nhà</span>
+        </div>
+        <div class="sfd-chip-row" id="sfdDirGroup">
+          <button type="button" class="sfd-chip active" data-val="all" onclick="pickDrawerDirection('all', this)">Tất cả</button>
+          <button type="button" class="sfd-chip" data-val="Đông" onclick="pickDrawerDirection('Đông', this)">Đông</button>
+          <button type="button" class="sfd-chip" data-val="Tây" onclick="pickDrawerDirection('Tây', this)">Tây</button>
+          <button type="button" class="sfd-chip" data-val="Nam" onclick="pickDrawerDirection('Nam', this)">Nam</button>
+          <button type="button" class="sfd-chip" data-val="Bắc" onclick="pickDrawerDirection('Bắc', this)">Bắc</button>
+          <button type="button" class="sfd-chip" data-val="Đông Nam" onclick="pickDrawerDirection('Đông Nam', this)">Đông Nam</button>
+          <button type="button" class="sfd-chip" data-val="Đông Bắc" onclick="pickDrawerDirection('Đông Bắc', this)">Đông Bắc</button>
+          <button type="button" class="sfd-chip" data-val="Tây Nam" onclick="pickDrawerDirection('Tây Nam', this)">Tây Nam</button>
+          <button type="button" class="sfd-chip" data-val="Tây Bắc" onclick="pickDrawerDirection('Tây Bắc', this)">Tây Bắc</button>
+        </div>
+      </div>
+
+      <!-- 6. Sắp xếp & Đồng bộ Bản đồ -->
+      <div class="sfd-section">
+        <div class="sfd-sec-head">
+          <span>Sắp xếp kết quả</span>
+        </div>
+        <div class="sfd-chip-row" id="sfdSortGroup">
+          <button type="button" class="sfd-chip active" data-sort="vip" onclick="pickDrawerSort('vip', this)">Ưu tiên (VIP)</button>
+          <button type="button" class="sfd-chip" data-sort="price-asc" onclick="pickDrawerSort('price-asc', this)">Giá thấp → cao</button>
+          <button type="button" class="sfd-chip" data-sort="price-desc" onclick="pickDrawerSort('price-desc', this)">Giá cao → thấp</button>
+          <button type="button" class="sfd-chip" data-sort="area-desc" onclick="pickDrawerSort('area-desc', this)">Diện tích lớn</button>
+          <button type="button" class="sfd-chip" data-sort="newest" onclick="pickDrawerSort('newest', this)">Mới nhất</button>
+        </div>
+
+        <label class="sfd-map-sync-row">
+          <input type="checkbox" id="sfdSyncMapToggle" checked>
+          <span><strong>Đồng bộ ghim trên Bản đồ</strong> theo điều kiện lọc đang chọn</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="sfd-footer">
+      <button type="button" class="sfd-btn-reset" onclick="resetMegaSearchFilters()">
+        <i class="fa-solid fa-rotate-left"></i> Đặt lại
+      </button>
+      <button type="button" class="sfd-btn-apply" onclick="executeMegaSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span id="megaLiveMatchBadge" class="tabular-nums">Xem kết quả</span>
+      </button>
+    </div>
+  </aside>
 
   <!-- ========================================================================
        ROUTE 1: TRANG CHỦ (#view-home)
@@ -1872,6 +2010,6 @@
   <script src="data/listings_1000.js?v=20261119z23"></script>
   <script src="data/listings_4000_a.js?v=20261119z21"></script>
   <script src="data/listings_4000_b.js?v=20261119z21"></script>
-  <script src="app.js?v=20261119z30"></script></script></script></script></script>
+  <script src="app.js?v=20261119z32"></script></script></script></script></script>
 </body>
 </html>
