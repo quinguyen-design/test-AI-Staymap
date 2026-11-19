@@ -3124,7 +3124,7 @@ function submitZaloViewingSchedule(propId) {
   const phoneEl = document.getElementById("schedTenantPhone");
   const phone = (phoneEl?.value || "").replace(/\D/g, "").trim();
   if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
-    showCttNotice("Số điện thoại chưa hợp lệ", "Vui lòng nhập đúng Số Điện Thoại / Zalo 10 số (bắt đầu 03/05/07/08/09) để chủ nhà xác nhận lịch hẹn.");
+    showCttNotice("Số điện thoại chưa hợp lệ", "Vui lòng nhập đúng Số Điện Thoại 10 số (bắt đầu 03/05/07/08/09) để chủ nhà xác nhận lịch hẹn.");
     phoneEl?.focus();
     return;
   }
@@ -4508,7 +4508,7 @@ function validateStudioStepBeforeNext(stepNum) {
       return false;
     }
     if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
-      showStudioStepError("Vui lòng nhập đúng Số Điện Thoại / Zalo Việt Nam (10 số, bắt đầu 03/05/07/08/09).");
+      showStudioStepError("Vui lòng nhập đúng Số Điện Thoại Việt Nam (10 số, bắt đầu 03/05/07/08/09).");
       document.getElementById("dPhone")?.focus();
       return false;
     }
