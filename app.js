@@ -1805,6 +1805,15 @@ function pickMegaCat(catKey, pillEl) {
   updateMegaLiveCount();
 }
 
+function populateMegaCities() {
+  const cityEl = document.getElementById("megaCitySelect");
+  if (!cityEl || typeof STUDIO_CITIES === "undefined") return;
+  const currentVal = cityEl.value || "TP. Hồ Chí Minh";
+  cityEl.innerHTML =
+    `<option value="all">Tất cả 34 Tỉnh / Thành</option>` +
+    STUDIO_CITIES.map((c) => `<option value="${c.value}" ${c.value === currentVal ? "selected" : ""}>${c.label}</option>`).join("");
+}
+
 function populateMegaWards() {
   const city = document.getElementById("megaCitySelect")?.value || "all";
   const wardEl = document.getElementById("megaWardSelect");
@@ -1812,31 +1821,42 @@ function populateMegaWards() {
   const wards = city !== "all" && STUDIO_WARDS_BY_CITY[city]
     ? STUDIO_WARDS_BY_CITY[city]
     : Object.values(STUDIO_WARDS_BY_CITY).flat();
-  wardEl.innerHTML = `<option value="all">Tất cả Phường / Xã</option>` +
+  wardEl.innerHTML = `<option value="all">Tất cả Phường / Xã (${wards.length})</option>` +
     wards.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
   populateMegaStreets();
 }
 
 function populateMegaStreets() {
+  const city = document.getElementById("megaCitySelect")?.value || "all";
   const ward = document.getElementById("megaWardSelect")?.value || "all";
   const streetEl = document.getElementById("megaStreetSelect");
   if (!streetEl) return;
-  const streets = ward !== "all" && STUDIO_STREETS_BY_WARD[ward]
-    ? STUDIO_STREETS_BY_WARD[ward]
-    : Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat()));
-  streetEl.innerHTML = `<option value="all">Tất cả Tên Đường</option>` +
+  let streets = [];
+  if (ward !== "all" && STUDIO_STREETS_BY_WARD[ward]) {
+    streets = STUDIO_STREETS_BY_WARD[ward];
+  } else if (city !== "all" && STUDIO_WARDS_BY_CITY[city]) {
+    const cityWards = STUDIO_WARDS_BY_CITY[city].map((w) => w.value);
+    streets = Array.from(new Set(cityWards.flatMap((w) => STUDIO_STREETS_BY_WARD[w] || [])));
+  } else {
+    streets = Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat()));
+  }
+  streetEl.innerHTML = `<option value="all">Tất cả Tên Đường (${streets.length})</option>` +
     streets.map((s) => `<option value="${s}">${s}</option>`).join("");
 }
 
 function populateMegaProjects() {
+  const city = document.getElementById("megaCitySelect")?.value || "all";
   const projEl = document.getElementById("megaProjectSelect");
   if (!projEl || typeof STUDIO_PROJECTS === "undefined") return;
-  projEl.innerHTML = `<option value="all">Tất cả Dự Án</option>` +
-    STUDIO_PROJECTS.map((pr) => `<option value="${pr.value}">${pr.label}</option>`).join("");
+  const projs = city !== "all" ? STUDIO_PROJECTS.filter((pr) => pr.city === city) : STUDIO_PROJECTS;
+  const list = projs.length ? projs : STUDIO_PROJECTS;
+  projEl.innerHTML = `<option value="all">Tất cả Dự Án (${list.length})</option>` +
+    list.map((pr) => `<option value="${pr.value}">${pr.label}</option>`).join("");
 }
 
 function onMegaCityChange() {
   populateMegaWards();
+  populateMegaProjects();
   updateMegaLiveCount();
 }
 
@@ -2076,6 +2096,7 @@ function resetMegaSearchFilters() {
 }
 
 function initMegaSearchSync() {
+  populateMegaCities();
   populateMegaWards();
   populateMegaProjects();
   updateMegaSliderLabels();
@@ -4392,48 +4413,538 @@ function calcStudioCheckoutPricing(z, dur, stObj, promoCode) {
 
 const STUDIO_WARDS_BY_CITY = {
   "TP. Hồ Chí Minh": [
-    { value: "P. Cầu Kiệu", label: "P. Cầu Kiệu (Phú Nhuận)" },
-    { value: "P. Hòa Hưng", label: "P. Hòa Hưng (Quận 10)" },
+    // Khu vực Quận 1 (cũ) -> 4 Phường mới
+    { value: "P. Sài Gòn", label: "P. Sài Gòn (Quận 1)" },
+    { value: "P. Tân Định", label: "P. Tân Định (Quận 1)" },
+    { value: "P. Bến Thành", label: "P. Bến Thành (Quận 1)" },
+    { value: "P. Cầu Ông Lãnh", label: "P. Cầu Ông Lãnh (Quận 1)" },
+    // Khu vực Quận 3 (cũ) -> 3 Phường mới
+    { value: "P. Bàn Cờ", label: "P. Bàn Cờ (Quận 3)" },
+    { value: "P. Xuân Hòa", label: "P. Xuân Hòa (Quận 3)" },
     { value: "P. Nhiêu Lộc", label: "P. Nhiêu Lộc (Quận 3)" },
+    // Khu vực Quận 4 (cũ) -> 3 Phường mới
+    { value: "P. Vĩnh Hội", label: "P. Vĩnh Hội (Quận 4)" },
+    { value: "P. Khánh Hội", label: "P. Khánh Hội (Quận 4)" },
+    { value: "P. Xóm Chiếu", label: "P. Xóm Chiếu (Quận 4)" },
+    // Khu vực Quận 5 (cũ) -> 3 Phường mới
+    { value: "P. Chợ Quán", label: "P. Chợ Quán (Quận 5)" },
+    { value: "P. An Đông", label: "P. An Đông (Quận 5)" },
+    { value: "P. Chợ Lớn", label: "P. Chợ Lớn (Quận 5)" },
+    // Khu vực Quận 6 (cũ) -> 4 Phường mới
+    { value: "P. Bình Tiên", label: "P. Bình Tiên (Quận 6)" },
+    { value: "P. Bình Tây", label: "P. Bình Tây (Quận 6)" },
+    { value: "P. Bình Phú", label: "P. Bình Phú (Quận 6)" },
+    { value: "P. Phú Lâm", label: "P. Phú Lâm (Quận 6)" },
+    // Khu vực Quận 7 (cũ) -> 4 Phường mới
+    { value: "P. Tân Thuận", label: "P. Tân Thuận (Quận 7)" },
+    { value: "P. Phú Thuận", label: "P. Phú Thuận (Quận 7)" },
+    { value: "P. Tân Mỹ", label: "P. Tân Mỹ (Quận 7)" },
+    { value: "P. Tân Hưng", label: "P. Tân Hưng (Quận 7)" },
+    // Khu vực Quận 8 (cũ) -> 3 Phường mới
+    { value: "P. Chánh Hưng", label: "P. Chánh Hưng (Quận 8)" },
+    { value: "P. Bình Đông", label: "P. Bình Đông (Quận 8)" },
+    { value: "P. Phú Định", label: "P. Phú Định (Quận 8)" },
+    // Khu vực Quận 10 (cũ) -> 3 Phường mới
+    { value: "P. Vườn Lài", label: "P. Vườn Lài (Quận 10)" },
+    { value: "P. Diên Hồng", label: "P. Diên Hồng (Quận 10)" },
+    { value: "P. Hòa Hưng", label: "P. Hòa Hưng (Quận 10)" },
+    // Khu vực Quận 11 (cũ) -> 4 Phường mới
+    { value: "P. Minh Phụng", label: "P. Minh Phụng (Quận 11)" },
+    { value: "P. Bình Thới", label: "P. Bình Thới (Quận 11)" },
+    { value: "P. Hòa Bình", label: "P. Hòa Bình (Quận 11)" },
+    { value: "P. Phú Thọ", label: "P. Phú Thọ (Quận 11)" },
+    // Khu vực Quận 12 (cũ) -> 5 Phường mới
+    { value: "P. Đông Hưng Thuận", label: "P. Đông Hưng Thuận (Quận 12)" },
+    { value: "P. Trung Mỹ Tây", label: "P. Trung Mỹ Tây (Quận 12)" },
+    { value: "P. Tân Thới Hiệp", label: "P. Tân Thới Hiệp (Quận 12)" },
+    { value: "P. Thới An", label: "P. Thới An (Quận 12)" },
+    { value: "P. An Phú Đông", label: "P. An Phú Đông (Quận 12)" },
+    // Khu vực Quận Bình Thạnh (cũ) -> 5 Phường mới
     { value: "P. Gia Định", label: "P. Gia Định (Bình Thạnh)" },
+    { value: "P. Bình Thạnh", label: "P. Bình Thạnh (Bình Thạnh)" },
+    { value: "P. Bình Lợi Trung", label: "P. Bình Lợi Trung (Bình Thạnh)" },
+    { value: "P. Thạnh Mỹ Tây", label: "P. Thạnh Mỹ Tây (Bình Thạnh)" },
+    { value: "P. Bình Quới", label: "P. Bình Quới (Bình Thạnh)" },
+    // Khu vực Quận Phú Nhuận (cũ) -> 3 Phường mới
+    { value: "P. Cầu Kiệu", label: "P. Cầu Kiệu (Phú Nhuận)" },
+    { value: "P. Phú Nhuận", label: "P. Phú Nhuận (Phú Nhuận)" },
+    { value: "P. Đức Nhuận", label: "P. Đức Nhuận (Phú Nhuận)" },
+    // Khu vực Quận Gò Vấp (cũ) -> 6 Phường mới
+    { value: "P. Hạnh Thông", label: "P. Hạnh Thông (Gò Vấp)" },
+    { value: "P. An Nhơn", label: "P. An Nhơn (Gò Vấp)" },
+    { value: "P. Gò Vấp", label: "P. Gò Vấp (Gò Vấp)" },
+    { value: "P. Thông Tây Hội", label: "P. Thông Tây Hội (Gò Vấp)" },
+    { value: "P. An Hội Tây", label: "P. An Hội Tây (Gò Vấp)" },
+    { value: "P. An Hội Đông", label: "P. An Hội Đông (Gò Vấp)" },
+    // Khu vực Quận Tân Bình (cũ) -> 6 Phường mới
+    { value: "P. Tân Sơn Hòa", label: "P. Tân Sơn Hòa (Tân Bình)" },
+    { value: "P. Tân Sơn Nhất", label: "P. Tân Sơn Nhất (Tân Bình)" },
+    { value: "P. Tân Hòa", label: "P. Tân Hòa (Tân Bình)" },
+    { value: "P. Bảy Hiền", label: "P. Bảy Hiền (Tân Bình)" },
+    { value: "P. Tân Bình", label: "P. Tân Bình (Tân Bình)" },
+    { value: "P. Tân Sơn", label: "P. Tân Sơn (Tân Bình)" },
+    // Khu vực Quận Tân Phú (cũ) -> 5 Phường mới
+    { value: "P. Tây Thạnh", label: "P. Tây Thạnh (Tân Phú)" },
+    { value: "P. Tân Sơn Nhì", label: "P. Tân Sơn Nhì (Tân Phú)" },
+    { value: "P. Phú Thọ Hòa", label: "P. Phú Thọ Hòa (Tân Phú)" },
+    { value: "P. Phú Thạnh", label: "P. Phú Thạnh (Tân Phú)" },
+    { value: "P. Tân Phú", label: "P. Tân Phú (Tân Phú)" },
+    // Khu vực Quận Bình Tân (cũ) -> 5 Phường mới
+    { value: "P. Bình Tân", label: "P. Bình Tân (Bình Tân)" },
+    { value: "P. Bình Hưng Hòa", label: "P. Bình Hưng Hòa (Bình Tân)" },
+    { value: "P. Bình Trị Đông", label: "P. Bình Trị Đông (Bình Tân)" },
+    { value: "P. An Lạc", label: "P. An Lạc (Bình Tân)" },
+    { value: "P. Tân Tạo", label: "P. Tân Tạo (Bình Tân)" },
+    // Khu vực TP. Thủ Đức (cũ) -> 12 Phường mới
+    { value: "P. Hiệp Bình", label: "P. Hiệp Bình (Thủ Đức)" },
+    { value: "P. Tam Bình", label: "P. Tam Bình (Thủ Đức)" },
+    { value: "P. Thủ Đức", label: "P. Thủ Đức (Thủ Đức)" },
+    { value: "P. Linh Xuân", label: "P. Linh Xuân (Thủ Đức)" },
+    { value: "P. Long Bình", label: "P. Long Bình (Thủ Đức)" },
+    { value: "P. Tăng Nhơn Phú", label: "P. Tăng Nhơn Phú (Thủ Đức)" },
+    { value: "P. Phước Long", label: "P. Phước Long (Thủ Đức)" },
+    { value: "P. Long Phước", label: "P. Long Phước (Thủ Đức)" },
+    { value: "P. Long Trường", label: "P. Long Trường (Thủ Đức)" },
+    { value: "P. An Khánh", label: "P. An Khánh (Thủ Đức - Thảo Điền/Thủ Thiêm)" },
+    { value: "P. Bình Trưng", label: "P. Bình Trưng (Thủ Đức)" },
+    { value: "P. Cát Lái", label: "P. Cát Lái (Thủ Đức - Thạnh Mỹ Lợi)" },
     { value: "P. Thảo Điền", label: "P. Thảo Điền (Thủ Đức)" },
     { value: "P. An Phú", label: "P. An Phú (Thủ Đức)" },
-    { value: "P. Long Bình", label: "P. Long Bình (Thủ Đức)" }
+    // Khu vực Bình Dương & Bà Rịa - Vũng Tàu sáp nhập vào TP.HCM
+    { value: "P. Thủ Dầu Một", label: "P. Thủ Dầu Một (Bình Dương)" },
+    { value: "P. Phú Lợi", label: "P. Phú Lợi (Bình Dương)" },
+    { value: "P. Dĩ An", label: "P. Dĩ An (Bình Dương)" },
+    { value: "P. Đông Hòa", label: "P. Đông Hòa (Dĩ An - Làng ĐH)" },
+    { value: "P. Tân Đông Hiệp", label: "P. Tân Đông Hiệp (Dĩ An)" },
+    { value: "P. Thuận An", label: "P. Thuận An (Bình Dương)" },
+    { value: "P. Bình Hòa", label: "P. Bình Hòa (Thuận An)" },
+    { value: "P. Lái Thiêu", label: "P. Lái Thiêu (Thuận An)" },
+    { value: "P. Vũng Tàu", label: "P. Vũng Tàu (Bà Rịa - Vũng Tàu)" },
+    { value: "P. Tam Thắng", label: "P. Tam Thắng (Vũng Tàu)" },
+    { value: "P. Phú Mỹ", label: "P. Phú Mỹ (Bà Rịa - Vũng Tàu)" },
+    // Khu vực các Xã ngoại thành mới
+    { value: "X. Nhà Bè", label: "X. Nhà Bè (TP.HCM)" },
+    { value: "X. Hiệp Phước", label: "X. Hiệp Phước (Nhà Bè)" },
+    { value: "X. Bình Hưng", label: "X. Bình Hưng (Bình Chánh)" },
+    { value: "X. Bình Chánh", label: "X. Bình Chánh (TP.HCM)" },
+    { value: "X. Vĩnh Lộc", label: "X. Vĩnh Lộc (Bình Chánh)" },
+    { value: "X. Hóc Môn", label: "X. Hóc Môn (TP.HCM)" },
+    { value: "X. Bà Điểm", label: "X. Bà Điểm (Hóc Môn)" },
+    { value: "X. Đông Thạnh", label: "X. Đông Thạnh (Hóc Môn)" },
+    { value: "X. Củ Chi", label: "X. Củ Chi (TP.HCM)" }
   ],
   "TP. Hà Nội": [
-    { value: "P. Đống Đa", label: "P. Đống Đa (Đống Đa)" },
-    { value: "P. Cầu Giấy", label: "P. Cầu Giấy (Cầu Giấy)" },
     { value: "P. Hoàn Kiếm", label: "P. Hoàn Kiếm (Hoàn Kiếm)" },
-    { value: "P. Thanh Xuân", label: "P. Thanh Xuân (Thanh Xuân)" }
+    { value: "P. Cửa Nam", label: "P. Cửa Nam (Hoàn Kiếm)" },
+    { value: "P. Hồng Hà", label: "P. Hồng Hà (Hoàn Kiếm - Ba Đình)" },
+    { value: "P. Ba Đình", label: "P. Ba Đình (Ba Đình)" },
+    { value: "P. Ngọc Hà", label: "P. Ngọc Hà (Ba Đình)" },
+    { value: "P. Giảng Võ", label: "P. Giảng Võ (Ba Đình)" },
+    { value: "P. Đống Đa", label: "P. Đống Đa (Đống Đa)" },
+    { value: "P. Láng", label: "P. Láng (Đống Đa)" },
+    { value: "P. Ô Chợ Dừa", label: "P. Ô Chợ Dừa (Đống Đa)" },
+    { value: "P. Kim Liên", label: "P. Kim Liên (Đống Đa)" },
+    { value: "P. Văn Miếu - Quốc Tử Giám", label: "P. Văn Miếu - Quốc Tử Giám (Đống Đa)" },
+    { value: "P. Hai Bà Trưng", label: "P. Hai Bà Trưng (Hai Bà Trưng)" },
+    { value: "P. Bạch Mai", label: "P. Bạch Mai (Hai Bà Trưng)" },
+    { value: "P. Vĩnh Tuy", label: "P. Vĩnh Tuy (Hai Bà Trưng)" },
+    { value: "P. Cầu Giấy", label: "P. Cầu Giấy (Cầu Giấy)" },
+    { value: "P. Nghĩa Đô", label: "P. Nghĩa Đô (Cầu Giấy)" },
+    { value: "P. Yên Hòa", label: "P. Yên Hòa (Cầu Giấy)" },
+    { value: "P. Thanh Xuân", label: "P. Thanh Xuân (Thanh Xuân)" },
+    { value: "P. Khương Đình", label: "P. Khương Đình (Thanh Xuân)" },
+    { value: "P. Phương Liệt", label: "P. Phương Liệt (Thanh Xuân)" },
+    { value: "P. Tây Hồ", label: "P. Tây Hồ (Tây Hồ)" },
+    { value: "P. Phú Thượng", label: "P. Phú Thượng (Tây Hồ)" },
+    { value: "P. Hoàng Mai", label: "P. Hoàng Mai (Hoàng Mai)" },
+    { value: "P. Hoàng Liệt", label: "P. Hoàng Liệt (Hoàng Mai)" },
+    { value: "P. Vĩnh Hưng", label: "P. Vĩnh Hưng (Hoàng Mai)" },
+    { value: "P. Tương Mai", label: "P. Tương Mai (Hoàng Mai)" },
+    { value: "P. Long Biên", label: "P. Long Biên (Long Biên)" },
+    { value: "P. Bồ Đề", label: "P. Bồ Đề (Long Biên)" },
+    { value: "P. Việt Hưng", label: "P. Việt Hưng (Long Biên)" },
+    { value: "P. Phúc Lợi", label: "P. Phúc Lợi (Long Biên)" },
+    { value: "P. Từ Liêm", label: "P. Từ Liêm (Nam Từ Liêm)" },
+    { value: "P. Tây Mỗ", label: "P. Tây Mỗ (Nam Từ Liêm)" },
+    { value: "P. Đại Mỗ", label: "P. Đại Mỗ (Nam Từ Liêm)" },
+    { value: "P. Xuân Phương", label: "P. Xuân Phương (Nam Từ Liêm)" },
+    { value: "P. Phú Diễn", label: "P. Phú Diễn (Bắc Từ Liêm)" },
+    { value: "P. Xuân Đỉnh", label: "P. Xuân Đỉnh (Bắc Từ Liêm)" },
+    { value: "P. Hà Đông", label: "P. Hà Đông (Hà Đông)" },
+    { value: "P. Dương Nội", label: "P. Dương Nội (Hà Đông)" },
+    { value: "P. Kiến Hưng", label: "P. Kiến Hưng (Hà Đông)" },
+    { value: "X. Gia Lâm", label: "X. Gia Lâm (Hà Nội)" },
+    { value: "X. Đông Anh", label: "X. Đông Anh (Hà Nội)" }
+  ],
+  "TP. Đà Nẵng": [
+    { value: "P. Hải Châu", label: "P. Hải Châu (Trung tâm Đà Nẵng)" },
+    { value: "P. Hòa Cường", label: "P. Hòa Cường (Hải Châu)" },
+    { value: "P. Thanh Khê", label: "P. Thanh Khê (Thanh Khê)" },
+    { value: "P. An Khê", label: "P. An Khê (Thanh Khê)" },
+    { value: "P. An Hải", label: "P. An Hải (Sơn Trà)" },
+    { value: "P. Sơn Trà", label: "P. Sơn Trà (Sơn Trà)" },
+    { value: "P. Ngũ Hành Sơn", label: "P. Ngũ Hành Sơn (Ngũ Hành Sơn)" },
+    { value: "P. Hòa Khánh", label: "P. Hòa Khánh (Liên Chiểu)" },
+    { value: "P. Liên Chiểu", label: "P. Liên Chiểu (Liên Chiểu)" },
+    { value: "P. Cẩm Lệ", label: "P. Cẩm Lệ (Cẩm Lệ)" },
+    { value: "P. Hòa Xuân", label: "P. Hòa Xuân (Cẩm Lệ)" },
+    { value: "P. Hội An", label: "P. Hội An (Quảng Nam - Đà Nẵng)" },
+    { value: "P. Tam Kỳ", label: "P. Tam Kỳ (Quảng Nam - Đà Nẵng)" }
+  ],
+  "TP. Hải Phòng": [
+    { value: "P. Hồng Bàng", label: "P. Hồng Bàng (Hải Phòng)" },
+    { value: "P. Ngô Quyền", label: "P. Ngô Quyền (Hải Phòng)" },
+    { value: "P. Gia Viên", label: "P. Gia Viên (Ngô Quyền)" },
+    { value: "P. Lê Chân", label: "P. Lê Chân (Hải Phòng)" },
+    { value: "P. An Biên", label: "P. An Biên (Lê Chân)" },
+    { value: "P. Hải An", label: "P. Hải An (Hải Phòng)" },
+    { value: "P. Thủy Nguyên", label: "P. Thủy Nguyên (Hải Phòng)" },
+    { value: "P. Thiên Hương", label: "P. Thiên Hương (Thủy Nguyên)" },
+    { value: "P. Hải Dương", label: "P. Hải Dương (Hải Phòng mới)" }
+  ],
+  "TP. Cần Thơ": [
+    { value: "P. Ninh Kiều", label: "P. Ninh Kiều (Trung tâm Cần Thơ)" },
+    { value: "P. Cái Khế", label: "P. Cái Khế (Ninh Kiều)" },
+    { value: "P. An Bình", label: "P. An Bình (Ninh Kiều)" },
+    { value: "P. Bình Thủy", label: "P. Bình Thủy (Cần Thơ)" },
+    { value: "P. Cái Răng", label: "P. Cái Răng (Cần Thơ)" },
+    { value: "P. Hưng Phú", label: "P. Hưng Phú (Cái Răng)" },
+    { value: "P. Vị Thanh", label: "P. Vị Thanh (Hậu Giang - Cần Thơ)" },
+    { value: "P. Sóc Trăng", label: "P. Sóc Trăng (Sóc Trăng - Cần Thơ)" }
+  ],
+  "TP. Huế": [
+    { value: "P. Thuận Hóa", label: "P. Thuận Hóa (Trung tâm TP. Huế)" },
+    { value: "P. Phú Xuân", label: "P. Phú Xuân (TP. Huế)" },
+    { value: "P. An Cựu", label: "P. An Cựu (TP. Huế)" },
+    { value: "P. Vỹ Dạ", label: "P. Vỹ Dạ (TP. Huế)" },
+    { value: "P. Thủy Xuân", label: "P. Thủy Xuân (TP. Huế)" }
+  ],
+  "TP. Đồng Nai": [
+    { value: "P. Biên Hòa", label: "P. Biên Hòa (Đồng Nai)" },
+    { value: "P. Trấn Biên", label: "P. Trấn Biên (Biên Hòa)" },
+    { value: "P. Hố Nai", label: "P. Hố Nai (Biên Hòa)" },
+    { value: "P. Trảng Dài", label: "P. Trảng Dài (Biên Hòa)" },
+    { value: "P. Long Bình", label: "P. Long Bình (Biên Hòa)" },
+    { value: "P. Tam Phước", label: "P. Tam Phước (Biên Hòa)" },
+    { value: "P. Long Khánh", label: "P. Long Khánh (Đồng Nai)" },
+    { value: "P. Đồng Xoài", label: "P. Đồng Xoài (Bình Phước - Đồng Nai)" },
+    { value: "X. Long Thành", label: "X. Long Thành (Sân bay Long Thành)" },
+    { value: "X. Nhơn Trạch", label: "X. Nhơn Trạch (Đồng Nai)" }
+  ],
+  "Tỉnh Bắc Ninh": [
+    { value: "P. Kinh Bắc", label: "P. Kinh Bắc (Trung tâm Bắc Ninh)" },
+    { value: "P. Võ Cường", label: "P. Võ Cường (Bắc Ninh)" },
+    { value: "P. Hạp Lĩnh", label: "P. Hạp Lĩnh (Bắc Ninh)" },
+    { value: "P. Từ Sơn", label: "P. Từ Sơn (Bắc Ninh)" },
+    { value: "P. Đồng Nguyên", label: "P. Đồng Nguyên (Từ Sơn)" },
+    { value: "P. Bắc Giang", label: "P. Bắc Giang (Bắc Ninh mới)" },
+    { value: "X. Yên Phong", label: "X. Yên Phong (KCN Yên Phong)" }
+  ],
+  "Tỉnh Khánh Hòa": [
+    { value: "P. Nha Trang", label: "P. Nha Trang (Trung tâm Nha Trang)" },
+    { value: "P. Bắc Nha Trang", label: "P. Bắc Nha Trang (Khánh Hòa)" },
+    { value: "P. Nam Nha Trang", label: "P. Nam Nha Trang (Khánh Hòa)" },
+    { value: "P. Tây Nha Trang", label: "P. Tây Nha Trang (Khánh Hòa)" },
+    { value: "P. Cam Ranh", label: "P. Cam Ranh (Khánh Hòa)" },
+    { value: "P. Phan Rang", label: "P. Phan Rang (Ninh Thuận - Khánh Hòa)" }
+  ],
+  "Tỉnh Lâm Đồng": [
+    { value: "P. Xuân Hương - Đà Lạt", label: "P. Xuân Hương - Đà Lạt (Trung tâm)" },
+    { value: "P. Lâm Viên - Đà Lạt", label: "P. Lâm Viên - Đà Lạt" },
+    { value: "P. Cam Ly - Đà Lạt", label: "P. Cam Ly - Đà Lạt" },
+    { value: "P. Xuân Trường - Đà Lạt", label: "P. Xuân Trường - Đà Lạt" },
+    { value: "P. Bảo Lộc", label: "P. Bảo Lộc (Lâm Đồng)" },
+    { value: "P. Phan Thiết", label: "P. Phan Thiết (Bình Thuận - Lâm Đồng)" }
+  ],
+  "Tỉnh Quảng Ninh": [
+    { value: "P. Hạ Long", label: "P. Hạ Long (Quảng Ninh)" },
+    { value: "P. Bãi Cháy", label: "P. Bãi Cháy (Hạ Long)" },
+    { value: "P. Hồng Gai", label: "P. Hồng Gai (Hạ Long)" },
+    { value: "P. Cẩm Phả", label: "P. Cẩm Phả (Quảng Ninh)" },
+    { value: "P. Uông Bí", label: "P. Uông Bí (Quảng Ninh)" },
+    { value: "P. Móng Cái", label: "P. Móng Cái (Quảng Ninh)" }
+  ],
+  "Tỉnh Hưng Yên": [
+    { value: "P. Phố Hiến", label: "P. Phố Hiến (Trung tâm Hưng Yên)" },
+    { value: "X. Văn Giang", label: "X. Văn Giang (Vinhomes Ocean Park 2-3 / Ecopark)" },
+    { value: "P. Mỹ Hào", label: "P. Mỹ Hào (Hưng Yên)" },
+    { value: "P. Thái Bình", label: "P. Thái Bình (Thái Bình - Hưng Yên)" }
+  ],
+  "Tỉnh Tây Ninh": [
+    { value: "P. Tân Ninh", label: "P. Tân Ninh (Trung tâm Tây Ninh)" },
+    { value: "P. Long An", label: "P. Long An (Tân An - Tây Ninh)" },
+    { value: "X. Bến Lức", label: "X. Bến Lức (Long An - Tây Ninh)" },
+    { value: "X. Đức Hòa", label: "X. Đức Hòa (Long An - Tây Ninh)" }
+  ],
+  "Tỉnh An Giang": [
+    { value: "P. Long Xuyên", label: "P. Long Xuyên (An Giang)" },
+    { value: "P. Rạch Giá", label: "P. Rạch Giá (Kiên Giang - An Giang)" },
+    { value: "Đặc khu Phú Quốc", label: "Đặc khu Phú Quốc (An Giang mới)" }
   ]
 };
 
 const STUDIO_STREETS_BY_WARD = {
-  "P. Cầu Kiệu": ["Phan Xích Long", "Hoa Sứ", "Hoa Phượng", "Trường Sa", "Phan Đăng Lưu"],
-  "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái"],
-  "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Lý Chính Thắng"],
-  "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng"],
-  "P. Thảo Điền": ["Xa Lộ Hà Nội", "Xuân Thủy", "Thảo Điền", "Quốc Hương"],
-  "P. An Phú": ["Mai Chí Thọ", "Lương Định Của", "Trần Não", "Song Hành"],
-  "P. Long Bình": ["Nguyễn Xiển", "Phước Thiện", "Nguyễn Văn Tăng"],
-  "P. Đống Đa": ["Chùa Bộc", "Thái Hà", "Tây Sơn", "Xã Đàn"],
-  "P. Cầu Giấy": ["Xuân Thủy", "Trần Duy Hưng", "Cầu Giấy", "Trung Kính"],
-  "P. Hoàn Kiếm": ["Hàng Bài", "Tràng Tiền", "Lý Thường Kiệt", "Phố Huế"],
-  "P. Thanh Xuân": ["Nguyễn Trãi", "Lê Văn Lương", "Khuất Duy Tiến", "Vũ Trọng Phụng"]
+  // TP. Hồ Chí Minh
+  "P. Sài Gòn": ["Nguyễn Huệ", "Lê Lợi", "Đồng Khởi", "Tôn Đức Thắng", "Hàm Nghi", "Pasteur", "Lê Duẩn", "Nguyễn Du", "Lý Tự Trọng", "Hai Bà Trưng"],
+  "P. Tân Định": ["Hai Bà Trưng", "Trần Quang Khải", "Đinh Tiên Hoàng", "Nguyễn Văn Thủ", "Điện Biên Phủ", "Nguyễn Đình Chiểu", "Võ Thị Sáu", "Hoàng Sa"],
+  "P. Bến Thành": ["Lê Lai", "Lê Thánh Tôn", "Nguyễn Trãi", "Phạm Ngũ Lão", "Bùi Viện", "Cống Quỳnh", "Trần Hưng Đạo", "Nam Kỳ Khởi Nghĩa"],
+  "P. Cầu Ông Lãnh": ["Trần Hưng Đạo", "Nguyễn Thái Học", "Nguyễn Cư Trinh", "Cầu Ông Lãnh", "Cô Giang", "Cô Bắc", "Đề Thám", "Võ Văn Kiệt"],
+  "P. Bàn Cờ": ["Nguyễn Đình Chiểu", "Điện Biên Phủ", "Cao Thắng", "Nguyễn Thiện Thuật", "Bàn Cờ", "Võ Văn Tần", "Cách Mạng Tháng 8"],
+  "P. Xuân Hòa": ["Võ Thị Sáu", "Nam Kỳ Khởi Nghĩa", "Pasteur", "Phạm Ngọc Thạch", "Trần Quốc Toản", "Lý Chính Thắng", "Hai Bà Trưng"],
+  "P. Nhiêu Lộc": ["Lê Văn Sỹ", "Trần Quốc Thảo", "Hoàng Sa", "Trường Sa", "Lý Chính Thắng", "Nguyễn Phúc Nguyên", "Kỳ Đồng"],
+  "P. Vĩnh Hội": ["Hoàng Diệu", "Khánh Hội", "Bến Vân Đồn", "Vĩnh Hội", "Tôn Đản", "Đường số 41", "Đường số 45"],
+  "P. Khánh Hội": ["Khánh Hội", "Bến Vân Đồn", "Hoàng Diệu", "Tôn Đản", "Nguyễn Hữu Hào", "Đoàn Văn Bơ"],
+  "P. Xóm Chiếu": ["Xóm Chiếu", "Tôn Đản", "Đoàn Văn Bơ", "Nguyễn Tất Thành", "Tôn Thất Thuyết", "Lê Quốc Hưng"],
+  "P. Chợ Quán": ["Trần Bình Trọng", "Nguyễn Trãi", "Trần Hưng Đạo", "An Dương Vương", "Nguyễn Văn Cừ", "Lê Hồng Phong"],
+  "P. An Đông": ["An Dương Vương", "Nguyễn Trãi", "Trần Phú", "Hùng Vương", "Nguyễn Duy Dương", "Sư Vạn Hạnh"],
+  "P. Chợ Lớn": ["Nguyễn Trãi", "Trần Hưng Đạo", "Hải Thượng Lãn Ông", "Châu Văn Liêm", "Hồng Bàng", "Phùng Hưng"],
+  "P. Bình Tiên": ["Phạm Văn Chí", "Hậu Giang", "Minh Phụng", "Bình Tiên", "Võ Văn Kiệt", "Lò Gốm"],
+  "P. Bình Tây": ["Hậu Giang", "Tháp Mười", "Bình Tây", "Phạm Đình Hổ", "Lê Quang Sung", "Chu Văn An"],
+  "P. Bình Phú": ["Bình Phú", "Hậu Giang", "Nguyễn Văn Luông", "Đường số 10", "Đường số 23", "Kinh Dương Vương"],
+  "P. Phú Lâm": ["Kinh Dương Vương", "Bà Hom", "Tân Hòa Đông", "Nguyễn Văn Luông", "Phú Lâm", "Đặng Nguyên Cẩn"],
+  "P. Tân Thuận": ["Huỳnh Tấn Phát", "Nguyễn Văn Linh", "Tân Thuận", "Trần Xuân Soạn", "Bùi Văn Ba", "Lê Văn Lương"],
+  "P. Phú Thuận": ["Huỳnh Tấn Phát", "Phú Thuận", "Đào Trí", "Nguyễn Lương Bằng", "Hoàng Quốc Việt", "Gò Ô Môi"],
+  "P. Tân Mỹ": ["Nguyễn Lương Bằng", "Nguyễn Văn Linh", "Tân Mỹ", "Nguyễn Thị Thập", "Hoàng Văn Thái", "Tôn Dật Tiên"],
+  "P. Tân Hưng": ["Nguyễn Hữu Thọ", "Nguyễn Thị Thập", "Lê Văn Lương", "Trần Xuân Soạn", "Đường D1", "Đường số 36", "Tân Quy"],
+  "P. Chánh Hưng": ["Phạm Hùng", "Tạ Quang Bửu", "Dương Bá Trạc", "Chánh Hưng", "Cao Lỗ", "Bông Sao", "Đông Hồ"],
+  "P. Bình Đông": ["Bến Bình Đông", "Phạm Thế Hiển", "Tạ Quang Bửu", "Quốc Lộ 50", "Bình Đông", "Trịnh Quang Nghị"],
+  "P. Phú Định": ["Phạm Thế Hiển", "An Dương Vương", "Võ Văn Kiệt", "Phú Định", "Trương Đình Hội", "Hồ Học Lãm"],
+  "P. Vườn Lài": ["Lý Thái Tổ", "Lê Hồng Phong", "Sư Vạn Hạnh", "Ngô Gia Tự", "Nguyễn Chí Thanh", "Hùng Vương", "Bà Hạt"],
+  "P. Diên Hồng": ["Ba Tháng Hai", "Lý Thường Kiệt", "Nguyễn Tri Phương", "Thành Thái", "Đào Duy Từ", "Ngô Quyền"],
+  "P. Hòa Hưng": ["Cách Mạng Tháng 8", "Sư Vạn Hạnh", "Tô Hiến Thành", "Thành Thái", "Ba Tháng Hai", "Đồng Nai", "Bắc Hải"],
+  "P. Minh Phụng": ["Minh Phụng", "Ba Tháng Hai", "Hồng Bàng", "Hàn Hải Nguyên", "Lạc Long Quân", "Phó Cơ Điều"],
+  "P. Bình Thới": ["Bình Thới", "Ông Ích Khiêm", "Lạc Long Quân", "Minh Phụng", "Lãnh Binh Thăng", "Âu Cơ"],
+  "P. Hòa Bình": ["Hòa Bình", "Lạc Long Quân", "Âu Cơ", "Kênh Tân Hóa", "Đầm Sen", "Trịnh Đình Trọng"],
+  "P. Phú Thọ": ["Lý Thường Kiệt", "Lữ Gia", "Nguyễn Thị Nhỏ", "Ba Tháng Hai", "Lê Đại Hành", "Thiên Phước"],
+  "P. Đông Hưng Thuận": ["Trường Chinh", "Nguyễn Văn Quá", "Đông Hưng Thuận", "Phan Văn Hớn", "Song Hành Quốc Lộ 22", "Quang Trung"],
+  "P. Trung Mỹ Tây": ["Tô Ký", "Nguyễn Ảnh Thủ", "Quốc Lộ 22", "Dương Thị Mười", "Trung Mỹ Tây 13", "Tân Chánh Hiệp 10"],
+  "P. Tân Thới Hiệp": ["Nguyễn Ảnh Thủ", "Lê Văn Khương", "Dương Thị Mười", "Tân Thới Hiệp 21", "Hiệp Thành 13"],
+  "P. Thới An": ["Lê Văn Khương", "Lê Thị Riêng", "Hà Huy Giáp", "Thới An 16", "Thạnh Xuân 25", "Quốc Lộ 1A"],
+  "P. An Phú Đông": ["Vườn Lài", "Hà Huy Giáp", "Quốc Lộ 1A", "An Phú Đông 9", "An Phú Đông 27", "Thạnh Lộc 19"],
+  "P. Gia Định": ["Nguyễn Hữu Cảnh", "Điện Biên Phủ", "Phan Văn Trị", "Bạch Đằng", "Xô Viết Nghệ Tĩnh", "Đinh Bộ Lĩnh", "Vạn Kiếp"],
+  "P. Bình Thạnh": ["Phan Văn Trị", "Nơ Trang Long", "Chu Văn An", "Bình Lợi", "Nguyễn Xí", "Đinh Bộ Lĩnh"],
+  "P. Bình Lợi Trung": ["Phạm Văn Đồng", "Bình Lợi", "Nơ Trang Long", "Lê Quang Định", "Nguyễn Văn Đậu", "Hoàng Hoa Thám"],
+  "P. Thạnh Mỹ Tây": ["Điện Biên Phủ", "Nguyễn Hữu Cảnh", "Xô Viết Nghệ Tĩnh", "Ung Văn Khiêm", "Nguyễn Gia Trí (D2)", "Võ Oanh (D3)", "Đường D5"],
+  "P. Bình Quới": ["Bình Quới", "Thanh Đa", "Xô Viết Nghệ Tĩnh", "Ung Văn Khiêm"],
+  "P. Cầu Kiệu": ["Phan Xích Long", "Hoa Sứ", "Hoa Phượng", "Hoa Lan", "Hoa Đào", "Trường Sa", "Phan Đăng Lưu", "Vạn Kiếp"],
+  "P. Phú Nhuận": ["Nguyễn Văn Trỗi", "Huỳnh Văn Bánh", "Lê Văn Sỹ", "Trần Huy Liệu", "Đặng Văn Ngữ", "Trương Quốc Dung"],
+  "P. Đức Nhuận": ["Hoàng Văn Thụ", "Phổ Quang", "Nguyễn Kiệm", "Thích Quảng Đức", "Đào Duy Anh", "Hồ Văn Huê"],
+  "P. Hạnh Thông": ["Nguyễn Văn Nghi", "Quang Trung", "Phạm Văn Đồng", "Nguyễn Thái Sơn", "Lê Lợi", "Nguyễn Kiệm"],
+  "P. An Nhơn": ["Phan Văn Trị", "Dương Quảng Hàm", "Nguyễn Thái Sơn", "Lê Đức Thọ", "Nguyễn Bá Tuấn"],
+  "P. Gò Vấp": ["Quang Trung", "Phan Văn Trị", "Nguyễn Oanh", "Thống Nhất", "Nguyễn Văn Lượng"],
+  "P. Thông Tây Hội": ["Quang Trung", "Thống Nhất", "Lê Văn Thọ", "Cây Trâm (Nguyễn Văn Khối)", "Phạm Văn Chiêu"],
+  "P. An Hội Tây": ["Phan Huy Ích", "Quang Trung", "Phạm Văn Chiêu", "Bùi Quang Là", "Tân Sơn"],
+  "P. An Hội Đông": ["Lê Đức Thọ", "Thống Nhất", "Phạm Văn Chiêu", "Lê Văn Thọ", "Đường số 59"],
+  "P. Tân Sơn Hòa": ["Hoàng Văn Thụ", "Lê Văn Sỹ", "Phạm Văn Hai", "Nguyễn Trọng Tuyển", "Út Tịch", "Bùi Thị Xuân"],
+  "P. Tân Sơn Nhất": ["Trường Sơn", "Bạch Đằng", "Hồng Hà", "Cộng Hòa", "Hoàng Văn Thụ", "Phổ Quang"],
+  "P. Tân Hòa": ["Lý Thường Kiệt", "Cách Mạng Tháng 8", "Bắc Hải", "Thành Thái", "Lạc Long Quân"],
+  "P. Bảy Hiền": ["Trường Chinh", "Lạc Long Quân", "Âu Cơ", "Đồng Đen", "Bàu Cát", "Nguyễn Hồng Đào"],
+  "P. Tân Bình": ["Cộng Hòa", "Trường Chinh", "Hoàng Hoa Thám", "Ấp Bắc", "Nguyễn Đức Thuận", "Thân Nhân Trung"],
+  "P. Tân Sơn": ["Trường Chinh", "Phan Huy Ích", "Phạm Văn Bạch", "Tân Sơn", "Cống Lở", "Trần Thái Tông"],
+  "P. Tây Thạnh": ["Tây Thạnh", "Lê Trọng Tấn", "Trường Chinh", "Chế Lan Viên", "Dương Đức Hiền", "Nguyễn Hữu Tiến"],
+  "P. Tân Sơn Nhì": ["Tân Sơn Nhì", "Lê Trọng Tấn", "Bờ Bao Tân Thắng", "Tân Kỳ Tân Quý", "Gò Dầu", "Trương Vĩnh Ký"],
+  "P. Phú Thọ Hòa": ["Lũy Bán Bích", "Vườn Lài", "Phú Thọ Hòa", "Nguyễn Sơn", "Tân Hương", "Độc Lập"],
+  "P. Phú Thạnh": ["Thoại Ngọc Hầu", "Bình Long", "Nguyễn Sơn", "Lũy Bán Bích", "Thạch Lam"],
+  "P. Tân Phú": ["Âu Cơ", "Lũy Bán Bích", "Thoại Ngọc Hầu", "Hòa Bình", "Kênh Tân Hóa", "Trịnh Đình Thảo"],
+  "P. Bình Tân": ["Kinh Dương Vương", "Tên Lửa", "Vành Đai Trong", "Đường số 7", "Tỉnh Lộ 10"],
+  "P. Bình Hưng Hòa": ["Lê Trọng Tấn", "Bình Long", "Tân Kỳ Tân Quý", "Mã Lò", "Quốc Lộ 1A"],
+  "P. Bình Trị Đông": ["Hương Lộ 2", "Bình Trị Đông", "Mã Lò", "Tỉnh Lộ 10", "Đường số 1"],
+  "P. An Lạc": ["Kinh Dương Vương", "Võ Văn Kiệt", "Hồ Học Lãm", "An Dương Vương", "Tên Lửa"],
+  "P. Tân Tạo": ["Tỉnh Lộ 10", "Quốc Lộ 1A", "Trần Đại Nghĩa", "Nguyễn Cửu Phú", "Lê Đình Cẩn"],
+  "P. Hiệp Bình": ["Phạm Văn Đồng", "Hiệp Bình", "Quốc Lộ 13", "Kha Vạn Cân", "Đường số 23", "Đường số 48"],
+  "P. Tam Bình": ["Tô Ngọc Vân", "Gò Dưa", "Tỉnh Lộ 43", "Quốc Lộ 1A", "Tam Bình"],
+  "P. Thủ Đức": ["Võ Văn Ngân", "Kha Vạn Cân", "Đặng Văn Bi", "Phạm Văn Đồng", "Hoàng Diệu 2", "Lê Văn Chí"],
+  "P. Linh Xuân": ["Quốc Lộ 1K", "Hoàng Cầm (QL1A)", "Linh Trung", "Lê Văn Chí", "Đường số 6"],
+  "P. Long Bình": ["Nguyễn Xiển", "Phước Thiện", "Nguyễn Văn Tăng", "Hoàng Hữu Nam", "Vành Đai 3"],
+  "P. Tăng Nhơn Phú": ["Lê Văn Việt", "Man Thiện", "Đình Phong Phú", "Lã Xuân Oai", "Xa Lộ Hà Nội", "Trương Văn Hải"],
+  "P. Phước Long": ["Đỗ Xuân Hợp", "Tây Hòa", "Dương Đình Hội", "Liên Phường", "Xa Lộ Hà Nội"],
+  "P. Long Phước": ["Long Phước", "Long Thuận", "Nguyễn Xiển", "Trường Lưu"],
+  "P. Long Trường": ["Nguyễn Duy Trinh", "Võ Chí Công", "Lã Xuân Oai", "Trường Lưu", "Hoàng Hữu Nam"],
+  "P. An Khánh": ["Mai Chí Thọ", "Xa Lộ Hà Nội", "Trần Não", "Xuân Thủy", "Thảo Điền", "Quốc Hương", "Nguyễn Cơ Thạch", "Lương Định Của"],
+  "P. Bình Trưng": ["Nguyễn Duy Trinh", "Lê Văn Thịnh", "Đồng Văn Cống", "Đường số 39", "Mai Chí Thọ"],
+  "P. Cát Lái": ["Đồng Văn Cống", "Nguyễn Thị Định", "Trương Văn Bang", "Mai Chí Thọ", "Lê Hiến Mai"],
+  "P. Thảo Điền": ["Xa Lộ Hà Nội", "Xuân Thủy", "Thảo Điền", "Quốc Hương", "Nguyễn Văn Hưởng"],
+  "P. An Phú": ["Mai Chí Thọ", "Lương Định Của", "Trần Não", "Song Hành", "Nguyễn Hoàng"],
+  "P. Thủ Dầu Một": ["Đại lộ Bình Dương", "Yersin", "Cách Mạng Tháng 8", "Phú Lợi", "Thích Quảng Đức", "30 Tháng 4"],
+  "P. Phú Lợi": ["Phú Lợi", "Đại lộ Bình Dương", "Mỹ Phước Tân Vạn", "Huỳnh Văn Lũy"],
+  "P. Dĩ An": ["Nguyễn An Ninh", "Lý Thường Kiệt", "Trần Hưng Đạo", "ĐT 743", "Quốc Lộ 1K"],
+  "P. Đông Hòa": ["Quốc Lộ 1K", "Trần Hưng Đạo", "Đông Hòa", "Tân Lập (Làng ĐH Quốc Gia)"],
+  "P. Thuận An": ["Đại lộ Bình Dương", "Nguyễn Trãi", "Cách Mạng Tháng 8", "ĐT 743B"],
+  "P. Vũng Tàu": ["Thùy Vân", "Hạ Long", "Trương Công Định", "Lê Hồng Phong", "Nguyễn An Ninh", "Ba Cu"],
+  "P. Tam Thắng": ["Nguyễn An Ninh", "Lê Hồng Phong", "30 Tháng 4", "Trần Phú"],
+  // TP. Hà Nội
+  "P. Hoàn Kiếm": ["Đinh Tiên Hoàng", "Hàng Đào", "Hàng Ngang", "Hàng Bông", "Lý Thái Tổ", "Tràng Thi", "Phùng Hưng"],
+  "P. Cửa Nam": ["Tràng Tiền", "Hàng Bài", "Lý Thường Kiệt", "Trần Hưng Đạo", "Hai Bà Trưng", "Phan Chu Trinh", "Lê Duẩn"],
+  "P. Ba Đình": ["Điện Biên Phủ", "Đội Cấn", "Kim Mã", "Thụy Khuê", "Quán Thánh", "Phan Đình Phùng", "Hoàng Hoa Thám"],
+  "P. Ngọc Hà": ["Liễu Giai", "Văn Cao", "Đội Cấn", "Kim Mã", "Đào Tấn", "Ngọc Khánh"],
+  "P. Giảng Võ": ["Giảng Võ", "Láng Hạ", "Ngọc Khánh", "Thành Công", "Đê La Thành", "Cát Linh", "Huỳnh Thúc Kháng"],
+  "P. Đống Đa": ["Thái Hà", "Chùa Bộc", "Tây Sơn", "Nguyễn Lương Bằng", "Yên Lãng", "Hoàng Cầu"],
+  "P. Láng": ["Đường Láng", "Chùa Láng", "Nguyễn Chí Thanh", "Huỳnh Thúc Kháng", "Nguyên Hồng"],
+  "P. Ô Chợ Dừa": ["Xã Đàn", "Ô Chợ Dừa", "Tôn Đức Thắng", "Đê La Thành", "Hào Nam", "Hoàng Cầu"],
+  "P. Kim Liên": ["Phạm Ngọc Thạch", "Giải Phóng", "Phương Mai", "Chùa Bộc", "Đông Tác", "Lương Định Của"],
+  "P. Văn Miếu - Quốc Tử Giám": ["Tôn Đức Thắng", "Quốc Tử Giám", "Nguyễn Khuyến", "Khâm Thiên", "Lê Duẩn"],
+  "P. Hai Bà Trưng": ["Phố Huế", "Bà Triệu", "Bạch Đằng", "Trần Khát Chân", "Lò Đúc", "Nguyễn Công Trứ"],
+  "P. Bạch Mai": ["Bạch Mai", "Trần Đại Nghĩa", "Lê Thanh Nghị", "Tạ Quang Bửu", "Đại Cồ Việt", "Minh Khai"],
+  "P. Vĩnh Tuy": ["Minh Khai", "Tam Trinh", "Kim Ngưu", "Lạc Trung", "Vĩnh Tuy"],
+  "P. Cầu Giấy": ["Cầu Giấy", "Xuân Thủy", "Dịch Vọng", "Trần Thái Tông", "Duy Tân", "Thành Thái", "Khúc Thừa Dụ"],
+  "P. Nghĩa Đô": ["Hoàng Quốc Việt", "Nguyễn Văn Huyên", "Tô Hiệu", "Nghĩa Tân", "Phạm Văn Đồng", "Trần Cung"],
+  "P. Yên Hòa": ["Trần Duy Hưng", "Trung Kính", "Yên Hòa", "Nguyễn Khang", "Mạc Thái Tổ", "Phạm Hùng"],
+  "P. Thanh Xuân": ["Nguyễn Trãi", "Lê Văn Lương", "Khuất Duy Tiến", "Vũ Trọng Phụng", "Nguyễn Tuân", "Ngụy Như Kon Tum"],
+  "P. Khương Đình": ["Khương Trung", "Khương Đình", "Vũ Tông Phan", "Nguyễn Xiển", "Bùi Xương Trạch"],
+  "P. Phương Liệt": ["Giải Phóng", "Trường Chinh", "Phương Liệt", "Lê Trọng Tấn", "Hoàng Văn Thái"],
+  "P. Tây Hồ": ["Lạc Long Quân", "Âu Cơ", "Xuân Diệu", "Trích Sài", "Thụy Khuê", "Quảng An", "Yên Phụ"],
+  "P. Phú Thượng": ["Võ Chí Công", "An Dương Vương", "Nguyễn Hoàng Tôn", "Phú Thượng"],
+  "P. Hoàng Mai": ["Giải Phóng", "Tân Mai", "Kim Đồng", "Tam Trinh", "Lĩnh Nam", "Trương Định"],
+  "P. Hoàng Liệt": ["Giải Phóng", "Nguyễn Hữu Thọ", "Linh Đàm", "Hoàng Liệt", "Ngọc Hồi"],
+  "P. Long Biên": ["Nguyễn Văn Cừ", "Cổ Linh", "Đàm Quang Trung", "Thạch Bàn", "Bát Khối"],
+  "P. Bồ Đề": ["Nguyễn Văn Cừ", "Ngọc Lâm", "Hồng Tiến", "Bồ Đề", "Ngọc Thụy"],
+  "P. Từ Liêm": ["Phạm Hùng", "Mễ Trì", "Lê Đức Thọ", "Hàm Nghi", "Nguyễn Cơ Thạch", "Trần Hữu Dực"],
+  "P. Tây Mỗ": ["Đại lộ Thăng Long", "Tây Mỗ", "Lê Quang Đạo kéo dài"],
+  "P. Đại Mỗ": ["Tố Hữu", "Đại Mỗ", "Lê Quang Đạo", "Sa Đôi"],
+  "P. Hà Đông": ["Quang Trung", "Trần Phú", "Nguyễn Khuyến", "Vạn Phúc", "Tố Hữu", "Phùng Hưng"],
+  "X. Gia Lâm": ["Đa Tốn", "Trâu Quỳ", "Kiêu Kỵ", "Dương Xá"],
+  // TP. Đà Nẵng
+  "P. Hải Châu": ["Bạch Đằng", "Nguyễn Văn Linh", "Lê Duẩn", "Trần Phú", "Hùng Vương", "Ông Ích Khiêm"],
+  "P. Hòa Cường": ["2 Tháng 9", "Núi Thành", "Phan Đăng Lưu", "Tiểu La", "Nguyễn Hữu Thọ"],
+  "P. Thanh Khê": ["Điện Biên Phủ", "Nguyễn Tất Thành", "Hà Huy Tập", "Lê Độ"],
+  "P. An Hải": ["Võ Nguyên Giáp", "Phạm Văn Đồng", "Ngô Quyền", "Trần Hưng Đạo", "Loseby"],
+  "P. Sơn Trà": ["Hoàng Sa", "Lê Đức Thọ", "Ngô Quyền", "Yết Kiêu"],
+  "P. Ngũ Hành Sơn": ["Võ Nguyên Giáp", "Trường Sa", "Lê Văn Hiến", "Châu Thị Vĩnh Tế", "An Thượng"],
+  "P. Hòa Xuân": ["Võ Chí Công", "Nguyễn Phước Lan", "29 Tháng 3", "Phạm Hùng"],
+  // TP. Hải Phòng, Cần Thơ, Huế, Đồng Nai, Bắc Ninh, Khánh Hòa, Lâm Đồng
+  "P. Hồng Bàng": ["Đinh Tiên Hoàng", "Trần Hưng Đạo", "Điện Biên Phủ", "Bạch Đằng"],
+  "P. Ngô Quyền": ["Lê Hồng Phong", "Cầu Đất", "Lạch Tray", "Đà Nẵng"],
+  "P. Lê Chân": ["Tô Hiệu", "Nguyễn Đức Cảnh", "Trần Nguyên Hãn", "Võ Nguyên Giáp"],
+  "P. Ninh Kiều": ["Hòa Bình", "30 Tháng 4", "Mậu Thân", "Nguyễn Văn Cừ", "Ba Tháng Hai", "Trần Hưng Đạo"],
+  "P. Cái Khế": ["Nguyễn Văn Cừ", "Cách Mạng Tháng 8", "Lê Lợi", "Trần Phú"],
+  "P. Thuận Hóa": ["Lê Lợi", "Hùng Vương", "Bến Nghé", "Đống Đa", "Hà Nội", "Nguyễn Huệ"],
+  "P. Biên Hòa": ["Phạm Văn Thuận", "Đồng Khởi", "Võ Thị Sáu", "Nguyễn Ái Quốc", "Hà Huy Giáp"],
+  "P. Võ Cường": ["Lý Thái Tổ", "Nguyễn Gia Thiều", "Lê Thái Tổ", "Ngô Gia Tự", "Huyền Quang"],
+  "P. Nha Trang": ["Trần Phú", "Lê Thánh Tôn", "Nguyễn Thị Minh Khai", "Thái Nguyên", "Yersin"],
+  "P. Xuân Hương - Đà Lạt": ["Nguyễn Chí Thanh", "Phan Bội Châu", "Trần Quốc Toản", "Ba Tháng Tư", "Hồ Tùng Mậu"],
+  "X. Văn Giang": ["Đại lộ San Hô", "Đường 52m Vinhomes Ocean Park", "Khu đô thị Ecopark"]
 };
 
 const STUDIO_WARD_COORDS = {
-  "P. Cầu Kiệu": [10.7965, 106.6825],
-  "P. Hòa Hưng": [10.7758, 106.6682],
+  "P. Sài Gòn": [10.7769, 106.7009],
+  "P. Tân Định": [10.7894, 106.6911],
+  "P. Bến Thành": [10.7721, 106.6983],
+  "P. Cầu Ông Lãnh": [10.7654, 106.6932],
+  "P. Bàn Cờ": [10.7712, 106.6815],
+  "P. Xuân Hòa": [10.7815, 106.6889],
   "P. Nhiêu Lộc": [10.7852, 106.6815],
+  "P. Vĩnh Hội": [10.7605, 106.7018],
+  "P. Khánh Hội": [10.7582, 106.7064],
+  "P. Xóm Chiếu": [10.7568, 106.7115],
+  "P. Chợ Quán": [10.7574, 106.6788],
+  "P. An Đông": [10.7586, 106.6702],
+  "P. Chợ Lớn": [10.7524, 106.6598],
+  "P. Bình Tiên": [10.7485, 106.6492],
+  "P. Bình Tây": [10.7469, 106.6412],
+  "P. Bình Phú": [10.7425, 106.6318],
+  "P. Phú Lâm": [10.7512, 106.6285],
+  "P. Tân Thuận": [10.7462, 106.7265],
+  "P. Phú Thuận": [10.7285, 106.7342],
+  "P. Tân Mỹ": [10.7294, 106.7218],
+  "P. Tân Hưng": [10.7418, 106.7024],
+  "P. Chánh Hưng": [10.7412, 106.6754],
+  "P. Bình Đông": [10.7315, 106.6512],
+  "P. Phú Định": [10.7245, 106.6289],
+  "P. Vườn Lài": [10.7662, 106.6718],
+  "P. Diên Hồng": [10.7689, 106.6635],
+  "P. Hòa Hưng": [10.7758, 106.6682],
+  "P. Minh Phụng": [10.7595, 106.6512],
+  "P. Bình Thới": [10.7648, 106.6445],
+  "P. Hòa Bình": [10.7695, 106.6392],
+  "P. Phú Thọ": [10.7672, 106.6548],
+  "P. Đông Hưng Thuận": [10.8345, 106.6248],
+  "P. Trung Mỹ Tây": [10.8512, 106.6185],
+  "P. Tân Thới Hiệp": [10.8625, 106.6412],
+  "P. Thới An": [10.8742, 106.6584],
+  "P. An Phú Đông": [10.8594, 106.6942],
   "P. Gia Định": [10.8012, 106.7065],
+  "P. Bình Thạnh": [10.8124, 106.7028],
+  "P. Bình Lợi Trung": [10.8185, 106.6964],
+  "P. Thạnh Mỹ Tây": [10.8025, 106.7185],
+  "P. Bình Quới": [10.8215, 106.7312],
+  "P. Cầu Kiệu": [10.7965, 106.6825],
+  "P. Phú Nhuận": [10.7942, 106.6758],
+  "P. Đức Nhuận": [10.8045, 106.6782],
+  "P. Hạnh Thông": [10.8225, 106.6845],
+  "P. An Nhơn": [10.8312, 106.6812],
+  "P. Gò Vấp": [10.8365, 106.6695],
+  "P. Thông Tây Hội": [10.8392, 106.6582],
+  "P. An Hội Tây": [10.8415, 106.6425],
+  "P. An Hội Đông": [10.8485, 106.6642],
+  "P. Tân Sơn Hòa": [10.7968, 106.6642],
+  "P. Tân Sơn Nhất": [10.8085, 106.6654],
+  "P. Tân Hòa": [10.7854, 106.6542],
+  "P. Bảy Hiền": [10.7924, 106.6465],
+  "P. Tân Bình": [10.8025, 106.6412],
+  "P. Tân Sơn": [10.8215, 106.6345],
+  "P. Tây Thạnh": [10.8125, 106.6215],
+  "P. Tân Sơn Nhì": [10.8015, 106.6285],
+  "P. Phú Thọ Hòa": [10.7892, 106.6245],
+  "P. Phú Thạnh": [10.7812, 106.6195],
+  "P. Tân Phú": [10.7745, 106.6312],
+  "P. Bình Tân": [10.7645, 106.6054],
+  "P. Bình Hưng Hòa": [10.7925, 106.5985],
+  "P. Bình Trị Đông": [10.7695, 106.6112],
+  "P. An Lạc": [10.7354, 106.6145],
+  "P. Tân Tạo": [10.7512, 106.5892],
+  "P. Hiệp Bình": [10.8412, 106.7215],
+  "P. Tam Bình": [10.8695, 106.7342],
+  "P. Thủ Đức": [10.8512, 106.7585],
+  "P. Linh Xuân": [10.8745, 106.7692],
+  "P. Long Bình": [10.8421, 106.8364],
+  "P. Tăng Nhơn Phú": [10.8452, 106.7845],
+  "P. Phước Long": [10.8215, 106.7712],
+  "P. Long Phước": [10.8095, 106.8492],
+  "P. Long Trường": [10.8045, 106.8092],
+  "P. An Khánh": [10.7945, 106.7346],
+  "P. Bình Trưng": [10.7885, 106.7642],
+  "P. Cát Lái": [10.7695, 106.7685],
   "P. Thảo Điền": [10.8035, 106.7346],
   "P. An Phú": [10.7876, 106.7484],
-  "P. Long Bình": [10.8421, 106.8364],
-  "P. Đống Đa": [21.0124, 105.8256],
-  "P. Cầu Giấy": [21.0338, 105.7945],
+  "P. Thủ Dầu Một": [10.9804, 106.6519],
+  "P. Dĩ An": [10.9068, 106.7694],
+  "P. Thuận An": [10.9241, 106.7130],
+  "P. Vũng Tàu": [10.3460, 107.0843],
   "P. Hoàn Kiếm": [21.0285, 105.8542],
-  "P. Thanh Xuân": [20.9956, 105.8089]
+  "P. Cửa Nam": [21.0225, 105.8485],
+  "P. Ba Đình": [21.0341, 105.8372],
+  "P. Ngọc Hà": [21.0365, 105.8185],
+  "P. Giảng Võ": [21.0245, 105.8192],
+  "P. Đống Đa": [21.0124, 105.8256],
+  "P. Láng": [21.0215, 105.8045],
+  "P. Ô Chợ Dừa": [21.0195, 105.8295],
+  "P. Kim Liên": [21.0068, 105.8365],
+  "P. Hai Bà Trưng": [21.0115, 105.8512],
+  "P. Bạch Mai": [21.0012, 105.8485],
+  "P. Vĩnh Tuy": [20.9985, 105.8695],
+  "P. Cầu Giấy": [21.0338, 105.7945],
+  "P. Nghĩa Đô": [21.0445, 105.7985],
+  "P. Yên Hòa": [21.0165, 105.7942],
+  "P. Thanh Xuân": [20.9956, 105.8089],
+  "P. Khương Đình": [20.9885, 105.8142],
+  "P. Tây Hồ": [21.0645, 105.8215],
+  "P. Hoàng Mai": [20.9765, 105.8492],
+  "P. Long Biên": [21.0385, 105.8942],
+  "P. Từ Liêm": [21.0185, 105.7685],
+  "P. Tây Mỗ": [21.0045, 105.7415],
+  "P. Hà Đông": [20.9715, 105.7785],
+  "X. Gia Lâm": [20.9945, 105.9425],
+  "P. Hải Châu": [16.0678, 108.2208],
+  "P. Sơn Trà": [16.0748, 108.2395],
+  "P. Ngũ Hành Sơn": [16.0185, 108.2515],
+  "P. Ninh Kiều": [10.0341, 105.7875],
+  "P. Hồng Bàng": [20.8589, 106.6745],
+  "P. Thuận Hóa": [16.4637, 107.5909],
+  "P. Biên Hòa": [10.9574, 106.8426],
+  "P. Võ Cường": [21.1785, 106.0642],
+  "P. Nha Trang": [12.2388, 109.1967],
+  "P. Xuân Hương - Đà Lạt": [11.9404, 108.4583],
+  "X. Văn Giang": [20.9465, 105.9685]
 };
 
 const STUDIO_STATE = {
@@ -4644,21 +5155,116 @@ function sanitizeStudioVnPhone(inputEl) {
   renderStudioPreview();
 }
 
+// Danh sách 34 Tỉnh / Thành phố trực thuộc Trung ương mới nhất (theo Nghị quyết 202/2025/QH15)
 const STUDIO_CITIES = [
-  { value: "TP. Hồ Chí Minh", label: "TP. Hồ Chí Minh" },
+  { value: "TP. Hồ Chí Minh", label: "TP. Hồ Chí Minh (gồm Bình Dương & Bà Rịa - Vũng Tàu)" },
   { value: "TP. Hà Nội", label: "TP. Hà Nội" },
-  { value: "TP. Đà Nẵng", label: "TP. Đà Nẵng" },
-  { value: "Bình Dương", label: "Bình Dương" },
-  { value: "Đồng Nai", label: "Đồng Nai" },
-  { value: "TP. Cần Thơ", label: "TP. Cần Thơ" }
+  { value: "TP. Đà Nẵng", label: "TP. Đà Nẵng (gồm Quảng Nam)" },
+  { value: "TP. Hải Phòng", label: "TP. Hải Phòng (gồm Hải Dương)" },
+  { value: "TP. Cần Thơ", label: "TP. Cần Thơ (gồm Hậu Giang & Sóc Trăng)" },
+  { value: "TP. Huế", label: "TP. Huế" },
+  { value: "TP. Đồng Nai", label: "TP. Đồng Nai (gồm Bình Phước)" },
+  { value: "Tỉnh Bắc Ninh", label: "Tỉnh Bắc Ninh (gồm Bắc Giang)" },
+  { value: "Tỉnh Khánh Hòa", label: "Tỉnh Khánh Hòa (gồm Ninh Thuận)" },
+  { value: "Tỉnh Lâm Đồng", label: "Tỉnh Lâm Đồng (gồm Đắk Nông & Bình Thuận)" },
+  { value: "Tỉnh Quảng Ninh", label: "Tỉnh Quảng Ninh" },
+  { value: "Tỉnh Hưng Yên", label: "Tỉnh Hưng Yên (gồm Thái Bình)" },
+  { value: "Tỉnh Tây Ninh", label: "Tỉnh Tây Ninh (gồm Long An)" },
+  { value: "Tỉnh An Giang", label: "Tỉnh An Giang (gồm Kiên Giang & Phú Quốc)" },
+  { value: "Tỉnh Phú Thọ", label: "Tỉnh Phú Thọ (gồm Vĩnh Phúc & Hòa Bình)" },
+  { value: "Tỉnh Ninh Bình", label: "Tỉnh Ninh Bình (gồm Hà Nam & Nam Định)" },
+  { value: "Tỉnh Thái Nguyên", label: "Tỉnh Thái Nguyên (gồm Bắc Kạn)" },
+  { value: "Tỉnh Thanh Hóa", label: "Tỉnh Thanh Hóa" },
+  { value: "Tỉnh Nghệ An", label: "Tỉnh Nghệ An" },
+  { value: "Tỉnh Hà Tĩnh", label: "Tỉnh Hà Tĩnh" },
+  { value: "Tỉnh Quảng Trị", label: "Tỉnh Quảng Trị (gồm Quảng Bình)" },
+  { value: "Tỉnh Quảng Ngãi", label: "Tỉnh Quảng Ngãi (gồm Bình Định)" },
+  { value: "Tỉnh Gia Lai", label: "Tỉnh Gia Lai (gồm Kon Tum)" },
+  { value: "Tỉnh Đắk Lắk", label: "Tỉnh Đắk Lắk (gồm Phú Yên)" },
+  { value: "Tỉnh Đồng Tháp", label: "Tỉnh Đồng Tháp (gồm Tiền Giang)" },
+  { value: "Tỉnh Vĩnh Long", label: "Tỉnh Vĩnh Long (gồm Bến Tre & Trà Vinh)" },
+  { value: "Tỉnh Cà Mau", label: "Tỉnh Cà Mau (gồm Bạc Liêu)" },
+  { value: "Tỉnh Lào Cai", label: "Tỉnh Lào Cai (gồm Yên Bái)" },
+  { value: "Tỉnh Tuyên Quang", label: "Tỉnh Tuyên Quang (gồm Hà Giang)" },
+  { value: "Tỉnh Lạng Sơn", label: "Tỉnh Lạng Sơn" },
+  { value: "Tỉnh Sơn La", label: "Tỉnh Sơn La" },
+  { value: "Tỉnh Điện Biên", label: "Tỉnh Điện Biên" },
+  { value: "Tỉnh Lai Châu", label: "Tỉnh Lai Châu" },
+  { value: "Tỉnh Cao Bằng", label: "Tỉnh Cao Bằng" }
 ];
 
 const STUDIO_PROJECTS = [
-  { value: "Vinhomes Central Park", label: "Vinhomes Central Park", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "208", coords: [10.7949, 106.7219] },
+  // TP. Hồ Chí Minh (Khu Trung tâm & Bình Thạnh - Gia Định - Thạnh Mỹ Tây)
+  { value: "Vinhomes Central Park", label: "Vinhomes Central Park (Landmark 81)", city: "TP. Hồ Chí Minh", ward: "P. Thạnh Mỹ Tây", street: "Nguyễn Hữu Cảnh", streetNumber: "208", coords: [10.7949, 106.7219] },
+  { value: "Vinhomes Golden River", label: "Vinhomes Golden River (Ba Son)", city: "TP. Hồ Chí Minh", ward: "P. Sài Gòn", street: "Tôn Đức Thắng", streetNumber: "2", coords: [10.7865, 106.7069] },
+  { value: "Grand Marina Saigon", label: "Grand Marina Saigon", city: "TP. Hồ Chí Minh", ward: "P. Sài Gòn", street: "Tôn Đức Thắng", streetNumber: "2", coords: [10.7878, 106.7076] },
+  { value: "Saigon Pearl", label: "Saigon Pearl", city: "TP. Hồ Chí Minh", ward: "P. Thạnh Mỹ Tây", street: "Nguyễn Hữu Cảnh", streetNumber: "92", coords: [10.7905, 106.7186] },
+  { value: "Sunwah Pearl", label: "Sunwah Pearl", city: "TP. Hồ Chí Minh", ward: "P. Thạnh Mỹ Tây", street: "Nguyễn Hữu Cảnh", streetNumber: "90", coords: [10.7892, 106.7182] },
+  { value: "City Garden", label: "City Garden", city: "TP. Hồ Chí Minh", ward: "P. Thạnh Mỹ Tây", street: "Ngô Tất Tố", streetNumber: "59", coords: [10.7924, 106.7098] },
+  { value: "The Marq", label: "The Marq Quận 1", city: "TP. Hồ Chí Minh", ward: "P. Tân Định", street: "Nguyễn Đình Chiểu", streetNumber: "29B", coords: [10.7868, 106.6975] },
+  { value: "Vinhomes Đồng Khởi", label: "Vinhomes Đồng Khởi", city: "TP. Hồ Chí Minh", ward: "P. Sài Gòn", street: "Lê Thánh Tôn", streetNumber: "72", coords: [10.7779, 106.7021] },
+  // Khu Đông TP.HCM (Thủ Đức mới: An Khánh, Thảo Điền, An Phú, Long Bình, Phước Long, Cát Lái)
   { value: "Vinhomes Grand Park", label: "Vinhomes Grand Park", city: "TP. Hồ Chí Minh", ward: "P. Long Bình", street: "Nguyễn Xiển", streetNumber: "512", coords: [10.8421, 106.8364] },
+  { value: "Masteri Centre Point", label: "Masteri Centre Point", city: "TP. Hồ Chí Minh", ward: "P. Long Bình", street: "Nguyễn Xiển", streetNumber: "512", coords: [10.8435, 106.8382] },
+  { value: "The Global City", label: "The Global City", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Đỗ Xuân Hợp", streetNumber: "1", coords: [10.7985, 106.7712] },
   { value: "The Sun Avenue", label: "The Sun Avenue", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Mai Chí Thọ", streetNumber: "28", coords: [10.7876, 106.7484] },
-  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. Thảo Điền", street: "Xa Lộ Hà Nội", streetNumber: "159", coords: [10.8021, 106.7405] },
-  { value: "Saigon Pearl", label: "Saigon Pearl", city: "TP. Hồ Chí Minh", ward: "P. Gia Định", street: "Nguyễn Hữu Cảnh", streetNumber: "92", coords: [10.7905, 106.7186] }
+  { value: "Masteri Thảo Điền", label: "Masteri Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Xa Lộ Hà Nội", streetNumber: "159", coords: [10.8021, 106.7405] },
+  { value: "Masteri An Phú", label: "Masteri An Phú", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Xa Lộ Hà Nội", streetNumber: "179", coords: [10.8012, 106.7428] },
+  { value: "Lumière Riverside", label: "Lumière Riverside", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Xa Lộ Hà Nội", streetNumber: "259", coords: [10.8018, 106.7452] },
+  { value: "Gateway Thảo Điền", label: "Gateway Thảo Điền", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Lê Thước", streetNumber: "2", coords: [10.8029, 106.7418] },
+  { value: "Khu đô thị Sala Đại Quang Minh", label: "Khu đô thị Sala Thủ Thiêm", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Mai Chí Thọ", streetNumber: "10", coords: [10.7732, 106.7218] },
+  { value: "Empire City Thủ Thiêm", label: "Empire City Thủ Thiêm", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Mai Chí Thọ", streetNumber: "2B", coords: [10.7705, 106.7124] },
+  { value: "The Metropole Thủ Thiêm", label: "The Metropole Thủ Thiêm", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Nguyễn Cơ Thạch", streetNumber: "1", coords: [10.7768, 106.7135] },
+  { value: "The River Thủ Thiêm", label: "The River Thủ Thiêm", city: "TP. Hồ Chí Minh", ward: "P. An Khánh", street: "Trần Bạch Đằng", streetNumber: "23", coords: [10.7815, 106.7168] },
+  { value: "Estella Heights", label: "Estella Heights", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Song Hành", streetNumber: "88", coords: [10.8005, 106.7512] },
+  { value: "Lexington Residence", label: "Lexington Residence", city: "TP. Hồ Chí Minh", ward: "P. An Phú", street: "Mai Chí Thọ", streetNumber: "67", coords: [10.7962, 106.7524] },
+  { value: "Đảo Kim Cương (Diamond Island)", label: "Đảo Kim Cương (Diamond Island)", city: "TP. Hồ Chí Minh", ward: "P. Cát Lái", street: "Trương Văn Bang", streetNumber: "1", coords: [10.7765, 106.7462] },
+  { value: "Vista Verde", label: "Vista Verde", city: "TP. Hồ Chí Minh", ward: "P. Cát Lái", street: "Đồng Văn Cống", streetNumber: "2", coords: [10.7742, 106.7568] },
+  { value: "Feliz en Vista", label: "Feliz en Vista", city: "TP. Hồ Chí Minh", ward: "P. Cát Lái", street: "Đồng Văn Cống", streetNumber: "1", coords: [10.7755, 106.7574] },
+  { value: "Vạn Phúc City", label: "Khu đô thị Vạn Phúc City", city: "TP. Hồ Chí Minh", ward: "P. Hiệp Bình", street: "Quốc Lộ 13", streetNumber: "375", coords: [10.8425, 106.7115] },
+  // Khu Nam & Trung Tâm TP.HCM (Quận 4, Quận 7, Quận 10, Tân Phú, Phú Nhuận, Gò Vấp, Bình Tân)
+  { value: "Sunrise City", label: "Sunrise City Quận 7", city: "TP. Hồ Chí Minh", ward: "P. Tân Hưng", street: "Nguyễn Hữu Thọ", streetNumber: "23", coords: [10.7398, 106.7015] },
+  { value: "Midtown Phú Mỹ Hưng", label: "Midtown Phú Mỹ Hưng", city: "TP. Hồ Chí Minh", ward: "P. Tân Mỹ", street: "Nguyễn Lương Bằng", streetNumber: "15", coords: [10.7228, 106.7274] },
+  { value: "Eco Green Saigon", label: "Eco Green Saigon", city: "TP. Hồ Chí Minh", ward: "P. Tân Thuận", street: "Nguyễn Văn Linh", streetNumber: "107", coords: [10.7458, 106.7245] },
+  { value: "Saigon South Residences", label: "Saigon South Residences", city: "TP. Hồ Chí Minh", ward: "X. Nhà Bè", street: "Nguyễn Hữu Thọ", streetNumber: "120", coords: [10.7124, 106.7018] },
+  { value: "Masteri Millennium", label: "Masteri Millennium Quận 4", city: "TP. Hồ Chí Minh", ward: "P. Vĩnh Hội", street: "Bến Vân Đồn", streetNumber: "132", coords: [10.7645, 106.6995] },
+  { value: "The Tresor", label: "The Tresor Quận 4", city: "TP. Hồ Chí Minh", ward: "P. Xóm Chiếu", street: "Bến Vân Đồn", streetNumber: "39", coords: [10.7672, 106.7035] },
+  { value: "RiverGate Residence", label: "RiverGate Residence", city: "TP. Hồ Chí Minh", ward: "P. Vĩnh Hội", street: "Bến Vân Đồn", streetNumber: "151", coords: [10.7628, 106.6974] },
+  { value: "Hà Đô Centrosa Garden", label: "Hà Đô Centrosa Garden", city: "TP. Hồ Chí Minh", ward: "P. Hòa Hưng", street: "Ba Tháng Hai", streetNumber: "200", coords: [10.7768, 106.6782] },
+  { value: "Kingdom 101", label: "Kingdom 101", city: "TP. Hồ Chí Minh", ward: "P. Hòa Hưng", street: "Tô Hiến Thành", streetNumber: "334", coords: [10.7752, 106.6635] },
+  { value: "Celadon City", label: "Khu đô thị Celadon City", city: "TP. Hồ Chí Minh", ward: "P. Tân Sơn Nhì", street: "Bờ Bao Tân Thắng", streetNumber: "88", coords: [10.8035, 106.6185] },
+  { value: "CityLand Park Hills", label: "CityLand Park Hills Gò Vấp", city: "TP. Hồ Chí Minh", ward: "P. Gò Vấp", street: "Phan Văn Trị", streetNumber: "18", coords: [10.8342, 106.6712] },
+  { value: "Golden Mansion", label: "Golden Mansion Phú Nhuận", city: "TP. Hồ Chí Minh", ward: "P. Đức Nhuận", street: "Phổ Quang", streetNumber: "119", coords: [10.8085, 106.6732] },
+  { value: "Orchard Parkview", label: "Orchard Parkview", city: "TP. Hồ Chí Minh", ward: "P. Đức Nhuận", street: "Hồng Hà", streetNumber: "130", coords: [10.8112, 106.6725] },
+  { value: "Akari City", label: "Akari City Bình Tân", city: "TP. Hồ Chí Minh", ward: "P. An Lạc", street: "Võ Văn Kiệt", streetNumber: "77", coords: [10.7285, 106.6124] },
+  { value: "Mizuki Park", label: "Mizuki Park Nam Sài Gòn", city: "TP. Hồ Chí Minh", ward: "X. Bình Hưng", street: "Nguyễn Văn Linh", streetNumber: "1", coords: [10.7245, 106.6542] },
+  // Khu vực Bình Dương & Vũng Tàu (Thuộc TP.HCM mới)
+  { value: "The Habitat Bình Dương", label: "The Habitat Bình Dương", city: "TP. Hồ Chí Minh", ward: "P. Thuận An", street: "Đại lộ Bình Dương", streetNumber: "8", coords: [10.9245, 106.7124] },
+  { value: "Astral City", label: "Astral City Thuận An", city: "TP. Hồ Chí Minh", ward: "P. Thuận An", street: "Đại lộ Bình Dương", streetNumber: "28", coords: [10.9185, 106.7095] },
+  { value: "Bcons City Làng Đại Học", label: "Bcons City Làng Đại Học", city: "TP. Hồ Chí Minh", ward: "P. Đông Hòa", street: "Thống Nhất", streetNumber: "15", coords: [10.8845, 106.7845] },
+  { value: "The Sóng Vũng Tàu", label: "The Sóng Vũng Tàu", city: "TP. Hồ Chí Minh", ward: "P. Tam Thắng", street: "Thi Sách", streetNumber: "28", coords: [10.3485, 107.0942] },
+  // TP. Hà Nội
+  { value: "Vinhomes Smart City", label: "Vinhomes Smart City", city: "TP. Hà Nội", ward: "P. Tây Mỗ", street: "Đại lộ Thăng Long", streetNumber: "Km6", coords: [21.0045, 105.7415] },
+  { value: "Vinhomes Ocean Park 1", label: "Vinhomes Ocean Park Gia Lâm", city: "TP. Hà Nội", ward: "X. Gia Lâm", street: "Đa Tốn", streetNumber: "1", coords: [20.9945, 105.9425] },
+  { value: "Vinhomes Times City", label: "Vinhomes Times City", city: "TP. Hà Nội", ward: "P. Vĩnh Tuy", street: "Minh Khai", streetNumber: "458", coords: [20.9952, 105.8685] },
+  { value: "Vinhomes Royal City", label: "Vinhomes Royal City", city: "TP. Hà Nội", ward: "P. Thanh Xuân", street: "Nguyễn Trãi", streetNumber: "72A", coords: [21.0025, 105.8152] },
+  { value: "Vinhomes Metropolis", label: "Vinhomes Metropolis Liễu Giai", city: "TP. Hà Nội", ward: "P. Ngọc Hà", street: "Liễu Giai", streetNumber: "29", coords: [21.0315, 105.8142] },
+  { value: "Vinhomes West Point", label: "Vinhomes West Point", city: "TP. Hà Nội", ward: "P. Từ Liêm", street: "Phạm Hùng", streetNumber: "2", coords: [21.0125, 105.7842] },
+  { value: "Vinhomes Skylake", label: "Vinhomes Skylake Phạm Hùng", city: "TP. Hà Nội", ward: "P. Từ Liêm", street: "Phạm Hùng", streetNumber: "16", coords: [21.0215, 105.7812] },
+  { value: "Vinhomes D'Capitale", label: "Vinhomes D'Capitale Trần Duy Hưng", city: "TP. Hà Nội", ward: "P. Yên Hòa", street: "Trần Duy Hưng", streetNumber: "119", coords: [21.0068, 105.7945] },
+  { value: "Keangnam Landmark 72", label: "Keangnam Hanoi Landmark Tower", city: "TP. Hà Nội", ward: "P. Từ Liêm", street: "Phạm Hùng", streetNumber: "E6", coords: [21.0168, 105.7838] },
+  { value: "Ciputra Hà Nội", label: "Khu đô thị Ciputra Tây Hồ", city: "TP. Hà Nội", ward: "P. Phú Thượng", street: "Võ Chí Công", streetNumber: "1", coords: [21.0785, 105.8045] },
+  { value: "Starlake Tây Hồ Tây", label: "Khu đô thị Starlake Tây Hồ Tây", city: "TP. Hà Nội", ward: "P. Nghĩa Đô", street: "Nguyễn Văn Huyên", streetNumber: "68", coords: [21.0545, 105.7965] },
+  { value: "The Matrix One", label: "The Matrix One Mỹ Đình", city: "TP. Hà Nội", ward: "P. Từ Liêm", street: "Lê Quang Đạo", streetNumber: "1", coords: [21.0112, 105.7695] },
+  { value: "Masteri West Heights", label: "Masteri West Heights", city: "TP. Hà Nội", ward: "P. Tây Mỗ", street: "Đại lộ Thăng Long", streetNumber: "2", coords: [21.0032, 105.7395] },
+  // Đà Nẵng, Hưng Yên, Hải Phòng, Khánh Hòa
+  { value: "Vinhomes Ocean Park 2 - 3", label: "Vinhomes Ocean Park 2 - 3 (The Empire)", city: "Tỉnh Hưng Yên", ward: "X. Văn Giang", street: "Đại lộ San Hô", streetNumber: "1", coords: [20.9465, 105.9685] },
+  { value: "Khu đô thị Ecopark", label: "Khu đô thị sinh thái Ecopark", city: "Tỉnh Hưng Yên", ward: "X. Văn Giang", street: "Khu đô thị Ecopark", streetNumber: "1", coords: [20.9595, 105.9365] },
+  { value: "Monarchy Đà Nẵng", label: "The Monarchy Đà Nẵng", city: "TP. Đà Nẵng", ward: "P. An Hải", street: "Trần Hưng Đạo", streetNumber: "535", coords: [16.0585, 108.2325] },
+  { value: "Sun Cosmo Residence Đà Nẵng", label: "Sun Cosmo Residence Đà Nẵng", city: "TP. Đà Nẵng", ward: "P. Ngũ Hành Sơn", street: "Trần Thị Lý", streetNumber: "1", coords: [16.0512, 108.2368] },
+  { value: "Vinhomes Imperia Hải Phòng", label: "Vinhomes Imperia Hải Phòng", city: "TP. Hải Phòng", ward: "P. Hồng Bàng", street: "Bạch Đằng", streetNumber: "1", coords: [20.8625, 106.6645] },
+  { value: "Vinhomes Marina Hải Phòng", label: "Vinhomes Marina Cầu Rào", city: "TP. Hải Phòng", ward: "P. Lê Chân", street: "Võ Nguyên Giáp", streetNumber: "1", coords: [20.8285, 106.6885] },
+  { value: "Gold Coast Nha Trang", label: "Gold Coast Nha Trang", city: "Tỉnh Khánh Hòa", ward: "P. Nha Trang", street: "Trần Hưng Đạo", streetNumber: "1", coords: [12.2452, 109.1958] }
 ];
 
 function getSelectedStudioProject() {
@@ -4697,7 +5303,20 @@ const STUDIO_COMBO_TIMERS = {
 
 function getStudioComboItems(kind) {
   if (kind === "city") return STUDIO_CITIES;
-  if (kind === "project") return STUDIO_PROJECTS;
+  if (kind === "project") {
+    const city = (document.getElementById("dCity")?.value || "").trim();
+    const ward = (document.getElementById("dWard")?.value || "").trim();
+    let list = STUDIO_PROJECTS;
+    if (city) {
+      const byCity = list.filter((p) => p.city === city);
+      if (byCity.length) list = byCity;
+    }
+    if (ward) {
+      const byWard = list.filter((p) => p.ward === ward);
+      if (byWard.length) list = byWard;
+    }
+    return list;
+  }
   if (kind === "deposit") return STUDIO_DEPOSITS;
   if (kind === "beds") return STUDIO_BEDS_OPTS;
   if (kind === "baths") return STUDIO_BATHS_OPTS;
@@ -4712,8 +5331,17 @@ function getStudioComboItems(kind) {
     }
     return Object.values(STUDIO_WARDS_BY_CITY).flat();
   }
+  const city = (document.getElementById("dCity")?.value || "").trim();
   const ward = (document.getElementById("dWard")?.value || "").trim();
-  const list = STUDIO_STREETS_BY_WARD[ward] || Object.values(STUDIO_STREETS_BY_WARD).flat();
+  let list = [];
+  if (ward && STUDIO_STREETS_BY_WARD[ward]) {
+    list = STUDIO_STREETS_BY_WARD[ward];
+  } else if (city && STUDIO_WARDS_BY_CITY[city]) {
+    const cityWards = STUDIO_WARDS_BY_CITY[city].map((w) => w.value);
+    list = cityWards.flatMap((w) => STUDIO_STREETS_BY_WARD[w] || []);
+  } else {
+    list = Object.values(STUDIO_STREETS_BY_WARD).flat();
+  }
   return Array.from(new Set(list)).map((s) => ({ value: s, label: s }));
 }
 
@@ -6369,6 +6997,44 @@ const PORTAL_DATA = {
     }
   } catch (_) {}
 
+  // Auto-merge all wards, streets, and coordinates from the 4,904 listings into STUDIO_WARDS_BY_CITY, STUDIO_STREETS_BY_WARD & STUDIO_WARD_COORDS
+  PROPERTIES.forEach((p) => {
+    if (p.city === "TP. Bắc Ninh") p.city = "Tỉnh Bắc Ninh";
+    const cityKey = p.city || "TP. Hồ Chí Minh";
+    if (!STUDIO_CITIES.some((c) => c.value === cityKey)) {
+      STUDIO_CITIES.push({ value: cityKey, label: cityKey });
+    }
+    if (!STUDIO_WARDS_BY_CITY[cityKey]) {
+      STUDIO_WARDS_BY_CITY[cityKey] = [];
+    }
+    const wardVal = (p.ward || "").trim();
+    if (wardVal) {
+      if (!STUDIO_WARDS_BY_CITY[cityKey].some((w) => w.value === wardVal)) {
+        STUDIO_WARDS_BY_CITY[cityKey].push({ value: wardVal, label: wardVal });
+      }
+      if (!STUDIO_WARD_COORDS[wardVal] && Number.isFinite(p.lat) && Number.isFinite(p.lng)) {
+        STUDIO_WARD_COORDS[wardVal] = [p.lat, p.lng];
+      }
+      if (!STUDIO_STREETS_BY_WARD[wardVal]) {
+        STUDIO_STREETS_BY_WARD[wardVal] = [];
+      }
+      const rawFront = ((p.fullAddress || "").split(",")[0] || "").trim();
+      const streetClean = rawFront
+        .replace(/^(Số\s*)?\d+[A-Za-z0-9/\-.,]*\s+/i, "")
+        .replace(/^(Đường|Phố)\s+(?!số\b)/i, "")
+        .trim();
+      if (
+        streetClean &&
+        streetClean.length >= 3 &&
+        streetClean.length <= 42 &&
+        !/^\d+$/.test(streetClean) &&
+        !STUDIO_STREETS_BY_WARD[wardVal].includes(streetClean)
+      ) {
+        STUDIO_STREETS_BY_WARD[wardVal].push(streetClean);
+      }
+    }
+  });
+
   // Restore saved portal wallet balance, transactions, and appointments
   try {
     const psRaw = localStorage.getItem("ctt_portal_state_v1");
@@ -7429,8 +8095,8 @@ function switchAdminTab(tabName, btnEl) {
       <div class="portal-table-card" style="margin-bottom:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
           <div>
-            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">1. Nhóm Phân Loại Bất Động Sản, Địa Bàn & Dự Án (Bước 1)</h3>
-            <small style="color:#64748b;">Tổng hợp 6 danh mục tin, danh sách Tỉnh/Phường/Đường và 5 Dự án có sẵn tọa độ GPS ghim map</small>
+            <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;">1. Nhóm Phân Loại Bất Động Sản, Địa Bàn 34 Tỉnh/TP & Dự Án (Bước 1)</h3>
+            <small style="color:#64748b;">Tổng hợp 6 danh mục tin, ${STUDIO_CITIES.length} Tỉnh/TP (NQ 202/2025/QH15), ${totalWards} Phường/Xã mới, ${totalStreets} Tên Đường và ${STUDIO_PROJECTS.length} Dự án chung cư chuẩn tọa độ GPS</small>
           </div>
           <span style="padding:4px 10px;border-radius:99px;background:linear-gradient(135deg,#f15a22,#ff9d00);color:#fff;font-size:11px;font-weight:800;">Tổng ${PROPERTIES.length} tin đang hiển thị</span>
         </div>
