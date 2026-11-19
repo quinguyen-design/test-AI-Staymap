@@ -91,6 +91,76 @@ const VIP_EXCLUSIVE_SLIDES = [
 
 // 2. AUTHENTIC LISTINGS FOR SPOTLIGHT, FEATURED, PRIME & CATEGORIES
 const PROPERTIES = [
+  // --- MẪU BÀI ĐĂNG ĐẦY ĐỦ 100% THÔNG SỐ (ID #9999) ---
+  {
+    id: 9999,
+    tier: "spotlight",
+    mapTier: "banner",
+    zoneId: 1,
+    vipBadge: "✦ ĐẶC QUYỀN",
+    badge: "✦ ĐẶC QUYỀN",
+    badgeClass: "tag-dacquyen",
+    sticker: "hot",
+    category: "can-ho-chung-cu",
+    categoryLabel: "Căn Hộ Chung Cư",
+    project: "Masteri Thảo Điền",
+    title: "Căn hộ 2PN Masteri Thảo Điền full nội thất cao cấp, view thoáng mát",
+    price: 14.5,
+    priceMillion: 14.5,
+    priceText: "14.5 Triệu",
+    deposit: "2 Tháng",
+    ward: "P. An Khánh",
+    city: "TP. Hồ Chí Minh",
+    fullAddress: "159 Xa Lộ Hà Nội, Phường An Khánh (Thủ Đức), TP. Hồ Chí Minh",
+    area: 72,
+    beds: "2 PN",
+    baths: "2 WC",
+    elec: "3.8k/kWh",
+    water: "25k/m³",
+    otherCost: "200k",
+    internet: "250k",
+    laundry: "50k/1 Lần",
+    trash: "30k",
+    parking: "120k",
+    maxPeople: "4",
+    extraPerson: "300k",
+    furniture: "Đầy đủ cao cấp",
+    floors: "Tầng 12",
+    direction: "Đông Nam",
+    frontageRoad: "30 m²",
+    roadAccess: "12 m²",
+    description: "Chính chủ cho thuê căn hộ 2 phòng ngủ - 2 WC tại dự án Masteri Thảo Điền, tầng 12 thoáng mát, hướng Đông Nam đón gió tự nhiên.\n\n• Nội thất đầy đủ cao cấp: Sofa da, Smart TV, tủ lạnh Inverter, máy giặt sấy riêng, bếp từ & máy hút mùi, giường nệm cao cấp.\n• Di chuyển thuận tiện: 2 phút ra ga Metro An Phú, Vincom Mega Mall ngay dưới chân tòa nhà.\n• Minh bạch chi phí điện nước, quản lý, gửi xe ngay trong hợp đồng thuê dài hạn.",
+    utilities: [
+      "Trường học (BIS / ĐH Hutech)",
+      "Chợ / Siêu Thị",
+      "Bệnh Viện / Y Tế",
+      "Công Viên",
+      "Xe Bus",
+      "Bank / ATM"
+    ],
+    services: [
+      "Nhà Xe / Hầm Xe Rộng",
+      "Khu Giặt / Phơi / Sấy",
+      "Bảo Vệ / Camera An Ninh",
+      "Hệ Thống PCCC",
+      "Thang Máy",
+      "Quản Lý / Kiểm Tra Khu Vực Chung"
+    ],
+    lat: 10.8022,
+    lng: 106.7418,
+    verified: true,
+    isVipPin: true,
+    phone: "0908 686 999",
+    host: "Chính chủ Ngọc Hân",
+    image: "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
+    gallery: [
+      "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&auto=format&fit=crop&q=80"
+    ]
+  },
   // --- SPOTLIGHT TIER (TOP 1 HIỂN THỊ) ---
   {
     id: 2078,
