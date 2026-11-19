@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261120b">
+  <link rel="stylesheet" href="styles.css?v=20261120c">
 </head>
 <body>
 
@@ -63,10 +63,9 @@
 
       <div class="shb-actions">
         <!-- Upgraded Instant VietQR Wallet Pill (Hidden until logged in) -->
-        <button type="button" id="headerWalletPill" class="shb-wallet-pill" style="display:none;" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR +11%">
+        <button type="button" id="headerWalletPill" class="shb-wallet-pill" style="display:none;" onclick="openWalletModal()" title="Ví đăng tin & Nạp nhanh VietQR">
           <i class="fa-solid fa-wallet" style="color:#f15a22;"></i>
           <span>Ví: <strong class="wallet-amount js-wallet-balance">550.000đ</strong></span>
-          <span class="wallet-topup-tag">+11%</span>
         </button>
 
         <!-- Auth Login Button (Shown when logged out) -->
@@ -91,7 +90,7 @@
               <i class="fa-solid fa-user-check" style="color:#f15a22;"></i> Hồ sơ & Quản lý tin đăng
             </button>
             <button type="button" class="header-user-dd-item" onclick="closeHeaderUserDropdown();openWalletModal()">
-              <i class="fa-solid fa-wallet" style="color:var(--ctt-orange);"></i> Ví đăng tin & Nạp VietQR (+11%)
+              <i class="fa-solid fa-wallet" style="color:var(--ctt-orange);"></i> Ví đăng tin & Nạp VietQR
             </button>
             <button type="button" id="dropdownAdminLink" class="header-user-dd-item" style="display:none;color:#f15a22;" onclick="closeHeaderUserDropdown();navigateTo('/admin.html')">
               <i class="fa-solid fa-shield-halved" style="color:#f15a22;"></i> Trung tâm Quản trị Admin
@@ -442,9 +441,9 @@
           <span class="promo-3d-hover-pill"><i class="fa-solid fa-bolt"></i> Đăng gói 1.000đ/ngày <i class="fa-solid fa-arrow-right"></i></span>
         </div>
 
-        <div class="promo-3d-banner-card" onclick="openWalletModal()" title="Khuyến Mãi Nạp Tháng 11 +11%">
-          <img src="assets/promo3.webp" alt="Khuyến Mãi Nạp Tháng 11 +11%">
-          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví nhận +11% <i class="fa-solid fa-arrow-right"></i></span>
+        <div class="promo-3d-banner-card" onclick="openWalletModal()" title="Nạp Ví Tự Động VietQR 24/7">
+          <img src="assets/promo3.webp" alt="Nạp Ví Tự Động VietQR 24/7">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví VietQR nhanh <i class="fa-solid fa-arrow-right"></i></span>
         </div>
       </div>
     </section>
@@ -490,7 +489,7 @@
 
     <!-- MID-PAGE HORIZONTAL PROMO BANNER (Real mid_banner.webp) -->
     <section class="lc-banner-row-section">
-      <a href="javascript:void(0)" onclick="handleMidPromoBannerClick()" class="lc-banner-row-card" title="Ưu đãi thành viên & Nạp Ví đăng tin nhận +11%">
+      <a href="javascript:void(0)" onclick="handleMidPromoBannerClick()" class="lc-banner-row-card" title="Ưu đãi thành viên & Nạp Ví đăng tin VietQR">
         <img src="assets/mid_banner.webp" alt="Đăng ký tài khoản nhận ngay 100.000đ">
       </a>
     </section>
@@ -737,7 +736,7 @@
   <section id="view-promo" class="app-route-view" style="display:none;">
     <div class="promo-3d-section" style="margin-top:36px;">
       <h1 class="section-title" style="margin-bottom:8px;">Trung Tâm Ưu Đãi & Khuyến Mãi Thành Viên</h1>
-      <p style="color:#64748b;margin-bottom:24px;">Nhận ngay ưu đãi +11% khi nạp Ví VietQR, giảm 20% gói VIP 30 ngày và gói đăng tin 1.000đ/ngày</p>
+      <p style="color:#64748b;margin-bottom:24px;">Nạp Ví tự động VietQR 24/7, giảm 20% gói VIP 30 ngày và gói đăng tin 1.000đ/ngày</p>
       <div class="promo-3d-grid">
         <div class="promo-3d-banner-card" onclick="openPostModalWithZone(1)">
           <img src="assets/promo1.webp" alt="Sale Off Tin VIP Đến 20%">
@@ -748,8 +747,8 @@
           <span class="promo-3d-hover-pill"><i class="fa-solid fa-bolt"></i> Đăng gói 1.000đ/ngày <i class="fa-solid fa-arrow-right"></i></span>
         </div>
         <div class="promo-3d-banner-card" onclick="openWalletModal()">
-          <img src="assets/promo3.webp" alt="Khuyến Mãi Nạp Tháng 11 +11%">
-          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví nhận +11% <i class="fa-solid fa-arrow-right"></i></span>
+          <img src="assets/promo3.webp" alt="Nạp Ví Tự Động VietQR 24/7">
+          <span class="promo-3d-hover-pill"><i class="fa-solid fa-qrcode"></i> Nạp Ví VietQR nhanh <i class="fa-solid fa-arrow-right"></i></span>
         </div>
       </div>
     </div>
@@ -794,7 +793,7 @@
           <div style="margin-top:16px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
               <span style="font-size:11px;color:#cbd5e1;">Số dư Ví đăng tin:</span>
-              <span style="font-size:10px;background:#f15a22;color:#0f172a;padding:2px 6px;border-radius:99px;font-weight:800;">+11% Tháng 11</span>
+              <span style="font-size:10px;background:#f15a22;color:#fff;padding:2px 6px;border-radius:99px;font-weight:800;">VietQR 24/7</span>
             </div>
             <div style="font-size:22px;font-weight:900;color:#f15a22;margin-bottom:10px;" class="js-wallet-balance tabular-nums">550.000đ</div>
             <button type="button" onclick="openWalletModal()" style="width:100%;padding:8px;border-radius:9px;border:none;background:var(--ctt-grad-brand);color:#fff;font-size:12px;font-weight:800;cursor:pointer;">
@@ -1044,7 +1043,7 @@
           <li><a href="javascript:void(0)" onclick="navigateTo('/hop-tac.html')"><i class="fa-solid fa-chevron-right"></i> Về chúng tôi</a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/tin-tuc.html')"><i class="fa-solid fa-chevron-right"></i> Hướng dẫn tìm nhà</a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/bao-gia.html')"><i class="fa-solid fa-chevron-right"></i> Báo giá dịch vụ VIP</a></li>
-          <li><a href="javascript:void(0)" onclick="openWalletModal()"><i class="fa-solid fa-chevron-right"></i> Nạp Ví VietQR (+11%)</a></li>
+          <li><a href="javascript:void(0)" onclick="openWalletModal()"><i class="fa-solid fa-chevron-right"></i> Nạp Ví VietQR</a></li>
         </ul>
       </div>
 
@@ -1516,13 +1515,13 @@
   </div>
 
   <!-- ========================================================================
-       MODAL 2: VIETQR / MOMO INSTANT WALLET TOP-UP (+11% BONUS)
+       MODAL 2: VIETQR / MOMO INSTANT WALLET TOP-UP
        ======================================================================== -->
   <div class="ctt-modal-backdrop" id="walletModalBackdrop">
     <div class="ctt-modal-dialog modal-sm">
       <div class="ctt-modal-header">
         <h3 style="font-size:17px;font-weight:900;color:#0f172a;">
-          <i class="fa-solid fa-qrcode" style="color:var(--ctt-orange);margin-right:8px;"></i>NẠP VÍ TỰ ĐỘNG VIETQR (+11% THÁNG 11)
+          <i class="fa-solid fa-qrcode" style="color:var(--ctt-orange);margin-right:8px;"></i>NẠP VÍ TỰ ĐỘNG VIETQR 24/7
         </h3>
         <button type="button" onclick="closeWalletModal()" style="border:none;background:transparent;font-size:18px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -1532,23 +1531,23 @@
           <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);" class="js-wallet-balance tabular-nums">550.000đ</div>
         </div>
 
-        <p style="font-size:13px;color:#475569;margin-bottom:14px;">Chọn mệnh giá nạp nhanh (Tặng thêm <strong>+11%</strong> vào Ví khuyến mãi):</p>
+        <p style="font-size:13px;color:#475569;margin-bottom:14px;">Chọn mệnh giá nạp nhanh vào Ví đăng tin:</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;" class="tabular-nums">
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(200000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 200.000đ</strong>
-            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 222.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#64748b;font-weight:700;">Cộng ngay 200.000đ</div>
           </button>
           <button type="button" class="zone-pkg-card selected" onclick="topUpWalletInstant(500000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 500.000đ</strong>
-            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 555.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#64748b;font-weight:700;">Cộng ngay 500.000đ</div>
           </button>
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(1000000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 1.000.000đ</strong>
-            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 1.110.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#64748b;font-weight:700;">Cộng ngay 1.000.000đ</div>
           </button>
           <button type="button" class="zone-pkg-card" onclick="topUpWalletInstant(2000000)">
             <strong style="font-size:15px;color:#0f172a;">Nạp 2.000.000đ</strong>
-            <div style="font-size:11.5px;color:#f15a22;font-weight:800;">Nhận 2.220.000đ (+11%)</div>
+            <div style="font-size:11.5px;color:#64748b;font-weight:700;">Cộng ngay 2.000.000đ</div>
           </button>
         </div>
         <small style="color:#64748b;font-size:11.5px;">Hỗ trợ VietQR 45 Ngân hàng, Ví MoMo & VNPay tự động 24/7.</small>
@@ -1564,7 +1563,7 @@
       <div class="ctt-modal-header">
         <div>
           <h3 style="font-size:17px;font-weight:900;color:#0f172a;">CỔNG ĐĂNG NHẬP & ĐĂNG KÝ BẢO MẬT CHOTHUETOT.VN</h3>
-          <small style="color:#64748b;font-size:12px;">Xác thực 2 lớp qua Zalo OTP & Google OAuth 2.0 • Bảo vệ tài khoản Chủ nhà & Admin</small>
+          <small style="color:#64748b;font-size:12px;">Xác thực 2 lớp qua Google OAuth 2.0 & Gmail • Bảo vệ tài khoản Chủ nhà & Admin</small>
         </div>
         <button type="button" onclick="closeAuthModal()" style="border:none;background:transparent;font-size:18px;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -1586,7 +1585,7 @@
                 </div>
                 <div class="auth-benefit-item">
                   <span class="auth-benefit-icon"><i class="fa-solid fa-shield-check"></i></span>
-                  <span>Xác thực chính chủ 2 lớp qua Zalo ZNS OTP hoặc Google OAuth 2.0.</span>
+                  <span>Xác thực tài khoản 2 lớp qua Email liên kết Google OAuth 2.0.</span>
                 </div>
                 <div class="auth-benefit-item">
                   <span class="auth-benefit-icon"><i class="fa-regular fa-calendar-check"></i></span>
@@ -1594,13 +1593,12 @@
                 </div>
                 <div class="auth-benefit-item">
                   <span class="auth-benefit-icon"><i class="fa-solid fa-wallet"></i></span>
-                  <span>Quản lý Ví đăng tin VietQR 24/7 — tặng ngay <strong>+11%</strong> giá trị nạp.</span>
+                  <span>Quản lý Ví đăng tin VietQR tự động 24/7 minh bạch & tức thì.</span>
                 </div>
               </div>
             </div>
             <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);">
               <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                <span class="auth-security-pill"><i class="fa-solid fa-shield-halved" style="color:#f15a22;"></i> Zalo ZNS OTP</span>
                 <span class="auth-security-pill"><i class="fa-brands fa-google" style="color:#f15a22;"></i> Google OAuth 2.0</span>
                 <span class="auth-security-pill"><i class="fa-solid fa-lock" style="color:#f15a22;"></i> 2FA Ready</span>
               </div>
@@ -1653,12 +1651,9 @@
                   ĐĂNG NHẬP VÀO TÀI KHOẢN
                 </button>
                 <div class="auth-divider">hoặc đăng nhập nhanh</div>
-                <div class="auth-social-grid">
-                  <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;" onclick="loginWithZaloQuick()">
-                    <img src="assets/zalo.svg" alt="Zalo" style="width:17px;height:17px;"> Zalo
-                  </button>
+                <div>
                   <button type="button" class="hsp-btn-reset" style="width:100%;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;" onclick="loginWithGoogleQuick()">
-                    <i class="fa-brands fa-google" style="color:#f15a22;font-size:15px;"></i> Google
+                    <i class="fa-brands fa-google" style="color:#f15a22;font-size:15px;"></i> Đăng nhập / Đăng ký nhanh qua Google
                   </button>
                 </div>
                 <div style="text-align:center;font-size:12px;color:#64748b;margin-top:2px;">
@@ -1745,62 +1740,14 @@
               </div>
             </div>
 
-            <!-- PANEL 2: ĐĂNG KÝ BẢO MẬT (2 PHƯƠNG THỨC) -->
+            <!-- PANEL 2: ĐĂNG KÝ BẢO MẬT QUA EMAIL GOOGLE -->
             <div id="authPanelRegister" style="display:none;">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-                <button type="button" id="regMethodZaloBtn" onclick="switchRegisterMethod('zalo')" style="padding:10px 8px;border-radius:10px;border:1.5px solid #f15a22;background:#f8fafc;color:#475569;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                  <img src="assets/zalo.svg" alt="Zalo" style="width:16px;height:16px;"> 1. SĐT (Mã qua Zalo)
-                </button>
-                <button type="button" id="regMethodGoogleBtn" onclick="switchRegisterMethod('google')" style="padding:10px 8px;border-radius:10px;border:1.5px solid #e2e8f0;background:#fff;color:#475569;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-                  <i class="fa-brands fa-google" style="color:#f15a22;"></i> 2. Email liên kết Google
-                </button>
+              <div style="padding:10px 12px;border-radius:10px;border:1.5px solid #f15a22;background:#fffaf5;color:#9a3412;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:14px;">
+                <i class="fa-brands fa-google" style="color:#f15a22;font-size:14px;"></i> Đăng ký bằng Email liên kết Google (Gmail)
               </div>
 
-              <!-- CÁCH 1: ĐĂNG KÝ BẰNG SĐT + GỬI MÃ OTP QUA ZALO -->
-              <div id="regPanelZalo" style="display:flex;flex-direction:column;gap:10px;">
-                <div>
-                  <label class="auth-field-label" for="regZaloName"><i class="fa-solid fa-id-card"></i> Họ và tên chính chủ</label>
-                  <input type="text" id="regZaloName" class="post-input" placeholder="VD: Nguyễn Minh Quân">
-                </div>
-                <div>
-                  <label class="auth-field-label" for="regZaloPhone"><i class="fa-solid fa-phone"></i> Số điện thoại Zalo</label>
-                  <div style="display:flex;gap:8px;">
-                    <input type="tel" id="regZaloPhone" class="post-input" style="flex:1;" placeholder="10 số, VD: 0906 344 877">
-                    <button type="button" id="btnSendZaloOtp" onclick="sendZaloRegisterOtp()" style="padding:0 14px;border-radius:10px;border:none;background:#f15a22;color:#fff;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">
-                      Gửi mã Zalo
-                    </button>
-                  </div>
-                </div>
-                <div id="regZaloOtpBanner" style="display:none;padding:9px 11px;border-radius:10px;background:#fffaf5;border:1px solid #fed7aa;color:#9a3412;font-size:11.5px;line-height:1.45;"></div>
-                <div>
-                  <label class="auth-field-label" for="regZaloOtpInput"><i class="fa-solid fa-comment-sms"></i> Mã OTP 6 số từ Zalo ZNS</label>
-                  <input type="text" id="regZaloOtpInput" class="post-input tabular-nums" maxlength="6" placeholder="Nhập mã OTP 6 số">
-                </div>
-                <div>
-                  <label class="auth-field-label" for="regZaloPassword"><i class="fa-solid fa-lock"></i> Mật khẩu bảo mật</label>
-                  <div class="auth-pwd-wrap">
-                    <input type="password" id="regZaloPassword" class="post-input" placeholder="≥ 8 ký tự, chữ hoa, số, ký tự đặc biệt" oninput="updateRegPasswordStrength(this.value, 'zalo')">
-                    <button type="button" class="auth-pwd-eye" onclick="toggleAuthPassword('regZaloPassword', this)" aria-label="Hiện/ẩn mật khẩu"><i class="fa-regular fa-eye"></i></button>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:8px;margin-top:5px;">
-                    <div style="flex:1;height:5px;border-radius:99px;background:#e2e8f0;overflow:hidden;">
-                      <div id="regZaloStrengthBar" style="width:0%;height:100%;background:#f15a22;transition:width 0.2s,background 0.2s;"></div>
-                    </div>
-                    <small id="regZaloStrengthLabel" style="font-size:11px;font-weight:700;color:#64748b;">Chưa nhập</small>
-                  </div>
-                </div>
-                <label style="display:flex;align-items:flex-start;gap:7px;font-size:11.5px;color:#475569;cursor:pointer;">
-                  <input type="checkbox" id="regZaloAgree" checked style="margin-top:2px;">
-                  <span>Tôi đồng ý xác thực SĐT chính chủ qua Zalo & Chính sách bảo mật ChoThueTot.vn</span>
-                </label>
-                <div id="regZaloError" class="auth-error-box"></div>
-                <button type="button" class="hsp-btn-apply" style="width:100%;padding:11px;" onclick="submitZaloRegister()">
-                  <i class="fa-solid fa-shield-check"></i> XÁC THỰC ZALO & HOÀN TẤT ĐĂNG KÝ
-                </button>
-              </div>
-
-              <!-- CÁCH 2: ĐĂNG KÝ BẰNG EMAIL LIÊN KẾT GOOGLE -->
-              <div id="regPanelGoogle" style="display:none;flex-direction:column;gap:10px;">
+              <!-- ĐĂNG KÝ BẰNG EMAIL LIÊN KẾT GOOGLE -->
+              <div id="regPanelGoogle" style="display:flex;flex-direction:column;gap:10px;">
                 <div>
                   <label class="auth-field-label" for="regGoogleEmail"><i class="fa-brands fa-google"></i> Email Google (Gmail)</label>
                   <div style="display:flex;gap:8px;">
@@ -1895,9 +1842,9 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data/listings_1000.js?v=20261120b"></script>
-  <script src="data/listings_4000_a.js?v=20261120b"></script>
-  <script src="data/listings_4000_b.js?v=20261120b"></script>
-  <script src="app.js?v=20261120b"></script>
+  <script src="data/listings_1000.js?v=20261120c"></script>
+  <script src="data/listings_4000_a.js?v=20261120c"></script>
+  <script src="data/listings_4000_b.js?v=20261120c"></script>
+  <script src="app.js?v=20261120c"></script>
 </body>
 </html>

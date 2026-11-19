@@ -1096,7 +1096,7 @@ function handleMidPromoBannerClick() {
   if (STATE.auth && STATE.auth.isLoggedIn) {
     openWalletModal();
   } else {
-    openAuthModal("Đăng nhập hoặc đăng ký tài khoản để nhận ưu đãi nạp Ví +11% ngay hôm nay!");
+    openAuthModal("Đăng nhập hoặc đăng ký tài khoản để quản lý Ví đăng tin VietQR ngay hôm nay!");
   }
 }
 
@@ -1166,7 +1166,7 @@ function navigateTo(route, pushHistory = true) {
   } else if (route.includes("uu-dai")) {
     heroEl.classList.add("is-compact");
     document.getElementById("view-promo").style.display = "block";
-    updateDocumentSeoMeta("Ưu Đãi Thành Viên & Khuyến Mãi Nạp Ví VietQR +11%", "Nhận ngay +11% khi nạp Ví đăng tin VietQR và giảm tới 20% gói VIP 30 ngày.");
+    updateDocumentSeoMeta("Ưu Đãi Thành Viên & Khuyến Mãi Gói Đăng Tin VIP", "Nạp Ví đăng tin tự động VietQR 24/7 và giảm tới 20% gói VIP 30 ngày.");
     setTimeout(() => heroMapInstance?.invalidateSize(), 300);
   } else if (route.includes("hop-tac")) {
     heroEl.classList.add("is-compact");
@@ -3378,7 +3378,7 @@ function submitNewPropertyListing() {
   const pkg = tier.packages[STATE.selectedPkgIndex] || tier.packages[0];
 
   if (STATE.walletBalance < pkg.price) {
-    showCttNotice("Số dư Ví chưa đủ", "Vui lòng nạp thêm qua VietQR (+11% ưu đãi) để thanh toán gói tin.");
+    showCttNotice("Số dư Ví chưa đủ", "Vui lòng nạp thêm qua VietQR để thanh toán gói tin.");
     openWalletModal();
     return;
   }
@@ -3532,7 +3532,7 @@ function closeCompareModal() {
   document.getElementById("compareModalBackdrop")?.classList.remove("is-open");
 }
 
-// Wallet Top-Up Modal (VietQR / MoMo +11% Bonus)
+// Wallet Top-Up Modal (VietQR / MoMo 24/7)
 function openWalletModal() {
   document.getElementById("walletModalBackdrop")?.classList.add("is-open");
   updateWalletUI();
@@ -3548,13 +3548,12 @@ function updateWalletUI() {
 }
 
 function topUpWalletInstant(amount) {
-  const bonus = Math.round(amount * 0.11); // +11% November Promo from chothuetot.vn!
-  STATE.walletBalance += amount + bonus;
+  STATE.walletBalance += amount;
   updateWalletUI();
   if (typeof savePortalStateStore === "function") savePortalStateStore();
   showCttNotice(
     "Nạp Ví VietQR thành công",
-    `• Số tiền nạp: +${new Intl.NumberFormat("vi-VN").format(amount)}đ\n• Thưởng khuyến mãi (+11%): +${new Intl.NumberFormat("vi-VN").format(bonus)}đ\n• Số dư Ví mới: ${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ`
+    `• Số tiền nạp: +${new Intl.NumberFormat("vi-VN").format(amount)}đ\n• Số dư Ví mới: ${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ`
   );
   closeWalletModal();
 }
@@ -3940,6 +3939,10 @@ function switchAuthMode(mode) {
   if (panelReg) panelReg.style.display = mode === "register" ? "block" : "none";
   if (panelForgot) panelForgot.style.display = mode === "forgot" ? "block" : "none";
   if (panelAdmin) panelAdmin.style.display = mode === "admin" ? "block" : "none";
+  if (mode === "register") {
+    const gPanel = document.getElementById("regPanelGoogle");
+    if (gPanel) gPanel.style.display = "flex";
+  }
 
   const isLogin = mode === "login" || mode === "forgot";
   const isReg = mode === "register";
@@ -4016,26 +4019,9 @@ function submitForgotReset() {
   showRegError("authLoginSuccess", "Đã cập nhật mật khẩu mới thành công! Bạn có thể đăng nhập ngay.");
 }
 
-function switchRegisterMethod(method) {
-  const isGoogle = method === "google";
-  const zaloBtn = document.getElementById("regMethodZaloBtn");
-  const googleBtn = document.getElementById("regMethodGoogleBtn");
-  const zaloPanel = document.getElementById("regPanelZalo");
+function switchRegisterMethod() {
   const googlePanel = document.getElementById("regPanelGoogle");
-
-  if (zaloPanel) zaloPanel.style.display = isGoogle ? "none" : "flex";
-  if (googlePanel) googlePanel.style.display = isGoogle ? "flex" : "none";
-
-  if (zaloBtn) {
-    zaloBtn.style.borderColor = isGoogle ? "#e2e8f0" : "#f15a22";
-    zaloBtn.style.background = isGoogle ? "#fff" : "#f8fafc";
-    zaloBtn.style.color = isGoogle ? "#475569" : "#475569";
-  }
-  if (googleBtn) {
-    googleBtn.style.borderColor = isGoogle ? "#f15a22" : "#e2e8f0";
-    googleBtn.style.background = isGoogle ? "#fffaf5" : "#fff";
-    googleBtn.style.color = isGoogle ? "#9a3412" : "#475569";
-  }
+  if (googlePanel) googlePanel.style.display = "flex";
 }
 
 function toggleAuthPassword(inputId, btnEl) {
@@ -6212,7 +6198,7 @@ const PORTAL_DATA = {
     { id: 103, guestName: "Lê Minh Khôi", guestPhone: "0914882310", propId: 4170, propTitle: "Penthouse Mini & CHDV View Kênh Nhiêu Lộc", slot: "Hôm nay • Tối (18h-20h)", status: "confirmed" }
   ],
   transactions: [
-    { code: "#VQR-99241", time: "18/11/2026 09:15", desc: "Nạp Ví tự động qua VietQR (+11% Khuyến mãi Tháng 11)", amount: 555000, type: "credit", vat: 0, status: "Hoàn tất tự động" },
+    { code: "#VQR-99241", time: "18/11/2026 09:15", desc: "Nạp Ví tự động qua VietQR 24/7", amount: 500000, type: "credit", vat: 0, status: "Hoàn tất tự động" },
     { code: "#VIP-88102", time: "17/11/2026 14:20", desc: "Đăng gói Banner Đặc Quyền (7 ngày) + Nhãn HOT + VAT 8% cho tin #2078", amount: -366660, type: "debit", vat: 27160, status: "Đã xuất hóa đơn VAT" }
   ]
 };
@@ -6448,12 +6434,11 @@ function getMemberOwnedProperties() {
 // Hook topUpWalletInstant & submitZaloViewingSchedule to record into PORTAL_DATA
 const _origTopUpWallet = topUpWalletInstant;
 topUpWalletInstant = function (amount) {
-  const bonus = Math.round(amount * 0.11);
   PORTAL_DATA.transactions.unshift({
     code: `#VQR-${Math.floor(10000 + Math.random() * 89999)}`,
     time: "Vừa xong",
-    desc: `Nạp Ví tự động VietQR (+11% thưởng: +${new Intl.NumberFormat("vi-VN").format(bonus)}đ)`,
-    amount: amount + bonus,
+    desc: `Nạp Ví tự động VietQR 24/7`,
+    amount: amount,
     type: "credit",
     vat: 0,
     status: "Hoàn tất tự động"
@@ -6897,9 +6882,9 @@ function switchMemberTab(tabName, btnEl) {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
           <div>
             <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Lịch Sử Giao Dịch Ví Đăng Tin & Hóa Đơn Thuế VAT (8%)</h3>
-            <small style="color:#64748b;">Tự động cộng +11% khi nạp VietQR và khấu trừ minh bạch kèm VAT 8% khi xuất bản tin đăng</small>
+            <small style="color:#64748b;">Tự động cộng tiền tức thì khi nạp VietQR và khấu trừ minh bạch kèm VAT 8% khi xuất bản tin đăng</small>
           </div>
-          <button type="button" class="hsp-btn-apply" onclick="openWalletModal()"><i class="fa-solid fa-qrcode"></i> Nạp thêm Ví (+11%)</button>
+          <button type="button" class="hsp-btn-apply" onclick="openWalletModal()"><i class="fa-solid fa-qrcode"></i> Nạp thêm Ví</button>
         </div>
         <table class="portal-table tabular-nums">
           <thead>
