@@ -6979,6 +6979,17 @@ const PORTAL_DATA = {
   } catch (_) {}
 
   // Auto-merge all wards, streets, and coordinates from the 4,904 listings into STUDIO_WARDS_BY_CITY, STUDIO_STREETS_BY_WARD & STUDIO_WARD_COORDS
+  const toTitleCaseStreet = (str) =>
+    str
+      .split(/\s+/)
+      .map((w, idx) => {
+        if (/^(QL|ĐT|TL)\d*[A-Z]?$/i.test(w)) return w.toUpperCase();
+        if (/^\d+[a-z]+$/i.test(w)) return w.toUpperCase();
+        if (idx > 0 && w.toLowerCase() === "số") return "số";
+        return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+      })
+      .join(" ");
+
   const sanitizeExtractedStreetName = (raw) => {
     if (!raw) return "";
     let s = String(raw).trim();
@@ -6988,25 +6999,38 @@ const PORTAL_DATA = {
     while (/^(hẻm|ngõ|ngách|kiệt|lô|tổ|ấp|khu phố|kp)\s+\d+[A-Za-z0-9/\-.,]*\s+/i.test(s)) {
       s = s.replace(/^(hẻm|ngõ|ngách|kiệt|lô|tổ|ấp|khu phố|kp)\s+\d+[A-Za-z0-9/\-.,]*\s+/i, "");
     }
-    s = s.replace(/^(Đường|Phố)\s+(?!số\b)/i, "").trim();
+    s = s.replace(/^(Mặt tiền|Đường|Phố)\s+(?!số(?:\s|$))/i, "").trim();
+    s = s.replace(/^(Đường|Phố)\s+(?!số(?:\s|$))/i, "").trim();
     if (/^số\s+\d+[A-Z]?$/i.test(s)) {
       s = "Đường " + s.replace(/^số/i, "số");
     }
-    if (!s || s.length < 4 || s.length > 32) return "";
-    // Reject administrative or building words masquerading as street names
-    if (/^(phường|xã|thị trấn|quận|huyện|thành phố|tỉnh|khu|chung cư|tòa|căn hộ|nhà|phòng|số|ngõ|ngách|hẻm|kiệt|ấp|tổ|lô|kp|ql|đt|dt)\b/i.test(s)) {
+    if (!s || s.length < 4 || s.length > 30) return "";
+    if (s.split(/\s+/).length > 5) return "";
+    // Reject administrative, landmark, project, or descriptive phrases masquerading as street names (use (?:\s|$) for Unicode)
+    if (
+      /^(phường|xã|thị trấn|quận|huyện|thành phố|tỉnh|khu|chung cư|tòa|căn hộ|nhà|phòng|số|ngõ|ngách|hẻm|kiệt|ấp|tổ|lô|kp|ql|đt|dt|tp\.|tx\.|tt\.|gần|đối diện|mặt tiền|sau|cạnh|bên|ngay|trước|cuối|đầu|vòng xoay|ngã|dự án|chợ|bệnh viện|trường|công viên)(?:\s|$)/i.test(
+        s
+      )
+    ) {
       return "";
     }
-    // Reject remaining numbers/slashes/parentheses except valid numbered roads or historic dates
     if (
-      /[()0-9/]/.test(s) &&
+      /(mặt tiền|đối diện|gần\s|ngay\s|vòng xoay|nhà thờ|hội trường|novaland|vinhomes|masteri|flora|jamila|safira|sunrise|him lam|golf park|residence|tower|plaza|garden|city|hồ chí minh|hà nội|đà nẵng|cần thơ|hải phòng|bình dương|đồng nai)/i.test(
+        s
+      )
+    ) {
+      return "";
+    }
+    // Reject remaining numbers/slashes/punctuation except valid numbered roads or historic dates
+    if (
+      /[()0-9/.,:;!?]/.test(s) &&
       !/^Đường số \d+[A-Z]?$/i.test(s) &&
       !/^(Quốc Lộ|Tỉnh Lộ) \d+[A-Z]?$/i.test(s) &&
       !/^(3 Tháng 2|30 Tháng 4|2 Tháng 9|19 Tháng 5|23 Tháng 9|Cách Mạng Tháng 8)$/i.test(s)
     ) {
       return "";
     }
-    return s;
+    return toTitleCaseStreet(s);
   };
   window.sanitizeExtractedStreetName = sanitizeExtractedStreetName;
 
@@ -7032,7 +7056,7 @@ const PORTAL_DATA = {
       }
       const rawFront = ((p.fullAddress || "").split(",")[0] || "").trim();
       const streetClean = sanitizeExtractedStreetName(rawFront);
-      if (streetClean && !STUDIO_STREETS_BY_WARD[wardVal].includes(streetClean)) {
+      if (streetClean && !STUDIO_STREETS_BY_WARD[wardVal].some((x) => x.toLowerCase() === streetClean.toLowerCase())) {
         STUDIO_STREETS_BY_WARD[wardVal].push(streetClean);
       }
     }
