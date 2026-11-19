@@ -96,7 +96,7 @@ const PROPERTIES = [
     id: 2078,
     tier: "spotlight",
     badge: "KIM CƯƠNG • TOP 1",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "Kiot & Phòng Studio cao cấp khu dân cư sầm uất gần chợ Phú Nhuận",
@@ -128,7 +128,7 @@ const PROPERTIES = [
     id: 4169,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP 1",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "can-ho-chung-cu",
     categoryLabel: "Căn hộ, chung cư",
     title: "PHÒNG STUDIO BAN CÔNG THOÁNG FULL NỘI THẤT TẠI PHAN XÍCH LONG",
@@ -160,7 +160,7 @@ const PROPERTIES = [
     id: 4170,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP 1",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "can-ho-chung-cu",
     categoryLabel: "Căn hộ, chung cư",
     title: "PHÒNG CAO CẤP 30m² FULL TIỆN NGHI GẦN CẦU LÊ VĂN SỸ",
@@ -192,7 +192,7 @@ const PROPERTIES = [
     id: 1117,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP 1",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "nha-o",
     categoryLabel: "Nhà ở",
     title: "Chính chủ cho thuê nhà nguyên căn 1 trệt 2 lầu – Full nội thất mới 100%",
@@ -224,7 +224,7 @@ const PROPERTIES = [
     id: 4154,
     tier: "spotlight",
     badge: "SPOTLIGHT • HOT",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "can-ho-chung-cu",
     categoryLabel: "Căn hộ, chung cư",
     title: "Khai trương 30P Studio ban công thoáng mát, Full nội thất mới tinh",
@@ -255,7 +255,7 @@ const PROPERTIES = [
     id: 1120,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "nha-o",
     categoryLabel: "Nhà ở",
     title: "Nhà thuê nguyên căn Nguyễn Oanh rộng rãi, vỉa hè 6m tiện mở Văn phòng",
@@ -286,7 +286,7 @@ const PROPERTIES = [
     id: 4209,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "mat-bang-van-phong",
     categoryLabel: "Mặt bằng, văn phòng",
     title: "Cho thuê mặt bằng kinh doanh & Showroom góc 2 mặt tiền - Chính chủ",
@@ -317,7 +317,7 @@ const PROPERTIES = [
     id: 4208,
     tier: "spotlight",
     badge: "SPOTLIGHT • VIP",
-    badgeClass: "tag-top1",
+    badgeClass: "tag-vip1",
     category: "bai-dat-kho-xuong",
     categoryLabel: "Bãi, Đất, Kho, Xưởng",
     title: "Cho thuê kho diện tích khủng 500m² ngay Tân Quy - Tân Hưng Quận 7",
@@ -350,7 +350,7 @@ const PROPERTIES = [
     id: 4165,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "Cho thuê Phòng có máy lạnh, ban công cách trường ĐH Công Thương 300m",
@@ -378,7 +378,7 @@ const PROPERTIES = [
     id: 4178,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "Phòng cho thuê quận Bình Thạnh, Chu Văn An có cửa sổ lớn thoáng mát",
@@ -406,7 +406,7 @@ const PROPERTIES = [
     id: 4179,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "PHÒNG BAN CÔNG NGAY ĐH KINH TẾ ĐỐI NGOẠI, ĐỖ XUÂN HỢP, YÊN TĨNH 30M²",
@@ -434,7 +434,7 @@ const PROPERTIES = [
     id: 4197,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "PHÒNG MỚI XÂY THOÁNG NGAY ĐƯỜNG LÊ NGÃ - GIỜ GIẤC TỰ DO, VÂN TAY",
@@ -462,7 +462,7 @@ const PROPERTIES = [
     id: 8931,
     tier: "featured",
     badge: "FEATURED • HÀ NỘI",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "can-ho-chung-cu",
     categoryLabel: "Căn hộ, chung cư",
     title: "Cho thuê căn hộ mini & Studio đường Võ Chí Công - Tây Hồ, Full đồ mới",
@@ -490,7 +490,7 @@ const PROPERTIES = [
     id: 1122,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "nha-o",
     categoryLabel: "Nhà ở",
     title: "Nhà nguyên căn full NỘI THẤT gần Công viên Gia Định, hẻm xe hơi",
@@ -518,7 +518,7 @@ const PROPERTIES = [
     id: 4210,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "mat-bang-van-phong",
     categoryLabel: "Mặt bằng, văn phòng",
     title: "Cho thuê Shophouse & Văn phòng đại diện Quận Tân Phú - TP Hồ Chí Minh",
@@ -546,7 +546,7 @@ const PROPERTIES = [
     id: 4172,
     tier: "featured",
     badge: "FEATURED • TOP 2",
-    badgeClass: "tag-top2",
+    badgeClass: "tag-vip2",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "Phòng trọ Gò Vấp đẹp mới xây sát ĐH Công Nghiệp, Phạm Văn Đồng",
@@ -576,7 +576,7 @@ const PROPERTIES = [
     id: 4202,
     tier: "prime",
     badge: "PRIME • TOP 3",
-    badgeClass: "tag-top3",
+    badgeClass: "tag-vip3",
     sticker: "hot",
     category: "bai-dat-kho-xuong",
     categoryLabel: "Bãi, Đất, Kho, Xưởng",
@@ -605,7 +605,7 @@ const PROPERTIES = [
     id: 4173,
     tier: "prime",
     badge: "PRIME • TOP 3",
-    badgeClass: "tag-top3",
+    badgeClass: "tag-vip3",
     category: "phong-tro",
     categoryLabel: "Phòng trọ",
     title: "PHÒNG CHO THUÊ 3/71/5/1 THÀNH THÁI, P.14, Q.10 (Phường Diên Hồng)",
@@ -633,7 +633,7 @@ const PROPERTIES = [
     id: 4205,
     tier: "prime",
     badge: "PRIME • TOP 3",
-    badgeClass: "tag-top3",
+    badgeClass: "tag-vip3",
     sticker: "hot",
     category: "bai-dat-kho-xuong",
     categoryLabel: "Bãi, Đất, Kho, Xưởng",
@@ -662,7 +662,7 @@ const PROPERTIES = [
     id: 4211,
     tier: "prime",
     badge: "PRIME • TOP 3",
-    badgeClass: "tag-top3",
+    badgeClass: "tag-vip3",
     sticker: "hot",
     category: "bai-dat-kho-xuong",
     categoryLabel: "Bãi, Đất, Kho, Xưởng",
@@ -3103,15 +3103,15 @@ function submitZaloViewingSchedule(propId) {
   const phoneEl = document.getElementById("schedTenantPhone");
   const phone = (phoneEl?.value || "").replace(/\D/g, "").trim();
   if (!/^0(3|5|7|8|9)\d{8}$/.test(phone)) {
-    alert("Vui lòng nhập đúng Số Điện Thoại / Zalo 10 số (bắt đầu 03/05/07/08/09) để chủ nhà xác nhận lịch hẹn.");
+    showCttNotice("Số điện thoại chưa hợp lệ", "Vui lòng nhập đúng Số Điện Thoại / Zalo 10 số (bắt đầu 03/05/07/08/09) để chủ nhà xác nhận lịch hẹn.");
     phoneEl?.focus();
     return;
   }
-  alert(
-    `✅ ĐÃ TẠO LỊCH HẸN XEM PHÒNG QUA ZALO CHỦ NHÀ!\n\n` +
-      `• Mã tin: #${item.id} (${item.ward}, ${item.city})\n` +
+  showCttNotice(
+    "Đã tạo lịch hẹn xem phòng qua Zalo",
+    `• Mã tin: #${item.id} (${item.ward}, ${item.city})\n` +
       `• Thời gian hẹn: ${STATE.selectedViewingDate} — ${STATE.selectedViewingTime}\n` +
-      `• SĐT khách thuê: ${phone}\n` +
+      `• SĐT khách thuê: ${formatPhone433(phone)}\n` +
       `• Chủ nhà (${item.host} - ${formatPhone433(item.phone)}) đã nhận thông báo từ ChoThueTot.vn!`
   );
 }
@@ -3204,12 +3204,12 @@ function renderPricingPage() {
 // 9. POST LISTING MODAL (#modalProperty) & ZONE PACKAGE SELECTOR + LIVE PREVIEW
 // ==========================================================================
 const VIP_ROI_METRICS = {
-  1: { calls: "68 lượt gọi & Zalo/tuần", boost: "8.5x", fillTime: "Lấp phòng trong 48h (94%)", badge: "BANNER ĐẶC QUYỀN", badgeClass: "tag-top1" },
-  2: { calls: "46 lượt gọi & Zalo/tuần", boost: "6.2x", fillTime: "Lấp phòng trong 3 ngày", badge: "SPOTLIGHT • TOP 1", badgeClass: "tag-top1" },
-  3: { calls: "32 lượt gọi & Zalo/tuần", boost: "4.5x", fillTime: "Lấp phòng trong 5 ngày", badge: "FEATURED • TOP 2", badgeClass: "tag-top2" },
-  10: { calls: "19 lượt gọi & Zalo/tuần", boost: "2.8x", fillTime: "Lấp phòng trong 7 ngày", badge: "PRIME • TOP 3", badgeClass: "tag-top3" },
-  4: { calls: "8 lượt gọi/tuần", boost: "1.2x", fillTime: "Duy trì ổn định dài hạn", badge: "TIN CƠ BẢN", badgeClass: "tag-top3" },
-  13: { calls: "4 lượt gọi/3 ngày", boost: "1.0x", fillTime: "Gói trải nghiệm dùng thử", badge: "TIN MIỄN PHÍ", badgeClass: "tag-top3" }
+  1: { calls: "68 lượt gọi & Zalo/tuần", boost: "8.5x", fillTime: "Lấp phòng trong 48h (94%)", badge: "BANNER ĐẶC QUYỀN", badgeClass: "tag-vip1" },
+  2: { calls: "46 lượt gọi & Zalo/tuần", boost: "6.2x", fillTime: "Lấp phòng trong 3 ngày", badge: "SPOTLIGHT • TOP 1", badgeClass: "tag-vip1" },
+  3: { calls: "32 lượt gọi & Zalo/tuần", boost: "4.5x", fillTime: "Lấp phòng trong 5 ngày", badge: "FEATURED • TOP 2", badgeClass: "tag-vip2" },
+  10: { calls: "19 lượt gọi & Zalo/tuần", boost: "2.8x", fillTime: "Lấp phòng trong 7 ngày", badge: "PRIME • TOP 3", badgeClass: "tag-vip3" },
+  4: { calls: "8 lượt gọi/tuần", boost: "1.2x", fillTime: "Duy trì ổn định dài hạn", badge: "TIN CƠ BẢN", badgeClass: "tag-vip3" },
+  13: { calls: "4 lượt gọi/3 ngày", boost: "1.0x", fillTime: "Gói trải nghiệm dùng thử", badge: "TIN MIỄN PHÍ", badgeClass: "tag-vip3" }
 };
 
 function openPostModal() {
@@ -3378,15 +3378,16 @@ function submitNewPropertyListing() {
   const pkg = tier.packages[STATE.selectedPkgIndex] || tier.packages[0];
 
   if (STATE.walletBalance < pkg.price) {
-    alert("Số dư Ví đăng tin chưa đủ! Vui lòng nạp thêm qua VietQR (+11% ưu đãi) để thanh toán gói tin.");
+    showCttNotice("Số dư Ví chưa đủ", "Vui lòng nạp thêm qua VietQR (+11% ưu đãi) để thanh toán gói tin.");
     openWalletModal();
     return;
   }
 
   STATE.walletBalance -= pkg.price;
   updateWalletUI();
+  if (typeof savePortalStateStore === "function") savePortalStateStore();
   closePostModal();
-  alert(`🎉 ĐĂNG TIN THÀNH CÔNG!\nGói hiển thị: ${tier.name} (${pkg.days} ngày)\nĐã trừ: ${new Intl.NumberFormat("vi-VN").format(pkg.price)}đ từ Ví đăng tin.`);
+  showCttNotice("Đăng tin thành công", `Gói hiển thị: ${tier.name} (${pkg.days} ngày)\nĐã trừ: ${new Intl.NumberFormat("vi-VN").format(pkg.price)}đ từ Ví đăng tin.`);
 }
 
 // ==========================================================================
@@ -3400,7 +3401,7 @@ function toggleCompare(e, propId, btnEl) {
     btnEl?.classList.remove("active");
   } else {
     if (STATE.compareList.length >= 3) {
-      alert("Bạn chỉ có thể so sánh tối đa 3 bất động sản cùng lúc!");
+      showCttNotice("Giới hạn so sánh", "Bạn chỉ có thể so sánh tối đa 3 bất động sản cùng lúc.");
       return;
     }
     STATE.compareList.push(propId);
@@ -5242,7 +5243,7 @@ function handleStudioPhotoUpload(input) {
   if (!files.length) return;
   const remaining = Math.max(0, 9 - STUDIO_STATE.photos.length);
   if (remaining === 0) {
-    alert("Chỉ được tải tối đa 9 hình ảnh.");
+    showCttNotice("Giới hạn hình ảnh", "Mỗi tin đăng chỉ được tải tối đa 9 hình ảnh.");
     input.value = "";
     return;
   }
@@ -6370,6 +6371,15 @@ const PORTAL_DATA = {
           Object.assign(p, patch);
         }
       });
+      if (Array.isArray(ovMap.__boostedIds) && ovMap.__boostedIds.length) {
+        ovMap.__boostedIds.slice().reverse().forEach((bId) => {
+          const idx = PROPERTIES.findIndex((p) => Number(p.id) === Number(bId));
+          if (idx > 0) {
+            const [item] = PROPERTIES.splice(idx, 1);
+            PROPERTIES.unshift(item);
+          }
+        });
+      }
     }
   } catch (_) {}
 
@@ -6575,10 +6585,34 @@ function openEditListingModal(propId) {
   if (netEl) netEl.value = cleanNumVal(item.internet);
   const launEl = document.getElementById("dLaundry");
   if (launEl) launEl.value = cleanNumVal(item.laundry);
+  const launStr = String(item.laundry || "");
+  if (/1\s*lần|lan/i.test(launStr)) selectStudioLaundryUnit("lan");
+  else if (/kg/i.test(launStr)) selectStudioLaundryUnit("kg");
+  else if (/phòng|phong/i.test(launStr)) selectStudioLaundryUnit("phong");
+  else selectStudioLaundryUnit("nguoi");
   const trashEl = document.getElementById("dTrash");
   if (trashEl) trashEl.value = cleanNumVal(item.trash);
   const parkEl = document.getElementById("dParking");
   if (parkEl) parkEl.value = cleanNumVal(item.parking);
+
+  const itemUtils = Array.isArray(item.utilities) ? item.utilities : [];
+  const itemSvcs = Array.isArray(item.services) ? item.services : [];
+  document.querySelectorAll("#postModalBackdrop .util-chk").forEach((chk) => {
+    chk.checked = itemUtils.includes(chk.value);
+  });
+  const schoolEntry = itemUtils.find((u) => String(u).startsWith("Trường học"));
+  const chkSchoolEl = document.getElementById("chkSchool");
+  const schoolWrapEl = document.getElementById("schoolCodeWrap");
+  const schoolInputEl = document.getElementById("dSchoolCode");
+  if (chkSchoolEl) chkSchoolEl.checked = Boolean(schoolEntry);
+  if (schoolWrapEl) schoolWrapEl.style.display = schoolEntry ? "block" : "none";
+  if (schoolInputEl) {
+    const mSchool = String(schoolEntry || "").match(/\(([^)]+)\)/);
+    schoolInputEl.value = mSchool ? mSchool[1] : "";
+  }
+  document.querySelectorAll("#postModalBackdrop .svc-chk").forEach((chk) => {
+    chk.checked = itemSvcs.includes(chk.value);
+  });
 
   const maxPEl = document.getElementById("dMaxPeople");
   if (maxPEl) {
@@ -6614,6 +6648,13 @@ function boostMemberListingNow(propId) {
   if (idx < 0) return;
   const [item] = PROPERTIES.splice(idx, 1);
   PROPERTIES.unshift(item);
+  try {
+    const ovMap = JSON.parse(localStorage.getItem("ctt_listing_overrides_v1") || "{}");
+    const bList = Array.isArray(ovMap.__boostedIds) ? ovMap.__boostedIds.filter((x) => Number(x) !== Number(propId)) : [];
+    bList.unshift(Number(propId));
+    ovMap.__boostedIds = bList.slice(0, 30);
+    localStorage.setItem("ctt_listing_overrides_v1", JSON.stringify(ovMap));
+  } catch (_) {}
   renderAllHomeGrids();
   updateMapPins("all", item.id);
   switchMemberTab("listings");

@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261120a">
+  <link rel="stylesheet" href="styles.css?v=20261120b">
 </head>
 <body>
 
@@ -1494,7 +1494,7 @@
               </div>
               <label style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;padding-top:10px;border-top:1px dashed #cbd5e1;font-size:11.5px;color:#334155;cursor:pointer;white-space:nowrap;">
                 <input type="checkbox" id="agreePostTerms" style="width:14px;height:14px;accent-color:var(--ctt-orange);cursor:pointer;flex-shrink:0;">
-                <span>Tôi đồng ý với <strong>Điều khoản đăng tin</strong> của ChoThueTot.vn</span>
+                <span>Tôi đồng ý với <strong style="color:var(--ctt-orange);text-decoration:underline;cursor:pointer;" onclick="event.preventDefault();event.stopPropagation();openLegalDocModal('rules')">Điều khoản đăng tin</strong> của ChoThueTot.vn</span>
               </label>
               <div style="margin-top:12px;text-align:center;">
                 <button type="button" class="hsp-btn-apply" style="padding:11px 28px;font-weight:900;letter-spacing:0.4px;" onclick="publishStudioListingNow()">
@@ -1895,9 +1895,9 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data/listings_1000.js?v=20261120a"></script>
-  <script src="data/listings_4000_a.js?v=20261120a"></script>
-  <script src="data/listings_4000_b.js?v=20261120a"></script>
-  <script src="app.js?v=20261120a"></script></script></script></script></script>
+  <script src="data/listings_1000.js?v=20261120b"></script>
+  <script src="data/listings_4000_a.js?v=20261120b"></script>
+  <script src="data/listings_4000_b.js?v=20261120b"></script>
+  <script src="app.js?v=20261120b"></script>
 </body>
 </html>
