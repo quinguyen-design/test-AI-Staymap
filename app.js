@@ -5404,6 +5404,7 @@ function pickStudioComboItem(kind, val) {
   if (kind === "city") {
     const wardEl = document.getElementById("dWard");
     const streetEl = document.getElementById("dStreet");
+    const addrEl = document.getElementById("dAddress");
     if (wardEl) {
       wardEl.value = "";
       wardEl.dataset.prevValid = "";
@@ -5412,18 +5413,28 @@ function pickStudioComboItem(kind, val) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
     }
+    if (addrEl) addrEl.value = "";
+    STUDIO_STATE.houseNumber = "";
   } else if (kind === "ward") {
     const streetEl = document.getElementById("dStreet");
+    const addrEl = document.getElementById("dAddress");
     if (streetEl && !STUDIO_STREETS_BY_WARD[val]?.includes(streetEl.value)) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
     }
+    if (addrEl) addrEl.value = "";
+    STUDIO_STATE.houseNumber = "";
+  } else if (kind === "street") {
+    const addrEl = document.getElementById("dAddress");
+    if (addrEl) addrEl.value = "";
+    STUDIO_STATE.houseNumber = "";
   } else if (kind === "project") {
     const proj = STUDIO_PROJECTS.find((p) => p.value === val);
     if (proj) {
       const cityEl = document.getElementById("dCity");
       const wardEl = document.getElementById("dWard");
       const streetEl = document.getElementById("dStreet");
+      const addrEl = document.getElementById("dAddress");
       if (cityEl && proj.city) {
         cityEl.value = proj.city;
         cityEl.dataset.prevValid = proj.city;
@@ -5436,6 +5447,7 @@ function pickStudioComboItem(kind, val) {
         streetEl.value = proj.street;
         streetEl.dataset.prevValid = proj.street;
       }
+      if (addrEl) addrEl.value = "";
       STUDIO_STATE.houseNumber = "";
       STUDIO_STATE.isEditingAddress = false;
     }
@@ -5651,23 +5663,17 @@ function mergeStudioFullAddressNow() {
 function syncStudioAddressDisplay() {
   const addrEl = document.getElementById("dAddress");
   const suffixEl = document.getElementById("dAddressSuffix");
-  const hasProject = Boolean(getValidStudioComboValue("project"));
   if (addrEl) {
     addrEl.placeholder = "Số Nhà Chuẩn, Ghim Đúng Map - VD: 168/86";
+    if (!STUDIO_STATE.isEditingAddress) {
+      addrEl.value = STUDIO_STATE.houseNumber || "";
+    }
   }
   const suffix = getStudioLockedSuffix();
   const hasPrefix = Boolean((STUDIO_STATE.houseNumber || "").trim());
-  if (!STUDIO_STATE.isEditingAddress && (hasPrefix || hasProject) && addrEl) {
-    addrEl.value = buildStudioFullAddress();
-    if (suffixEl) suffixEl.textContent = "";
-  } else {
-    if (!STUDIO_STATE.isEditingAddress && !hasPrefix && !hasProject && addrEl) {
-      addrEl.value = "";
-    }
-    if (suffixEl) {
-      suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
-      suffixEl.classList.toggle("has-prefix", hasPrefix);
-    }
+  if (suffixEl) {
+    suffixEl.textContent = suffix ? (hasPrefix ? `, ${suffix}` : suffix) : "";
+    suffixEl.classList.toggle("has-prefix", hasPrefix);
   }
   renderStudioPreview();
 }
@@ -5680,8 +5686,6 @@ function onStudioLocationChange(wardChanged = false) {
 function onStudioAddressFocus() {
   clearTimeout(STUDIO_STATE.addrMergeTimer);
   STUDIO_STATE.isEditingAddress = true;
-  const addrEl = document.getElementById("dAddress");
-  if (addrEl) addrEl.value = STUDIO_STATE.houseNumber || "";
   syncStudioAddressDisplay();
 }
 
@@ -5689,13 +5693,6 @@ function onStudioAddressInput(val) {
   STUDIO_STATE.isEditingAddress = true;
   STUDIO_STATE.houseNumber = val;
   syncStudioAddressDisplay();
-  clearTimeout(STUDIO_STATE.addrMergeTimer);
-  if ((val || "").trim()) {
-    STUDIO_STATE.addrMergeTimer = setTimeout(() => {
-      STUDIO_STATE.isEditingAddress = false;
-      mergeStudioFullAddressNow();
-    }, 1500);
-  }
 }
 
 function onStudioAddressBlur() {
