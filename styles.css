@@ -5366,3 +5366,121 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* PropTech Key-Value Spec List & Clean UX Hierarchy */
+.pd-kv-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.pd-kv-section-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.pd-kv-section-title i {
+  color: var(--ctt-orange);
+}
+.pd-kv-list {
+  display: flex;
+  flex-direction: column;
+}
+.pd-kv-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 2px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13.5px;
+}
+.pd-kv-row:last-child {
+  border-bottom: none;
+}
+.pd-kv-label {
+  color: #64748b;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.pd-kv-label i {
+  color: var(--ctt-orange);
+  width: 15px;
+  text-align: center;
+  font-size: 13px;
+}
+.pd-kv-val {
+  color: #0f172a;
+  font-weight: 700;
+  text-align: right;
+  word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+.pd-amenity-pill span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+@media (max-width: 768px) {
+  .pd-kv-columns {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+
+/* Compact Above-the-Fold Detail Page Ergonomics */
+.pd-container {
+  margin: 16px auto 36px;
+}
+.pd-breadcrumb {
+  margin-bottom: 12px;
+  font-size: 12.5px;
+}
+.pd-gallery {
+  height: 290px;
+  gap: 10px;
+  margin-bottom: 14px;
+  border-radius: 16px;
+}
+.pd-gal-side {
+  gap: 10px;
+}
+.pd-view-all-photos {
+  bottom: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  border-radius: 10px;
+}
+.pd-card-box {
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border-radius: 16px;
+}
+.pd-price-big {
+  font-size: 26px;
+}
+.pd-kv-row {
+  padding: 6px 2px;
+  font-size: 13px;
+}
+.pd-amenity-group {
+  padding: 12px;
+}
+.pd-amenity-grid {
+  gap: 6px;
+}
+.pd-amenity-pill {
+  padding: 6px 9px;
+  font-size: 11.5px;
+}
