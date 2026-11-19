@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /tai-khoan.html
+
+Sitemap: https://chothuetot.vn/sitemap.xml

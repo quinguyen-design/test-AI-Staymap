@@ -5,7 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng | CHOTHUETOT.VN</title>
   <meta name="description" content="CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng uy tín hàng đầu Việt Nam.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="seoCanonicalLink" href="https://chothuetot.vn/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CHOTHUETOT.VN">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:title" id="seoOgTitle" content="Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng | CHOTHUETOT.VN">
+  <meta property="og:description" id="seoOgDesc" content="CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng uy tín hàng đầu Việt Nam.">
+  <meta property="og:image" id="seoOgImage" content="https://chothuetot.vn/assets/images/logo/logo_cms_1782625511.png">
+  <meta property="og:url" id="seoOgUrl" content="https://chothuetot.vn/">
   <link rel="icon" type="image/png" href="assets/logo.png">
+  <script type="application/ld+json" id="seoJsonLdScript">
+  {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    "name": "CHOTHUETOT.VN",
+    "url": "https://chothuetot.vn/",
+    "logo": "https://chothuetot.vn/assets/images/logo/logo_cms_1782625511.png",
+    "telephone": "+84-906-344-877",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Nguyễn Văn Nghi, P. Hạnh Thông",
+      "addressLocality": "TP. Hồ Chí Minh",
+      "addressCountry": "VN"
+    }
+  }
+  </script>
 
   <!-- Fonts: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
   <!-- Master Luxury Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=20261119z31">
+  <link rel="stylesheet" href="styles.css?v=20261120a">
 </head>
 <body>
 
@@ -108,7 +133,7 @@
           <i class="fa-solid fa-warehouse"></i> Kho xưởng
         </button>
         <button type="button" class="map-filter-chip" onclick="filterMapCategory('homestay-airbnb', this)">
-          <i class="fa-solid fa-umbrella-beach"></i> HomeStay / Aribnb
+          <i class="fa-solid fa-umbrella-beach"></i> HomeStay / Airbnb
         </button>
       </div>
 
@@ -154,7 +179,7 @@
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-can-ho-chung-cu')"><span><i class="fa-solid fa-building" style="color:var(--ctt-orange);width:20px;"></i> Căn hộ chung cư</span> <i class="fa-solid fa-angle-right"></i></a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-mat-bang-van-phong')"><span><i class="fa-solid fa-shop" style="color:var(--ctt-orange);width:20px;"></i> Mặt bằng văn phòng</span> <i class="fa-solid fa-angle-right"></i></a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-dat-xuong-kho-bai')"><span><i class="fa-solid fa-warehouse" style="color:var(--ctt-orange);width:20px;"></i> Đất - Xưởng, Kho - Bãi</span> <i class="fa-solid fa-angle-right"></i></a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')"><span><i class="fa-solid fa-umbrella-beach" style="color:var(--ctt-orange);width:20px;"></i> HomeStay / Aribnb</span> <i class="fa-solid fa-angle-right"></i></a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')"><span><i class="fa-solid fa-umbrella-beach" style="color:var(--ctt-orange);width:20px;"></i> HomeStay / Airbnb</span> <i class="fa-solid fa-angle-right"></i></a></li>
         </ul>
       </div>
 
@@ -182,7 +207,7 @@
               <button type="button" class="hsp-seg-item" onclick="pickSegCategory('can-ho-chung-cu', 'Căn hộ chung cư', this)">Căn hộ chung cư</button>
               <button type="button" class="hsp-seg-item" onclick="pickSegCategory('mat-bang-van-phong', 'Mặt bằng văn phòng', this)">Mặt bằng văn phòng</button>
               <button type="button" class="hsp-seg-item" onclick="pickSegCategory('bai-dat-kho-xuong', 'Đất - Xưởng, Kho - Bãi', this)">Đất - Xưởng, Kho - Bãi</button>
-              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('homestay-airbnb', 'HomeStay / Aribnb', this)">HomeStay / Aribnb</button>
+              <button type="button" class="hsp-seg-item" onclick="pickSegCategory('homestay-airbnb', 'HomeStay / Airbnb', this)">HomeStay / Airbnb</button>
             </div>
           </div>
 
@@ -224,7 +249,7 @@
         <div id="hspActivePillsBar" class="hsp-active-pills-bar" style="display:none;"></div>
 
         <!-- Minimalist Airbnb/Zillow-Style Horizontal Smart Filter (Progressive Disclosure) -->
-        <div class="hsp-panel" id="hspMegaPanel" style="width:840px;padding:18px 22px;">
+        <div class="hsp-panel" id="hspMegaPanel" style="width:min(840px, calc(100vw - 24px));max-width:calc(100vw - 24px);padding:18px 22px;">
           <div class="hsp-panel-header" style="padding-bottom:10px;margin-bottom:14px;">
             <div class="hsp-panel-title" style="font-size:13.5px;font-weight:600;color:#334155;">
               <i class="fa-solid fa-sliders"></i>
@@ -237,7 +262,7 @@
           </div>
 
           <!-- Core 4 Horizontal Row (1-click / minimal friction) -->
-          <div style="display:grid;grid-template-columns:1.15fr 1fr 1fr 0.95fr 0.9fr;gap:10px;margin-bottom:12px;">
+          <div class="hsp-core-row" style="display:grid;grid-template-columns:1.15fr 1fr 1fr 0.95fr 0.9fr;gap:10px;margin-bottom:12px;">
             <div>
               <label for="megaCatSelect" class="hsp-sec-title" style="margin-bottom:4px;">Loại hình</label>
               <select id="megaCatSelect" class="hsp-select" onchange="updateMegaLiveCount()">
@@ -247,7 +272,7 @@
                 <option value="can-ho-chung-cu">Căn hộ chung cư</option>
                 <option value="mat-bang-van-phong">Mặt bằng văn phòng</option>
                 <option value="bai-dat-kho-xuong">Đất - Xưởng, Kho - Bãi</option>
-                <option value="homestay-airbnb">HomeStay / Aribnb</option>
+                <option value="homestay-airbnb">HomeStay / Airbnb</option>
               </select>
             </div>
             <div>
@@ -293,7 +318,7 @@
 
           <!-- Progressive Disclosure: Advanced Row (Hidden by default) -->
           <div id="megaAdvancedWrap" style="display:none;padding:12px 14px;background:#f8fafc;border-radius:12px;border:1px solid #f1f5f9;margin-bottom:12px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.8fr 0.8fr;gap:8px;margin-bottom:10px;">
+            <div class="hsp-adv-row" style="display:grid;grid-template-columns:1fr 1fr 0.8fr 0.8fr 0.8fr;gap:8px;margin-bottom:10px;">
               <div>
                 <label for="megaStreetSelect" class="hsp-sec-title" style="margin-bottom:4px;">Tên Đường</label>
                 <select id="megaStreetSelect" class="hsp-select" onchange="updateMegaLiveCount()">
@@ -606,6 +631,7 @@
     <div class="lc-section">
       <div class="lc-wrap">
         <div class="lc-grid" id="categoryListingsGrid"></div>
+        <div id="catPaginationBar" class="ctt-pagination-bar"></div>
         <div id="categorySeoFooterBox" style="margin-top:28px;padding:22px 26px;background:#fff;border-radius:18px;border:1px solid #e2e8f0;"></div>
       </div>
     </div>
@@ -966,13 +992,13 @@
         </ul>
       </div>
       <div class="seo-col">
-        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')" style="color:inherit;text-decoration:none;">HomeStay / Aribnb</a></h3>
+        <h3 class="seo-title"><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb')" style="color:inherit;text-decoration:none;">HomeStay / Airbnb</a></h3>
         <ul class="seo-list">
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-p-cau-kieu')">HomeStay P. Cầu Kiệu</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-p-nhieu-loc')">Aribnb View Kênh Nhiêu Lộc</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-p-nhieu-loc')">Airbnb View Kênh Nhiêu Lộc</a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-tp-ha-noi')">HomeStay Phố Cổ Hà Nội</a></li>
           <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-gia-tu-4-den-7-trieu')">HomeStay 4 - 7 triệu/tháng</a></li>
-          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-gia-tu-7-den-15-trieu')">Căn hộ Aribnb 7 - 15 triệu</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateTo('/cho-thue-homestay-airbnb-gia-tu-7-den-15-trieu')">Căn hộ Airbnb 7 - 15 triệu</a></li>
         </ul>
       </div>
     </div>
@@ -1005,10 +1031,10 @@
       <div class="footer-col">
         <h3 class="sitemap-title">Pháp lý & Quy định</h3>
         <ul class="sitemap-links">
-          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Điều khoản sử dụng</a></li>
-          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Chính sách bảo mật</a></li>
-          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Quy định đăng tin</a></li>
-          <li><a href="javascript:void(0)"><i class="fa-solid fa-chevron-right"></i> Giải quyết tranh chấp</a></li>
+          <li><a href="javascript:void(0)" onclick="openLegalDocModal('terms')"><i class="fa-solid fa-chevron-right"></i> Điều khoản sử dụng</a></li>
+          <li><a href="javascript:void(0)" onclick="openLegalDocModal('privacy')"><i class="fa-solid fa-chevron-right"></i> Chính sách bảo mật</a></li>
+          <li><a href="javascript:void(0)" onclick="openLegalDocModal('rules')"><i class="fa-solid fa-chevron-right"></i> Quy định đăng tin</a></li>
+          <li><a href="javascript:void(0)" onclick="openLegalDocModal('dispute')"><i class="fa-solid fa-chevron-right"></i> Giải quyết tranh chấp</a></li>
         </ul>
       </div>
 
@@ -1024,7 +1050,7 @@
 
       <div class="footer-col">
         <h3 class="sitemap-title">Nhận chương trình khuyến mãi</h3>
-        <form class="newsletter-form" onsubmit="event.preventDefault();alert('Cảm ơn bạn đã đăng ký nhận ưu đãi từ ChoThueTot.vn!');">
+        <form class="newsletter-form" onsubmit="event.preventDefault();showCttNotice('Đăng ký thành công', 'Cảm ơn bạn đã đăng ký nhận mã giảm giá và ưu đãi từ ChoThueTot.vn!');this.reset();">
           <input type="email" placeholder="Nhập địa chỉ email của bạn..." required>
           <button type="submit"><i class="fa-solid fa-paper-plane"></i> Đăng ký nhận mã giảm giá</button>
         </form>
@@ -1099,7 +1125,7 @@
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('can-ho-chung-cu', 'Căn Hộ Chung Cư', this)"><span class="cat-icon-circle"><i class="fa-solid fa-building"></i></span><span style="line-height:1.25;">Căn Hộ<br>Chung Cư</span></button>
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('mat-bang-van-phong', 'Mặt Bằng Văn Phòng', this)"><span class="cat-icon-circle"><i class="fa-solid fa-shop"></i></span><span style="line-height:1.25;">Mặt Bằng<br>Văn Phòng</span></button>
                 <button type="button" class="post-cat-btn" onclick="selectStudioCategory('bai-dat-kho-xuong', 'Đất - Xưởng, Kho - Bãi', this)"><span class="cat-icon-circle"><i class="fa-solid fa-warehouse"></i></span><span style="line-height:1.25;">Đất - Xưởng<br>Kho - Bãi</span></button>
-                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('homestay-airbnb', 'HomeStay / Aribnb', this)"><span class="cat-icon-circle"><i class="fa-solid fa-umbrella-beach"></i></span><span style="line-height:1.25;">HomeStay<br>Aribnb</span></button>
+                <button type="button" class="post-cat-btn" onclick="selectStudioCategory('homestay-airbnb', 'HomeStay / Airbnb', this)"><span class="cat-icon-circle"><i class="fa-solid fa-umbrella-beach"></i></span><span style="line-height:1.25;">HomeStay<br>Airbnb</span></button>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
@@ -1869,9 +1895,9 @@
 
   <!-- Leaflet JS & Master App Engine -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="data/listings_1000.js?v=20261119z23"></script>
-  <script src="data/listings_4000_a.js?v=20261119z21"></script>
-  <script src="data/listings_4000_b.js?v=20261119z21"></script>
-  <script src="app.js?v=20261119z30"></script></script></script></script></script>
+  <script src="data/listings_1000.js?v=20261120a"></script>
+  <script src="data/listings_4000_a.js?v=20261120a"></script>
+  <script src="data/listings_4000_b.js?v=20261120a"></script>
+  <script src="app.js?v=20261120a"></script></script></script></script></script>
 </body>
 </html>

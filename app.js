@@ -977,10 +977,119 @@ function buildPropertySeoUrl(item) {
   return `#/${baseCat}-${wardSlug}-${citySlug}/${titleSlug}-${priceSlug}-id${item.id}`;
 }
 
-function updateDocumentSeoMeta(title, desc) {
-  if (title) document.title = `${title} | CHOTHUETOT.VN`;
+function updateDocumentSeoMeta(title, desc, opts = {}) {
+  const fullTitle = title ? `${title} | CHOTHUETOT.VN` : "CHOTHUETOT.VN";
+  document.title = fullTitle;
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc && desc) metaDesc.setAttribute("content", desc);
+  const ogTitle = document.getElementById("seoOgTitle");
+  if (ogTitle) ogTitle.setAttribute("content", fullTitle);
+  const ogDesc = document.getElementById("seoOgDesc");
+  if (ogDesc && desc) ogDesc.setAttribute("content", desc);
+  const ogImage = document.getElementById("seoOgImage");
+  if (ogImage) ogImage.setAttribute("content", opts.image || "https://chothuetot.vn/assets/images/logo/logo_cms_1782625511.png");
+  const canonicalUrl = opts.url || `https://chothuetot.vn/${window.location.hash || ""}`;
+  const canEl = document.getElementById("seoCanonicalLink");
+  if (canEl) canEl.setAttribute("href", canonicalUrl);
+  const ogUrl = document.getElementById("seoOgUrl");
+  if (ogUrl) ogUrl.setAttribute("content", canonicalUrl);
+  const ldEl = document.getElementById("seoJsonLdScript");
+  if (ldEl && opts.jsonLd) {
+    ldEl.textContent = JSON.stringify(opts.jsonLd);
+  }
+}
+
+function showCttNotice(title, message, durationMs = 4500) {
+  let stack = document.getElementById("cttToastStack");
+  if (!stack) {
+    stack = document.createElement("div");
+    stack.id = "cttToastStack";
+    stack.className = "ctt-toast-stack";
+    document.body.appendChild(stack);
+  }
+  const card = document.createElement("div");
+  card.className = "ctt-toast-card";
+  card.innerHTML = `
+    <div class="ctt-toast-icon"><i class="fa-solid fa-bell"></i></div>
+    <div class="ctt-toast-body">
+      <div class="ctt-toast-title">${title || "Thông báo ChoThueTot.vn"}</div>
+      <div class="ctt-toast-msg">${message || ""}</div>
+    </div>
+    <button type="button" class="ctt-toast-close" aria-label="Đóng" onclick="this.parentElement.remove()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  `;
+  stack.appendChild(card);
+  if (durationMs > 0) {
+    setTimeout(() => {
+      if (card.parentElement) card.remove();
+    }, durationMs);
+  }
+}
+
+function openLegalDocModal(docKey) {
+  const docs = {
+    terms: {
+      title: "ĐIỀU KHOẢN SỬ DỤNG — CHOTHUETOT.VN",
+      body: `
+        <p><strong>1. Phạm vi áp dụng:</strong> Điều khoản này quy định quyền và nghĩa vụ của Chủ nhà, Môi giới và Khách thuê khi sử dụng nền tảng bản đồ bất động sản cho thuê <strong>ChoThueTot.vn</strong>.</p>
+        <p><strong>2. Minh bạch thông tin:</strong> Mọi tin đăng phải kê khai đúng giá thuê thực tế, diện tích sử dụng, biểu giá Điện - Nước (theo quy định Nhà nước hoặc đơn giá cố định) và các chi phí dịch vụ đi kèm.</p>
+        <p><strong>3. Quyền lợi tài khoản Thành viên:</strong> Mỗi tin đăng sau khi xuất bản được miễn phí <strong>03 lần chỉnh sửa nội dung đầu tiên</strong> và hỗ trợ tự động tối ưu đường dẫn chuẩn SEO.</p>
+        <p><strong>4. Thanh toán & Hóa đơn VAT:</strong> Mọi giao dịch nạp Ví VietQR và mua gói hiển thị VIP đều được khấu trừ minh bạch kèm thuế GTGT (VAT 8%) theo quy định hiện hành.</p>
+      `
+    },
+    privacy: {
+      title: "CHÍNH SÁCH BẢO MẬT THÔNG TIN",
+      body: `
+        <p><strong>1. Bảo vệ dữ liệu cá nhân:</strong> ChoThueTot.vn tuân thủ Nghị định 13/2023/NĐ-CP về Bảo vệ dữ liệu cá nhân. Số điện thoại Zalo và thông tin xác thực CCCD của Chủ nhà chỉ dùng để xác minh chính chủ và kết nối lịch hẹn xem nhà.</p>
+        <p><strong>2. Bảo mật tài khoản & Thanh toán:</strong> Lịch sử nạp Ví VietQR và thông tin hóa đơn được mã hóa và chỉ hiển thị trong khu vực Quản lý Tài khoản của chính chủ sở hữu.</p>
+        <p><strong>3. Quyền của thành viên:</strong> Thành viên có toàn quyền chỉnh sửa hồ sơ, đổi mật khẩu, ẩn tin đăng khi đã cho thuê hoặc yêu cầu hủy kích hoạt tài khoản bất cứ lúc nào.</p>
+      `
+    },
+    rules: {
+      title: "QUY ĐỊNH ĐĂNG TIN & KIỂM DUYỆT HÌNH ẢNH",
+      body: `
+        <p><strong>1. Quy chuẩn hình ảnh:</strong> Tin đăng phải sử dụng từ 04–09 hình ảnh thực tế của bất động sản. Nghiêm cấm sử dụng ảnh bìa có chứa logo/watermark của các nền tảng khác.</p>
+        <p><strong>2. Phân hạng hiển thị:</strong> Hệ thống gồm 06 phân khu hiển thị rõ ràng: <em>Banner Đặc Quyền, TOP 1 Hiển Thị (VIP 1), TOP 2 Nổi Bật (VIP 2), TOP 3 Hiệu Quả (VIP 3), Tin Cơ Bản</em> và <em>Đăng Tin Miễn Phí</em> (Tin miễn phí không hiển thị ghim trên Bản đồ).</p>
+        <p><strong>3. Chống tin ảo & Cọc ảo:</strong> Tin đăng sai lệch giá hoặc thu cọc bất minh sẽ bị hệ thống AI Pre-Check và Quản trị viên gỡ bỏ vĩnh viễn.</p>
+      `
+    },
+    dispute: {
+      title: "CƠ CHẾ GIẢI QUYẾT TRANH CHẤP & KHIẾU NẠI",
+      body: `
+        <p><strong>1. Tiếp nhận phản ánh:</strong> Khi phát hiện tin đăng không đúng thực tế, đã cho thuê hoặc sai biểu giá điện nước, khách thuê có thể gửi phản ánh qua Hotline/Zalo <strong>0906 344 877</strong> hoặc email <strong>Chothuetot.vn@gmail.com</strong>.</p>
+        <p><strong>2. Thời gian xử lý:</strong> Bộ phận Kiểm duyệt xác minh trong vòng <strong>04–24 giờ làm việc</strong>; tạm ẩn tin đang tranh chấp và hoàn trả chi phí ngày VIP còn lại nếu lỗi thuộc về hệ thống kỹ thuật.</p>
+      `
+    }
+  };
+  const d = docs[docKey] || docs.terms;
+  let modal = document.getElementById("legalDocModalBackdrop");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "legalDocModalBackdrop";
+    modal.className = "ctt-modal-backdrop";
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove("is-open");
+    };
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div class="ctt-modal-dialog" style="max-width:640px;">
+      <div class="ctt-modal-header">
+        <h3 style="font-size:16.5px;font-weight:900;color:#0f172a;margin:0;">
+          <i class="fa-solid fa-scale-balanced" style="color:var(--ctt-orange);margin-right:8px;"></i>${d.title}
+        </h3>
+        <button type="button" onclick="document.getElementById('legalDocModalBackdrop').classList.remove('is-open')" style="width:34px;height:34px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ctt-modal-body" style="font-size:13.5px;color:#334155;line-height:1.68;display:flex;flex-direction:column;gap:10px;">
+        ${d.body}
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <button type="button" class="hsp-btn-apply" onclick="document.getElementById('legalDocModalBackdrop').classList.remove('is-open')">Đã hiểu & Đóng</button>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.classList.add("is-open");
 }
 
 function handleMidPromoBannerClick() {
@@ -1023,7 +1132,7 @@ function navigateTo(route, pushHistory = true) {
     updateMapPins("all");
     updateDocumentSeoMeta(
       "Cho Thuê Tốt - Thuê Phòng Trọ, Nhà Nguyên Căn, Căn Hộ, Mặt Bằng, Kho Xưởng, HomeStay",
-      "CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng, HomeStay/Aribnb minh bạch 100%."
+      "CHOTHUETOT.VN — Nền tảng cho thuê phòng trọ, nhà nguyên căn, căn hộ chung cư, mặt bằng văn phòng, kho xưởng, HomeStay/Airbnb minh bạch 100%."
     );
   } else if (
     route.includes("cho-thue") ||
@@ -1170,11 +1279,13 @@ function toggle3DMapMorph(btnEl) {
   btnEl?.classList.toggle("active", heroEl.classList.contains("is-3d-morph"));
 }
 
-function updateMapPins(catFilter = "all", focusId = null) {
+function updateMapPins(catFilter = "all", focusId = null, customPool = null) {
   if (!heroMapInstance || !heroMarkersLayer) return;
   heroMarkersLayer.clearLayers();
 
-  const rawPool = PROPERTIES.filter((p) => {
+  const sourceList = Array.isArray(customPool) ? customPool : PROPERTIES;
+  const rawPool = sourceList.filter((p) => {
+    if (p.isHidden) return false;
     // Hạng 6: Tin miễn phí không hiển thị trên bản đồ
     if (p.tier === "free" || p.mapTier === "free" || p.zoneId === 13) return false;
     if (catFilter === "all") return true;
@@ -1820,8 +1931,8 @@ function matchesMegaFilter(p, f) {
   }
   if (f.furniture && f.furniture !== "all" && p.furniture && p.furniture !== f.furniture) return false;
   if (f.beds && f.beds !== "all") {
-    const pBeds = parseInt(p.beds || "1", 10);
-    if (f.beds === "4+ PN" ? pBeds < 4 : p.beds !== f.beds) return false;
+    const pBeds = parseInt(p.beds || "1", 10) || 1;
+    if (f.beds === "4+ PN" ? pBeds < 4 : pBeds !== parseInt(f.beds, 10)) return false;
   }
   if (f.direction && f.direction !== "all" && p.direction && p.direction !== f.direction) return false;
   if (f.minPrice && f.minPrice > 0 && p.price < f.minPrice) return false;
@@ -2352,7 +2463,7 @@ function openCategoryView(route) {
     catName = "Đất - Xưởng, Kho - Bãi";
   } else if (route.includes("homestay")) {
     catKey = "homestay-airbnb";
-    catName = "HomeStay / Aribnb";
+    catName = "HomeStay / Airbnb";
   } else if (route.includes("spotlight")) {
     tierFilter = "spotlight";
     catName = "Spotlight — TOP 1 Hiển Thị";
@@ -2444,7 +2555,42 @@ function renderCategoryQuickSeoBar() {
   `;
 }
 
-function applyCategoryBarFilter(updateUrl = true) {
+const CAT_PAGE_SIZE = 24;
+
+function renderCttPaginationHTML(currentPage, totalPages, jsCallbackName) {
+  if (totalPages <= 1) return "";
+  const pages = [];
+  const addBtn = (p, label = p, isAct = false, isDis = false) =>
+    `<button type="button" class="ctt-page-btn ${isAct ? "active" : ""}" ${isDis ? "disabled" : ""} onclick="${jsCallbackName}(${p})">${label}</button>`;
+
+  pages.push(addBtn(Math.max(1, currentPage - 1), '<i class="fa-solid fa-chevron-left"></i>', false, currentPage <= 1));
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
+  if (start > 1) {
+    pages.push(addBtn(1, "1", currentPage === 1));
+    if (start > 2) pages.push(`<span class="ctt-page-info">…</span>`);
+  }
+  for (let p = start; p <= end; p++) {
+    pages.push(addBtn(p, String(p), p === currentPage));
+  }
+  if (end < totalPages) {
+    if (end < totalPages - 1) pages.push(`<span class="ctt-page-info">…</span>`);
+    pages.push(addBtn(totalPages, String(totalPages), currentPage === totalPages));
+  }
+  pages.push(addBtn(Math.min(totalPages, currentPage + 1), '<i class="fa-solid fa-chevron-right"></i>', false, currentPage >= totalPages));
+  return pages.join("");
+}
+
+function goToCategoryPage(page) {
+  applyCategoryBarFilter(false, page);
+  const gridEl = document.getElementById("categoryListingsGrid");
+  if (gridEl) {
+    const y = gridEl.getBoundingClientRect().top + window.scrollY - 110;
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  }
+}
+
+function applyCategoryBarFilter(updateUrl = true, page = 1) {
   const ctx = STATE.activeCategoryContext || { catKey: "all", catName: "Bất Động Sản", tierFilter: null, ward: "all", city: "all", priceKey: "all", isSearchRoute: false };
   const priceKey = document.getElementById("catBarPrice")?.value || "all";
   const areaMin = parseFloat(document.getElementById("catBarArea")?.value || "0");
@@ -2474,15 +2620,26 @@ function applyCategoryBarFilter(updateUrl = true) {
 
   filtered.sort((a, b) => getTierPriorityRank(a) - getTierPriorityRank(b));
 
-  document.getElementById("catResultCount").textContent = `${filtered.length} tin đăng phù hợp`;
-  document.getElementById("categoryListingsGrid").innerHTML = filtered.length
-    ? filtered.map(buildListingCardHTML).join("")
+  const totalItems = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / CAT_PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+  STATE.catCurrentPage = safePage;
+  const pageSlice = filtered.slice((safePage - 1) * CAT_PAGE_SIZE, safePage * CAT_PAGE_SIZE);
+
+  document.getElementById("catResultCount").textContent = `${new Intl.NumberFormat("vi-VN").format(totalItems)} tin đăng phù hợp`;
+  document.getElementById("categoryListingsGrid").innerHTML = pageSlice.length
+    ? pageSlice.map(buildListingCardHTML).join("")
     : `<div style="grid-column:1/-1;text-align:center;padding:48px 20px;background:#fff;border-radius:16px;border:1px solid #e2e8f0;">
          <i class="fa-solid fa-magnifying-glass" style="font-size:32px;color:#cbd5e1;margin-bottom:10px;"></i>
          <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin-bottom:6px;">Chưa có tin đăng trong phân khúc này</h3>
          <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Bạn có thể bấm Đặt lại bộ lọc để xem toàn bộ danh sách tin đã xác minh.</p>
-         <button type="button" class="hsp-btn-apply" onclick="navigateTo('/cho-thue-phong-tro')">Đặt lại bộ lọc & Xem tất cả</button>
+         <button type="button" class="hsp-btn-apply" onclick="resetMegaSearchFilters();navigateTo('/cho-thue-phong-tro')">Đặt lại bộ lọc & Xem tất cả</button>
        </div>`;
+
+  const pagBar = document.getElementById("catPaginationBar");
+  if (pagBar) {
+    pagBar.innerHTML = renderCttPaginationHTML(safePage, totalPages, "goToCategoryPage");
+  }
 
   const seoBox = document.getElementById("categorySeoFooterBox");
   if (seoBox) {
@@ -2494,12 +2651,12 @@ function applyCategoryBarFilter(updateUrl = true) {
         Thông tin thị trường & Kinh nghiệm thuê ${ctx.catName} tại ${locLabel} (${priceLabel})
       </h3>
       <p style="font-size:13px;color:#475569;line-height:1.65;margin:0;">
-        Danh sách <strong>${filtered.length} tin cho thuê ${ctx.catName}</strong> tại khu vực <strong>${locLabel}</strong> với mức giá <strong>${priceLabel}</strong> trên <strong>ChoThueTot.vn (Staymap.vn)</strong> đều được định vị trực tiếp trên Bản đồ 3D và công khai bảng tính chi phí Điện, Nước, Dịch vụ thực tế hàng tháng. Người thuê dễ dàng lọc theo Phường/Xã sáp nhập mới, so sánh tổng chi phí trọn gói và đặt lịch hẹn xem nhà trực tiếp qua Zalo chính chủ miễn phí 100%.
+        Danh sách <strong>${new Intl.NumberFormat("vi-VN").format(totalItems)} tin cho thuê ${ctx.catName}</strong> tại khu vực <strong>${locLabel}</strong> với mức giá <strong>${priceLabel}</strong> trên <strong>ChoThueTot.vn (Staymap.vn)</strong> đều được định vị trực tiếp trên Bản đồ 3D và công khai bảng tính chi phí Điện, Nước, Dịch vụ thực tế hàng tháng. Người thuê dễ dàng lọc theo Phường/Xã sáp nhập mới, so sánh tổng chi phí trọn gói và đặt lịch hẹn xem nhà trực tiếp qua Zalo chính chủ miễn phí 100%.
       </p>
     `;
   }
 
-  updateMapPins(ctx.catKey);
+  updateMapPins(ctx.catKey, null, filtered);
 }
 
 // ==========================================================================
@@ -2616,9 +2773,47 @@ function openPropertyDetailView(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId)) || PROPERTIES[0];
   const seoHashUrl = buildPropertySeoUrl(item);
   window.history.pushState({}, "", seoHashUrl);
+  const fullCanonical = `https://chothuetot.vn/${seoHashUrl}`;
   updateDocumentSeoMeta(
-    `${item.title} - ${item.priceText}/tháng tại ${item.ward}`,
-    `Cho thuê ${item.categoryLabel} tại ${item.fullAddress}. Giá ${item.priceText}/tháng, diện tích ${item.area}m², điện ${item.elec}, nước ${item.water}.`
+    `${item.title} - ${item.priceText}/Tháng tại ${item.ward}`,
+    `Cho thuê ${item.categoryLabel} tại ${item.fullAddress}. Giá ${item.priceText}/Tháng, diện tích ${item.area}m², điện ${item.elec}, nước ${item.water}.`,
+    {
+      image: item.image,
+      url: fullCanonical,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "RealEstateListing",
+            "name": item.title,
+            "url": fullCanonical,
+            "image": item.gallery && item.gallery.length ? item.gallery : [item.image],
+            "description": item.description || `Cho thuê ${item.categoryLabel} tại ${item.fullAddress}`,
+            "offers": {
+              "@type": "Offer",
+              "price": Math.round((Number(item.price) || 0) * 1000000),
+              "priceCurrency": "VND",
+              "availability": "https://schema.org/InStock"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": item.fullAddress,
+              "addressLocality": item.ward,
+              "addressRegion": item.city,
+              "addressCountry": "VN"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://chothuetot.vn/" },
+              { "@type": "ListItem", "position": 2, "name": item.categoryLabel, "item": `https://chothuetot.vn/#/${item.category}.html` },
+              { "@type": "ListItem", "position": 3, "name": item.title, "item": fullCanonical }
+            ]
+          }
+        ]
+      }
+    }
   );
 
   document.body.classList.add("is-detail-view");
@@ -3355,8 +3550,10 @@ function topUpWalletInstant(amount) {
   const bonus = Math.round(amount * 0.11); // +11% November Promo from chothuetot.vn!
   STATE.walletBalance += amount + bonus;
   updateWalletUI();
-  alert(
-    `✅ NẠP VÍ VIETQR THÀNH CÔNG!\nSố tiền nạp: +${new Intl.NumberFormat("vi-VN").format(amount)}đ\nThưởng Khuyến mãi Tháng 11 (+11%): +${new Intl.NumberFormat("vi-VN").format(bonus)}đ\nSố dư Ví mới: ${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ`
+  if (typeof savePortalStateStore === "function") savePortalStateStore();
+  showCttNotice(
+    "Nạp Ví VietQR thành công",
+    `• Số tiền nạp: +${new Intl.NumberFormat("vi-VN").format(amount)}đ\n• Thưởng khuyến mãi (+11%): +${new Intl.NumberFormat("vi-VN").format(bonus)}đ\n• Số dư Ví mới: ${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ`
   );
   closeWalletModal();
 }
@@ -5210,7 +5407,7 @@ function buildStudioAiDraft() {
       "hạ tầng hoàn chỉnh, diện tích dễ quy hoạch khu kho chứa và khu điều hành riêng biệt",
       "không gian rộng mở, phù hợp làm kho trung chuyển, xưởng gia công hoặc bãi tập kết"
     ],
-    "HomeStay / Aribnb": [
+    "HomeStay / Airbnb": [
       "phong cách bài trí tinh tế, ấm cúng và đầy đủ tiện nghi nghỉ dưỡng ngay khu vực trung tâm",
       "góc decor chụp ảnh đẹp, check-in linh hoạt và chỉ mất vài phút di chuyển ra các điểm ăn uống nổi tiếng",
       "không gian ấm áp như ở nhà, đầy đủ tiện nghi cho kỳ lưu trú ngắn hoặc dài ngày",
@@ -5487,6 +5684,7 @@ function switchStudioPreviewTab(tabName, btnEl) {
 }
 
 function initStudioPostListing(preselectedZoneId = null) {
+  STUDIO_STATE.editingPropId = null;
   STUDIO_STATE.houseNumber = "";
   STUDIO_STATE.isEditingAddress = false;
   STUDIO_STATE.deposit = "";
@@ -5819,35 +6017,48 @@ function publishStudioListingNow() {
     return;
   }
   if (!document.getElementById("agreePostTerms")?.checked) {
-    alert("Vui lòng tick xác nhận đồng ý với Điều khoản đăng tin của ChoThueTot.vn.");
+    showCttNotice("Chưa xác nhận Điều khoản", "Vui lòng tick đồng ý với Điều khoản đăng tin của ChoThueTot.vn ở Bước 4.");
     return;
   }
 
+  const editingId = Number(STUDIO_STATE.editingPropId) || 0;
+  const existingProp = editingId > 0 ? PROPERTIES.find((p) => p.id === editingId) : null;
   const dur = STUDIO_DURATIONS.find((x) => x.days === STUDIO_STATE.selectedDays) || STUDIO_DURATIONS[1];
   const stObj = STUDIO_STICKERS.find((s) => s.id === STUDIO_STATE.selectedSticker);
   const pricing = calcStudioCheckoutPricing(z, dur, stObj, STUDIO_STATE.promoCode);
-  const vatTotal = pricing.vatTotal;
-  const grandTotal = pricing.grandTotal;
+  const isFreeEditEligible = Boolean(
+    existingProp &&
+    (existingProp.freeEditsLeft ?? 3) > 0 &&
+    (existingProp.zoneId || 0) === z.id &&
+    (existingProp.sticker || null) === (STUDIO_STATE.selectedSticker || null)
+  );
+  const vatTotal = isFreeEditEligible ? 0 : pricing.vatTotal;
+  const grandTotal = isFreeEditEligible ? 0 : pricing.grandTotal;
 
   if (STATE.walletBalance < grandTotal) {
-    alert(`Số dư Ví hiện tại (${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ) chưa đủ để thanh toán ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ (đã gồm VAT 8%). Vui lòng nạp thêm vào Ví.`);
+    showCttNotice(
+      "Số dư Ví chưa đủ",
+      `Số dư hiện tại (${new Intl.NumberFormat("vi-VN").format(STATE.walletBalance)}đ) chưa đủ thanh toán ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ (gồm VAT 8%). Vui lòng nạp thêm vào Ví.`
+    );
     openWalletModal();
     return;
   }
 
-  STATE.walletBalance -= grandTotal;
-  updateWalletUI();
-  PORTAL_DATA.transactions.unshift({
-    code: `#VIP-${Math.floor(10000 + Math.random() * 89999)}`,
-    time: "Vừa xong",
-    desc: `Đăng gói ${z.name} (${dur.label})${stObj ? ` + Nhãn ${stObj.name}` : ""}${pricing.promoObj ? ` + Mã ${pricing.promoObj.code}` : ""} + VAT 8%`,
-    amount: -grandTotal,
-    type: "debit",
-    vat: vatTotal,
-    status: "Đã xuất hóa đơn VAT"
-  });
+  if (grandTotal > 0) {
+    STATE.walletBalance -= grandTotal;
+    updateWalletUI();
+    PORTAL_DATA.transactions.unshift({
+      code: `#VIP-${Math.floor(10000 + Math.random() * 89999)}`,
+      time: "Vừa xong",
+      desc: `${existingProp ? `Nâng cấp/Sửa tin #${existingProp.id} — ` : "Đăng "}gói ${z.name} (${dur.label})${stObj ? ` + Nhãn ${stObj.name}` : ""}${pricing.promoObj ? ` + Mã ${pricing.promoObj.code}` : ""} + VAT 8%`,
+      amount: -grandTotal,
+      type: "debit",
+      vat: vatTotal,
+      status: "Đã xuất hóa đơn VAT"
+    });
+  }
 
-  const newId = PROPERTIES.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0) + 1;
+  const newId = existingProp ? existingProp.id : PROPERTIES.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0) + 1;
   const priceNum = parseFloat(document.getElementById("dPrice")?.value || "6.5");
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
@@ -5922,17 +6133,31 @@ function publishStudioListingNow() {
     image: coverPhoto,
     gallery: STUDIO_STATE.photos.slice(),
     videoUrl: STUDIO_STATE.videoUrl || "",
-    videoName: STUDIO_STATE.videoName || ""
+    videoName: STUDIO_STATE.videoName || "",
+    freeEditsLeft: existingProp
+      ? Math.max(0, (existingProp.freeEditsLeft ?? 3) - (isFreeEditEligible ? 1 : 0))
+      : 3
   };
 
-  PROPERTIES.unshift(newProp);
+  if (existingProp) {
+    Object.assign(existingProp, newProp);
+    if (typeof saveListingOverrideRecord === "function") {
+      saveListingOverrideRecord(existingProp.id, newProp);
+    }
+  } else {
+    PROPERTIES.unshift(newProp);
+  }
+  STUDIO_STATE.editingPropId = null;
+
   try {
     const saved = JSON.parse(localStorage.getItem("ctt_user_listings_v1") || "[]");
-    const nextSaved = [newProp, ...(Array.isArray(saved) ? saved.filter((x) => x && x.id !== newProp.id) : [])].slice(0, 30);
+    const nextSaved = [newProp, ...(Array.isArray(saved) ? saved.filter((x) => x && x.id !== newProp.id) : [])].slice(0, 40);
     localStorage.setItem("ctt_user_listings_v1", JSON.stringify(nextSaved));
   } catch (e) {}
+  if (typeof savePortalStateStore === "function") savePortalStateStore();
+
   if (z.id === 1 && typeof VIP_EXCLUSIVE_SLIDES !== "undefined" && Array.isArray(VIP_EXCLUSIVE_SLIDES)) {
-    VIP_EXCLUSIVE_SLIDES.unshift({
+    const slideObj = {
       id: newId,
       location: newProp.fullAddress,
       price: String(priceNum),
@@ -5948,7 +6173,10 @@ function publishStudioListingNow() {
       phoneFull: newProp.phone,
       phoneMasked: newProp.phone.length >= 7 ? `${newProp.phone.slice(0, 4)} ${newProp.phone.slice(4, 7)} ***` : newProp.phone,
       photos: newProp.gallery.length >= 3 ? newProp.gallery.slice(0, 3) : [coverPhoto, coverPhoto, coverPhoto]
-    });
+    };
+    const existSlideIdx = VIP_EXCLUSIVE_SLIDES.findIndex((s) => Number(s.id) === Number(newId));
+    if (existSlideIdx >= 0) VIP_EXCLUSIVE_SLIDES[existSlideIdx] = slideObj;
+    else VIP_EXCLUSIVE_SLIDES.unshift(slideObj);
     STATE.sv1Index = 0;
     STATE.sv1ThumbIndex = 0;
     renderSv1Slider();
@@ -5959,11 +6187,11 @@ function publishStudioListingNow() {
   initMegaSearchSync();
   closePostModal();
 
-  alert(
-    `🎉 ĐĂNG TIN THÀNH CÔNG (#${newId})!\n\n` +
-      `• Gói hiển thị: ${z.name} (${dur.label})\n` +
-      `• Tổng thanh toán (gồm VAT 8%): ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ\n` +
-      `• Hệ thống đang mở Trang Chi Tiết Bài Viết vừa xuất bản của bạn!`
+  showCttNotice(
+    existingProp ? `Đã cập nhật tin #${newId}` : `Đăng tin thành công (#${newId})`,
+    existingProp
+      ? `• Gói hiển thị: ${z.name}\n• Quyền sửa miễn phí còn lại: ${newProp.freeEditsLeft}/3 lần\n• Chi phí phát sinh: ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ`
+      : `• Gói hiển thị: ${z.name} (${dur.label})\n• Tổng thanh toán (gồm VAT 8%): ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ\n• Đang mở Trang Chi Tiết Bài Viết vừa xuất bản!`
   );
 
   openPropertyDetailView(newId);
@@ -5988,7 +6216,7 @@ const PORTAL_DATA = {
   ]
 };
 
-// Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/Aribnb listings
+// Enrich all mock PROPERTIES with 4-photo galleries, 4-tier VIP badges, stickers, and 2 HomeStay/Airbnb listings
 (function enrichPropertiesAndPortals() {
   const importedBatches = [
     window.IMPORTED_CHOTHUETOT_LISTINGS,
@@ -6029,7 +6257,7 @@ const PORTAL_DATA = {
     "https://chothuetot.vn/assets/images/properties/album_1791022210_7592.webp"
   ];
 
-  // Add 2 authentic HomeStay / Aribnb listings if not present
+  // Add 2 authentic HomeStay / Airbnb listings if not present
   if (!PROPERTIES.some((p) => p.category === "homestay-airbnb")) {
     PROPERTIES.push(
       {
@@ -6040,7 +6268,7 @@ const PORTAL_DATA = {
         badgeClass: "tag-vip1",
         sticker: "hot",
         category: "homestay-airbnb",
-        categoryLabel: "HomeStay / Aribnb",
+        categoryLabel: "HomeStay / Airbnb",
         title: "HomeStay Indochine Studio Full Nội Thất View Kênh Nhiêu Lộc — Lê Văn Sỹ",
         price: 8.5,
         priceText: "8.5 Triệu",
@@ -6073,8 +6301,8 @@ const PORTAL_DATA = {
         badgeClass: "tag-vip2",
         sticker: "promo",
         category: "homestay-airbnb",
-        categoryLabel: "HomeStay / Aribnb",
-        title: "Căn Hộ Aribnb 2PN Ban Công Rộng Sát Phan Xích Long — Nhận Khách Ngắn & Dài Hạn",
+        categoryLabel: "HomeStay / Airbnb",
+        title: "Căn Hộ Airbnb 2PN Ban Công Rộng Sát Phan Xích Long — Nhận Khách Ngắn & Dài Hạn",
         price: 11.5,
         priceText: "11.5 Triệu",
         ward: "P. Cầu Kiệu",
@@ -6124,7 +6352,88 @@ const PORTAL_DATA = {
       p.freeEditsLeft = 3;
     }
   });
+
+  // Restore saved listing overrides (Admin tier/sticker edits, hide/show, edits, deletes)
+  try {
+    const ovRaw = localStorage.getItem("ctt_listing_overrides_v1");
+    if (ovRaw) {
+      const ovMap = JSON.parse(ovRaw) || {};
+      if (Array.isArray(ovMap.__deletedIds) && ovMap.__deletedIds.length) {
+        const delSet = new Set(ovMap.__deletedIds.map(Number));
+        for (let i = PROPERTIES.length - 1; i >= 0; i--) {
+          if (delSet.has(Number(PROPERTIES[i].id))) PROPERTIES.splice(i, 1);
+        }
+      }
+      PROPERTIES.forEach((p) => {
+        const patch = ovMap[String(p.id)];
+        if (patch && typeof patch === "object") {
+          Object.assign(p, patch);
+        }
+      });
+    }
+  } catch (_) {}
+
+  // Restore saved portal wallet balance, transactions, and appointments
+  try {
+    const psRaw = localStorage.getItem("ctt_portal_state_v1");
+    if (psRaw) {
+      const ps = JSON.parse(psRaw);
+      if (typeof ps.walletBalance === "number") STATE.walletBalance = ps.walletBalance;
+      if (Array.isArray(ps.transactions) && ps.transactions.length) PORTAL_DATA.transactions = ps.transactions;
+      if (Array.isArray(ps.appointments) && ps.appointments.length) PORTAL_DATA.appointments = ps.appointments;
+    }
+  } catch (_) {}
 })();
+
+function savePortalStateStore() {
+  try {
+    localStorage.setItem(
+      "ctt_portal_state_v1",
+      JSON.stringify({
+        walletBalance: STATE.walletBalance,
+        transactions: PORTAL_DATA.transactions.slice(0, 50),
+        appointments: PORTAL_DATA.appointments.slice(0, 50)
+      })
+    );
+  } catch (_) {}
+}
+
+function saveListingOverrideRecord(propId, patchObj, isDeleted = false) {
+  try {
+    const ovMap = JSON.parse(localStorage.getItem("ctt_listing_overrides_v1") || "{}");
+    if (isDeleted) {
+      const del = Array.isArray(ovMap.__deletedIds) ? ovMap.__deletedIds : [];
+      if (!del.includes(Number(propId))) del.push(Number(propId));
+      ovMap.__deletedIds = del;
+      delete ovMap[String(propId)];
+    } else if (patchObj && typeof patchObj === "object") {
+      ovMap[String(propId)] = { ...(ovMap[String(propId)] || {}), ...patchObj };
+    }
+    localStorage.setItem("ctt_listing_overrides_v1", JSON.stringify(ovMap));
+  } catch (_) {}
+}
+
+function getMemberOwnedProperties() {
+  let savedIds = new Set();
+  try {
+    const userSaved = JSON.parse(localStorage.getItem("ctt_user_listings_v1") || "[]");
+    if (Array.isArray(userSaved)) {
+      userSaved.forEach((x) => { if (x && x.id) savedIds.add(Number(x.id)); });
+    }
+  } catch (_) {}
+  const authName = (STATE.auth?.displayName || "").trim().toLowerCase();
+  const owned = PROPERTIES.filter((p) => {
+    if (savedIds.has(Number(p.id))) return true;
+    if (authName && String(p.host || "").toLowerCase() === authName) return true;
+    return false;
+  });
+  const baseTen = PROPERTIES.slice(0, 10);
+  const combined = [...owned];
+  baseTen.forEach((p) => {
+    if (!combined.some((x) => x.id === p.id)) combined.push(p);
+  });
+  return combined.slice(0, 20);
+}
 
 // Hook topUpWalletInstant & submitZaloViewingSchedule to record into PORTAL_DATA
 const _origTopUpWallet = topUpWalletInstant;
@@ -6179,7 +6488,7 @@ function syncMemberSidebarAndKpis() {
   const metaEl = document.getElementById("memberSidebarMeta");
   if (metaEl) metaEl.textContent = `Mã: ${code} • ${roleLabel}`;
 
-  const myProps = PROPERTIES.slice(0, 10);
+  const myProps = getMemberOwnedProperties();
   const vipCount = myProps.filter((p) => p.tier === "spotlight" || p.tier === "featured" || p.tier === "prime").length;
   const navCnt = document.getElementById("memberNavCountListings");
   if (navCnt) navCnt.textContent = String(myProps.length);
@@ -6197,28 +6506,38 @@ function openEditListingModal(propId) {
   if (!item) return;
   openPostModal();
   STUDIO_STATE.editingPropId = item.id;
-  STUDIO_STATE.catKey = item.category;
-  STUDIO_STATE.catLabel = item.categoryLabel;
+  selectStudioCategory(item.category || "phong-tro", item.categoryLabel || "Phòng trọ / CHDV", document.querySelector(`#postModalBackdrop .post-cat-btn[data-cat="${item.category}"]`));
   STUDIO_STATE.beds = item.beds || "1 PN";
   STUDIO_STATE.baths = item.baths || "1 WC";
   STUDIO_STATE.deposit = item.deposit || "1 Tháng";
   STUDIO_STATE.photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice();
-  STUDIO_STATE.selectedZoneId = item.zoneId || (item.tier === "spotlight" ? 2 : item.tier === "featured" ? 3 : 5);
+  STUDIO_STATE.selectedZoneId = item.zoneId || (item.tier === "spotlight" ? 2 : item.tier === "featured" ? 3 : item.tier === "prime" ? 5 : 4);
   STUDIO_STATE.selectedSticker = item.sticker || null;
 
   const cityEl = document.getElementById("dCity");
   if (cityEl) {
     cityEl.value = item.city || "TP. Hồ Chí Minh";
+    cityEl.dataset.prevValid = cityEl.value;
     populateStudioWards();
   }
   const wardEl = document.getElementById("dWard");
   if (wardEl) {
     wardEl.value = item.ward || "P. Cầu Kiệu";
+    wardEl.dataset.prevValid = wardEl.value;
     populateStudioStreets();
   }
   const streetEl = document.getElementById("dStreet");
-  if (streetEl && streetEl.options.length > 1) streetEl.selectedIndex = 1;
-  STUDIO_STATE.houseNumber = (item.fullAddress || "142").split(",")[0];
+  if (streetEl) {
+    const guessedStreet = ((item.fullAddress || "").split(",")[0] || "").replace(/^\d+[A-Za-z0-9/\-]*\s*/, "").trim();
+    streetEl.value = item.street || guessedStreet || "Phan Xích Long";
+    streetEl.dataset.prevValid = streetEl.value;
+  }
+  const projEl = document.getElementById("dProject");
+  if (projEl) {
+    projEl.value = item.project || "";
+    projEl.dataset.prevValid = projEl.value;
+  }
+  STUDIO_STATE.houseNumber = ((item.fullAddress || "142").split(",")[0] || "142").split(/\s+/)[0];
   const addrEl = document.getElementById("dAddress");
   if (addrEl) addrEl.value = item.fullAddress || "";
   const hostEl = document.getElementById("dHost");
@@ -6233,11 +6552,56 @@ function openEditListingModal(propId) {
   const areaEl = document.getElementById("dArea");
   if (areaEl) areaEl.value = item.area || 35;
   const depEl = document.getElementById("dDeposit");
-  if (depEl) depEl.value = item.deposit || "1 Tháng";
+  if (depEl) {
+    depEl.value = item.deposit || "1 Tháng";
+    depEl.dataset.prevValid = depEl.value;
+  }
+  const bedsEl = document.getElementById("dBeds");
+  if (bedsEl) bedsEl.value = String(parseInt(item.beds || "1", 10) || 1);
+  const bathsEl = document.getElementById("dBaths");
+  if (bathsEl) bathsEl.value = String(parseInt(item.baths || "1", 10) || 1);
+
+  const cleanNumVal = (v) => (/nhà nước/i.test(String(v || "")) ? "" : String(v || "").replace(/[^0-9.]/g, ""));
+  const elecEl = document.getElementById("dElec");
+  if (elecEl) elecEl.value = cleanNumVal(item.elec);
+  const waterEl = document.getElementById("dWater");
+  if (waterEl) waterEl.value = cleanNumVal(item.water);
+  if (/m³|m3|khối/i.test(String(item.water || ""))) selectStudioWaterUnit("m3");
+  else selectStudioWaterUnit("nguoi");
+
+  const otherEl = document.getElementById("dOtherCost");
+  if (otherEl) otherEl.value = cleanNumVal(item.otherCost);
+  const netEl = document.getElementById("dInternet");
+  if (netEl) netEl.value = cleanNumVal(item.internet);
+  const launEl = document.getElementById("dLaundry");
+  if (launEl) launEl.value = cleanNumVal(item.laundry);
+  const trashEl = document.getElementById("dTrash");
+  if (trashEl) trashEl.value = cleanNumVal(item.trash);
+  const parkEl = document.getElementById("dParking");
+  if (parkEl) parkEl.value = cleanNumVal(item.parking);
+
+  const maxPEl = document.getElementById("dMaxPeople");
+  if (maxPEl) {
+    maxPEl.value = item.maxPeople || "";
+    onStudioMaxPeopleChange(maxPEl.value);
+  }
+  const extraPEl = document.getElementById("dExtraPerson");
+  if (extraPEl) extraPEl.value = cleanNumVal(item.extraPerson);
+  const furnEl = document.getElementById("dFurniture");
+  if (furnEl) furnEl.value = item.furniture || "";
+  const flEl = document.getElementById("dFloors");
+  if (flEl) flEl.value = item.floors || "";
+  const dirEl = document.getElementById("dDirection");
+  if (dirEl) dirEl.value = item.direction || "";
+  const frontEl = document.getElementById("dFrontageRoad");
+  if (frontEl) frontEl.value = item.frontageRoad || "";
+  const roadEl = document.getElementById("dRoadAccess");
+  if (roadEl) roadEl.value = item.roadAccess || "";
+
   const titleEl = document.getElementById("dTitle");
   if (titleEl) titleEl.value = (item.title || "").slice(0, 70);
   const descEl = document.getElementById("dDesc");
-  if (descEl) descEl.value = item.description || `Chính chủ cho thuê ${item.title} tại ${item.fullAddress}.`;
+  if (descEl) descEl.value = item.description || item.desc || `Chính chủ cho thuê ${item.title} tại ${item.fullAddress}.`;
 
   updateStudioTitleCount();
   renderStudioPhotosManager();
@@ -6253,17 +6617,36 @@ function boostMemberListingNow(propId) {
   renderAllHomeGrids();
   updateMapPins("all", item.id);
   switchMemberTab("listings");
-  alert(`🚀 ĐÃ ĐẨY TIN #${item.id} LÊN ĐẦU BẢNG!\n• Tin đăng đã được ưu tiên lên vị trí số 1 và làm mới ghim Bản đồ 3D.`);
+  showCttNotice(
+    `Đã đẩy tin #${item.id} lên đầu bảng`,
+    "Tin đăng đã được ưu tiên lên vị trí số 1 và làm mới ghim trên Bản đồ."
+  );
 }
 
 function toggleHideMemberListing(propId) {
   const item = PROPERTIES.find((p) => p.id === Number(propId));
   if (!item) return;
   item.isHidden = !item.isHidden;
+  saveListingOverrideRecord(item.id, { isHidden: item.isHidden });
   renderAllHomeGrids();
   updateMapPins("all");
   syncMemberSidebarAndKpis();
   switchMemberTab("listings");
+  showCttNotice(
+    item.isHidden ? `Đã ẩn tin #${item.id}` : `Đã hiển thị lại tin #${item.id}`,
+    item.isHidden ? "Tin đăng đã tạm ẩn khỏi trang chủ và bản đồ." : "Tin đăng đã hoạt động trở lại trên hệ thống."
+  );
+}
+
+function confirmMemberAppointment(apptId) {
+  const appt = PORTAL_DATA.appointments.find((a) => String(a.id) === String(apptId));
+  if (appt) {
+    appt.status = "confirmed";
+    savePortalStateStore();
+  }
+  syncMemberSidebarAndKpis();
+  switchMemberTab("appointments");
+  showCttNotice("Đã xác nhận lịch hẹn Zalo", `Đã chốt lịch xem phòng với khách ${appt ? appt.guestName : ""}.`);
 }
 
 function copyPropertySeoLink(propId, btnEl) {
@@ -6292,11 +6675,11 @@ function saveMemberProfileSettings() {
   const newPwd = document.getElementById("memProfileNewPwd")?.value || "";
 
   if (!nameVal) {
-    alert("Vui lòng nhập Họ và tên hiển thị.");
+    showCttNotice("Thiếu thông tin", "Vui lòng nhập Họ và tên hiển thị.");
     return;
   }
   STATE.auth.displayName = nameVal;
-  if (phoneVal) STATE.auth.phone = phoneVal;
+  if (phoneVal) STATE.auth.phone = formatPhone433(phoneVal);
   if (emailVal) STATE.auth.email = emailVal;
 
   const store = getAccountsStore();
@@ -6314,7 +6697,10 @@ function saveMemberProfileSettings() {
 
   updateAuthUI();
   syncMemberSidebarAndKpis();
-  alert(`✅ Đã cập nhật hồ sơ thành công cho tài khoản "${nameVal}"${newPwd && newPwd.length >= 6 ? " (Đã đổi mật khẩu mới)" : ""}!`);
+  showCttNotice(
+    "Đã lưu hồ sơ tài khoản",
+    `Đã cập nhật thông tin cho "${nameVal}"${newPwd && newPwd.length >= 6 ? " (Đã đổi mật khẩu mới)" : ""}.`
+  );
 }
 
 function switchMemberTab(tabName, btnEl) {
@@ -6328,7 +6714,7 @@ function switchMemberTab(tabName, btnEl) {
   if (!container) return;
 
   if (tabName === "listings") {
-    const allMyProps = PROPERTIES.slice(0, 10);
+    const allMyProps = getMemberOwnedProperties();
     const fMode = PORTAL_DATA.memberFilter || "all";
     const myProps = allMyProps.filter((p) => {
       if (fMode === "vip") return p.tier === "spotlight" || p.tier === "featured" || p.tier === "prime";
@@ -6452,7 +6838,7 @@ function switchMemberTab(tabName, btnEl) {
                 </td>
                 <td>
                   <div style="display:flex;gap:8px;align-items:center;">
-                    <button type="button" onclick="this.textContent='Đã xác nhận Zalo ✓';this.style.background='#059669';" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;">
+                    <button type="button" onclick="confirmMemberAppointment('${a.id}')" class="hsp-btn-apply" style="padding:6px 12px;font-size:11.5px;${a.status === "confirmed" ? "background:#059669;" : ""}">
                       ${a.status === "confirmed" ? "Đã xác nhận ✓" : "Xác nhận hẹn"}
                     </button>
                     <a href="https://zalo.me/${a.guestPhone.replace(/\D/g, "")}" target="_blank" style="color:#0284c7;font-weight:800;font-size:12px;text-decoration:none;">Chat Zalo</a>
@@ -6604,39 +6990,56 @@ function adminChangeListingTier(propId, newZoneIdStr) {
   item.badge = z.badge || z.name;
   item.badgeClass = z.badgeClass;
   item.isVipPin = z.id === 1;
+  saveListingOverrideRecord(item.id, {
+    zoneId: item.zoneId,
+    tier: item.tier,
+    mapTier: item.mapTier,
+    badge: item.badge,
+    badgeClass: item.badgeClass,
+    isVipPin: item.isVipPin
+  });
   renderAllHomeGrids();
   updateMapPins("all");
   updateMapFilterChipCounts();
   initMegaSearchSync();
   switchAdminTab(STATE.activeAdminTab || "moderation");
+  showCttNotice("Đã đổi hạng gói VIP", `Tin #${item.id} đã chuyển sang gói "${z.name}".`);
 }
 
 function adminChangeListingSticker(propId, stickerVal) {
   const item = PROPERTIES.find((p) => p.id === Number(propId));
   if (!item) return;
   item.sticker = stickerVal || null;
+  saveListingOverrideRecord(item.id, { sticker: item.sticker });
   renderAllHomeGrids();
   switchAdminTab(STATE.activeAdminTab || "moderation");
+  showCttNotice("Đã cập nhật nhãn dán", `Tin #${item.id}: ${item.sticker ? `Nhãn ${item.sticker.toUpperCase()}` : "Đã gỡ nhãn dán"}.`);
 }
 
 function adminDeleteListingNow(propId) {
   const idx = PROPERTIES.findIndex((p) => p.id === Number(propId));
   if (idx < 0) return;
   PROPERTIES.splice(idx, 1);
+  saveListingOverrideRecord(propId, null, true);
   renderAllHomeGrids();
   updateMapPins("all");
   updateMapFilterChipCounts();
   initMegaSearchSync();
   syncAdminKpis();
   switchAdminTab(STATE.activeAdminTab || "all-listings");
+  showCttNotice("Đã xóa tin đăng", `Mã tin #${propId} đã được gỡ khỏi hệ thống.`);
 }
 
 function approveAdminListing(propId, btnEl) {
   const item = PROPERTIES.find((p) => p.id === Number(propId));
-  if (item) item.verified = true;
+  if (item) {
+    item.verified = true;
+    saveListingOverrideRecord(item.id, { verified: true });
+  }
   btnEl.innerHTML = '<i class="fa-solid fa-check-double"></i> Đã duyệt lên sóng';
   btnEl.style.background = "#0f172a";
   btnEl.style.color = "#ffd700";
+  showCttNotice("Đã duyệt tin đăng", `Mã tin #${propId} đã được xác thực lên sóng.`);
 }
 
 function adminCreateAccountNow() {
@@ -6645,7 +7048,7 @@ function adminCreateAccountNow() {
   const pwdVal = (document.getElementById("admNewPwd")?.value || "").trim();
   const roleVal = document.getElementById("admNewRole")?.value || "member";
   if (!idVal || !nameVal || !pwdVal) {
-    alert("Vui lòng nhập đầy đủ Tên đăng nhập/Email/SĐT, Họ tên hiển thị và Mật khẩu.");
+    showCttNotice("Thiếu thông tin", "Vui lòng nhập đầy đủ Tên đăng nhập/Email/SĐT, Họ tên hiển thị và Mật khẩu.");
     return;
   }
   upsertAccountRecord({
@@ -6658,7 +7061,12 @@ function adminCreateAccountNow() {
   });
   syncAdminKpis();
   switchAdminTab("users");
-  alert(`✅ Đã tạo tài khoản "${idVal}" (${roleVal.toUpperCase()}) thành công!`);
+  showCttNotice("Đã tạo tài khoản mới", `Tài khoản "${idVal}" (${roleVal.toUpperCase()}) đã sẵn sàng đăng nhập.`);
+}
+
+function goToAdminListingsPage(page) {
+  PORTAL_DATA.adminListingsPage = Number(page) || 1;
+  switchAdminTab("all-listings");
 }
 
 function adminToggleUserRole(identity) {
@@ -6764,24 +7172,29 @@ function switchAdminTab(tabName, btnEl) {
       if (kw && !String(p.id).includes(kw) && !p.title.toLowerCase().includes(kw) && !p.ward.toLowerCase().includes(kw)) return false;
       return true;
     });
+    const adminPageSize = 30;
+    const totalAdminPages = Math.max(1, Math.ceil(list.length / adminPageSize));
+    const curAdminPage = Math.min(Math.max(1, Number(PORTAL_DATA.adminListingsPage) || 1), totalAdminPages);
+    PORTAL_DATA.adminListingsPage = curAdminPage;
+    const pageRows = list.slice((curAdminPage - 1) * adminPageSize, curAdminPage * adminPageSize);
 
     container.innerHTML = `
       <div class="portal-table-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
           <div>
-            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Toàn Bộ Tin Đăng Trên Hệ Thống (${list.length}/${PROPERTIES.length} tin)</h3>
-            <small style="color:#64748b;">Tra cứu theo mã tin, tiêu đề, khu vực và quản lý đường dẫn chuẩn SEO</small>
+            <h3 style="font-size:18px;font-weight:900;color:#0f172a;">Quản Lý Toàn Bộ Tin Đăng Trên Hệ Thống (${new Intl.NumberFormat("vi-VN").format(list.length)}/${new Intl.NumberFormat("vi-VN").format(PROPERTIES.length)} tin)</h3>
+            <small style="color:#64748b;">Tra cứu theo mã tin, tiêu đề, khu vực • Hiển thị trang ${curAdminPage}/${totalAdminPages} (${adminPageSize} tin/trang)</small>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <input type="text" class="post-input" style="width:220px;padding:7px 12px;font-size:12.5px;" placeholder="Tìm mã tin, tên đường, phường..." value="${PORTAL_DATA.adminSearchKw || ""}" oninput="PORTAL_DATA.adminSearchKw=this.value;switchAdminTab('all-listings')">
-            <select class="post-input" style="width:180px;padding:7px 10px;font-size:12.5px;" onchange="PORTAL_DATA.adminCatFilter=this.value;switchAdminTab('all-listings')">
+            <input type="text" class="post-input" style="width:220px;padding:7px 12px;font-size:12.5px;" placeholder="Tìm mã tin, tên đường, phường..." value="${PORTAL_DATA.adminSearchKw || ""}" oninput="PORTAL_DATA.adminSearchKw=this.value;PORTAL_DATA.adminListingsPage=1;switchAdminTab('all-listings')">
+            <select class="post-input" style="width:180px;padding:7px 10px;font-size:12.5px;" onchange="PORTAL_DATA.adminCatFilter=this.value;PORTAL_DATA.adminListingsPage=1;switchAdminTab('all-listings')">
               <option value="all" ${catF === "all" ? "selected" : ""}>Tất cả 6 loại hình</option>
               <option value="phong-tro" ${catF === "phong-tro" ? "selected" : ""}>Phòng Trọ / CHDV</option>
               <option value="nha-o" ${catF === "nha-o" ? "selected" : ""}>Nhà Nguyên Căn</option>
               <option value="can-ho-chung-cu" ${catF === "can-ho-chung-cu" ? "selected" : ""}>Căn Hộ Chung Cư</option>
               <option value="mat-bang-van-phong" ${catF === "mat-bang-van-phong" ? "selected" : ""}>Mặt Bằng Văn Phòng</option>
               <option value="bai-dat-kho-xuong" ${catF === "bai-dat-kho-xuong" ? "selected" : ""}>Đất - Xưởng, Kho - Bãi</option>
-              <option value="homestay-airbnb" ${catF === "homestay-airbnb" ? "selected" : ""}>HomeStay / Aribnb</option>
+              <option value="homestay-airbnb" ${catF === "homestay-airbnb" ? "selected" : ""}>HomeStay / Airbnb</option>
             </select>
           </div>
         </div>
@@ -6797,7 +7210,7 @@ function switchAdminTab(tabName, btnEl) {
             </tr>
           </thead>
           <tbody>
-            ${list.map((p) => {
+            ${pageRows.map((p) => {
               const vip = getPropertyVipDisplay(p);
               return `
                 <tr>
@@ -6828,6 +7241,7 @@ function switchAdminTab(tabName, btnEl) {
             }).join("")}
           </tbody>
         </table>
+        <div class="ctt-pagination-bar">${renderCttPaginationHTML(curAdminPage, totalAdminPages, "goToAdminListingsPage")}</div>
       </div>
     `;
   } else if (tabName === "revenue") {
@@ -6952,7 +7366,7 @@ function switchAdminTab(tabName, btnEl) {
       { key: "can-ho-chung-cu", label: "Căn Hộ Chung Cư" },
       { key: "mat-bang-van-phong", label: "Mặt Bằng Văn Phòng" },
       { key: "bai-dat-kho-xuong", label: "Đất - Xưởng, Kho - Bãi" },
-      { key: "homestay-airbnb", label: "HomeStay / Aribnb" }
+      { key: "homestay-airbnb", label: "HomeStay / Airbnb" }
     ].map((c) => ({
       ...c,
       count: PROPERTIES.filter((p) => p.category === c.key).length
@@ -7053,19 +7467,19 @@ function switchAdminTab(tabName, btnEl) {
               </tr>
               <tr>
                 <td><strong>Kết Cấu Phòng</strong></td>
-                <td style="font-size:12px;color:#334155;">Phòng Ngủ (1–6+ PN) • Nhà Vệ Sinh (1–6+ WC)</td>
+                <td style="font-size:12px;color:#334155;">Phòng Ngủ (nhập số trực tiếp, mặc định 1) • Nhà Vệ Sinh (nhập số trực tiếp, mặc định 1)</td>
               </tr>
               <tr>
                 <td><strong>Chi Phí Cơ Bản</strong></td>
-                <td style="font-size:12px;color:#334155;">Điện (k/kWh hoặc Nhà nước) • Nước (k/Người hoặc Nhà nước)</td>
+                <td style="font-size:12px;color:#334155;">Điện (k/kWh hoặc Nhà nước) • Nước (k/Người, k/m³ hoặc Nhà nước)</td>
               </tr>
               <tr>
                 <td><strong>Chi Phí Khác</strong></td>
-                <td style="font-size:12px;color:#334155;"><strong>Trọn Gói Chi Phí Khác</strong> (loại trừ 4 mục lẻ) hoặc tách: Internet, Giặt Sấy, Phí Rác, Phí Xe (Xe/Người)</td>
+                <td style="font-size:12px;color:#334155;"><strong>Trọn Gói Chi Phí Khác</strong> (loại trừ 4 mục lẻ) hoặc tách: Internet, Giặt Sấy (Người/1 Lần/Kg/Phòng), Phí Rác, Phí Xe (Xe/Người)</td>
               </tr>
               <tr>
                 <td><strong>Giới Hạn Người</strong></td>
-                <td style="font-size:12px;color:#334155;">1–5 Người/Phòng • Phụ thu thêm người (k/Người/Tháng khi ≥ 2 người)</td>
+                <td style="font-size:12px;color:#334155;">1–5 Người/Phòng • Phụ thu thêm người (diễn giải từ người thứ N+1)</td>
               </tr>
             </tbody>
           </table>
@@ -7185,7 +7599,7 @@ function switchAdminTab(tabName, btnEl) {
       { type: "SEO Loại hình + Giá thành", url: "/cho-thue-phong-tro-gia-duoi-4-trieu", title: "Cho Thuê Phòng Trọ / CHDV — Dưới 4 Triệu/tháng", status: "Indexed • 100/100" },
       { type: "SEO Nhà nguyên căn + Vị trí", url: "/cho-thue-nha-nguyen-can-p-hoa-hung", title: "Cho Thuê Nhà Nguyên Căn Tại P. Hòa Hưng (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
       { type: "SEO Căn hộ + Giá thành", url: "/cho-thue-can-ho-chung-cu-gia-tu-4-den-7-trieu", title: "Cho Thuê Căn Hộ Chung Cư — Từ 4 - 7 Triệu/tháng", status: "Indexed • 100/100" },
-      { type: "SEO HomeStay / Aribnb", url: "/cho-thue-homestay-airbnb-p-nhieu-loc", title: "Cho Thuê HomeStay / Aribnb Tại P. Nhiêu Lộc (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
+      { type: "SEO HomeStay / Airbnb", url: "/cho-thue-homestay-airbnb-p-nhieu-loc", title: "Cho Thuê HomeStay / Airbnb Tại P. Nhiêu Lộc (TP. Hồ Chí Minh)", status: "Indexed • 100/100" },
       { type: "SEO Khu vực Hà Nội", url: "/cho-thue-can-ho-chung-cu-tp-ha-noi", title: "Cho Thuê Căn Hộ Chung Cư Tại TP. Hà Nội", status: "Indexed • 100/100" }
     ];
     container.innerHTML = `
