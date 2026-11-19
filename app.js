@@ -1848,10 +1848,13 @@ function populateMegaProjects() {
   const city = document.getElementById("megaCitySelect")?.value || "all";
   const projEl = document.getElementById("megaProjectSelect");
   if (!projEl || typeof STUDIO_PROJECTS === "undefined") return;
-  const projs = city !== "all" ? STUDIO_PROJECTS.filter((pr) => pr.city === city) : STUDIO_PROJECTS;
-  const list = projs.length ? projs : STUDIO_PROJECTS;
-  projEl.innerHTML = `<option value="all">Tất cả Dự Án (${list.length})</option>` +
-    list.map((pr) => `<option value="${pr.value}">${pr.label}</option>`).join("");
+  const list = city !== "all" ? STUDIO_PROJECTS.filter((pr) => pr.city === city) : STUDIO_PROJECTS;
+  if (!list.length) {
+    projEl.innerHTML = `<option value="all">Không có dự án</option>`;
+  } else {
+    projEl.innerHTML = `<option value="all">Tất cả Dự Án (${list.length})</option>` +
+      list.map((pr) => `<option value="${pr.value}">${pr.label}</option>`).join("");
+  }
 }
 
 function onMegaCityChange() {
@@ -5287,16 +5290,14 @@ function getStudioComboItems(kind) {
   if (kind === "project") {
     const city = (document.getElementById("dCity")?.value || "").trim();
     const ward = (document.getElementById("dWard")?.value || "").trim();
-    let list = STUDIO_PROJECTS;
-    if (city) {
-      const byCity = list.filter((p) => p.city === city);
-      if (byCity.length) list = byCity;
-    }
+    if (!city) return STUDIO_PROJECTS;
+    const byCity = STUDIO_PROJECTS.filter((p) => p.city === city);
+    if (!byCity.length) return [];
     if (ward) {
-      const byWard = list.filter((p) => p.ward === ward);
-      if (byWard.length) list = byWard;
+      const byWard = byCity.filter((p) => p.ward === ward);
+      if (byWard.length) return byWard;
     }
-    return list;
+    return byCity;
   }
   if (kind === "deposit") return STUDIO_DEPOSITS;
   if (kind === "beds") return STUDIO_BEDS_OPTS;
@@ -5307,18 +5308,18 @@ function getStudioComboItems(kind) {
   if (kind === "direction") return STUDIO_DIRECTIONS_OPTS;
   if (kind === "ward") {
     const city = (document.getElementById("dCity")?.value || "").trim();
-    if (city && STUDIO_WARDS_BY_CITY[city]) {
-      return STUDIO_WARDS_BY_CITY[city];
+    if (city) {
+      return STUDIO_WARDS_BY_CITY[city] || [];
     }
     return Object.values(STUDIO_WARDS_BY_CITY).flat();
   }
   const city = (document.getElementById("dCity")?.value || "").trim();
   const ward = (document.getElementById("dWard")?.value || "").trim();
   let list = [];
-  if (ward && STUDIO_STREETS_BY_WARD[ward]) {
-    list = STUDIO_STREETS_BY_WARD[ward];
-  } else if (city && STUDIO_WARDS_BY_CITY[city]) {
-    const cityWards = STUDIO_WARDS_BY_CITY[city].map((w) => w.value);
+  if (ward) {
+    list = STUDIO_STREETS_BY_WARD[ward] || [];
+  } else if (city) {
+    const cityWards = (STUDIO_WARDS_BY_CITY[city] || []).map((w) => w.value);
     list = cityWards.flatMap((w) => STUDIO_STREETS_BY_WARD[w] || []);
   } else {
     list = Object.values(STUDIO_STREETS_BY_WARD).flat();
@@ -5368,6 +5369,11 @@ function renderStudioComboList(kind, query = "") {
     : items;
 
   if (!filtered.length) {
+    if (kind === "project") {
+      listEl.innerHTML = "";
+      listEl.classList.remove("is-open");
+      return;
+    }
     listEl.innerHTML = `<div class="ctt-combo-empty">Không tìm thấy trong danh sách — Vui lòng chọn từ gợi ý.</div>`;
   } else {
     listEl.innerHTML = filtered
@@ -5381,7 +5387,14 @@ function renderStudioComboList(kind, query = "") {
 
 function openStudioCombo(kind) {
   clearTimeout(STUDIO_COMBO_TIMERS[kind]);
-  const { inputEl } = getStudioComboEls(kind);
+  const { inputEl, listEl } = getStudioComboEls(kind);
+  if (kind === "project" && !getStudioComboItems("project").length) {
+    if (listEl) {
+      listEl.innerHTML = "";
+      listEl.classList.remove("is-open");
+    }
+    return;
+  }
   const val = (inputEl?.value || "").trim();
   const isExactOption = isValidStudioComboValue(kind, val);
   if (inputEl && isExactOption) inputEl.dataset.prevValid = val;
@@ -5394,6 +5407,29 @@ function filterStudioCombo(kind) {
   syncStudioAddressDisplay();
 }
 
+function syncStudioProjectFieldState() {
+  const city = (document.getElementById("dCity")?.value || "").trim();
+  const projEl = document.getElementById("dProject");
+  const listEl = document.getElementById("dProjectSuggestList");
+  if (!projEl) return;
+  const cityProjects = city ? STUDIO_PROJECTS.filter((p) => p.city === city) : STUDIO_PROJECTS;
+  if (!cityProjects.length) {
+    projEl.value = "";
+    projEl.dataset.prevValid = "";
+    projEl.placeholder = "";
+    if (listEl) {
+      listEl.innerHTML = "";
+      listEl.classList.remove("is-open");
+    }
+  } else {
+    projEl.placeholder = "Không thuộc dự án";
+    if (projEl.value && !cityProjects.some((p) => p.value === projEl.value)) {
+      projEl.value = "";
+      projEl.dataset.prevValid = "";
+    }
+  }
+}
+
 function pickStudioComboItem(kind, val) {
   const { inputEl, listEl } = getStudioComboEls(kind);
   if (inputEl) {
@@ -5404,6 +5440,7 @@ function pickStudioComboItem(kind, val) {
   if (kind === "city") {
     const wardEl = document.getElementById("dWard");
     const streetEl = document.getElementById("dStreet");
+    const projEl = document.getElementById("dProject");
     if (wardEl) {
       wardEl.value = "";
       wardEl.dataset.prevValid = "";
@@ -5412,11 +5449,24 @@ function pickStudioComboItem(kind, val) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
     }
+    if (projEl) {
+      projEl.value = "";
+      projEl.dataset.prevValid = "";
+    }
+    syncStudioProjectFieldState();
   } else if (kind === "ward") {
     const streetEl = document.getElementById("dStreet");
     if (streetEl && !STUDIO_STREETS_BY_WARD[val]?.includes(streetEl.value)) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
+    }
+    const projEl = document.getElementById("dProject");
+    if (projEl && projEl.value) {
+      const pObj = STUDIO_PROJECTS.find((p) => p.value === projEl.value);
+      if (pObj && pObj.ward !== val) {
+        projEl.value = "";
+        projEl.dataset.prevValid = "";
+      }
     }
   } else if (kind === "project") {
     const proj = STUDIO_PROJECTS.find((p) => p.value === val);
