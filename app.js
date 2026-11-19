@@ -2313,12 +2313,12 @@ function buildListingCardHTML(item) {
           <span>Điện: ${item.elec}</span>
           <span>Nước: ${item.water}</span>
           <span>${(() => {
-            if (item.otherCost) return `Chi Phí Khác: ${item.otherCost}`;
+            if (item.otherCost) return `CP Khác: ${item.otherCost}`;
             const sumK = [item.internet, item.laundry, item.trash, item.parking].reduce((s, v) => {
               const n = parseFloat(String(v || "").replace(/[^0-9.]/g, ""));
               return s + (Number.isFinite(n) && n > 0 ? n : 0);
             }, 0);
-            return sumK > 0 ? `Chi Phí Khác: ${Number(sumK.toFixed(2))}k` : "Chi Phí Khác: --";
+            return sumK > 0 ? `CP Khác: ${Number(sumK.toFixed(2))}k` : "CP Khác: --";
           })()}</span>
         </div>
 
@@ -5839,7 +5839,7 @@ function renderStudioPreview() {
             <div class="lc-utility-bar demo-utility-bar">
               <span>Điện: ${elec}</span>
               <span>Nước: ${water}</span>
-              <span>Chi Phí Khác: ${otherCost}</span>
+              <span>CP Khác: ${otherCost}</span>
             </div>
             <div class="lc-card-footer">
               <div class="lc-card-addr">
