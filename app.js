@@ -5662,7 +5662,7 @@ function initStudioPostListing(preselectedZoneId = null) {
   STUDIO_STATE.editingPropId = null;
   STUDIO_STATE.houseNumber = "";
   STUDIO_STATE.isEditingAddress = false;
-  STUDIO_STATE.deposit = "";
+  STUDIO_STATE.deposit = "1 Tháng";
   STUDIO_STATE.furniture = "";
   STUDIO_STATE.beds = "1 PN";
   STUDIO_STATE.baths = "1 WC";
@@ -5709,13 +5709,18 @@ function initStudioPostListing(preselectedZoneId = null) {
   });
   syncStudioCostExclusion();
   updateStudioTitleCount();
-  ["dWard", "dStreet", "dDeposit", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
+  ["dWard", "dStreet", "dMaxPeople", "dFurniture", "dFloors", "dDirection", "dProject"].forEach((id) => {
     const el = document.getElementById(id);
     if (el) {
       el.value = "";
       if (el.dataset) el.dataset.prevValid = "";
     }
   });
+  const depInitEl = document.getElementById("dDeposit");
+  if (depInitEl) {
+    depInitEl.value = "1 Tháng";
+    depInitEl.dataset.prevValid = "1 Tháng";
+  }
   const cityEl = document.getElementById("dCity");
   if (cityEl) {
     cityEl.value = "TP. Hồ Chí Minh";
