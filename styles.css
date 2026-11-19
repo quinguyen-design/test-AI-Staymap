@@ -4551,15 +4551,9 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 }
 .util-unit {
   font-size: 10.5px;
-  font-weight: 400;
-  color: #94a3b8;
-  margin-left: 3px;
-}
-#dWaterUnitList .ctt-combo-item,
-#dLaundryUnitList .ctt-combo-item {
-  font-size: 12.5px;
-  font-weight: 400;
-  color: #475569;
+  font-weight: 500;
+  color: #64748b;
+  margin-left: 2px;
 }
 .util-k-wrap {
   position: relative;
