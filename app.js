@@ -1116,13 +1116,6 @@ function initHeroMap() {
   mapEl.addEventListener("mouseleave", () => heroMapInstance.scrollWheelZoom.disable());
 
   heroMarkersLayer = L.layerGroup().addTo(heroMapInstance);
-  heroMapInstance.on("moveend", () => {
-    const heroEl = document.getElementById("siteHeaderHero");
-    const boundsBtn = document.getElementById("mapBoundsSearchBtn");
-    if (boundsBtn && heroEl && heroEl.classList.contains("is-expanded")) {
-      boundsBtn.style.display = "inline-flex";
-    }
-  });
   updateMapPins("all");
 }
 
@@ -1177,12 +1170,11 @@ function toggle3DMapMorph(btnEl) {
   btnEl?.classList.toggle("active", heroEl.classList.contains("is-3d-morph"));
 }
 
-function updateMapPins(catFilter = "all", focusId = null, customPool = null) {
+function updateMapPins(catFilter = "all", focusId = null) {
   if (!heroMapInstance || !heroMarkersLayer) return;
   heroMarkersLayer.clearLayers();
 
-  const sourceList = Array.isArray(customPool) ? customPool : PROPERTIES;
-  const rawPool = sourceList.filter((p) => {
+  const rawPool = PROPERTIES.filter((p) => {
     // Hạng 6: Tin miễn phí không hiển thị trên bản đồ
     if (p.tier === "free" || p.mapTier === "free" || p.zoneId === 13) return false;
     if (catFilter === "all") return true;
@@ -1456,8 +1448,6 @@ function toggleExpandHeroMap() {
   document.body.style.overflow = expanded ? "hidden" : "";
   if (!expanded) {
     closeHeroMapLeftDrawer();
-    const boundsBtn = document.getElementById("mapBoundsSearchBtn");
-    if (boundsBtn) boundsBtn.style.display = "none";
   }
   if (btnSpan) {
     btnSpan.textContent = expanded ? "Thu gọn" : "Mở rộng";
@@ -1591,30 +1581,25 @@ function pickSegCategory(val, label, btnEl) {
   if (disp) disp.textContent = label;
   document.querySelectorAll("#segCatPopover .hsp-seg-item").forEach((b) => b.classList.remove("active"));
   btnEl?.classList.add("active");
-  document.querySelectorAll("#sfdCatGrid .sfd-cat-card").forEach((c) => {
-    c.classList.toggle("active", c.dataset.cat === val);
-  });
   closeAllSegPopovers();
-  renderSmartPriceHistogram();
   updateMegaLiveCount();
 }
 
 let MEGA_PRICE_STATE = { min: 0, max: 999, label: "Tất cả giá" };
-let SMART_FILTER_TRAITS = new Set();
-let SMART_FILTER_SORT = "vip";
-let SMART_MAP_BOUNDS = null;
 
 function pickSegPriceRange(minVal, maxVal, label, btnEl) {
   MEGA_PRICE_STATE = { min: Number(minVal) || 0, max: Number(maxVal) || 999, label };
   const sel = document.getElementById("megaPriceRange");
   if (sel) {
-    sel.value = `${MEGA_PRICE_STATE.min}-${MEGA_PRICE_STATE.max}`;
+    const key = `${MEGA_PRICE_STATE.min}-${MEGA_PRICE_STATE.max}`;
+    if (Array.from(sel.options).some((o) => o.value === key)) {
+      sel.value = key;
+    }
   }
   const disp = document.getElementById("segPriceDisplay");
   if (disp) disp.textContent = label;
   document.querySelectorAll("#segPricePopover .hsp-seg-item").forEach((b) => b.classList.remove("active"));
   btnEl?.classList.add("active");
-  syncSmartPriceUI();
   closeAllSegPopovers();
   updateMegaLiveCount();
 }
@@ -1641,7 +1626,6 @@ function onMegaPriceSelectChange(selEl) {
   MEGA_PRICE_STATE = { min: parseFloat(minStr) || 0, max: parseFloat(maxStr) || 999, label };
   const disp = document.getElementById("segPriceDisplay");
   if (disp) disp.textContent = label;
-  syncSmartPriceUI();
   updateMegaLiveCount();
 }
 
@@ -1649,308 +1633,27 @@ function pickSegPrice(val, label, btnEl) {
   pickSegPriceRange(0, val >= 50 ? 999 : val, label, btnEl);
 }
 
-function openSmartFilterDrawer() {
-  closeAllSegPopovers();
-  const panel = document.getElementById("hspMegaPanel");
-  const backdrop = document.getElementById("hspFilterBackdrop");
-  const bar = document.getElementById("hspBar");
-  panel?.classList.add("is-open");
-  backdrop?.classList.add("is-open");
-  bar?.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-  renderSmartPriceHistogram();
-  syncSmartPriceUI();
-  updateMegaLiveCount();
-}
-
-function closeSmartFilterDrawer() {
-  const panel = document.getElementById("hspMegaPanel");
-  const backdrop = document.getElementById("hspFilterBackdrop");
-  const bar = document.getElementById("hspBar");
-  panel?.classList.remove("is-open");
-  backdrop?.classList.remove("is-open");
-  bar?.classList.remove("is-open");
-  const heroEl = document.getElementById("siteHeaderHero");
-  if (!heroEl || !heroEl.classList.contains("is-expanded")) {
-    document.body.style.overflow = "";
-  }
-}
-
 function initMegaSearchPanel() {
   const trigger = document.getElementById("hspFilterTrigger");
   const panel = document.getElementById("hspMegaPanel");
+  const bar = document.getElementById("hspBar");
 
-  trigger?.addEventListener("click", (e) => {
+  const toggleMega = (e) => {
     e?.stopPropagation();
-    if (panel?.classList.contains("is-open")) {
-      closeSmartFilterDrawer();
-    } else {
-      openSmartFilterDrawer();
-    }
-  });
+    closeAllSegPopovers();
+    const willOpen = !panel.classList.contains("is-open");
+    panel.classList.toggle("is-open", willOpen);
+    bar?.classList.toggle("is-open", willOpen);
+  };
+
+  trigger?.addEventListener("click", toggleMega);
   panel?.addEventListener("click", (e) => e.stopPropagation());
 
   document.addEventListener("click", () => {
     closeAllSegPopovers();
+    panel?.classList.remove("is-open");
+    bar?.classList.remove("is-open");
   });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && panel?.classList.contains("is-open")) {
-      closeSmartFilterDrawer();
-    }
-  });
-}
-
-function renderSmartPriceHistogram() {
-  const container = document.getElementById("sfdPriceHist");
-  if (!container || typeof PROPERTIES === "undefined") return;
-  const fBase = getMegaFilterPayload();
-  const fNoPrice = { ...fBase, minPrice: 0, maxPrice: 999 };
-  const pool = PROPERTIES.filter((p) => matchesMegaFilter(p, fNoPrice));
-  const buckets = new Array(12).fill(0);
-  const step = 30 / 12; // 2.5 Tr per bucket up to 30+
-  pool.forEach((p) => {
-    const val = Math.max(0, Number(p.price) || 0);
-    const idx = Math.min(11, Math.floor(val / step));
-    buckets[idx] += 1;
-  });
-  const maxB = Math.max(1, ...buckets);
-  const minSlider = Math.min(30, MEGA_PRICE_STATE.min || 0);
-  const maxSlider = MEGA_PRICE_STATE.max >= 999 ? 30 : Math.min(30, MEGA_PRICE_STATE.max);
-  container.innerHTML = buckets
-    .map((cnt, i) => {
-      const bStart = i * step;
-      const bEnd = (i + 1) * step;
-      const inRange = bEnd > minSlider && bStart < (maxSlider >= 30 ? 999 : maxSlider);
-      const pct = Math.max(10, Math.round((cnt / maxB) * 100));
-      return `<div class="sfd-hist-bar ${inRange ? "in-range" : ""}" style="height:${pct}%;" title="${bStart.toFixed(1)}–${i === 11 ? "30+" : bEnd.toFixed(1)} Tr: ${cnt} tin"></div>`;
-    })
-    .join("");
-}
-
-function syncSmartPriceUI() {
-  const sMin = document.getElementById("sfdSliderMin");
-  const sMax = document.getElementById("sfdSliderMax");
-  const fill = document.getElementById("sfdTrackFill");
-  const inpMin = document.getElementById("sfdMinInput");
-  const inpMax = document.getElementById("sfdMaxInput");
-  const readout = document.getElementById("sfdPriceReadout");
-  const minVal = MEGA_PRICE_STATE.min || 0;
-  const maxVal = MEGA_PRICE_STATE.max || 999;
-  const sMinNum = Math.min(30, minVal);
-  const sMaxNum = maxVal >= 999 ? 30 : Math.min(30, maxVal);
-  if (sMin) sMin.value = String(sMinNum);
-  if (sMax) sMax.value = String(sMaxNum);
-  if (fill) {
-    const leftPct = (sMinNum / 30) * 100;
-    const rightPct = 100 - (sMaxNum / 30) * 100;
-    fill.style.left = `${leftPct}%`;
-    fill.style.right = `${rightPct}%`;
-  }
-  if (inpMin && document.activeElement !== inpMin) {
-    inpMin.value = minVal > 0 ? String(minVal) : "";
-  }
-  if (inpMax && document.activeElement !== inpMax) {
-    inpMax.value = maxVal < 999 ? String(maxVal) : "";
-  }
-  if (readout) readout.textContent = MEGA_PRICE_STATE.label || "Tất cả giá";
-  renderSmartPriceHistogram();
-}
-
-function onSmartPriceSliderInput(which) {
-  const sMin = document.getElementById("sfdSliderMin");
-  const sMax = document.getElementById("sfdSliderMax");
-  if (!sMin || !sMax) return;
-  let minVal = parseFloat(sMin.value) || 0;
-  let maxVal = parseFloat(sMax.value) || 30;
-  if (minVal > maxVal - 0.5) {
-    if (which === "min") {
-      minVal = Math.max(0, maxVal - 0.5);
-      sMin.value = String(minVal);
-    } else {
-      maxVal = Math.min(30, minVal + 0.5);
-      sMax.value = String(maxVal);
-    }
-  }
-  const realMax = maxVal >= 30 ? 999 : maxVal;
-  let label = "Tất cả giá";
-  if (minVal > 0 && realMax < 999) label = `${minVal} - ${realMax} Triệu`;
-  else if (minVal > 0) label = `Trên ${minVal} Triệu`;
-  else if (realMax < 999) label = `Dưới ${realMax} Triệu`;
-  MEGA_PRICE_STATE = { min: minVal, max: realMax, label };
-  const disp = document.getElementById("segPriceDisplay");
-  if (disp) disp.textContent = label;
-  document.querySelectorAll("#sfdPricePresets .sfd-chip").forEach((c) => c.classList.remove("active"));
-  syncSmartPriceUI();
-  updateMegaLiveCount();
-}
-
-function onSmartPriceBoxInput() {
-  const minRaw = parseFloat(document.getElementById("sfdMinInput")?.value || "0");
-  const maxRaw = parseFloat(document.getElementById("sfdMaxInput")?.value || "0");
-  const minVal = Number.isFinite(minRaw) && minRaw > 0 ? minRaw : 0;
-  const maxVal = Number.isFinite(maxRaw) && maxRaw > 0 ? maxRaw : 999;
-  let label = "Tất cả giá";
-  if (minVal > 0 && maxVal < 999) label = `${minVal} - ${maxVal} Triệu`;
-  else if (minVal > 0) label = `Trên ${minVal} Triệu`;
-  else if (maxVal < 999) label = `Dưới ${maxVal} Triệu`;
-  MEGA_PRICE_STATE = { min: minVal, max: maxVal, label };
-  const disp = document.getElementById("segPriceDisplay");
-  if (disp) disp.textContent = label;
-  document.querySelectorAll("#sfdPricePresets .sfd-chip").forEach((c) => c.classList.remove("active"));
-  syncSmartPriceUI();
-  updateMegaLiveCount();
-}
-
-function pickSmartPricePreset(minVal, maxVal, label, btnEl) {
-  MEGA_PRICE_STATE = { min: Number(minVal) || 0, max: Number(maxVal) || 999, label };
-  const disp = document.getElementById("segPriceDisplay");
-  if (disp) disp.textContent = label;
-  document.querySelectorAll("#sfdPricePresets .sfd-chip").forEach((c) => c.classList.remove("active"));
-  btnEl?.classList.add("active");
-  syncSmartPriceUI();
-  updateMegaLiveCount();
-}
-
-function pickDrawerCat(val, label, btnEl) {
-  const sel = document.getElementById("megaCatSelect");
-  if (sel) sel.value = val;
-  const disp = document.getElementById("segCatDisplay");
-  if (disp) disp.textContent = label;
-  document.querySelectorAll("#sfdCatGrid .sfd-cat-card").forEach((c) => c.classList.remove("active"));
-  btnEl?.classList.add("active");
-  document.querySelectorAll("#segCatPopover .hsp-seg-item").forEach((b) => {
-    const oc = b.getAttribute("onclick") || "";
-    b.classList.toggle("active", oc.includes(`'${val}'`));
-  });
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function pickDrawerArea(minArea, btnEl) {
-  const el = document.getElementById("megaAreaRange");
-  if (el) el.value = String(minArea || 0);
-  document.querySelectorAll("#sfdAreaGroup .sfd-seg-btn").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function pickDrawerBeds(val, btnEl) {
-  const el = document.getElementById("megaBedsSelect");
-  if (el) el.value = val || "all";
-  document.querySelectorAll("#sfdBedsGroup .sfd-seg-btn").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function pickDrawerFurniture(val, btnEl) {
-  const el = document.getElementById("megaFurnitureSelect");
-  if (el) el.value = val || "all";
-  document.querySelectorAll("#sfdFurnGroup .sfd-seg-btn").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function pickDrawerDirection(val, btnEl) {
-  const el = document.getElementById("megaDirectionSelect");
-  if (el) el.value = val || "all";
-  document.querySelectorAll("#sfdDirGroup .sfd-chip").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function toggleDrawerTrait(btnEl, traitKey) {
-  if (!btnEl) return;
-  const active = btnEl.classList.toggle("active");
-  if (active) SMART_FILTER_TRAITS.add(traitKey);
-  else SMART_FILTER_TRAITS.delete(traitKey);
-  renderSmartPriceHistogram();
-  updateMegaLiveCount();
-}
-
-function pickDrawerSort(sortKey, btnEl) {
-  SMART_FILTER_SORT = sortKey || "vip";
-  STATE.searchSort = SMART_FILTER_SORT;
-  document.querySelectorAll("#sfdSortGroup .sfd-chip").forEach((b) => b.classList.remove("active"));
-  btnEl?.classList.add("active");
-}
-
-function parseNaturalSearchQuery(rawQuery) {
-  const text = String(rawQuery || "").trim();
-  if (!text) return false;
-  const low = toVietnameseSlug(text);
-  let parsedAny = false;
-
-  // 1. Category detection
-  const catRules = [
-    { key: "phong-tro", label: "Phòng trọ / CHDV", patterns: ["phong-tro", "nha-tro", "chdv", "can-ho-dich-vu", "studio"] },
-    { key: "nha-o", label: "Nhà nguyên căn", patterns: ["nha-nguyen-can", "nha-pho", "nha-rieng", "biet-thu"] },
-    { key: "can-ho-chung-cu", label: "Căn hộ chung cư", patterns: ["chung-cu", "can-ho"] },
-    { key: "mat-bang-van-phong", label: "Mặt bằng văn phòng", patterns: ["mat-bang", "van-phong", "kiot", "shophouse"] },
-    { key: "bai-dat-kho-xuong", label: "Đất - Xưởng, Kho - Bãi", patterns: ["kho-xuong", "nha-xuong", "bai-dat"] },
-    { key: "homestay-airbnb", label: "HomeStay / Aribnb", patterns: ["homestay", "airbnb"] }
-  ];
-  for (const r of catRules) {
-    if (r.patterns.some((pt) => low.includes(pt))) {
-      const btn = document.querySelector(`#sfdCatGrid .sfd-cat-card[data-cat="${r.key}"]`);
-      pickDrawerCat(r.key, r.label, btn);
-      parsedAny = true;
-      break;
-    }
-  }
-
-  // 2. Price detection ("duoi 5tr", "5-8tr", "tren 10tr")
-  const mRange = text.match(/(\d+(?:[.,]\d+)?)\s*[-–]\s*(\d+(?:[.,]\d+)?)\s*(?:tr|triệu|trieu)/i);
-  const mUnder = text.match(/(?:dưới|duoi|<)\s*(\d+(?:[.,]\d+)?)\s*(?:tr|triệu|trieu)/i);
-  const mOver = text.match(/(?:trên|tren|>)\s*(\d+(?:[.,]\d+)?)\s*(?:tr|triệu|trieu)/i);
-  if (mRange) {
-    const a = parseFloat(mRange[1].replace(",", "."));
-    const b = parseFloat(mRange[2].replace(",", "."));
-    pickSmartPricePreset(a, b, `${a} - ${b} Triệu`, null);
-    parsedAny = true;
-  } else if (mUnder) {
-    const b = parseFloat(mUnder[1].replace(",", "."));
-    pickSmartPricePreset(0, b, `Dưới ${b} Triệu`, null);
-    parsedAny = true;
-  } else if (mOver) {
-    const a = parseFloat(mOver[1].replace(",", "."));
-    pickSmartPricePreset(a, 999, `Trên ${a} Triệu`, null);
-    parsedAny = true;
-  }
-
-  // 3. Bedroom count detection ("2pn", "3 phong ngu")
-  const mBeds = text.match(/(\d)\s*(?:pn|phòng\s*ngủ|phong\s*ngu)/i);
-  if (mBeds) {
-    const n = parseInt(mBeds[1], 10);
-    const bVal = n >= 4 ? "4+ PN" : `${n} PN`;
-    const btn = document.querySelector(`#sfdBedsGroup .sfd-seg-btn[data-val="${bVal}"]`);
-    pickDrawerBeds(bVal, btn);
-    parsedAny = true;
-  }
-
-  return parsedAny;
-}
-
-function searchInCurrentMapBounds() {
-  if (!heroMapInstance) return;
-  const b = heroMapInstance.getBounds();
-  SMART_MAP_BOUNDS = {
-    south: b.getSouth(),
-    north: b.getNorth(),
-    west: b.getWest(),
-    east: b.getEast()
-  };
-  const btn = document.getElementById("mapBoundsSearchBtn");
-  if (btn) btn.style.display = "none";
-  const heroEl = document.getElementById("siteHeaderHero");
-  if (heroEl && heroEl.classList.contains("is-expanded")) {
-    toggleExpandHeroMap();
-  }
-  executeMegaSearch();
 }
 
 function updateMegaSliderLabels() {
@@ -2099,28 +1802,7 @@ function getMegaFilterPayload() {
       return m ? m[1] : "";
     })
     .filter(Boolean);
-  const traits = Array.from(SMART_FILTER_TRAITS);
-  const syncMap = document.getElementById("sfdSyncMapToggle")?.checked !== false;
-  return {
-    keyword: kw,
-    category: cat,
-    city,
-    ward,
-    street,
-    project,
-    furniture,
-    beds,
-    direction,
-    minPrice,
-    maxPrice,
-    priceLabel: MEGA_PRICE_STATE.label,
-    minArea,
-    utilities,
-    traits,
-    sort: SMART_FILTER_SORT,
-    mapBounds: SMART_MAP_BOUNDS,
-    syncMap
-  };
+  return { keyword: kw, category: cat, city, ward, street, project, furniture, beds, direction, minPrice, maxPrice, priceLabel: MEGA_PRICE_STATE.label, minArea, utilities };
 }
 
 function matchesMegaFilter(p, f) {
@@ -2139,28 +1821,16 @@ function matchesMegaFilter(p, f) {
   if (f.furniture && f.furniture !== "all" && p.furniture && p.furniture !== f.furniture) return false;
   if (f.beds && f.beds !== "all") {
     const pBeds = parseInt(p.beds || "1", 10);
-    if (f.beds === "4+ PN" ? pBeds < 4 : pBeds !== parseInt(f.beds, 10)) return false;
+    if (f.beds === "4+ PN" ? pBeds < 4 : p.beds !== f.beds) return false;
   }
   if (f.direction && f.direction !== "all" && p.direction && p.direction !== f.direction) return false;
   if (f.minPrice && f.minPrice > 0 && p.price < f.minPrice) return false;
   if (f.maxPrice && f.maxPrice < 999 && p.price > f.maxPrice) return false;
   if (f.minArea && f.minArea > 0 && p.area < f.minArea) return false;
-  if (f.traits && f.traits.length) {
-    for (const t of f.traits) {
-      if (t === "elec-state" && !/nhà nước/i.test(String(p.elec || ""))) return false;
-      if (t === "free-deposit" && !/miễn|0|không/i.test(String(p.deposit || ""))) return false;
-      if (t === "vip-only" && !(p.zoneId === 1 || p.tier === "spotlight" || p.tier === "featured" || p.tier === "prime")) return false;
-    }
-  }
   if (f.utilities && f.utilities.length) {
-    const allTags = `${(p.utilities || []).join(" ")} ${(p.services || []).join(" ")} ${p.desc || ""} ${p.description || ""} ${p.title || ""}`.toLowerCase();
+    const allTags = `${(p.utilities || []).join(" ")} ${(p.services || []).join(" ")} ${p.desc || ""}`.toLowerCase();
     for (const u of f.utilities) {
       if (!allTags.includes(u.toLowerCase().split("/")[0].trim())) return false;
-    }
-  }
-  if (f.mapBounds && p.lat && p.lng) {
-    if (p.lat < f.mapBounds.south || p.lat > f.mapBounds.north || p.lng < f.mapBounds.west || p.lng > f.mapBounds.east) {
-      return false;
     }
   }
   if (f.keyword && !f.keyword.startsWith("Gần ")) {
@@ -2183,36 +1853,26 @@ function clearSingleMegaFilter(kind, val) {
     const el = document.getElementById("megaStreetSelect");
     if (el) el.value = "all";
   } else if (kind === "category") {
-    pickDrawerCat("all", "Tất cả loại hình", document.querySelector('#sfdCatGrid .sfd-cat-card[data-cat="all"]'));
+    pickSegCategory("all", "Tất cả loại hình", document.querySelector("#segCatPopover .hsp-seg-item"));
     return;
   } else if (kind === "price") {
     const minIn = document.getElementById("segPriceMinInput");
     const maxIn = document.getElementById("segPriceMaxInput");
     if (minIn) minIn.value = "";
     if (maxIn) maxIn.value = "";
-    pickSmartPricePreset(0, 999, "Tất cả giá", document.querySelector("#sfdPricePresets .sfd-chip"));
+    pickSegPriceRange(0, 999, "Tất cả giá", document.querySelector("#segPricePopover .hsp-seg-item"));
     return;
   } else if (kind === "area") {
-    pickDrawerArea(0, document.querySelector('#sfdAreaGroup .sfd-seg-btn[data-val="0"]'));
-    return;
-  } else if (kind === "beds") {
-    pickDrawerBeds("all", document.querySelector('#sfdBedsGroup .sfd-seg-btn[data-val="all"]'));
-    return;
+    const el = document.getElementById("megaAreaRange");
+    if (el) el.value = "0";
   } else if (kind === "furniture") {
-    pickDrawerFurniture("all", document.querySelector('#sfdFurnGroup .sfd-seg-btn[data-val="all"]'));
-    return;
-  } else if (kind === "direction") {
-    pickDrawerDirection("all", document.querySelector('#sfdDirGroup .sfd-chip[data-val="all"]'));
-    return;
-  } else if (kind === "trait") {
-    SMART_FILTER_TRAITS.delete(val);
-    document.querySelectorAll(`#sfdTraitsGroup .sfd-chip[data-trait="${val}"]`).forEach((b) => b.classList.remove("active"));
+    const el = document.getElementById("megaFurnitureSelect");
+    if (el) el.value = "all";
+    document.querySelectorAll("#hspMegaPanel .hsp-q-pill[onclick*=\"'furniture'\"]").forEach((b) => b.classList.remove("active"));
   } else if (kind === "util") {
     document.querySelectorAll("#hspMegaPanel .hsp-q-pill.active[onclick*=\"'util'\"]").forEach((b) => {
       if ((b.getAttribute("onclick") || "").includes(`'${val}'`)) b.classList.remove("active");
     });
-  } else if (kind === "mapBounds") {
-    SMART_MAP_BOUNDS = null;
   } else if (kind === "keyword") {
     const input = document.getElementById("hspSearchInput");
     if (input) {
@@ -2220,15 +1880,13 @@ function clearSingleMegaFilter(kind, val) {
       delete input.dataset.pickedLabel;
     }
   }
-  renderSmartPriceHistogram();
   updateMegaLiveCount();
 }
 
 function renderActiveFilterPills(f) {
   const bar = document.getElementById("hspActivePillsBar");
-  const filterBadge = document.getElementById("hspFilterBadge");
+  if (!bar) return;
   const pills = [];
-  if (f.mapBounds) pills.push({ kind: "mapBounds", val: "bounds", label: "Trong vùng bản đồ" });
   if (f.project && f.project !== "all") pills.push({ kind: "project", val: f.project, label: f.project });
   if (f.ward && f.ward !== "all") pills.push({ kind: "ward", val: f.ward, label: f.ward });
   if (f.street && f.street !== "all") pills.push({ kind: "street", val: f.street, label: `Đường ${f.street}` });
@@ -2239,29 +1897,13 @@ function renderActiveFilterPills(f) {
   if ((f.minPrice && f.minPrice > 0) || (f.maxPrice && f.maxPrice < 999)) {
     pills.push({ kind: "price", val: "price", label: f.priceLabel || `Dưới ${f.maxPrice}Tr` });
   }
-  if (f.minArea && f.minArea > 0) pills.push({ kind: "area", val: f.minArea, label: `≥ ${f.minArea}m²` });
-  if (f.beds && f.beds !== "all") pills.push({ kind: "beds", val: f.beds, label: f.beds });
+  if (f.minArea && f.minArea > 0) pills.push({ kind: "area", val: f.minArea, label: `Từ ${f.minArea}m²` });
   if (f.furniture && f.furniture !== "all") pills.push({ kind: "furniture", val: f.furniture, label: `NT ${f.furniture}` });
-  if (f.direction && f.direction !== "all") pills.push({ kind: "direction", val: f.direction, label: `Hướng ${f.direction}` });
-  const traitLabels = { "elec-state": "Điện Nhà nước", "free-deposit": "Miễn cọc", "vip-only": "Tin VIP" };
-  if (f.traits && f.traits.length) {
-    f.traits.forEach((t) => pills.push({ kind: "trait", val: t, label: traitLabels[t] || t }));
-  }
   if (f.utilities && f.utilities.length) {
     f.utilities.forEach((u) => pills.push({ kind: "util", val: u, label: u }));
   }
   if (f.keyword) pills.push({ kind: "keyword", val: f.keyword, label: `"${f.keyword}"` });
 
-  if (filterBadge) {
-    if (pills.length > 0) {
-      filterBadge.textContent = String(pills.length);
-      filterBadge.style.display = "inline-flex";
-    } else {
-      filterBadge.style.display = "none";
-    }
-  }
-
-  if (!bar) return;
   if (!pills.length) {
     bar.style.display = "none";
     bar.innerHTML = "";
@@ -2279,13 +1921,10 @@ function renderActiveFilterPills(f) {
 
 function updateMegaLiveCount() {
   const badge = document.getElementById("megaLiveMatchBadge");
-  const headerSub = document.getElementById("sfdHeaderCount");
   if (typeof PROPERTIES === "undefined") return;
   const f = getMegaFilterPayload();
   const count = PROPERTIES.filter((p) => matchesMegaFilter(p, f)).length;
-  const fmtCount = new Intl.NumberFormat("vi-VN").format(count);
-  if (badge) badge.textContent = `Hiển thị ${fmtCount} tin phù hợp`;
-  if (headerSub) headerSub.textContent = `${fmtCount} tin phù hợp điều kiện hiện tại`;
+  if (badge) badge.textContent = `Xem ${count} tin phù hợp`;
   renderActiveFilterPills(f);
 }
 
@@ -2300,13 +1939,6 @@ function resetMegaSearchFilters() {
   const segPriceDisp = document.getElementById("segPriceDisplay");
   if (segPriceDisp) segPriceDisp.textContent = "Tất cả giá";
   document.querySelectorAll("#segCatPopover .hsp-seg-item, #segPricePopover .hsp-seg-item").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdCatGrid .sfd-cat-card").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdAreaGroup .sfd-seg-btn").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdBedsGroup .sfd-seg-btn").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdFurnGroup .sfd-seg-btn").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdDirGroup .sfd-chip").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdSortGroup .sfd-chip").forEach((b, idx) => b.classList.toggle("active", idx === 0));
-  document.querySelectorAll("#sfdPricePresets .sfd-chip").forEach((b, idx) => b.classList.toggle("active", idx === 0));
   const catEl = document.getElementById("megaCatSelect");
   if (catEl) catEl.value = "all";
   const cityEl = document.getElementById("megaCitySelect");
@@ -2318,28 +1950,18 @@ function resetMegaSearchFilters() {
     const el = document.getElementById(id);
     if (el) el.value = "all";
   });
-  SMART_FILTER_TRAITS.clear();
-  SMART_FILTER_SORT = "vip";
-  SMART_MAP_BOUNDS = null;
-  STATE.searchSort = "vip";
   document.querySelectorAll("#hspMegaPanel .hsp-q-pill").forEach((p) => p.classList.remove("active"));
   MEGA_PRICE_STATE = { min: 0, max: 999, label: "Tất cả giá" };
   const minIn = document.getElementById("segPriceMinInput");
   const maxIn = document.getElementById("segPriceMaxInput");
   if (minIn) minIn.value = "";
   if (maxIn) maxIn.value = "";
-  const sfdMinIn = document.getElementById("sfdMinInput");
-  const sfdMaxIn = document.getElementById("sfdMaxInput");
-  if (sfdMinIn) sfdMinIn.value = "";
-  if (sfdMaxIn) sfdMaxIn.value = "";
   const priceEl = document.getElementById("megaPriceRange");
   if (priceEl) priceEl.value = "0-999";
   const areaEl = document.getElementById("megaAreaRange");
   if (areaEl) areaEl.value = "0";
   if (typeof clearLandmarkFilter === "function") clearLandmarkFilter();
-  syncSmartPriceUI();
   updateMegaLiveCount();
-  updateMapPins("all");
 }
 
 function initMegaSearchSync() {
@@ -2375,23 +1997,8 @@ function updateMapFilterChipCounts() {
 }
 
 function executeMegaSearch() {
-  const searchInput = document.getElementById("hspSearchInput");
-  const rawInput = searchInput?.value.trim() || "";
-  if (rawInput && rawInput !== searchInput?.dataset.pickedLabel) {
-    const parsed = parseNaturalSearchQuery(rawInput);
-    if (parsed && searchInput) {
-      // Clear natural language phrase if fully structured (keep location keywords if needed)
-      const cleaned = rawInput
-        .replace(/phòng\s*trọ|nhà\s*trọ|chdv|nhà\s*nguyên\s*căn|căn\s*hộ|chung\s*cư|mặt\s*bằng|văn\s*phòng|kho\s*xưởng|homestay|airbnb/gi, "")
-        .replace(/(?:dưới|duoi|trên|tren|<|>)?\s*\d+(?:[.,]\d+)?\s*(?:[-–]\s*\d+(?:[.,]\d+)?)?\s*(?:tr|triệu|trieu)/gi, "")
-        .replace(/\d+\s*(?:pn|phòng\s*ngủ|phong\s*ngu)/gi, "")
-        .trim();
-      searchInput.value = cleaned;
-    }
-  }
   STATE.searchFilter = getMegaFilterPayload();
-  closeSmartFilterDrawer();
-  closeAllSegPopovers();
+  document.getElementById("hspMegaPanel")?.classList.remove("is-open");
   navigateTo("/search.html");
 }
 
@@ -2865,18 +2472,7 @@ function applyCategoryBarFilter(updateUrl = true) {
     return true;
   });
 
-  const sortMode = STATE.searchSort || "vip";
-  if (sortMode === "price-asc") {
-    filtered.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
-  } else if (sortMode === "price-desc") {
-    filtered.sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
-  } else if (sortMode === "area-desc") {
-    filtered.sort((a, b) => (Number(b.area) || 0) - (Number(a.area) || 0));
-  } else if (sortMode === "newest") {
-    filtered.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
-  } else {
-    filtered.sort((a, b) => getTierPriorityRank(a) - getTierPriorityRank(b));
-  }
+  filtered.sort((a, b) => getTierPriorityRank(a) - getTierPriorityRank(b));
 
   document.getElementById("catResultCount").textContent = `${filtered.length} tin đăng phù hợp`;
   document.getElementById("categoryListingsGrid").innerHTML = filtered.length
@@ -2903,8 +2499,7 @@ function applyCategoryBarFilter(updateUrl = true) {
     `;
   }
 
-  const shouldSyncMap = ctx.isSearchRoute && STATE.searchFilter?.syncMap !== false;
-  updateMapPins(ctx.catKey, null, shouldSyncMap ? filtered : null);
+  updateMapPins(ctx.catKey);
 }
 
 // ==========================================================================
