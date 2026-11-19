@@ -2979,6 +2979,10 @@ function openPropertyDetailView(propId) {
   const servicesArr = Array.isArray(item.services) ? item.services.filter(Boolean) : [];
   const hasUtilitiesOrServices = utilitiesArr.length > 0 || servicesArr.length > 0;
 
+  const g4 = galleryList[3] || g2;
+  const g5 = galleryList[4] || g3;
+  const isLongDesc = descriptionText.length > 220 || descriptionText.split("\n").length > 4;
+
   detailView.innerHTML = `
     <div class="pd-container">
       <div class="pd-breadcrumb">
@@ -2991,82 +2995,87 @@ function openPropertyDetailView(propId) {
         <strong style="color:var(--ctt-orange);">Mã tin #${item.id}</strong>
       </div>
 
+      <!-- Header-First (Phong cách Airbnb / Batdongsan): Tiêu đề & Địa chỉ lên trên cùng -->
+      <div class="pd-top-header">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
+          ${vipInfo.label ? `<span class="lc-vip-tag ${vipInfo.badgeClass}" style="position:static;">${vipInfo.label}</span>` : ""}
+          ${stObj ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>` : ""}
+          <span style="background:#f1f5f9;color:#334155;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;">${item.categoryLabel}</span>
+          ${item.project ? `<span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;"><i class="fa-solid fa-building"></i> ${item.project}</span>` : ""}
+        </div>
+        <h1 style="font-size:22px;font-weight:900;color:#0f172a;line-height:1.3;margin:0 0 6px;">
+          ${item.title}
+        </h1>
+        <div style="font-size:13.5px;color:#475569;font-weight:600;">
+          <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:6px;"></i>
+          ${item.fullAddress}
+        </div>
+      </div>
+
+      <!-- Compact Bento 5-Photo Strip (268px cao, nhìn bao quát toàn bộ ảnh không bị bự quá khổ) -->
+      <div class="pd-bento-gallery">
+        <div class="pd-bento-main" onclick="openPropertyGalleryModal(${item.id}, 0)">
+          <img src="${g1}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
+          <span class="sv1-3d-glass-tag"><i class="fa-regular fa-images"></i> ${galleryList.length} ảnh${item.videoUrl ? " • Có Video" : ""}</span>
+        </div>
+        <div class="pd-bento-grid">
+          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 1)">
+            <img src="${g2}" alt="Ảnh 2" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 2)">
+            <img src="${g3}" alt="Ảnh 3" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 3)">
+            <img src="${g4}" alt="Ảnh 4" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 4)">
+            <img src="${g5}" alt="Ảnh 5" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
+            <div class="pd-view-all-photos"><i class="fa-regular fa-images"></i> Xem tất cả (${galleryList.length})</div>
+          </div>
+        </div>
+      </div>
+
       <div class="pd-content-grid">
-        <!-- Cột Trái: Hình ảnh + Toàn bộ thông tin bài viết gọn gàng, dễ đọc -->
-        <div>
-          <!-- Hình Ảnh & Video (Bước 3 - kích thước gọn gàng, không chiếm hết màn hình) -->
-          <div class="pd-gallery">
-            <div class="pd-gal-main" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 0)">
-              <img src="${g1}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
-              <span class="sv1-3d-glass-tag"><i class="fa-regular fa-images"></i> ${vipInfo.label ? `${vipInfo.label} • ` : ""}${galleryList.length} ảnh${item.videoUrl ? " • Có Video" : ""}</span>
-            </div>
-            <div class="pd-gal-side">
-              <div class="pd-gal-item" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 1)">
-                <img src="${g2}" alt="Ảnh góc 2" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
+        <!-- Cột Trái: 1 Trang Giấy Trắng Thống Nhất (Nhẹ mắt, không chia 4-5 khung nặng nề) -->
+        <div class="pd-unified-sheet">
+          <!-- Dải thông số cốt lõi -->
+          <div class="pd-sheet-section">
+            <div class="pd-key-strip">
+              <div class="pd-key-item is-price">
+                <small>Giá thuê</small>
+                <strong>${item.priceText} <span style="font-size:12px;color:#64748b;font-weight:600;">/ tháng</span></strong>
               </div>
-              <div class="pd-gal-item" style="cursor:pointer;" onclick="openPropertyGalleryModal(${item.id}, 2)">
-                <img src="${g3}" alt="Ảnh góc 3" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
-                <div class="pd-view-all-photos"><i class="fa-regular fa-images"></i> +${galleryList.length} ảnh${item.videoUrl ? " & Video" : ""}</div>
+              <div class="pd-key-item">
+                <small>Tiền cọc</small>
+                <strong>${item.deposit || "Thỏa Thuận"}</strong>
               </div>
-            </div>
-          </div>
-
-          <!-- Cụm 1: Tổng Quan, Vị Trí & Thông Số Cơ Bản -->
-          <div class="pd-card-box">
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
-              ${vipInfo.label ? `<span class="lc-vip-tag ${vipInfo.badgeClass}" style="position:static;">${vipInfo.label}</span>` : ""}
-              ${stObj ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>` : ""}
-              <span style="background:#f1f5f9;color:#334155;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;">${item.categoryLabel}</span>
-              ${item.project ? `<span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;"><i class="fa-solid fa-building"></i> ${item.project}</span>` : ""}
-            </div>
-
-            <h1 style="font-size:21px;font-weight:900;color:#0f172a;line-height:1.3;margin-bottom:6px;">
-              ${item.title}
-            </h1>
-            <p style="font-size:13.5px;color:#475569;font-weight:600;margin-bottom:14px;">
-              <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:6px;"></i>
-              ${item.fullAddress}
-            </p>
-
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fffaf5;border:1.5px solid #fed7aa;border-radius:14px;flex-wrap:wrap;gap:14px;">
-              <div>
-                <div style="font-size:10.5px;font-weight:800;color:#9a3412;text-transform:uppercase;">Giá thuê</div>
-                <div class="pd-price-big">${item.priceText} <span style="font-size:14px;color:#64748b;font-weight:600;">/ tháng</span></div>
+              <div class="pd-key-item">
+                <small>Diện tích</small>
+                <strong>${item.area}&nbsp;m²</strong>
               </div>
-              <div style="display:flex;gap:20px;flex-wrap:wrap;font-variant-numeric:tabular-nums;">
-                <div>
-                  <div style="font-size:10.5px;color:#64748b;font-weight:700;">TIỀN CỌC</div>
-                  <div style="font-size:15px;font-weight:900;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
-                </div>
-                <div>
-                  <div style="font-size:10.5px;color:#64748b;font-weight:700;">DIỆN TÍCH</div>
-                  <div style="font-size:15px;font-weight:900;color:#0f172a;">${item.area}&nbsp;m²</div>
-                </div>
-                <div>
-                  <div style="font-size:10.5px;color:#64748b;font-weight:700;">PHÒNG NGỦ / WC</div>
-                  <div style="font-size:15px;font-weight:900;color:#0f172a;">${item.beds} • ${item.baths}</div>
-                </div>
+              <div class="pd-key-item">
+                <small>Phòng ngủ / WC</small>
+                <strong>${item.beds} • ${item.baths}</strong>
               </div>
             </div>
           </div>
 
-          <!-- Cụm 2: Mô Tả Chi Tiết & Video (đặt ngay sau Tổng quan để dễ đọc) -->
-          <div class="pd-card-box">
-            <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 12px;">
-              <i class="fa-solid fa-align-left" style="color:var(--ctt-orange);margin-right:8px;"></i>Thông tin mô tả
-            </h3>
-            <div style="font-size:14.5px;color:#334155;line-height:1.75;white-space:pre-line;">${descriptionText}</div>
+          <!-- Thông tin mô tả (Thu gọn mặc định 4 dòng + nút Xem thêm) -->
+          <div class="pd-sheet-section">
+            <h3 class="pd-sheet-title"><i class="fa-solid fa-align-left"></i> Thông tin mô tả</h3>
+            <div id="pdDescBody" class="${isLongDesc ? "pd-desc-clamped" : ""}" style="font-size:14px;color:#334155;line-height:1.65;white-space:pre-line;">${descriptionText}</div>
+            ${isLongDesc ? `
+            <button type="button" class="pd-desc-toggle-btn" onclick="const el=document.getElementById('pdDescBody');const open=el.classList.toggle('pd-desc-clamped');this.innerHTML=open?'Xem thêm mô tả <i class=\\'fa-solid fa-chevron-down\\'></i>':'Thu gọn <i class=\\'fa-solid fa-chevron-up\\'></i>';">
+              Xem thêm mô tả <i class="fa-solid fa-chevron-down"></i>
+            </button>` : ""}
             ${item.videoUrl ? `
-            <div style="margin-top:18px;padding-top:16px;border-top:1px solid #f1f5f9;">
-              <div style="font-size:13.5px;font-weight:800;color:#0f172a;margin-bottom:10px;">
-                <i class="fa-solid fa-video" style="color:var(--ctt-orange);margin-right:6px;"></i>Video thực tế
-              </div>
-              <video src="${item.videoUrl}" controls style="width:100%;max-height:360px;border-radius:14px;background:#0f172a;"></video>
+            <div style="margin-top:14px;">
+              <video src="${item.videoUrl}" controls style="width:100%;max-height:300px;border-radius:12px;background:#0f172a;"></video>
             </div>` : ""}
           </div>
 
-          <!-- Cụm 3: Đặc Điểm Bất Động Sản & Chi Phí Sinh Hoạt (2 cột key-value tinh gọn) -->
-          <div class="pd-card-box">
+          <!-- Đặc điểm & Chi phí (2 cột key-value siêu gọn) -->
+          <div class="pd-sheet-section">
             <div class="pd-kv-columns">
               <div>
                 <div class="pd-kv-section-title"><i class="fa-solid fa-house-circle-check"></i> Đặc điểm bất động sản</div>
@@ -3080,28 +3089,21 @@ function openPropertyDetailView(propId) {
           </div>
 
           ${hasUtilitiesOrServices ? `
-          <!-- Cụm 4: Tiện Ích & Dịch Vụ -->
-          <div class="pd-card-box">
-            <h3 style="font-size:17px;font-weight:800;color:#0f172a;margin:0 0 14px;">
-              <i class="fa-solid fa-sparkles" style="color:var(--ctt-orange);margin-right:8px;"></i>Tiện ích & Dịch vụ
-            </h3>
-            <div class="pd-amenity-cols ${utilitiesArr.length && servicesArr.length ? "" : "is-single"}">
+          <!-- Tiện ích & Dịch vụ (Kiểu Airbnb Icon + Chữ thanh thoát, không viền hộp nặng mắt) -->
+          <div class="pd-sheet-section">
+            <div class="pd-air-cols ${utilitiesArr.length && servicesArr.length ? "" : "is-single"}">
               ${utilitiesArr.length ? `
-              <div class="pd-amenity-group">
-                <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
-                  <i class="fa-solid fa-location-crosshairs" style="color:var(--ctt-orange);margin-right:6px;"></i>Tiện ích xung quanh
-                </div>
-                <div class="pd-amenity-grid">
-                  ${utilitiesArr.map((u) => `<div class="pd-amenity-pill"><i class="fa-solid fa-check"></i><span>${u}</span></div>`).join("")}
+              <div>
+                <div class="pd-kv-section-title"><i class="fa-solid fa-location-crosshairs"></i> Tiện ích xung quanh</div>
+                <div class="pd-air-list">
+                  ${utilitiesArr.map((u) => `<div class="pd-air-item"><i class="fa-solid fa-check"></i><span>${u}</span></div>`).join("")}
                 </div>
               </div>` : ""}
               ${servicesArr.length ? `
-              <div class="pd-amenity-group">
-                <div style="font-size:12px;font-weight:800;color:#0f172a;margin-bottom:10px;text-transform:uppercase;">
-                  <i class="fa-solid fa-bell-concierge" style="color:var(--ctt-orange);margin-right:6px;"></i>Dịch vụ tòa nhà
-                </div>
-                <div class="pd-amenity-grid">
-                  ${servicesArr.map((s) => `<div class="pd-amenity-pill"><i class="fa-solid fa-circle-check"></i><span>${s}</span></div>`).join("")}
+              <div>
+                <div class="pd-kv-section-title"><i class="fa-solid fa-bell-concierge"></i> Dịch vụ tòa nhà</div>
+                <div class="pd-air-list">
+                  ${servicesArr.map((s) => `<div class="pd-air-item"><i class="fa-solid fa-circle-check"></i><span>${s}</span></div>`).join("")}
                 </div>
               </div>` : ""}
             </div>
@@ -3111,24 +3113,24 @@ function openPropertyDetailView(propId) {
         <!-- Cột Phải Sticky: Thông Tin Liên Hệ (Bước 1) -->
         <div class="pd-sticky-sidebar">
           <div class="pd-card-box" style="margin-bottom:0;">
-            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid #f1f5f9;">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid #f1f5f9;">
               <div>
                 <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Giá thuê</div>
-                <div style="font-size:24px;font-weight:900;color:var(--ctt-orange);" class="tabular-nums">${item.priceText} <span style="font-size:13px;color:#64748b;font-weight:600;">/ tháng</span></div>
+                <div style="font-size:23px;font-weight:900;color:var(--ctt-orange);" class="tabular-nums">${item.priceText} <span style="font-size:12.5px;color:#64748b;font-weight:600;">/ tháng</span></div>
               </div>
               <div style="text-align:right;">
                 <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Tiền cọc</div>
-                <div style="font-size:14px;font-weight:800;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
+                <div style="font-size:13.5px;font-weight:800;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
               </div>
             </div>
 
-            <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-              <div style="width:50px;height:50px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+              <div style="width:46px;height:46px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0;">
                 ${(item.host || "C").charAt(0).toUpperCase()}
               </div>
               <div style="min-width:0;">
-                <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Người liên hệ</div>
-                <div style="font-size:16px;font-weight:900;color:#0f172a;word-break:break-word;">${item.host}</div>
+                <div style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;">Người liên hệ</div>
+                <div style="font-size:15.5px;font-weight:900;color:#0f172a;word-break:break-word;">${item.host}</div>
               </div>
             </div>
 
