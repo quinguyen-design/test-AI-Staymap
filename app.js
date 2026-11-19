@@ -1818,11 +1818,15 @@ function populateMegaWards() {
   const city = document.getElementById("megaCitySelect")?.value || "all";
   const wardEl = document.getElementById("megaWardSelect");
   if (!wardEl) return;
-  const wards = city !== "all" && STUDIO_WARDS_BY_CITY[city]
-    ? STUDIO_WARDS_BY_CITY[city]
+  const wards = city !== "all"
+    ? (STUDIO_WARDS_BY_CITY[city] || [])
     : Object.values(STUDIO_WARDS_BY_CITY).flat();
-  wardEl.innerHTML = `<option value="all">Tất cả Phường / Xã (${wards.length})</option>` +
-    wards.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
+  if (!wards.length) {
+    wardEl.innerHTML = `<option value="all">Không có Phường / Xã</option>`;
+  } else {
+    wardEl.innerHTML = `<option value="all">Tất cả Phường / Xã (${wards.length})</option>` +
+      wards.map((w) => `<option value="${w.value}">${w.label}</option>`).join("");
+  }
   populateMegaStreets();
 }
 
@@ -1832,23 +1836,30 @@ function populateMegaStreets() {
   const streetEl = document.getElementById("megaStreetSelect");
   if (!streetEl) return;
   let streets = [];
-  if (ward !== "all" && STUDIO_STREETS_BY_WARD[ward]) {
-    streets = STUDIO_STREETS_BY_WARD[ward];
-  } else if (city !== "all" && STUDIO_WARDS_BY_CITY[city]) {
-    const cityWards = STUDIO_WARDS_BY_CITY[city].map((w) => w.value);
+  if (ward !== "all") {
+    streets = STUDIO_STREETS_BY_WARD[ward] || [];
+  } else if (city !== "all") {
+    const cityWards = (STUDIO_WARDS_BY_CITY[city] || []).map((w) => w.value);
     streets = Array.from(new Set(cityWards.flatMap((w) => STUDIO_STREETS_BY_WARD[w] || [])));
   } else {
     streets = Array.from(new Set(Object.values(STUDIO_STREETS_BY_WARD).flat()));
   }
-  streetEl.innerHTML = `<option value="all">Tất cả Tên Đường (${streets.length})</option>` +
-    streets.map((s) => `<option value="${s}">${s}</option>`).join("");
+  if (!streets.length) {
+    streetEl.innerHTML = `<option value="all">Không có Tên Đường</option>`;
+  } else {
+    streetEl.innerHTML = `<option value="all">Tất cả Tên Đường (${streets.length})</option>` +
+      streets.map((s) => `<option value="${s}">${s}</option>`).join("");
+  }
 }
 
 function populateMegaProjects() {
   const city = document.getElementById("megaCitySelect")?.value || "all";
+  const ward = document.getElementById("megaWardSelect")?.value || "all";
   const projEl = document.getElementById("megaProjectSelect");
   if (!projEl || typeof STUDIO_PROJECTS === "undefined") return;
-  const list = city !== "all" ? STUDIO_PROJECTS.filter((pr) => pr.city === city) : STUDIO_PROJECTS;
+  let list = STUDIO_PROJECTS;
+  if (city !== "all") list = list.filter((pr) => pr.city === city);
+  if (ward !== "all") list = list.filter((pr) => pr.ward === ward);
   if (!list.length) {
     projEl.innerHTML = `<option value="all">Không có dự án</option>`;
   } else {
@@ -1865,6 +1876,7 @@ function onMegaCityChange() {
 
 function onMegaWardChange() {
   populateMegaStreets();
+  populateMegaProjects();
   updateMegaLiveCount();
 }
 
@@ -5294,8 +5306,7 @@ function getStudioComboItems(kind) {
     const byCity = STUDIO_PROJECTS.filter((p) => p.city === city);
     if (!byCity.length) return [];
     if (ward) {
-      const byWard = byCity.filter((p) => p.ward === ward);
-      if (byWard.length) return byWard;
+      return byCity.filter((p) => p.ward === ward);
     }
     return byCity;
   }
@@ -5369,7 +5380,7 @@ function renderStudioComboList(kind, query = "") {
     : items;
 
   if (!filtered.length) {
-    if (kind === "project") {
+    if (kind === "project" || kind === "ward" || kind === "street") {
       listEl.innerHTML = "";
       listEl.classList.remove("is-open");
       return;
@@ -5388,7 +5399,7 @@ function renderStudioComboList(kind, query = "") {
 function openStudioCombo(kind) {
   clearTimeout(STUDIO_COMBO_TIMERS[kind]);
   const { inputEl, listEl } = getStudioComboEls(kind);
-  if (kind === "project" && !getStudioComboItems("project").length) {
+  if ((kind === "project" || kind === "ward" || kind === "street") && !getStudioComboItems(kind).length) {
     if (listEl) {
       listEl.innerHTML = "";
       listEl.classList.remove("is-open");
@@ -5409,11 +5420,47 @@ function filterStudioCombo(kind) {
 
 function syncStudioProjectFieldState() {
   const city = (document.getElementById("dCity")?.value || "").trim();
+  const ward = (document.getElementById("dWard")?.value || "").trim();
+  const wardEl = document.getElementById("dWard");
+  const wardListEl = document.getElementById("dWardSuggestList");
+  const streetEl = document.getElementById("dStreet");
+  const streetListEl = document.getElementById("dStreetSuggestList");
   const projEl = document.getElementById("dProject");
   const listEl = document.getElementById("dProjectSuggestList");
+
+  const cityWards = city ? (STUDIO_WARDS_BY_CITY[city] || []) : Object.values(STUDIO_WARDS_BY_CITY).flat();
+  if (wardEl) {
+    if (!cityWards.length) {
+      wardEl.value = "";
+      wardEl.dataset.prevValid = "";
+      wardEl.placeholder = "";
+      if (wardListEl) {
+        wardListEl.innerHTML = "";
+        wardListEl.classList.remove("is-open");
+      }
+    } else {
+      wardEl.placeholder = "Chọn Phường / Xã";
+    }
+  }
+
+  const availStreets = getStudioComboItems("street");
+  if (streetEl) {
+    if (!availStreets.length) {
+      streetEl.value = "";
+      streetEl.dataset.prevValid = "";
+      streetEl.placeholder = "";
+      if (streetListEl) {
+        streetListEl.innerHTML = "";
+        streetListEl.classList.remove("is-open");
+      }
+    } else {
+      streetEl.placeholder = "Chọn Tên Đường";
+    }
+  }
+
   if (!projEl) return;
-  const cityProjects = city ? STUDIO_PROJECTS.filter((p) => p.city === city) : STUDIO_PROJECTS;
-  if (!cityProjects.length) {
+  const availProjects = getStudioComboItems("project");
+  if (!availProjects.length) {
     projEl.value = "";
     projEl.dataset.prevValid = "";
     projEl.placeholder = "";
@@ -5423,7 +5470,7 @@ function syncStudioProjectFieldState() {
     }
   } else {
     projEl.placeholder = "Không thuộc dự án";
-    if (projEl.value && !cityProjects.some((p) => p.value === projEl.value)) {
+    if (projEl.value && !availProjects.some((p) => p.value === projEl.value)) {
       projEl.value = "";
       projEl.dataset.prevValid = "";
     }
@@ -5460,14 +5507,7 @@ function pickStudioComboItem(kind, val) {
       streetEl.value = "";
       streetEl.dataset.prevValid = "";
     }
-    const projEl = document.getElementById("dProject");
-    if (projEl && projEl.value) {
-      const pObj = STUDIO_PROJECTS.find((p) => p.value === projEl.value);
-      if (pObj && pObj.ward !== val) {
-        projEl.value = "";
-        projEl.dataset.prevValid = "";
-      }
-    }
+    syncStudioProjectFieldState();
   } else if (kind === "project") {
     const proj = STUDIO_PROJECTS.find((p) => p.value === val);
     if (proj) {
