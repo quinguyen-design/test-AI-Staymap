@@ -5791,7 +5791,7 @@ function renderStudioPreview() {
     const val = parseFloat((document.getElementById(id)?.value || "").replace(/k/gi, "").trim());
     return sum + (Number.isFinite(val) && val > 0 ? val : 0);
   }, 0);
-  const elec = elecRaw ? `${elecRaw}k` : "Nhà nước";
+  const elec = elecRaw ? `${elecRaw}k/kWh` : "Nhà nước";
   const waterUnitSuffix = STUDIO_STATE.waterUnit === "m3" ? "/m³" : "/Người";
   const water = waterRaw ? `${waterRaw}k${waterUnitSuffix}` : "Nhà nước";
   const otherCost = otherRaw
@@ -6087,7 +6087,7 @@ function publishStudioListingNow() {
     area: parseInt(document.getElementById("dArea")?.value || "35", 10),
     beds: STUDIO_STATE.beds,
     baths: STUDIO_STATE.baths,
-    elec: elecRaw ? `${elecRaw}k` : "Nhà nước",
+    elec: elecRaw ? `${elecRaw}k/kWh` : "Nhà nước",
     water: waterRaw ? `${waterRaw}k${STUDIO_STATE.waterUnit === "m3" ? "/m³" : "/Người"}` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
     internet: internetRaw ? `${internetRaw}k` : "",
