@@ -1320,6 +1320,30 @@
                 <textarea id="dDesc" rows="9" class="post-input" style="min-height:210px;line-height:1.55;resize:vertical;" oninput="onStudioManualContentEdit()"></textarea>
               </div>
 
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;align-items:start;">
+                <div>
+                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>Hình Ảnh <span class="req-star">*</span></span>
+                    <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
+                  </div>
+                  <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;text-align:center;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:14px;"></i>
+                    <span>Tải Ảnh (4–9 ảnh)</span>
+                    <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleStudioPhotoUpload(this)">
+                  </label>
+                  <div class="post-photo-manager" id="demoPhotos"></div>
+                </div>
+
+                <div>
+                  <div class="post-field-label"><span>Video <small class="util-unit">(Tùy chọn)</small></span></div>
+                  <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;text-align:center;">
+                    <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:14px;"></i>
+                    <span id="demoVideoLabel" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Tải Video (MP4)</span>
+                    <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleStudioVideoUpload(this)">
+                  </label>
+                </div>
+              </div>
+
               <div style="padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:10px;">
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px;">
                   <div>
@@ -1356,30 +1380,6 @@
                     <div class="post-field-label"><span>Đường Vào Nhà <small class="util-unit">(m²)</small></span></div>
                     <input type="text" inputmode="decimal" id="dRoadAccess" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericUnit(this, 'm²')">
                   </div>
-                </div>
-              </div>
-
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;align-items:start;">
-                <div>
-                  <div class="post-field-label" style="display:flex;justify-content:space-between;align-items:center;">
-                    <span>Hình Ảnh <span class="req-star">*</span></span>
-                    <small id="demoPhotoCountLabel" class="tabular-nums" style="color:#64748b;font-weight:400;">0/9 hình</small>
-                  </div>
-                  <label for="dPhotoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;text-align:center;">
-                    <i class="fa-solid fa-cloud-arrow-up" style="color:var(--ctt-orange);font-size:14px;"></i>
-                    <span>Tải Ảnh (4–9 ảnh)</span>
-                    <input type="file" id="dPhotoFileInput" accept="image/*" multiple style="display:none;" onchange="handleStudioPhotoUpload(this)">
-                  </label>
-                  <div class="post-photo-manager" id="demoPhotos"></div>
-                </div>
-
-                <div>
-                  <div class="post-field-label"><span>Video <small class="util-unit">(Tùy chọn)</small></span></div>
-                  <label for="dVideoFileInput" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc;color:#475569;font-size:12px;font-weight:700;cursor:pointer;text-align:center;">
-                    <i class="fa-solid fa-video" style="color:var(--ctt-orange);font-size:14px;"></i>
-                    <span id="demoVideoLabel" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Tải Video (MP4)</span>
-                    <input type="file" id="dVideoFileInput" accept="video/*" style="display:none;" onchange="handleStudioVideoUpload(this)">
-                  </label>
                 </div>
               </div>
 
