@@ -4608,7 +4608,8 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 #postModalBackdrop .post-input::placeholder {
   font-size: 13px;
   font-weight: 500;
-  color: #94a3b8;
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
   opacity: 1;
 }
 #postModalBackdrop input[type="number"]::-webkit-outer-spin-button,
@@ -4975,7 +4976,8 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 #postModalBackdrop .ctt-combo-wrap .post-input::placeholder,
 .ctt-combo-wrap .post-input::placeholder {
   font-size: 13px;
-  color: #94a3b8;
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
   font-weight: 500;
   opacity: 1;
 }
