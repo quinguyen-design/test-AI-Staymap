@@ -31,6 +31,7 @@ const VIP_EXCLUSIVE_SLIDES = [
     baths: "2 WC",
     elec: "3.8k/kWh",
     water: "25k/m³",
+    otherCost: "200k",
     phone: "0908 686 999",
     phoneMasked: "0908 686 ***",
     lat: 10.8022,
@@ -52,8 +53,9 @@ const VIP_EXCLUSIVE_SLIDES = [
     area: "38m²",
     beds: "1 PN",
     baths: "1 WC",
-    elec: "3.500đ/kWh",
-    water: "100k/người",
+    elec: "3.5k/kWh",
+    water: "100k/Người",
+    otherCost: "150k",
     phone: "0906 344 877",
     phoneMasked: "0906 344 ***",
     lat: 10.7982,
@@ -75,8 +77,9 @@ const VIP_EXCLUSIVE_SLIDES = [
     area: "30m²",
     beds: "1 PN",
     baths: "1 WC",
-    elec: "3.800đ/kWh",
-    water: "100k/người",
+    elec: "3.8k/kWh",
+    water: "100k/Người",
+    otherCost: "120k",
     phone: "0909 882 456",
     phoneMasked: "0909 882 ***",
     lat: 10.7875,
@@ -2418,7 +2421,6 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
     leftEl.innerHTML = `
       <div class="sv1-verified-row">
         <span class="lc-vip-tag tag-dacquyen" style="position:static;padding:4px 11px;font-size:11px;">✦ ĐẶC QUYỀN</span>
-        <span class="sv1-badge-verified"><i class="fa-solid fa-shield-check"></i> ĐÃ XÁC MINH THỰC TẾ</span>
       </div>
       <div class="sv1-loc">
         <i class="fa-solid fa-location-dot"></i>
@@ -2437,10 +2439,12 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
       </a>
       <p class="sv1-desc">${slide.desc}</p>
       <div class="sv1-specs tabular-nums">
-        <span class="sv1-spec-pill"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
-        <span class="sv1-spec-pill"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
-        <span class="sv1-spec-pill"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
-        <span class="sv1-spec-pill"><i class="fa-solid fa-bolt"></i> Điện ${slide.elec}</span>
+        <span class="sv1-spec-pill" title="Diện tích"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
+        <span class="sv1-spec-pill" title="Phòng ngủ"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
+        <span class="sv1-spec-pill" title="Nhà vệ sinh"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
+        <span class="sv1-spec-pill" title="Giá điện"><i class="fa-solid fa-bolt"></i> ${String(slide.elec || "Nhà nước").replace(".500đ", ".5k").replace(".800đ", ".8k")}</span>
+        <span class="sv1-spec-pill" title="Giá nước"><i class="fa-solid fa-droplet"></i> ${slide.water || "Nhà nước"}</span>
+        <span class="sv1-spec-pill" title="Chi phí khác"><i class="fa-solid fa-receipt"></i> ${slide.otherCost || "150k"}</span>
       </div>
       <div class="sv1-cta-row">
         <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-btn-detail">
@@ -6466,7 +6470,6 @@ function renderStudioPreview() {
       <div style="background:#fffaf5;border:1.5px solid #fed7aa;border-radius:18px;padding:16px;">
         <div style="display:flex;gap:6px;margin-bottom:6px;">
           <span class="sv1-badge-vip" style="font-size:10px;padding:3px 9px;"><i class="fa-solid fa-crown"></i> ĐẶC QUYỀN VIP</span>
-          <span class="sv1-badge-verified" style="font-size:10px;padding:3px 9px;">ĐÃ XÁC MINH</span>
         </div>
         <div style="font-size:11.5px;font-weight:700;color:#64748b;margin-bottom:4px;">
           <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> ${fullAddr}
@@ -6476,10 +6479,13 @@ function renderStudioPreview() {
         </div>
         <div style="font-size:14.5px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:6px;">${title}</div>
         <p style="font-size:11.5px;color:#475569;line-height:1.45;margin-bottom:10px;">${desc}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" class="tabular-nums">
-          <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-maximize"></i> ${area} m²</span>
-          <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bed"></i> ${STUDIO_STATE.beds}</span>
-          <span class="sv1-spec-pill" style="font-size:11px;padding:4px 9px;"><i class="fa-solid fa-bath"></i> ${STUDIO_STATE.baths}</span>
+        <div style="display:flex;flex-wrap:nowrap;gap:4px;margin-bottom:10px;overflow-x:auto;" class="tabular-nums">
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-maximize"></i> ${area}m²</span>
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-bed"></i> ${STUDIO_STATE.beds}</span>
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-bath"></i> ${STUDIO_STATE.baths}</span>
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-bolt"></i> ${elec}</span>
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-droplet"></i> ${water}</span>
+          <span class="sv1-spec-pill" style="font-size:10.5px;padding:4px 7px;white-space:nowrap;"><i class="fa-solid fa-receipt"></i> ${otherCost}</span>
         </div>
         <div style="position:relative;border-radius:14px;overflow:hidden;height:175px;border:2px solid #fff;box-shadow:0 10px 24px rgba(0,0,0,0.15);background:#f1f5f9;">
           ${coverPhoto
@@ -6797,11 +6803,12 @@ function publishStudioListingNow() {
       unit: "Triệu | Tháng",
       title: newProp.title,
       desc: newProp.description || `${newProp.categoryLabel} tại ${newProp.fullAddress}`,
-      area: `${newProp.area} m²`,
+      area: `${newProp.area}m²`,
       beds: newProp.beds,
       baths: newProp.baths,
       elec: newProp.elec,
       water: newProp.water,
+      otherCost: newProp.otherCost || "--",
       phone: newProp.phone,
       phoneFull: newProp.phone,
       phoneMasked: newProp.phone.length >= 7 ? `${newProp.phone.slice(0, 4)} ${newProp.phone.slice(4, 7)} ***` : newProp.phone,

@@ -7059,3 +7059,38 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     margin-top: 8px !important;
   }
 }
+
+
+/* Compact 1-Row 6-Pill Specs Bar in VIP Exclusive Banner (.sv1-specs) */
+.sv1-left {
+  width: 38%;
+}
+.sv1-specs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 5px !important;
+  width: 100%;
+}
+.sv1-specs .sv1-spec-pill {
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 6px 7px !important;
+  font-size: 11.5px !important;
+  gap: 4px !important;
+  border-radius: 9px !important;
+  white-space: nowrap !important;
+  min-width: 0;
+}
+.sv1-specs .sv1-spec-pill i {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+@media (max-width: 980px) {
+  .sv1-left {
+    width: 100%;
+  }
+  .sv1-specs {
+    flex-wrap: wrap !important;
+  }
+}
