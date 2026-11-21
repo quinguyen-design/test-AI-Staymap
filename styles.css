@@ -6995,3 +6995,45 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     ) !important;
   transition: opacity 0.15s linear !important;
 }
+
+
+/* Solid Multi-Layer 3D Slab Extrusion (Real Physical Sidewall Depth on Rotating Cards & Thumbnails) */
+.sv1-3d-orbit-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ff9d00 0%, #f15a22 50%, #7c2d12 100%) !important;
+  transform: translateZ(-8px);
+  pointer-events: none;
+}
+.sv1-3d-orbit-card::after {
+  content: "";
+  display: block !important;
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #c2410c 0%, #431407 55%, #0f172a 100%) !important;
+  border: 1.5px solid rgba(255, 157, 0, 0.55);
+  transform: translateZ(-15px);
+  pointer-events: none;
+}
+.sv1-3d-orbit-card .sv1-orbit-frame,
+.sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  box-shadow:
+    var(--ex1, -2px) 1.5px 0 #ffb347,
+    var(--ex2, -4px) 3px 0 #ff7a00,
+    var(--ex3, -6px) 4.5px 0 #f15a22,
+    var(--ex4, -8px) 6px 0 #c2410c,
+    var(--ex5, -10px) 7.5px 0 #7c2d12,
+    var(--ex6, -12px) 9px 0 #1e293b,
+    0 14px 26px rgba(15, 23, 42, 0.24),
+    0 0 16px rgba(241, 90, 34, 0.35) !important;
+}
+.sv1-card-thumb {
+  box-shadow:
+    var(--tx1, -1.5px) 1.5px 0 #ff9d00,
+    var(--tx2, -3px) 3px 0 #c2410c,
+    var(--tx3, -4.5px) 4.5px 0 #1e293b,
+    0 6px 12px rgba(15, 23, 42, 0.28) !important;
+}
