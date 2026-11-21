@@ -2475,7 +2475,7 @@ function startSv1CylinderLoop() {
       }
 
       const isMobile = window.innerWidth <= 980;
-      const pivotX = isMobile ? 255 : 415;
+      const pivotX = isMobile ? 270 : 435;
 
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
@@ -2487,8 +2487,8 @@ function startSv1CylinderLoop() {
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        // Hiển thị ~4.5 thẻ trên vòng trụ (slotDiff từ -2.25 đến +2.25); bỏ qua cập nhật DOM cho các thẻ mặt sau
-        if (absSlot > 2.25) {
+        // Hiển thị đúng 3 thẻ lớn trên vòng trụ (1 thẻ chính giữa + 1 thẻ dưới-phải + 1 thẻ trên-trái)
+        if (absSlot > 1.48) {
           if (!c.classList.contains("is-back")) {
             c.style.opacity = "0";
             c.style.pointerEvents = "none";
@@ -2498,17 +2498,15 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Quỹ đạo đường cong không chồng lấn (MAX_OVERLAP = 0 trên toàn bộ 4.5 thẻ) + per-card perspective chống lỗi cắt mặt phẳng 3D
-        const arcAngle = slotDiff * 36;
+        // Quỹ đạo 3 thẻ lớn tách rời hoàn toàn, mặt luôn hướng ra ngoài + đế dày 3D -9px
+        const arcAngle = Math.min(86, Math.abs(slotDiff * 54)) * Math.sign(slotDiff);
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
-        const ty = isMobile
-          ? slotDiff * 76 + Math.sign(slotDiff) * Math.pow(absSlot, 1.65) * 28
-          : slotDiff * 104 + Math.sign(slotDiff) * Math.pow(absSlot, 1.65) * 42;
-        const rotY = slotDiff * 36 + SV1_CYLINDER.mouseX * 4;
+        const ty = slotDiff * (isMobile ? 104 : 148);
+        const rotY = slotDiff * 44 + SV1_CYLINDER.mouseX * 4;
         const rotX = SV1_CYLINDER.mouseY * -3;
-        const scale = Math.max(0.56, 1.06 - absSlot * 0.23);
-        const opacity = absSlot < 1.85 ? Math.max(0.48, 1 - absSlot * 0.2) : Math.max(0, (2.25 - absSlot) * 1.4);
+        const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
+        const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
