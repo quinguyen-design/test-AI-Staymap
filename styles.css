@@ -6839,3 +6839,14 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .sv1-3d-orbit-stage::before {
   display: none !important;
 }
+
+
+/* Baseline-Align "Bản Đồ" Button Exactly with "| Tháng" */
+.sv1-price-row {
+  align-items: baseline !important;
+}
+.sv1-btn-map-inline {
+  align-self: baseline !important;
+  position: relative;
+  top: -1px;
+}
