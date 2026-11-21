@@ -2425,17 +2425,11 @@ function updateSv1LeftAndControlsOnly() {
     `;
   }
 
-  const thumbsRow = document.getElementById("sv1ThumbsRow");
-  if (thumbsRow) {
-    thumbsRow.innerHTML = slide.photos
-      .map(
-        (imgUrl, idx) => `
-        <div class="sv1-r-thumb ${idx === STATE.sv1ThumbIndex ? "active" : ""}" onclick="switchSv1Thumb(${idx})">
-          <img src="${imgUrl}" alt="Thumb ${idx + 1}" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&auto=format&fit=crop&q=80'">
-        </div>
-      `
-      )
-      .join("");
+  const phoneBtn = document.getElementById("sv1ActivePhoneBtn");
+  if (phoneBtn) {
+    phoneBtn.setAttribute("onclick", `revealSv1Phone(this, '${slide.phone}')`);
+    const span = phoneBtn.querySelector(".phone-text");
+    if (span) span.textContent = `${slide.phoneMasked} • Bấm hiện số`;
   }
 
   const total = VIP_EXCLUSIVE_SLIDES.length;
@@ -2497,17 +2491,15 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Trục trụ lồi (Convex Cylinder) xoay từ dưới lên trên:
-        // - Mặt hình luôn hướng ra ngoài (slotDiff > 0 ở dưới-phải có rotY > 0; slotDiff < 0 ở trên-trái có rotY < 0 để mép ngoài cong ôm vô trong trụ)
-        // - Mặt hình có độ nghiêng nhẹ hướng lên phía trên 10 độ (rotX = +10deg)
+        // Đảo ngược góc nghiêng theo đúng yêu cầu: rotY = -slotDiff * 56, rotX = -10, rotZ = +4
         const arcAngle = slotDiff * 68; // degrees quanh trụ
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = slotDiff * 54 + SV1_CYLINDER.mouseX * 5;
-        const rotX = 10 + SV1_CYLINDER.mouseY * -4;
-        const rotZ = -4;
+        const rotY = -slotDiff * 56 + SV1_CYLINDER.mouseX * 5;
+        const rotX = -10 + SV1_CYLINDER.mouseY * -4;
+        const rotZ = 4;
         const scale = Math.max(0.84, 1 - absSlot * 0.1);
         const opacity = absSlot < 0.92 ? 1 : Math.max(0, 1 - (absSlot - 0.92) * 3.2);
 
@@ -2583,6 +2575,24 @@ function handleSv1OrbitCardClick(idx, propId) {
   }
 }
 
+function switchSv1CardPhoto(event, cardIdx, thumbIdx, btnEl) {
+  if (event) event.stopPropagation();
+  const slide = VIP_EXCLUSIVE_SLIDES[cardIdx];
+  if (!slide) return;
+  const cardEl = document.querySelector(`.sv1-3d-orbit-card[data-orbit-idx="${cardIdx}"]`);
+  if (!cardEl) return;
+  const mainImg = cardEl.querySelector("img.sv1-orbit-photo");
+  if (mainImg && slide.photos[thumbIdx]) {
+    mainImg.src = slide.photos[thumbIdx];
+  }
+  cardEl.querySelectorAll(".sv1-card-thumb").forEach((b, i) => {
+    b.classList.toggle("active", i === thumbIdx);
+  });
+  if (cardIdx === STATE.sv1Index) {
+    STATE.sv1ThumbIndex = thumbIdx;
+  }
+}
+
 function renderSv1Slider() {
   const slide = VIP_EXCLUSIVE_SLIDES[STATE.sv1Index];
   const container = document.getElementById("sv1CardContainer");
@@ -2600,33 +2610,35 @@ function renderSv1Slider() {
             ${VIP_EXCLUSIVE_SLIDES.map((s, idx) => {
               return `
                 <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
-                  <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
-                  <img class="sv1-orbit-photo" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
-                  <div class="sv1-3d-glare"></div>
-                  <div class="sv1-orbit-overlay">
-                    <div style="min-width:0;">
-                      <div class="sv1-orbit-price">${s.price} ${s.unit}</div>
-                      <div class="sv1-orbit-title">${s.title}</div>
+                  <div class="sv1-orbit-frame">
+                    <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
+                    <img class="sv1-orbit-photo" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
+                    <div class="sv1-3d-glare"></div>
+                    <div class="sv1-orbit-overlay">
+                      <div style="min-width:0;">
+                        <div class="sv1-orbit-price">${s.price} ${s.unit}</div>
+                        <div class="sv1-orbit-title">${s.title}</div>
+                      </div>
                     </div>
-                    <span style="font-size:11px;font-weight:800;color:#ffd700;white-space:nowrap;">Xem <i class="fa-solid fa-arrow-right"></i></span>
+                  </div>
+                  <div class="sv1-card-thumbs">
+                    ${(s.photos || []).slice(0, 3).map((pUrl, tIdx) => `
+                      <button type="button" class="sv1-card-thumb ${tIdx === 0 ? "active" : ""}" onclick="switchSv1CardPhoto(event, ${idx}, ${tIdx}, this)">
+                        <img src="${pUrl}" alt="Ảnh ${tIdx + 1}" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&auto=format&fit=crop&q=80'">
+                      </button>
+                    `).join("")}
                   </div>
                 </div>
               `;
             }).join("")}
           </div>
         </div>
-        <div class="sv1-r-thumbs" id="sv1ThumbsRow"></div>
       </div>
     `;
     bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
     startSv1CylinderLoop();
   }
 
-  // Cập nhật ảnh thumbnail của thẻ đang ở chính diện nếu người dùng bấm thumb
-  const activeCardImg = container.querySelector(`.sv1-3d-orbit-card[data-orbit-idx="${STATE.sv1Index}"] img.sv1-orbit-photo`);
-  if (activeCardImg) {
-    activeCardImg.src = slide.photos[STATE.sv1ThumbIndex] || slide.photos[0];
-  }
   updateSv1LeftAndControlsOnly();
 }
 

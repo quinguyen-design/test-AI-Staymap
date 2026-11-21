@@ -6310,3 +6310,97 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     bottom: -46px !important;
   }
 }
+
+
+/* Thumbnails Attached to 3D Card Bottom Edge (Cutting 1/3 Below Card) & Reversed Tilt */
+.sv1-card-3d {
+  margin-bottom: 0;
+}
+.sv1-3d-orbit-card {
+  overflow: visible !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.sv1-3d-orbit-card::after {
+  display: none !important;
+}
+.sv1-orbit-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  background: #0f172a;
+  box-shadow:
+    0 26px 54px rgba(2, 6, 23, 0.42),
+    -5px 0 0 rgba(255, 255, 255, 0.2),
+    5px 0 0 rgba(255, 215, 0, 0.16);
+}
+.sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  border-color: #ffd700;
+  box-shadow:
+    0 30px 62px rgba(241, 90, 34, 0.32),
+    0 18px 38px rgba(15, 23, 42, 0.45),
+    0 0 0 1.5px rgba(255, 215, 0, 0.65);
+}
+.sv1-orbit-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.04) 38%, transparent 60%);
+  pointer-events: none;
+  z-index: 3;
+}
+.sv1-orbit-overlay {
+  padding: 22px 210px 12px 14px !important;
+}
+.sv1-card-thumbs {
+  position: absolute;
+  bottom: -16px;
+  right: 14px;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sv1-card-thumb {
+  width: 60px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #ffffff;
+  background: #0f172a;
+  box-shadow: 0 8px 18px rgba(2, 6, 23, 0.38);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.sv1-card-thumb.active,
+.sv1-card-thumb:hover {
+  border-color: var(--ctt-orange);
+  transform: translateY(-3px) scale(1.05);
+}
+.sv1-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (max-width: 980px) {
+  .sv1-orbit-overlay {
+    padding: 16px 145px 10px 10px !important;
+  }
+  .sv1-card-thumbs {
+    bottom: -12px;
+    right: 10px;
+    gap: 4px;
+  }
+  .sv1-card-thumb {
+    width: 44px;
+    height: 32px;
+    border-radius: 7px;
+  }
+}
