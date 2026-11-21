@@ -2549,18 +2549,6 @@ function startSv1CylinderLoop() {
         const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
         const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
 
-        // Tạo độ dày khối 3D đặc (6 lớp cạnh vát kim loại thay đổi góc chiếu thực tế theo rotY)
-        const sideX = -Math.sin((rotY * Math.PI) / 180) * 15;
-        c.style.setProperty("--ex1", `${(sideX * 0.17).toFixed(1)}px`);
-        c.style.setProperty("--ex2", `${(sideX * 0.34).toFixed(1)}px`);
-        c.style.setProperty("--ex3", `${(sideX * 0.51).toFixed(1)}px`);
-        c.style.setProperty("--ex4", `${(sideX * 0.68).toFixed(1)}px`);
-        c.style.setProperty("--ex5", `${(sideX * 0.85).toFixed(1)}px`);
-        c.style.setProperty("--ex6", `${sideX.toFixed(1)}px`);
-        c.style.setProperty("--tx1", `${(sideX * 0.14).toFixed(1)}px`);
-        c.style.setProperty("--tx2", `${(sideX * 0.28).toFixed(1)}px`);
-        c.style.setProperty("--tx3", `${(sideX * 0.42).toFixed(1)}px`);
-
         // Tia Laser viền ngoài + Tia Laser quét ngang mặt thẻ (xuất hiện ngẫu nhiên, chạy ngẫu nhiên và kết thúc hẳn sau 3s trên mỗi tin)
         const laserAngle = ((SV1_CYLINDER.progress * 420 + i * 110) % 360 + 360) % 360;
         c.style.setProperty("--laser-angle", `${laserAngle.toFixed(1)}deg`);
