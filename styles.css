@@ -6995,3 +6995,14 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     ) !important;
   transition: opacity 0.15s linear !important;
 }
+
+
+/* Show Brand Orange Border Only on Main Front Card (.is-center); Hide Orange Border on Incoming/Outgoing Cards */
+.sv1-3d-orbit-card:not(.is-center)::before {
+  opacity: 0 !important;
+}
+.sv1-3d-orbit-card:not(.is-center) .sv1-orbit-frame {
+  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  background: #0f172a !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14) !important;
+}
