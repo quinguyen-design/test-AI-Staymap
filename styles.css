@@ -6724,3 +6724,20 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     flex-wrap: wrap;
   }
 }
+
+
+/* Remove Border on VIP Phone Button (#sv1ActivePhoneBtn) */
+.sv1-right .sv1-r-phone,
+.sv1-cta-row #sv1ActivePhoneBtn,
+#sv1ActivePhoneBtn {
+  border: none !important;
+  background: #0f172a !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2) !important;
+}
+#sv1ActivePhoneBtn:hover {
+  background: var(--ctt-grad-brand) !important;
+  border: none !important;
+}
+.sv1-card-3d.is-slide-switching #sv1ActivePhoneBtn {
+  animation: none !important;
+}
