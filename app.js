@@ -2982,6 +2982,7 @@ function openPropertyDetailView(propId) {
   const g4 = galleryList[3] || g2;
   const g5 = galleryList[4] || g3;
   const isLongDesc = descriptionText.length > 220 || descriptionText.split("\n").length > 4;
+  const defaultSchedPhone = STATE.auth?.isLoggedIn && STATE.auth?.phone ? STATE.auth.phone : "";
 
   detailView.innerHTML = `
     <div class="pd-container">
@@ -3125,27 +3126,16 @@ function openPropertyDetailView(propId) {
           </div>` : ""}
         </div>
 
-        <!-- Cột Phải Sticky: Thông Tin Liên Hệ (Bước 1) -->
+        <!-- Right Sticky Contact & Booking Sidebar -->
         <div class="pd-sticky-sidebar">
           <div class="pd-card-box" style="margin-bottom:0;">
-            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid #f1f5f9;">
-              <div>
-                <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Giá thuê</div>
-                <div style="font-size:23px;font-weight:900;color:var(--ctt-orange);" class="tabular-nums">${item.priceText} <span style="font-size:12.5px;color:#64748b;font-weight:600;">/ tháng</span></div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;">Tiền cọc</div>
-                <div style="font-size:13.5px;font-weight:800;color:#0f172a;">${item.deposit || "Thỏa Thuận"}</div>
-              </div>
-            </div>
-
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-              <div style="width:46px;height:46px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:14px;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid #f1f5f9;">
+              <div style="width:56px;height:56px;border-radius:50%;background:var(--ctt-grad-brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;flex-shrink:0;">
                 ${(item.host || "C").charAt(0).toUpperCase()}
               </div>
               <div style="min-width:0;">
-                <div style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;">Người liên hệ</div>
-                <div style="font-size:15.5px;font-weight:900;color:#0f172a;word-break:break-word;">${item.host}</div>
+                <div style="font-size:16px;font-weight:900;color:#0f172a;word-break:break-word;">${item.host}</div>
+                <div style="font-size:12px;color:#f15a22;font-weight:700;"><i class="fa-solid fa-circle-check"></i> Đã xác thực CCCD & Chủ nhà</div>
               </div>
             </div>
 
@@ -3153,9 +3143,40 @@ function openPropertyDetailView(propId) {
               <i class="fa-solid fa-phone-volume"></i> ${formatPhone433(item.phone)} • Gọi ngay
             </button>
 
-            <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0f172a;background:#f8fafc;color:#0f172a;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;">
-              <img src="assets/zalo.svg" alt="Zalo" style="width:20px;height:20px;"> Nhắn Zalo (${formatPhone433(item.phone)})
+            <a href="https://zalo.me/${cleanPhoneDigits}" target="_blank" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid #0f172a;background:#f8fafc;color:#0f172a;font-size:13.5px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;text-decoration:none;">
+              <img src="assets/zalo.svg" alt="Zalo" style="width:20px;height:20px;"> Nhắn Zalo nhận video phòng thực tế
             </a>
+
+            <div class="pd-schedule-box">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <strong style="font-size:13px;color:#0f172a;"><i class="fa-regular fa-calendar-check" style="color:var(--ctt-orange);margin-right:6px;"></i>Đặt lịch hẹn xem phòng trực tiếp</strong>
+                <span style="font-size:10.5px;font-weight:700;color:#f15a22;">Miễn phí 100%</span>
+              </div>
+
+              <small style="display:block;font-size:11px;color:#64748b;font-weight:700;margin-bottom:5px;">1. Chọn ngày xem phòng:</small>
+              <div class="pd-sched-pills" id="schedDateGroup">
+                <div class="pd-sched-pill" onclick="selectViewingSlot('date', 'Hôm nay', this)">Hôm nay</div>
+                <div class="pd-sched-pill active" onclick="selectViewingSlot('date', 'Ngày mai', this)">Ngày mai</div>
+                <div class="pd-sched-pill" onclick="selectViewingSlot('date', 'Cuối tuần', this)">Cuối tuần</div>
+              </div>
+
+              <small style="display:block;font-size:11px;color:#64748b;font-weight:700;margin-bottom:5px;">2. Chọn khung giờ:</small>
+              <div class="pd-sched-pills" id="schedTimeGroup">
+                <div class="pd-sched-pill" onclick="selectViewingSlot('time', 'Sáng (09h-11h)', this)">Sáng 9h-11h</div>
+                <div class="pd-sched-pill active" onclick="selectViewingSlot('time', 'Chiều (14h-17h)', this)">Chiều 14h-17h</div>
+                <div class="pd-sched-pill" onclick="selectViewingSlot('time', 'Tối (18h-20h)', this)">Tối 18h-20h</div>
+              </div>
+
+              <input type="tel" inputmode="numeric" maxlength="10" id="schedTenantPhone" value="${defaultSchedPhone}" class="hsp-select tabular-nums" style="background:#fff;margin-bottom:10px;font-size:12.5px;" placeholder="Nhập SĐT Zalo 10 số của bạn...">
+
+              <button type="button" onclick="submitZaloViewingSchedule(${item.id})" style="width:100%;padding:11px;border-radius:12px;border:none;background:#0f172a;color:#f15a22;font-size:12.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i class="fa-solid fa-paper-plane"></i> Gửi lịch hẹn qua Zalo Chủ Nhà
+              </button>
+            </div>
+
+            <div style="margin-top:14px;padding:12px;border-radius:12px;background:#fffaf5;border:1px solid #fed7aa;font-size:12px;color:#9a3412;line-height:1.5;">
+              <i class="fa-solid fa-shield-heart"></i> <strong>Khuyến cáo an toàn ChoThueTot:</strong> Tuyệt đối không chuyển khoản đặt cọc trước khi đến xem nhà trực tiếp và kiểm tra hợp đồng.
+            </div>
           </div>
         </div>
       </div>
