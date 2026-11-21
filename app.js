@@ -16,8 +16,31 @@ function formatPhone433(raw) {
   return String(raw || "").trim() || "0906 344 877";
 }
 
-// 1. BANNER ĐẶC QUYỀN (.sv1) — 3 EXCLUSIVE VIP SHOWCASE SLIDES
+// 1. BANNER ĐẶC QUYỀN (.sv1) — 10 EXCLUSIVE VIP SHOWCASE SLIDES
 const VIP_EXCLUSIVE_SLIDES = [
+  {
+    id: 9999,
+    slug: "/cho-thue-can-ho-chung-cu-p-an-khanh-tp-ho-chi-minh/can-ho-2pn-masteri-thao-dien-full-noi-that-cao-cap-view-th-gia-14-5-trieu-id9999",
+    title: "CĂN HỘ 2PN MASTERI THẢO ĐIỀN FULL NỘI THẤT CAO CẤP — VIEW SÔNG SÀI GÒN",
+    price: "14.5 Triệu",
+    unit: "| Tháng",
+    location: "Phường An Khánh (Thủ Đức), TP. Hồ Chí Minh",
+    desc: "Căn hộ 2PN – 2WC tầng 12 hướng Đông Nam thoáng mát, đầy đủ nội thất cao cấp (Sofa da, Smart TV, máy giặt sấy riêng). 2 phút ra Metro An Phú & Vincom Mega Mall.",
+    area: "72m²",
+    beds: "2 PN",
+    baths: "2 WC",
+    elec: "3.8k/kWh",
+    water: "25k/m³",
+    phone: "0908 686 999",
+    phoneMasked: "0908 686 ***",
+    lat: 10.8022,
+    lng: 106.7418,
+    photos: [
+      "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp"
+    ]
+  },
   {
     id: 2078,
     slug: "/cho-thue-phong-tro-phuong-cau-kieu/kiot-cho-thue-khu-dan-cu-sam-uat-gan-cho-2078",
@@ -25,7 +48,7 @@ const VIP_EXCLUSIVE_SLIDES = [
     price: "7.6 Triệu",
     unit: "| Tháng",
     location: "Phường Cầu Kiệu (Phú Nhuận), TP. Hồ Chí Minh",
-    desc: "Không gian Kiot kết hợp Studio cao cấp ngay trục sầm uất Phan Xích Long – Cầu Kiệu. Mặt tiền thoáng rộng, lối đi riêng 24/24, trang bị sẵn nội thất chuẩn khách sạn, khóa vân tay 2 lớp, PCCC tự động. Phù hợp vừa ở vừa kinh doanh showroom/studio.",
+    desc: "Không gian Kiot kết hợp Studio cao cấp ngay trục sầm uất Phan Xích Long – Cầu Kiệu. Mặt tiền thoáng rộng, lối đi riêng 24/24, trang bị sẵn nội thất chuẩn khách sạn, khóa vân tay 2 lớp, PCCC tự động.",
     area: "38m²",
     beds: "1 PN",
     baths: "1 WC",
@@ -48,7 +71,7 @@ const VIP_EXCLUSIVE_SLIDES = [
     price: "6.5 Triệu",
     unit: "| Tháng",
     location: "Phường Nhiêu Lộc (Quận 3), TP. Hồ Chí Minh",
-    desc: "Căn hộ dịch vụ 30m² thiết kế Indochine hiện đại, ban công đón gió mát rượi ngay cầu Lê Văn Sỹ. Full nội thất cao cấp: Smart TV 55 inch, tủ lạnh Inverter, máy giặt sấy riêng, thang máy tốc độ cao, hầm xe rộng rãi.",
+    desc: "Căn hộ dịch vụ 30m² thiết kế Indochine hiện đại, ban công đón gió mát rượi ngay cầu Lê Văn Sỹ. Full nội thất cao cấp: Smart TV 55 inch, tủ lạnh Inverter, máy giặt sấy riêng, thang máy tốc độ cao.",
     area: "30m²",
     beds: "1 PN",
     baths: "1 WC",
@@ -71,7 +94,7 @@ const VIP_EXCLUSIVE_SLIDES = [
     price: "45 Triệu",
     unit: "| Tháng",
     location: "Phường Tân Hưng (Quận 7), TP. Hồ Chí Minh",
-    desc: "Mặt bằng kho xưởng & showroom diện tích khủng 500m² ngay trung tâm Tân Quy – Tân Hưng Quận 7. Trần cao 8.5m, nền bê tông chịu lực, điện 3 pha hạ trạm riêng, đường xe container 40 feet ra vào 24/24 không cấm giờ.",
+    desc: "Mặt bằng kho xưởng & showroom diện tích khủng 500m² ngay trung tâm Tân Quy – Tân Hưng Quận 7. Trần cao 8.5m, nền bê tông chịu lực, điện 3 pha hạ trạm riêng, đường container 40 feet ra vào 24/24.",
     area: "500m²",
     beds: "2 VP",
     baths: "3 WC",
@@ -85,6 +108,144 @@ const VIP_EXCLUSIVE_SLIDES = [
       "https://chothuetot.vn/assets/images/properties/album_1791022210_7592.webp",
       "https://chothuetot.vn/assets/images/properties/album_1791022894_6188.webp",
       "https://chothuetot.vn/assets/images/properties/album_1791021309_7046.webp"
+    ]
+  },
+  {
+    id: 4169,
+    slug: "/cho-thue-can-ho-chung-cu-p-cau-kieu-tp-ho-chi-minh/phong-studio-ban-cong-thoang-full-noi-that-tai-phan-xich-long-id4169",
+    title: "STUDIO BAN CÔNG THOÁNG FULL NỘI THẤT TRUNG TÂM PHAN XÍCH LONG",
+    price: "5.8 Triệu",
+    unit: "| Tháng",
+    location: "Phường Cầu Kiệu (Phú Nhuận), TP. Hồ Chí Minh",
+    desc: "Phòng Studio 32m² ban công rộng đón nắng tự nhiên, hẻm xe hơi thông thoáng ngay khu ẩm thực Phan Xích Long. Giờ giấc tự do, bảo vệ 24/7, thang máy tốc độ cao.",
+    area: "32m²",
+    beds: "1 PN",
+    baths: "1 WC",
+    elec: "3.8k/kWh",
+    water: "100k/Tháng",
+    phone: "0906 344 877",
+    phoneMasked: "0906 344 ***",
+    lat: 10.7915,
+    lng: 106.7045,
+    photos: [
+      "https://chothuetot.vn/assets/images/properties/album_1791009142_8327.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp",
+      "https://chothuetot.vn/assets/images/properties/album_1791010804_6960.webp"
+    ]
+  },
+  {
+    id: 1117,
+    slug: "/cho-thue-nha-nguyen-can-1117",
+    title: "NHÀ NGUYÊN CĂN MẶT TIỀN 3 TẦNG SÂN VƯỜN RỘNG — PHÙ HỢP Ở & LÀM VĂN PHÒNG",
+    price: "22 Triệu",
+    unit: "| Tháng",
+    location: "Phường Thạnh Mỹ Tây (Bình Thạnh), TP. Hồ Chí Minh",
+    desc: "Nhà nguyên căn 1 trệt 2 lầu thiết kế hiện đại, sân để được ô tô và 10 xe máy. Gần Landmark 81, cầu Sài Gòn, thuận tiện làm văn phòng công ty, studio chụp ảnh hoặc gia đình đông thành viên.",
+    area: "120m²",
+    beds: "4 PN",
+    baths: "4 WC",
+    elec: "Nhà nước",
+    water: "Nhà nước",
+    phone: "0933 551 888",
+    phoneMasked: "0933 551 ***",
+    lat: 10.7991,
+    lng: 106.7182,
+    photos: [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=900&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    id: 4154,
+    slug: "/cho-thue-can-ho-chung-cu-4154",
+    title: "DUPLEX FULL KÍNH PANORAMA VIEW CÔNG VIÊN — NỘI THẤT PHONG CÁCH BẮC ÂU",
+    price: "9.2 Triệu",
+    unit: "| Tháng",
+    location: "Phường Tân Định (Quận 1), TP. Hồ Chí Minh",
+    desc: "Căn hộ Duplex trần cao 4.2m cửa kính tràn viền cực sáng, cách công viên Lê Văn Tám chỉ 200m. Trang bị bếp từ, máy hút mùi, máy giặt riêng trong phòng, dọn vào ở ngay.",
+    area: "45m²",
+    beds: "1 PN",
+    baths: "1 WC",
+    elec: "3.8k/kWh",
+    water: "120k/Người",
+    phone: "0903 712 456",
+    phoneMasked: "0903 712 ***",
+    lat: 10.7896,
+    lng: 106.6914,
+    photos: [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1000&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    id: 1120,
+    slug: "/cho-thue-mat-bang-van-phong-1120",
+    title: "MẶT BẰNG KINH DOANH & VĂN PHÒNG ĐẠI DIỆN GÓC 2 MẶT TIỀN SẦM UẤT",
+    price: "28 Triệu",
+    unit: "| Tháng",
+    location: "Phường Bến Thành (Quận 1), TP. Hồ Chí Minh",
+    desc: "Mặt bằng góc 2 mặt tiền vỉa hè rộng 6m, lượng khách vãng lai cực lớn, sẵn hệ thống đèn ray, máy lạnh âm trần và cửa kính cường lực. Phù hợp showroom, cafe flagship, spa cao cấp.",
+    area: "95m²",
+    beds: "1 Sảnh",
+    baths: "2 WC",
+    elec: "Nhà nước",
+    water: "Nhà nước",
+    phone: "0912 440 668",
+    phoneMasked: "0912 440 ***",
+    lat: 10.7725,
+    lng: 106.6981,
+    photos: [
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=900&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    id: 4209,
+    slug: "/cho-thue-homestay-airbnb-4209",
+    title: "HOMESTAY & SERVICED APARTMENT PHONG CÁCH RESORT — CÓ HỒ BƠI SÂN THƯỢNG",
+    price: "11.5 Triệu",
+    unit: "| Tháng",
+    location: "Phường Thảo Điền (Thủ Đức), TP. Hồ Chí Minh",
+    desc: "Không gian nghỉ dưỡng giữa lòng Thảo Điền với hồ bơi vô cực tầng thượng, phòng gym miễn phí, dọn phòng 2 lần/tuần. Hỗ trợ thuê ngắn hạn hoặc dài hạn linh hoạt.",
+    area: "52m²",
+    beds: "1 PN",
+    baths: "1 WC",
+    elec: "4.0k/kWh",
+    water: "Miễn phí",
+    phone: "0988 901 234",
+    phoneMasked: "0988 901 ***",
+    lat: 10.8045,
+    lng: 106.7332,
+    photos: [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1000&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    id: 2078,
+    slug: "/cho-thue-phong-tro-hanoi-vip-10",
+    title: "CĂN HỘ STUDIO BAN CÔNG HỒ TÂY — NỘI THẤT GỖ SỒI TỰ NHIÊN CAO CẤP",
+    price: "8.8 Triệu",
+    unit: "| Tháng",
+    location: "Phường Quảng An (Tây Hồ), TP. Hà Nội",
+    desc: "Studio 42m² cách mặt Hồ Tây chỉ 100m, ban công thoáng nhìn ra vườn cây xanh mát. Nội thất gỗ sồi tự nhiên, bồn tắm nằm thư giãn, thang máy & bảo vệ 24/24.",
+    area: "42m²",
+    beds: "1 PN",
+    baths: "1 WC",
+    elec: "3.5k/kWh",
+    water: "100k/Người",
+    phone: "0904 667 890",
+    phoneMasked: "0904 667 ***",
+    lat: 21.0645,
+    lng: 105.8225,
+    photos: [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&auto=format&fit=crop&q=80",
+      "https://chothuetot.vn/assets/images/properties/album_1791010714_7391.webp"
     ]
   }
 ];
@@ -2377,10 +2538,19 @@ function renderSv1Slider() {
     if (thumbsRow) thumbsRow.innerHTML = thumbsHtml;
   }
 
-  // Update dots
-  document.querySelectorAll(".sv1-dot").forEach((dot, idx) => {
-    dot.classList.toggle("active", idx === STATE.sv1Index);
-  });
+  // Update dynamic dots matching VIP_EXCLUSIVE_SLIDES.length
+  const dotsWrap = document.querySelector(".sv1-dot-indicator");
+  if (dotsWrap) {
+    if (dotsWrap.children.length !== total) {
+      dotsWrap.innerHTML = VIP_EXCLUSIVE_SLIDES.map(
+        (_, idx) => `<button type="button" class="sv1-dot ${idx === STATE.sv1Index ? "active" : ""}" onclick="switchSv1Slide(${idx}, true)" aria-label="Slide ${idx + 1}"></button>`
+      ).join("");
+    } else {
+      dotsWrap.querySelectorAll(".sv1-dot").forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === STATE.sv1Index);
+      });
+    }
+  }
 }
 
 function switchSv1Slide(dirOrIdx, isDirect = false) {
