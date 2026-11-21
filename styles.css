@@ -6083,3 +6083,38 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     height: 185px;
   }
 }
+
+
+/* Vertical Bottom-to-Top 3D Cylinder (~2.5 large cards visible) */
+.sv1-3d-orbit-stage {
+  perspective: 1400px;
+  height: 390px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  cursor: ns-resize;
+  touch-action: pan-x;
+}
+.sv1-3d-orbit-card {
+  width: 94%;
+  max-width: 520px;
+  height: 265px;
+  backface-visibility: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+.sv1-3d-orbit-card.is-back {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.sv1-orbit-title {
+  max-width: 340px;
+}
+@media (max-width: 980px) {
+  .sv1-3d-orbit-stage {
+    height: 300px;
+  }
+  .sv1-3d-orbit-card {
+    width: 94%;
+    height: 205px;
+  }
+}

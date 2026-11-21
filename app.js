@@ -2374,12 +2374,12 @@ const SV1_CYLINDER = {
   paused: false,
   dragging: false,
   dragMoved: false,
-  lastX: 0,
+  lastY: 0,
   rafId: null
 };
 
 function getSv1CylinderRadius() {
-  return window.innerWidth <= 980 ? 255 : 355;
+  return window.innerWidth <= 980 ? 340 : 440;
 }
 
 function updateSv1LeftAndControlsOnly() {
@@ -2475,21 +2475,26 @@ function startSv1CylinderLoop() {
           SV1_CYLINDER.angle += diff * 0.09;
         }
       } else if (!SV1_CYLINDER.paused && !SV1_CYLINDER.dragging) {
-        // Chuyển động chậm liên tục quanh trục trụ (360° mỗi ~42 giây)
-        SV1_CYLINDER.angle -= 0.14;
+        // Xoay chậm liên tục từ dưới lên trên quanh trục ngang (X)
+        SV1_CYLINDER.angle += 0.13;
       }
 
-      rotor.style.transform = `translateZ(-${radius}px) rotateY(${SV1_CYLINDER.angle.toFixed(3)}deg)`;
+      rotor.style.transform = `translateZ(-${radius}px) rotateX(${SV1_CYLINDER.angle.toFixed(3)}deg)`;
 
-      // Xác định thẻ đang hướng về phía trước (góc gần 0° nhất)
-      const rawIdx = Math.round(-SV1_CYLINDER.angle / step);
+      // Xác định thẻ đang hướng chính diện & ẩn nửa sau của trụ để luôn thấy ~2.5 thẻ lớn rõ nét
+      const rawIdx = Math.round(SV1_CYLINDER.angle / step);
       const frontIdx = ((rawIdx % total) + total) % total;
+      rotor.querySelectorAll(".sv1-3d-orbit-card").forEach((c, i) => {
+        const cardRot = SV1_CYLINDER.angle - i * step;
+        const rad = (cardRot * Math.PI) / 180;
+        const facing = Math.cos(rad);
+        c.classList.toggle("is-center", i === frontIdx);
+        c.classList.toggle("is-back", facing < 0.25);
+      });
+
       if (frontIdx !== STATE.sv1Index) {
         STATE.sv1Index = frontIdx;
         STATE.sv1ThumbIndex = 0;
-        rotor.querySelectorAll(".sv1-3d-orbit-card").forEach((c, i) => {
-          c.classList.toggle("is-center", i === frontIdx);
-        });
         updateSv1LeftAndControlsOnly();
       }
     }
@@ -2514,14 +2519,14 @@ function bindSv1OrbitInteractions(stage) {
     SV1_CYLINDER.dragging = true;
     SV1_CYLINDER.dragMoved = false;
     SV1_CYLINDER.targetAngle = null;
-    SV1_CYLINDER.lastX = e.clientX;
+    SV1_CYLINDER.lastY = e.clientY;
   });
   window.addEventListener("pointermove", (e) => {
     if (!SV1_CYLINDER.dragging) return;
-    const dx = e.clientX - SV1_CYLINDER.lastX;
-    if (Math.abs(dx) > 3) SV1_CYLINDER.dragMoved = true;
-    SV1_CYLINDER.lastX = e.clientX;
-    SV1_CYLINDER.angle += dx * 0.35;
+    const dy = e.clientY - SV1_CYLINDER.lastY;
+    if (Math.abs(dy) > 3) SV1_CYLINDER.dragMoved = true;
+    SV1_CYLINDER.lastY = e.clientY;
+    SV1_CYLINDER.angle -= dy * 0.35;
   });
   window.addEventListener("pointerup", () => {
     SV1_CYLINDER.dragging = false;
@@ -2557,9 +2562,9 @@ function renderSv1Slider() {
         <div class="sv1-3d-orbit-stage" id="sv1OrbitStage">
           <div class="sv1-3d-orbit-rotor" id="sv1OrbitRotor">
             ${VIP_EXCLUSIVE_SLIDES.map((s, idx) => {
-              const cardAngle = idx * step;
+              const cardAngle = -idx * step;
               return `
-                <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" style="transform: rotateY(${cardAngle}deg) translateZ(${radius}px);" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
+                <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" style="transform: rotateX(${cardAngle}deg) translateZ(${radius}px);" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
                   <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
                   <img class="sv1-orbit-photo" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
                   <div class="sv1-3d-glare"></div>
@@ -2601,13 +2606,13 @@ function switchSv1Slide(dirOrIdx, isDirect = false) {
     ? ((dirOrIdx % total) + total) % total
     : ((STATE.sv1Index + dirOrIdx) % total + total) % total;
 
-  // Tìm góc quay ngắn nhất trên trục trụ tới thẻ đích
-  const currentMod = ((-SV1_CYLINDER.angle % 360) + 360) % 360;
+  // Tìm góc quay ngắn nhất trên trục trụ dọc tới thẻ đích
+  const currentMod = ((SV1_CYLINDER.angle % 360) + 360) % 360;
   let targetMod = nextIdx * step;
   let delta = targetMod - currentMod;
   if (delta > 180) delta -= 360;
   if (delta < -180) delta += 360;
-  SV1_CYLINDER.targetAngle = SV1_CYLINDER.angle - delta;
+  SV1_CYLINDER.targetAngle = SV1_CYLINDER.angle + delta;
 
   STATE.sv1Index = nextIdx;
   STATE.sv1ThumbIndex = 0;
