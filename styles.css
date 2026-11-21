@@ -6404,3 +6404,58 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     border-radius: 7px;
   }
 }
+
+
+/* True 3D Extruded Slab Thickness (translateZ -9px), Lighter Shadow, 4.5 Cards Stage & 60fps GPU Optimization */
+.sv1-3d-orbit-stage {
+  perspective: 920px;
+  height: 485px;
+  contain: layout style;
+}
+.sv1-3d-orbit-card {
+  width: 375px;
+  max-width: 56%;
+  height: 235px;
+  transform-style: preserve-3d !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Lớp đế 3D lùi sâu -9px tạo độ dày khối thẻ thật trong không gian 3D mà không tốn GPU */
+.sv1-3d-orbit-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 21px;
+  background: linear-gradient(135deg, #ffd700 0%, #f15a22 48%, #475569 100%);
+  transform: translateZ(-9px);
+  pointer-events: none;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+}
+.sv1-orbit-frame {
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  background: #0f172a;
+  /* Giảm đổ bóng nặng, chỉ giữ viền cạnh 3D sắc nét */
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12) !important;
+  transform: translateZ(0);
+}
+.sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  border-color: #ffd700;
+  box-shadow: 0 10px 22px rgba(241, 90, 34, 0.18), 0 0 0 1.5px rgba(255, 215, 0, 0.75) !important;
+}
+.sv1-card-thumb {
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.22);
+}
+@media (max-width: 980px) {
+  .sv1-3d-orbit-stage {
+    height: 360px;
+  }
+  .sv1-3d-orbit-card {
+    width: 265px;
+    max-width: 56%;
+    height: 172px;
+  }
+  .sv1-3d-orbit-card::before {
+    transform: translateZ(-6px);
+  }
+}

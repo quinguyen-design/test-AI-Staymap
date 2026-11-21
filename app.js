@@ -2372,6 +2372,8 @@ const SV1_CYLINDER = {
   progress: 0, // đơn vị: số thứ tự slide liên tục (0 .. total)
   targetProgress: null,
   paused: false,
+  inView: true,
+  observerBound: false,
   dragging: false,
   dragMoved: false,
   lastX: 0,
@@ -2450,6 +2452,11 @@ function updateSv1LeftAndControlsOnly() {
 function startSv1CylinderLoop() {
   if (SV1_CYLINDER.rafId) return;
   const tick = () => {
+    // Tối ưu hiệu năng: tạm nghỉ tính toán 3D khi tab ẩn, khi đang mở trang chi tiết, hoặc khi đã cuộn qua khỏi Banner VIP
+    if (document.hidden || !SV1_CYLINDER.inView || document.body.classList.contains("is-detail-view")) {
+      SV1_CYLINDER.rafId = requestAnimationFrame(tick);
+      return;
+    }
     const rotor = document.getElementById("sv1OrbitRotor");
     const total = VIP_EXCLUSIVE_SLIDES.length;
     if (rotor && total > 0) {
@@ -2462,16 +2469,15 @@ function startSv1CylinderLoop() {
           SV1_CYLINDER.progress += diff * 0.085;
         }
       } else if (!SV1_CYLINDER.paused && !SV1_CYLINDER.dragging) {
-        // Nhịp lật 3D giống video mẫu: khi thẻ vào giữa (gần số nguyên) sẽ lướt chậm lại để ngắm hình lớn, khi chuyển giao giữa 2 thẻ sẽ lật mở dứt khoát
         const frac = SV1_CYLINDER.progress - Math.round(SV1_CYLINDER.progress);
-        const speedBoost = 0.0018 + Math.min(0.25, Math.abs(frac)) * 0.022;
+        const speedBoost = 0.0018 + Math.min(0.25, Math.abs(frac)) * 0.018;
         SV1_CYLINDER.progress += speedBoost;
       }
 
       const isMobile = window.innerWidth <= 980;
-      const pivotX = isMobile ? 235 : 370;
-      const depthZ = isMobile ? 210 : 320;
-      const verticalPitch = isMobile ? 75 : 105;
+      const pivotX = isMobile ? 225 : 375;
+      const depthZ = isMobile ? 195 : 300;
+      const verticalPitch = isMobile ? 54 : 76;
 
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
@@ -2483,30 +2489,33 @@ function startSv1CylinderLoop() {
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        if (absSlot > 1.18) {
-          c.style.opacity = "0";
-          c.style.pointerEvents = "none";
-          c.classList.add("is-back");
-          c.classList.remove("is-center");
+        // Hiển thị ~4.5 thẻ trên vòng trụ (slotDiff từ -2.25 đến +2.25); bỏ qua cập nhật DOM cho các thẻ mặt sau để nhẹ CPU/GPU
+        if (absSlot > 2.28) {
+          if (!c.classList.contains("is-back")) {
+            c.style.opacity = "0";
+            c.style.pointerEvents = "none";
+            c.classList.add("is-back");
+            c.classList.remove("is-center");
+          }
           return;
         }
 
-        // Mặt hình luôn hướng ra bên ngoài quanh mặt lồi của trụ (slotDiff > 0 ở dưới-phải -> rotY > 0; slotDiff < 0 ở trên-trái -> rotY < 0), không nghiêng rotX/rotZ
-        const arcAngle = slotDiff * 66; // degrees quanh trụ
+        // Mặt hình luôn hướng ra ngoài quanh trụ lồi (~4.5 thẻ trải dọc từ dưới-phải lên trên-trái)
+        const arcAngle = slotDiff * 38; // degrees quanh trụ (±2.25 * 38° = ±85.5°)
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = slotDiff * 44 + SV1_CYLINDER.mouseX * 4;
+        const rotY = slotDiff * 35 + SV1_CYLINDER.mouseX * 4;
         const rotX = SV1_CYLINDER.mouseY * -3;
-        const scale = Math.max(0.84, 1 - absSlot * 0.1);
-        const opacity = absSlot < 0.92 ? 1 : Math.max(0, 1 - (absSlot - 0.92) * 3.2);
+        const scale = Math.max(0.72, 1 - absSlot * 0.11);
+        const opacity = absSlot < 1.85 ? Math.max(0.42, 1 - absSlot * 0.22) : Math.max(0, (2.28 - absSlot) * 1.35);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
         c.style.opacity = opacity.toFixed(3);
         c.style.pointerEvents = opacity > 0.25 ? "auto" : "none";
-        c.style.zIndex = String(Math.round(100 - absSlot * 45));
+        c.style.zIndex = String(Math.round(100 - absSlot * 30));
         c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       });
 
@@ -2524,6 +2533,20 @@ function startSv1CylinderLoop() {
 function bindSv1OrbitInteractions(stage) {
   if (!stage || stage.dataset.orbitBound === "1") return;
   stage.dataset.orbitBound = "1";
+
+  if (!SV1_CYLINDER.observerBound && "IntersectionObserver" in window) {
+    SV1_CYLINDER.observerBound = true;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          SV1_CYLINDER.inView = entry.isIntersecting;
+        });
+      },
+      { threshold: 0.05 }
+    );
+    const container = document.getElementById("sv1CardContainer");
+    if (container) obs.observe(container);
+  }
 
   stage.addEventListener("mouseenter", () => {
     SV1_CYLINDER.paused = true;
@@ -2611,7 +2634,7 @@ function renderSv1Slider() {
                 <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
                   <div class="sv1-orbit-frame">
                     <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
-                    <img class="sv1-orbit-photo" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
+                    <img class="sv1-orbit-photo" decoding="async" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
                     <div class="sv1-3d-glare"></div>
                     <div class="sv1-orbit-overlay">
                       <div style="min-width:0;">
