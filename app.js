@@ -2383,10 +2383,23 @@ const SV1_CYLINDER = {
   rafId: null
 };
 
-function updateSv1LeftAndControlsOnly() {
+function triggerSv1BrandBorderSync() {
+  const container = document.getElementById("sv1CardContainer");
+  if (!container) return;
+  container.classList.remove("is-slide-switching");
+  void container.offsetWidth;
+  container.classList.add("is-slide-switching");
+  clearTimeout(SV1_CYLINDER.pulseTimer);
+  SV1_CYLINDER.pulseTimer = setTimeout(() => {
+    container.classList.remove("is-slide-switching");
+  }, 700);
+}
+
+function updateSv1LeftAndControlsOnly(withPulse = false) {
   const slide = VIP_EXCLUSIVE_SLIDES[STATE.sv1Index];
   const container = document.getElementById("sv1CardContainer");
   if (!container || !slide) return;
+  if (withPulse) triggerSv1BrandBorderSync();
 
   const leftEl = container.querySelector(".sv1-left");
   if (leftEl) {
@@ -2515,7 +2528,7 @@ function startSv1CylinderLoop() {
       if (frontIdx !== STATE.sv1Index) {
         STATE.sv1Index = frontIdx;
         STATE.sv1ThumbIndex = 0;
-        updateSv1LeftAndControlsOnly();
+        updateSv1LeftAndControlsOnly(true);
       }
     }
     SV1_CYLINDER.rafId = requestAnimationFrame(tick);
@@ -2675,7 +2688,7 @@ function switchSv1Slide(dirOrIdx, isDirect = false) {
 
   STATE.sv1Index = nextIdx;
   STATE.sv1ThumbIndex = 0;
-  updateSv1LeftAndControlsOnly();
+  updateSv1LeftAndControlsOnly(true);
 }
 
 function switchSv1Thumb(thumbIdx) {

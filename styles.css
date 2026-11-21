@@ -6560,3 +6560,78 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     height: 186px;
   }
 }
+
+
+/* Brand Orange Gradient Border for 3D VIP Cards, Phone Button & Synchronized Slide-Switch Border Pulse */
+.sv1-card-3d {
+  border: 2px solid transparent !important;
+  background:
+    linear-gradient(135deg, #ffffff 0%, #fffaf5 65%, #fff3e6 100%) padding-box,
+    linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) border-box !important;
+  transition: box-shadow 0.35s ease;
+}
+.sv1-card-3d::before {
+  background: linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) !important;
+}
+.sv1-3d-orbit-card::before {
+  background: linear-gradient(135deg, #f15a22 0%, #ff7a00 52%, #ff9d00 100%) !important;
+}
+.sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  border: 2.5px solid transparent !important;
+  background:
+    linear-gradient(#0f172a, #0f172a) padding-box,
+    linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) border-box !important;
+  box-shadow: 0 10px 24px rgba(241, 90, 34, 0.25), 0 0 0 1.5px rgba(241, 90, 34, 0.48) !important;
+}
+.sv1-orbit-chip {
+  border-color: rgba(241, 90, 34, 0.75) !important;
+  color: #ff9d00 !important;
+}
+.sv1-orbit-price {
+  background: linear-gradient(135deg, #ff7a00 0%, #ffb347 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.sv1-right .sv1-r-phone,
+#sv1ActivePhoneBtn {
+  border: 2px solid transparent !important;
+  background:
+    linear-gradient(#0f172a, #0f172a) padding-box,
+    linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) border-box !important;
+  box-shadow: 0 8px 20px rgba(241, 90, 34, 0.22) !important;
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+#sv1ActivePhoneBtn:hover {
+  background:
+    linear-gradient(135deg, #f15a22 0%, #ff9d00 100%) padding-box,
+    linear-gradient(135deg, #ffffff 0%, #ffd7aa 100%) border-box !important;
+}
+@keyframes sv1BrandBorderPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(241, 90, 34, 0.65), 0 12px 28px rgba(241, 90, 34, 0.38);
+  }
+  55% {
+    box-shadow: 0 0 0 7px rgba(255, 157, 0, 0), 0 16px 34px rgba(241, 90, 34, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 157, 0, 0), 0 8px 20px rgba(241, 90, 34, 0.18);
+  }
+}
+@keyframes sv1LeftSyncFade {
+  0% {
+    opacity: 0.55;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.sv1-card-3d.is-slide-switching,
+.sv1-card-3d.is-slide-switching .sv1-3d-orbit-card.is-center .sv1-orbit-frame,
+.sv1-card-3d.is-slide-switching #sv1ActivePhoneBtn {
+  animation: sv1BrandBorderPulse 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sv1-card-3d.is-slide-switching .sv1-left {
+  animation: sv1LeftSyncFade 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
