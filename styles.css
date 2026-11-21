@@ -6676,3 +6676,51 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     border-radius: 8px;
   }
 }
+
+
+/* Price Row with Inline "Bản Đồ" Button on Right & Phone Button Swapped into CTA Row */
+.sv1-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sv1-btn-map-inline {
+  padding: 7px 14px !important;
+  font-size: 12.5px !important;
+  border-radius: 99px !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sv1-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+.sv1-cta-row .sv1-btn-detail {
+  padding: 12px 18px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.sv1-cta-row #sv1ActivePhoneBtn {
+  position: static !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 5px 15px 5px 6px !important;
+  font-size: 13px !important;
+  gap: 8px !important;
+  white-space: nowrap;
+}
+.sv1-cta-row #sv1ActivePhoneBtn .sv1-r-phone-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+@media (max-width: 980px) {
+  .sv1-cta-row {
+    flex-wrap: wrap;
+  }
+}

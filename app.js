@@ -2412,8 +2412,13 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
         <i class="fa-solid fa-location-dot"></i>
         <span>${slide.location}</span>
       </div>
-      <div class="sv1-price tabular-nums">
-        ${slide.price} <span>${slide.unit}</span>
+      <div class="sv1-price-row">
+        <div class="sv1-price tabular-nums">
+          ${slide.price} <span>${slide.unit}</span>
+        </div>
+        <button type="button" class="sv1-btn-map-focus sv1-btn-map-inline" onclick="focusPropertyOnHeroMap(${slide.id})">
+          <i class="fa-solid fa-map-location-dot" style="color:var(--ctt-orange);"></i> Bản Đồ
+        </button>
       </div>
       <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-title">
         ${slide.title}
@@ -2429,18 +2434,12 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
         <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-btn-detail">
           Xem chi tiết đặc quyền <i class="fa-solid fa-arrow-right"></i>
         </a>
-        <button type="button" class="sv1-btn-map-focus" onclick="focusPropertyOnHeroMap(${slide.id})">
-          <i class="fa-solid fa-map-location-dot"></i> Định vị trên bản đồ
+        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
+          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
+          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
         </button>
       </div>
     `;
-  }
-
-  const phoneBtn = document.getElementById("sv1ActivePhoneBtn");
-  if (phoneBtn) {
-    phoneBtn.setAttribute("onclick", `revealSv1Phone(this, '${slide.phone}')`);
-    const span = phoneBtn.querySelector(".phone-text");
-    if (span) span.textContent = `${slide.phoneMasked} • Bấm hiện số`;
   }
 
   const total = VIP_EXCLUSIVE_SLIDES.length;
@@ -2661,10 +2660,6 @@ function renderSv1Slider() {
             }).join("")}
           </div>
         </div>
-        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
-          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
-          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
-        </button>
       </div>
     `;
     bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
