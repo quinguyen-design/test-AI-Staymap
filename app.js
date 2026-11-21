@@ -2420,10 +2420,6 @@ function updateSv1LeftAndControlsOnly() {
           <i class="fa-solid fa-map-location-dot"></i> Định vị trên bản đồ
         </button>
       </div>
-      <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
-        <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
-        <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
-      </button>
     `;
   }
 
@@ -2652,6 +2648,10 @@ function renderSv1Slider() {
             }).join("")}
           </div>
         </div>
+        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
+          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
+          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
+        </button>
       </div>
     `;
     bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
