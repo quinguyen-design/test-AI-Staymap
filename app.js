@@ -3012,32 +3012,47 @@ function openPropertyDetailView(propId) {
         </div>
       </div>
 
-      <!-- Compact Bento 5-Photo Strip (268px cao, nhìn bao quát toàn bộ ảnh không bị bự quá khổ) -->
-      <div class="pd-bento-gallery">
-        <div class="pd-bento-main" onclick="openPropertyGalleryModal(${item.id}, 0)">
-          <img src="${g1}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
-          <span class="sv1-3d-glass-tag"><i class="fa-regular fa-images"></i> ${galleryList.length} ảnh${item.videoUrl ? " • Có Video" : ""}</span>
-        </div>
-        <div class="pd-bento-grid">
-          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 1)">
-            <img src="${g2}" alt="Ảnh 2" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
-          </div>
-          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 2)">
-            <img src="${g3}" alt="Ảnh 3" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
-          </div>
-          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 3)">
-            <img src="${g4}" alt="Ảnh 4" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&auto=format&fit=crop&q=80'">
-          </div>
-          <div class="pd-bento-item" onclick="openPropertyGalleryModal(${item.id}, 4)">
-            <img src="${g5}" alt="Ảnh 5" onerror="this.src='https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&auto=format&fit=crop&q=80'">
-            <div class="pd-view-all-photos"><i class="fa-regular fa-images"></i> Xem tất cả (${galleryList.length})</div>
-          </div>
-        </div>
-      </div>
-
+      <!-- Lưới 2 Cột: Cột Trái (Carousel + Nội Dung) | Cột Phải Sticky (Giá + Liên Hệ) -->
       <div class="pd-content-grid">
-        <!-- Cột Trái: 1 Trang Giấy Trắng Thống Nhất (Nhẹ mắt, không chia 4-5 khung nặng nề) -->
-        <div class="pd-unified-sheet">
+        <div>
+          <!-- Khung Ảnh Chuẩn (Hiển thị đủ 100% ảnh ngang & dọc + lướt qua xem + huy hiệu trên ảnh) -->
+          <div class="pd-carousel-wrap" data-prop-id="${item.id}" data-idx="0">
+            <div class="pd-carousel-stage" id="pdCarouselStage">
+              <img class="pd-carousel-ambient" id="pdCarouselAmbient" src="${g1}" alt="" aria-hidden="true">
+              <img class="pd-carousel-img" id="pdCarouselMainImg" src="${g1}" alt="${item.title}" onclick="openPropertyGalleryModal(${item.id}, Number(document.querySelector('.pd-carousel-wrap')?.dataset.idx || 0))" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
+              <div class="pd-carousel-badges">
+                ${vipInfo.label ? `<span class="lc-vip-tag ${vipInfo.badgeClass}" style="position:static;"><i class="fa-solid fa-award" style="margin-right:4px;"></i>${vipInfo.label}</span>` : ""}
+                ${stObj ? `<span class="sticker-pill ${stObj.cls}"><i class="fa-solid ${stObj.icon}"></i> ${stObj.name}</span>` : ""}
+              </div>
+              <div class="pd-carousel-top-right">
+                <span class="pd-carousel-counter" id="pdCarouselCounter">1 / ${galleryList.length}</span>
+                <button type="button" class="pd-carousel-expand" title="Phóng to toàn màn hình" onclick="openPropertyGalleryModal(${item.id}, Number(document.querySelector('.pd-carousel-wrap')?.dataset.idx || 0))">
+                  <i class="fa-solid fa-expand"></i>
+                </button>
+              </div>
+              ${galleryList.length > 1 ? `
+              <button type="button" class="pd-carousel-nav prev" aria-label="Ảnh trước" onclick="stepDetailCarousel(${item.id}, -1)">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <button type="button" class="pd-carousel-nav next" aria-label="Ảnh sau" onclick="stepDetailCarousel(${item.id}, 1)">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>` : ""}
+            </div>
+            ${galleryList.length > 1 ? `
+            <div class="pd-carousel-thumbs" id="pdCarouselThumbs">
+              ${galleryList
+                .map(
+                  (src, idx) => `
+                <button type="button" class="pd-carousel-thumb ${idx === 0 ? "active" : ""}" onclick="goToDetailCarousel(${item.id}, ${idx})">
+                  <img src="${src}" alt="Ảnh ${idx + 1}" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&auto=format&fit=crop&q=80'">
+                </button>`
+                )
+                .join("")}
+            </div>` : ""}
+          </div>
+
+          <!-- 1 Trang Giấy Trắng Thống Nhất -->
+          <div class="pd-unified-sheet">
           <!-- Dải thông số cốt lõi -->
           <div class="pd-sheet-section">
             <div class="pd-key-strip">
@@ -3168,6 +3183,33 @@ function openPropertyDetailView(propId) {
 
   const scrollTop = Math.max(0, detailView.offsetTop - 92);
   window.scrollTo({ top: scrollTop, behavior: "smooth" });
+}
+
+function goToDetailCarousel(propId, idx) {
+  const item = PROPERTIES.find((p) => p.id === Number(propId));
+  if (!item) return;
+  const photos = item.gallery && item.gallery.length ? item.gallery : [item.image];
+  if (!photos.length) return;
+  const safeIdx = ((Number(idx) % photos.length) + photos.length) % photos.length;
+  const wrap = document.querySelector(".pd-carousel-wrap");
+  const mainImg = document.getElementById("pdCarouselMainImg");
+  const ambientImg = document.getElementById("pdCarouselAmbient");
+  const counterEl = document.getElementById("pdCarouselCounter");
+  if (wrap) wrap.dataset.idx = String(safeIdx);
+  if (mainImg) mainImg.src = photos[safeIdx];
+  if (ambientImg) ambientImg.src = photos[safeIdx];
+  if (counterEl) counterEl.textContent = `${safeIdx + 1} / ${photos.length}`;
+  const thumbs = document.querySelectorAll("#pdCarouselThumbs .pd-carousel-thumb");
+  thumbs.forEach((btn, i) => {
+    btn.classList.toggle("active", i === safeIdx);
+    if (i === safeIdx) btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  });
+}
+
+function stepDetailCarousel(propId, delta) {
+  const wrap = document.querySelector(".pd-carousel-wrap");
+  const cur = Number(wrap?.dataset.idx || 0);
+  goToDetailCarousel(propId, cur + delta);
 }
 
 function selectViewingSlot(type, val, pillEl) {
