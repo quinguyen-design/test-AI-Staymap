@@ -6828,3 +6828,14 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     ) !important;
   transition: none !important;
 }
+
+
+/* Pure White Background for .sv1-card-3d (Keep Sunlight Shimmer on 3D Cards) */
+.sv1-card-3d {
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) border-box !important;
+}
+.sv1-3d-orbit-stage::before {
+  display: none !important;
+}
