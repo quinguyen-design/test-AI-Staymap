@@ -2418,14 +2418,11 @@ function updateSv1LeftAndControlsOnly() {
           <i class="fa-solid fa-map-location-dot"></i> Định vị trên bản đồ
         </button>
       </div>
+      <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
+        <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
+        <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
+      </button>
     `;
-  }
-
-  const phoneBtn = document.getElementById("sv1ActivePhoneBtn");
-  if (phoneBtn) {
-    phoneBtn.setAttribute("onclick", `revealSv1Phone(this, '${slide.phone}')`);
-    const span = phoneBtn.querySelector(".phone-text");
-    if (span) span.textContent = `${slide.phoneMasked} • Bấm hiện số`;
   }
 
   const thumbsRow = document.getElementById("sv1ThumbsRow");
@@ -2500,18 +2497,19 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Lật cánh cửa xoay 3D quanh trụ (từ -82° dựng nghiêng bên dưới-phải -> lật mở phẳng 0° ở giữa -> lật khép +82° lên trên-trái)
-        const arcAngle = slotDiff * 76; // degrees
+        // Trục trụ lồi (Convex Cylinder) xoay từ dưới lên trên:
+        // - Mặt hình luôn hướng ra ngoài (slotDiff > 0 ở dưới-phải có rotY > 0; slotDiff < 0 ở trên-trái có rotY < 0 để mép ngoài cong ôm vô trong trụ)
+        // - Mặt hình có độ nghiêng nhẹ hướng lên phía trên 10 độ (rotX = +10deg)
+        const arcAngle = slotDiff * 68; // degrees quanh trụ
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        // Góc lật mặt thẻ mạnh (-82° -> 0° -> +82°) kết hợp perspective 760px tạo hiệu ứng lật hình thang 3D như video mẫu
-        const rotY = -slotDiff * 78 + SV1_CYLINDER.mouseX * 6;
-        const rotX = slotDiff * 6 + SV1_CYLINDER.mouseY * -5;
-        const rotZ = -slotDiff * 3.5;
+        const rotY = slotDiff * 54 + SV1_CYLINDER.mouseX * 5;
+        const rotX = 10 + SV1_CYLINDER.mouseY * -4;
+        const rotZ = -4;
         const scale = Math.max(0.84, 1 - absSlot * 0.1);
-        const opacity = absSlot < 0.88 ? 1 : Math.max(0, 1 - (absSlot - 0.88) * 3.2);
+        const opacity = absSlot < 0.92 ? 1 : Math.max(0, 1 - (absSlot - 0.92) * 3.2);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
@@ -2617,10 +2615,6 @@ function renderSv1Slider() {
             }).join("")}
           </div>
         </div>
-        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
-          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
-          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
-        </button>
         <div class="sv1-r-thumbs" id="sv1ThumbsRow"></div>
       </div>
     `;
