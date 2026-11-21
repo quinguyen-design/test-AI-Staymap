@@ -5965,3 +5965,76 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     transform: translate3d(26%, 8px, -90px) rotateY(-24deg) scale(0.84);
   }
 }
+
+
+/* Fix 3D Orbit Card Clickability (Z >= 0), Clean Non-Overlapping Controls & Responsive Width */
+.sv1-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+}
+.sv1-3d-orbit-stage {
+  height: 310px;
+  pointer-events: none;
+}
+.sv1-3d-orbit-card {
+  pointer-events: auto;
+  height: 275px;
+}
+.sv1-3d-orbit-card.is-center {
+  transform: translate3d(0, 0, 120px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1);
+}
+.sv1-3d-orbit-card.is-prev {
+  transform: translate3d(-44%, 6px, 0px) rotateY(32deg) scale(0.84);
+}
+.sv1-3d-orbit-card.is-next {
+  transform: translate3d(44%, 6px, 0px) rotateY(-32deg) scale(0.84);
+}
+.sv1-3d-orbit-card.is-hidden-left {
+  transform: translate3d(-78%, 12px, 0px) rotateY(48deg) scale(0.66);
+}
+.sv1-3d-orbit-card.is-hidden-right {
+  transform: translate3d(78%, 12px, 0px) rotateY(-48deg) scale(0.66);
+}
+.sv1-right .sv1-r-phone,
+.sv1-right .sv1-r-thumbs {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+.sv1-right .sv1-r-phone {
+  align-self: center;
+}
+.sv1-right .sv1-r-thumbs {
+  justify-content: center;
+}
+@media (max-width: 980px) {
+  .sv1-card-3d {
+    grid-template-columns: 1fr !important;
+  }
+  .sv1-right {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .sv1-3d-orbit-stage {
+    height: 245px;
+  }
+  .sv1-3d-orbit-card {
+    width: 78%;
+    height: 215px;
+  }
+  .sv1-3d-orbit-card.is-prev {
+    transform: translate3d(-24%, 6px, 0px) rotateY(24deg) scale(0.84);
+  }
+  .sv1-3d-orbit-card.is-next {
+    transform: translate3d(24%, 6px, 0px) rotateY(-24deg) scale(0.84);
+  }
+}
