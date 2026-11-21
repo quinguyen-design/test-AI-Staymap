@@ -2368,177 +2368,81 @@ function executeMegaSearch() {
 // ==========================================================================
 // 3. 3D LUXURY "BANNER ĐẶC QUYỀN" (.sv1) SLIDER
 // ==========================================================================
-function getSv1OrbitClass(idx, activeIdx, total) {
-  if (total <= 1) return "is-center";
-  let diff = idx - activeIdx;
-  if (diff > total / 2) diff -= total;
-  if (diff < -total / 2) diff += total;
-  if (diff === 0) return "is-center";
-  if (diff === -1) return "is-prev";
-  if (diff === 1) return "is-next";
-  return diff < 0 ? "is-hidden-left" : "is-hidden-right";
+const SV1_CYLINDER = {
+  angle: 0,
+  targetAngle: null,
+  paused: false,
+  dragging: false,
+  dragMoved: false,
+  lastX: 0,
+  rafId: null
+};
+
+function getSv1CylinderRadius() {
+  return window.innerWidth <= 980 ? 255 : 355;
 }
 
-function bindSv1OrbitInteractions(stage) {
-  if (!stage || stage.dataset.orbitBound === "1") return;
-  stage.dataset.orbitBound = "1";
-  let dragStartX = null;
-
-  stage.addEventListener("mousemove", (e) => {
-    const centerCard = stage.querySelector(".sv1-3d-orbit-card.is-center");
-    if (!centerCard) return;
-    const rect = centerCard.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    const ry = ((x - 0.5) * 14).toFixed(2);
-    const rx = ((0.5 - y) * 10).toFixed(2);
-    centerCard.style.setProperty("--rx", `${rx}deg`);
-    centerCard.style.setProperty("--ry", `${ry}deg`);
-    centerCard.style.setProperty("--gx", `${Math.round(x * 100)}%`);
-    centerCard.style.setProperty("--gy", `${Math.round(y * 100)}%`);
-  });
-
-  stage.addEventListener("mouseleave", () => {
-    const centerCard = stage.querySelector(".sv1-3d-orbit-card.is-center");
-    if (!centerCard) return;
-    centerCard.style.setProperty("--rx", "0deg");
-    centerCard.style.setProperty("--ry", "0deg");
-  });
-
-  stage.addEventListener("pointerdown", (e) => {
-    dragStartX = e.clientX;
-  });
-  stage.addEventListener("pointerup", (e) => {
-    if (dragStartX === null) return;
-    const dx = e.clientX - dragStartX;
-    dragStartX = null;
-    if (Math.abs(dx) > 42) {
-      switchSv1Slide(dx < 0 ? 1 : -1);
-    }
-  });
-}
-
-function handleSv1OrbitCardClick(idx, propId) {
-  if (idx === STATE.sv1Index) {
-    openPropertyDetailView(propId);
-  } else {
-    switchSv1Slide(idx, true);
-  }
-}
-
-function renderSv1Slider() {
+function updateSv1LeftAndControlsOnly() {
   const slide = VIP_EXCLUSIVE_SLIDES[STATE.sv1Index];
   const container = document.getElementById("sv1CardContainer");
   if (!container || !slide) return;
 
-  const mainPhoto = slide.photos[STATE.sv1ThumbIndex] || slide.photos[0];
-  let leftEl = container.querySelector(".sv1-left");
-  let rightEl = container.querySelector(".sv1-right");
-
-  const leftHtml = `
-    <div class="sv1-verified-row">
-      <span class="lc-vip-tag tag-dacquyen" style="position:static;padding:4px 11px;font-size:11px;">✦ ĐẶC QUYỀN</span>
-      <span class="sv1-badge-verified"><i class="fa-solid fa-shield-check"></i> ĐÃ XÁC MINH THỰC TẾ</span>
-    </div>
-    <div class="sv1-loc">
-      <i class="fa-solid fa-location-dot"></i>
-      <span>${slide.location}</span>
-    </div>
-    <div class="sv1-price tabular-nums">
-      ${slide.price} <span>${slide.unit}</span>
-    </div>
-    <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-title">
-      ${slide.title}
-    </a>
-    <p class="sv1-desc">${slide.desc}</p>
-    <div class="sv1-specs tabular-nums">
-      <span class="sv1-spec-pill"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
-      <span class="sv1-spec-pill"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
-      <span class="sv1-spec-pill"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
-      <span class="sv1-spec-pill"><i class="fa-solid fa-bolt"></i> Điện ${slide.elec}</span>
-    </div>
-    <div class="sv1-cta-row">
-      <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-btn-detail">
-        Xem chi tiết đặc quyền <i class="fa-solid fa-arrow-right"></i>
-      </a>
-      <button type="button" class="sv1-btn-map-focus" onclick="focusPropertyOnHeroMap(${slide.id})">
-        <i class="fa-solid fa-map-location-dot"></i> Định vị trên bản đồ
-      </button>
-    </div>
-  `;
-
-  const thumbsHtml = slide.photos
-    .map(
-      (imgUrl, idx) => `
-      <div class="sv1-r-thumb ${idx === STATE.sv1ThumbIndex ? "active" : ""}" onclick="switchSv1Thumb(${idx})">
-        <img src="${imgUrl}" alt="Thumb ${idx + 1}" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&auto=format&fit=crop&q=80'">
+  const leftEl = container.querySelector(".sv1-left");
+  if (leftEl) {
+    leftEl.innerHTML = `
+      <div class="sv1-verified-row">
+        <span class="lc-vip-tag tag-dacquyen" style="position:static;padding:4px 11px;font-size:11px;">✦ ĐẶC QUYỀN</span>
+        <span class="sv1-badge-verified"><i class="fa-solid fa-shield-check"></i> ĐÃ XÁC MINH THỰC TẾ</span>
       </div>
-    `
-    )
-    .join("");
-
-  const total = VIP_EXCLUSIVE_SLIDES.length;
-  const existingCards = rightEl ? rightEl.querySelectorAll(".sv1-3d-orbit-card") : [];
-
-  // Lần đầu hoặc khi số lượng slide thay đổi: dựng stage 3D bền vững để giữ mượt transition xoay 3D
-  if (!leftEl || !rightEl || existingCards.length !== total) {
-    container.innerHTML = `
-      <div class="sv1-left">${leftHtml}</div>
-      <div class="sv1-right">
-        <div class="sv1-3d-orbit-stage" id="sv1OrbitStage">
-          ${VIP_EXCLUSIVE_SLIDES.map((s, idx) => {
-            const cls = getSv1OrbitClass(idx, STATE.sv1Index, total);
-            const photo = idx === STATE.sv1Index ? mainPhoto : s.photos[0];
-            return `
-              <div class="sv1-3d-orbit-card ${cls}" data-orbit-idx="${idx}" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
-                <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
-                <img class="sv1-orbit-photo" src="${photo}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
-                <div class="sv1-3d-glare"></div>
-                <div class="sv1-orbit-overlay">
-                  <div style="min-width:0;">
-                    <div class="sv1-orbit-price">${s.price} ${s.unit}</div>
-                    <div class="sv1-orbit-title">${s.title}</div>
-                  </div>
-                  <span style="font-size:11px;font-weight:800;color:#ffd700;white-space:nowrap;">Xem <i class="fa-solid fa-arrow-right"></i></span>
-                </div>
-              </div>
-            `;
-          }).join("")}
-        </div>
-        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
-          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
-          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
+      <div class="sv1-loc">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>${slide.location}</span>
+      </div>
+      <div class="sv1-price tabular-nums">
+        ${slide.price} <span>${slide.unit}</span>
+      </div>
+      <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-title">
+        ${slide.title}
+      </a>
+      <p class="sv1-desc">${slide.desc}</p>
+      <div class="sv1-specs tabular-nums">
+        <span class="sv1-spec-pill"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
+        <span class="sv1-spec-pill"><i class="fa-solid fa-bolt"></i> Điện ${slide.elec}</span>
+      </div>
+      <div class="sv1-cta-row">
+        <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-btn-detail">
+          Xem chi tiết đặc quyền <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <button type="button" class="sv1-btn-map-focus" onclick="focusPropertyOnHeroMap(${slide.id})">
+          <i class="fa-solid fa-map-location-dot"></i> Định vị trên bản đồ
         </button>
-        <div class="sv1-r-thumbs" id="sv1ThumbsRow">${thumbsHtml}</div>
       </div>
     `;
-    bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
-  } else {
-    // Cập nhật class 3D tại chỗ để các thẻ xoay mượt trong không gian 3D
-    leftEl.innerHTML = leftHtml;
-    existingCards.forEach((cardEl, idx) => {
-      const cls = getSv1OrbitClass(idx, STATE.sv1Index, total);
-      cardEl.className = `sv1-3d-orbit-card ${cls}`;
-      cardEl.style.setProperty("--rx", "0deg");
-      cardEl.style.setProperty("--ry", "0deg");
-      const imgEl = cardEl.querySelector("img.sv1-orbit-photo");
-      if (imgEl && idx === STATE.sv1Index) {
-        imgEl.src = mainPhoto;
-      } else if (imgEl) {
-        imgEl.src = VIP_EXCLUSIVE_SLIDES[idx].photos[0];
-      }
-    });
-    const phoneBtn = document.getElementById("sv1ActivePhoneBtn");
-    if (phoneBtn) {
-      phoneBtn.setAttribute("onclick", `revealSv1Phone(this, '${slide.phone}')`);
-      const span = phoneBtn.querySelector(".phone-text");
-      if (span) span.textContent = `${slide.phoneMasked} • Bấm hiện số`;
-    }
-    const thumbsRow = document.getElementById("sv1ThumbsRow");
-    if (thumbsRow) thumbsRow.innerHTML = thumbsHtml;
   }
 
-  // Update dynamic dots matching VIP_EXCLUSIVE_SLIDES.length
+  const phoneBtn = document.getElementById("sv1ActivePhoneBtn");
+  if (phoneBtn) {
+    phoneBtn.setAttribute("onclick", `revealSv1Phone(this, '${slide.phone}')`);
+    const span = phoneBtn.querySelector(".phone-text");
+    if (span) span.textContent = `${slide.phoneMasked} • Bấm hiện số`;
+  }
+
+  const thumbsRow = document.getElementById("sv1ThumbsRow");
+  if (thumbsRow) {
+    thumbsRow.innerHTML = slide.photos
+      .map(
+        (imgUrl, idx) => `
+        <div class="sv1-r-thumb ${idx === STATE.sv1ThumbIndex ? "active" : ""}" onclick="switchSv1Thumb(${idx})">
+          <img src="${imgUrl}" alt="Thumb ${idx + 1}" onerror="this.src='https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&auto=format&fit=crop&q=80'">
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  const total = VIP_EXCLUSIVE_SLIDES.length;
   const dotsWrap = document.querySelector(".sv1-dot-indicator");
   if (dotsWrap) {
     if (dotsWrap.children.length !== total) {
@@ -2553,14 +2457,167 @@ function renderSv1Slider() {
   }
 }
 
-function switchSv1Slide(dirOrIdx, isDirect = false) {
-  if (isDirect) {
-    STATE.sv1Index = dirOrIdx;
-  } else {
-    STATE.sv1Index = (STATE.sv1Index + dirOrIdx + VIP_EXCLUSIVE_SLIDES.length) % VIP_EXCLUSIVE_SLIDES.length;
+function startSv1CylinderLoop() {
+  if (SV1_CYLINDER.rafId) return;
+  const tick = () => {
+    const rotor = document.getElementById("sv1OrbitRotor");
+    const total = VIP_EXCLUSIVE_SLIDES.length;
+    if (rotor && total > 0) {
+      const step = 360 / total;
+      const radius = getSv1CylinderRadius();
+
+      if (SV1_CYLINDER.targetAngle !== null) {
+        const diff = SV1_CYLINDER.targetAngle - SV1_CYLINDER.angle;
+        if (Math.abs(diff) < 0.15) {
+          SV1_CYLINDER.angle = SV1_CYLINDER.targetAngle;
+          SV1_CYLINDER.targetAngle = null;
+        } else {
+          SV1_CYLINDER.angle += diff * 0.09;
+        }
+      } else if (!SV1_CYLINDER.paused && !SV1_CYLINDER.dragging) {
+        // Chuyển động chậm liên tục quanh trục trụ (360° mỗi ~42 giây)
+        SV1_CYLINDER.angle -= 0.14;
+      }
+
+      rotor.style.transform = `translateZ(-${radius}px) rotateY(${SV1_CYLINDER.angle.toFixed(3)}deg)`;
+
+      // Xác định thẻ đang hướng về phía trước (góc gần 0° nhất)
+      const rawIdx = Math.round(-SV1_CYLINDER.angle / step);
+      const frontIdx = ((rawIdx % total) + total) % total;
+      if (frontIdx !== STATE.sv1Index) {
+        STATE.sv1Index = frontIdx;
+        STATE.sv1ThumbIndex = 0;
+        rotor.querySelectorAll(".sv1-3d-orbit-card").forEach((c, i) => {
+          c.classList.toggle("is-center", i === frontIdx);
+        });
+        updateSv1LeftAndControlsOnly();
+      }
+    }
+    SV1_CYLINDER.rafId = requestAnimationFrame(tick);
+  };
+  SV1_CYLINDER.rafId = requestAnimationFrame(tick);
+}
+
+function bindSv1OrbitInteractions(stage) {
+  if (!stage || stage.dataset.orbitBound === "1") return;
+  stage.dataset.orbitBound = "1";
+
+  stage.addEventListener("mouseenter", () => {
+    SV1_CYLINDER.paused = true;
+  });
+  stage.addEventListener("mouseleave", () => {
+    SV1_CYLINDER.paused = false;
+    SV1_CYLINDER.dragging = false;
+  });
+
+  stage.addEventListener("pointerdown", (e) => {
+    SV1_CYLINDER.dragging = true;
+    SV1_CYLINDER.dragMoved = false;
+    SV1_CYLINDER.targetAngle = null;
+    SV1_CYLINDER.lastX = e.clientX;
+  });
+  window.addEventListener("pointermove", (e) => {
+    if (!SV1_CYLINDER.dragging) return;
+    const dx = e.clientX - SV1_CYLINDER.lastX;
+    if (Math.abs(dx) > 3) SV1_CYLINDER.dragMoved = true;
+    SV1_CYLINDER.lastX = e.clientX;
+    SV1_CYLINDER.angle += dx * 0.35;
+  });
+  window.addEventListener("pointerup", () => {
+    SV1_CYLINDER.dragging = false;
+  });
+}
+
+function handleSv1OrbitCardClick(idx, propId) {
+  if (SV1_CYLINDER.dragMoved) {
+    SV1_CYLINDER.dragMoved = false;
+    return;
   }
+  if (idx === STATE.sv1Index) {
+    openPropertyDetailView(propId);
+  } else {
+    switchSv1Slide(idx, true);
+  }
+}
+
+function renderSv1Slider() {
+  const slide = VIP_EXCLUSIVE_SLIDES[STATE.sv1Index];
+  const container = document.getElementById("sv1CardContainer");
+  if (!container || !slide) return;
+
+  const total = VIP_EXCLUSIVE_SLIDES.length;
+  const step = 360 / total;
+  const radius = getSv1CylinderRadius();
+  const existingCards = container.querySelectorAll(".sv1-3d-orbit-card");
+
+  if (!container.querySelector("#sv1OrbitRotor") || existingCards.length !== total) {
+    container.innerHTML = `
+      <div class="sv1-left"></div>
+      <div class="sv1-right">
+        <div class="sv1-3d-orbit-stage" id="sv1OrbitStage">
+          <div class="sv1-3d-orbit-rotor" id="sv1OrbitRotor">
+            ${VIP_EXCLUSIVE_SLIDES.map((s, idx) => {
+              const cardAngle = idx * step;
+              return `
+                <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" style="transform: rotateY(${cardAngle}deg) translateZ(${radius}px);" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
+                  <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
+                  <img class="sv1-orbit-photo" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
+                  <div class="sv1-3d-glare"></div>
+                  <div class="sv1-orbit-overlay">
+                    <div style="min-width:0;">
+                      <div class="sv1-orbit-price">${s.price} ${s.unit}</div>
+                      <div class="sv1-orbit-title">${s.title}</div>
+                    </div>
+                    <span style="font-size:11px;font-weight:800;color:#ffd700;white-space:nowrap;">Xem <i class="fa-solid fa-arrow-right"></i></span>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+        <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
+          <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
+          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
+        </button>
+        <div class="sv1-r-thumbs" id="sv1ThumbsRow"></div>
+      </div>
+    `;
+    bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
+    startSv1CylinderLoop();
+  }
+
+  // Cập nhật ảnh thumbnail của thẻ đang ở chính diện nếu người dùng bấm thumb
+  const activeCardImg = container.querySelector(`.sv1-3d-orbit-card[data-orbit-idx="${STATE.sv1Index}"] img.sv1-orbit-photo`);
+  if (activeCardImg) {
+    activeCardImg.src = slide.photos[STATE.sv1ThumbIndex] || slide.photos[0];
+  }
+  updateSv1LeftAndControlsOnly();
+}
+
+function switchSv1Slide(dirOrIdx, isDirect = false) {
+  const total = VIP_EXCLUSIVE_SLIDES.length;
+  const step = 360 / total;
+  const nextIdx = isDirect
+    ? ((dirOrIdx % total) + total) % total
+    : ((STATE.sv1Index + dirOrIdx) % total + total) % total;
+
+  // Tìm góc quay ngắn nhất trên trục trụ tới thẻ đích
+  const currentMod = ((-SV1_CYLINDER.angle % 360) + 360) % 360;
+  let targetMod = nextIdx * step;
+  let delta = targetMod - currentMod;
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  SV1_CYLINDER.targetAngle = SV1_CYLINDER.angle - delta;
+
+  STATE.sv1Index = nextIdx;
   STATE.sv1ThumbIndex = 0;
-  renderSv1Slider();
+  const rotor = document.getElementById("sv1OrbitRotor");
+  if (rotor) {
+    rotor.querySelectorAll(".sv1-3d-orbit-card").forEach((c, i) => {
+      c.classList.toggle("is-center", i === nextIdx);
+    });
+  }
+  updateSv1LeftAndControlsOnly();
 }
 
 function switchSv1Thumb(thumbIdx) {
