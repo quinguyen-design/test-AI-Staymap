@@ -7006,3 +7006,38 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   background: #0f172a !important;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14) !important;
 }
+
+
+/* Circular Dots (.sv1-dot) Centered Below 3D Rotating Cylinder Axis */
+.sv1-stage-topbar .sv1-dot-indicator {
+  display: none !important;
+}
+.sv1-right .sv1-dot-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 8px;
+}
+.sv1-dot {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  background: #cbd5e1 !important;
+  border: none !important;
+  cursor: pointer;
+  transition: transform 0.22s ease, background 0.22s ease, box-shadow 0.22s ease !important;
+}
+.sv1-dot:hover {
+  background: #94a3b8 !important;
+  transform: scale(1.18);
+}
+.sv1-dot.active {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #f15a22 0%, #ff9d00 100%) !important;
+  transform: scale(1.28);
+  box-shadow: 0 0 0 3px rgba(241, 90, 34, 0.22) !important;
+}

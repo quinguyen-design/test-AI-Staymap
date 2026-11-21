@@ -2455,7 +2455,7 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
   }
 
   const total = VIP_EXCLUSIVE_SLIDES.length;
-  const dotsWrap = document.querySelector(".sv1-dot-indicator");
+  const dotsWrap = document.getElementById("sv1AxisDots") || document.querySelector(".sv1-right .sv1-dot-indicator");
   if (dotsWrap) {
     if (dotsWrap.children.length !== total) {
       dotsWrap.innerHTML = VIP_EXCLUSIVE_SLIDES.map(
@@ -2721,6 +2721,7 @@ function renderSv1Slider() {
             }).join("")}
           </div>
         </div>
+        <div class="sv1-dot-indicator" id="sv1AxisDots"></div>
       </div>
     `;
     bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
