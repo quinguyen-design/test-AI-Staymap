@@ -2485,6 +2485,27 @@ function startSv1CylinderLoop() {
       const isMobile = window.innerWidth <= 980;
       const pivotX = isMobile ? 270 : 435;
 
+      // Tọa độ ánh nắng chuyển động ngẫu nhiên đa tần số (non-repeating Lissajous sunlight) trên nền Banner & sân khấu 3D
+      const t = SV1_CYLINDER.progress * Math.PI * 2;
+      const containerEl = document.getElementById("sv1CardContainer");
+      const stageEl = document.getElementById("sv1OrbitStage");
+      if (containerEl) {
+        const bgSunX = 62 + Math.sin(t * 0.73) * 18 + Math.cos(t * 1.91) * 9;
+        const bgSunY = 36 + Math.cos(t * 0.89) * 16 + Math.sin(t * 1.47) * 8;
+        const bgSun2X = 28 + Math.cos(t * 0.61) * 16 + Math.sin(t * 1.33) * 7;
+        const bgSun2Y = 68 + Math.sin(t * 0.79) * 15;
+        containerEl.style.setProperty("--bg-sun-x", `${bgSunX.toFixed(1)}%`);
+        containerEl.style.setProperty("--bg-sun-y", `${bgSunY.toFixed(1)}%`);
+        containerEl.style.setProperty("--bg-sun2-x", `${bgSun2X.toFixed(1)}%`);
+        containerEl.style.setProperty("--bg-sun2-y", `${bgSun2Y.toFixed(1)}%`);
+      }
+      if (stageEl) {
+        const stSunX = 50 + Math.sin(t * 1.13) * 24 + Math.cos(t * 2.17) * 10;
+        const stSunY = 46 + Math.cos(t * 0.97) * 22 + Math.sin(t * 1.79) * 9;
+        stageEl.style.setProperty("--stage-sun-x", `${stSunX.toFixed(1)}%`);
+        stageEl.style.setProperty("--stage-sun-y", `${stSunY.toFixed(1)}%`);
+      }
+
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
 
@@ -2515,6 +2536,16 @@ function startSv1CylinderLoop() {
         const rotX = SV1_CYLINDER.mouseY * -3;
         const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
         const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
+
+        // Vệt nắng phản quang quét ngang qua mặt kính từng thẻ theo góc xoay 3D + đốm nắng flare ngẫu nhiên
+        const sunSweep = 52 - slotDiff * 46 + Math.sin(t * 1.37 + i * 2.1) * 14 + SV1_CYLINDER.mouseX * 28;
+        const flareX = 38 + Math.sin(t * 1.19 + i * 1.7) * 28 - slotDiff * 18;
+        const flareY = 26 + Math.cos(t * 1.43 + i * 2.3) * 18;
+        const glareAlpha = Math.max(0.28, 0.88 - absSlot * 0.35 + Math.sin(t * 1.9 + i) * 0.12);
+        c.style.setProperty("--sun-sweep", `${sunSweep.toFixed(1)}%`);
+        c.style.setProperty("--flare-x", `${flareX.toFixed(1)}%`);
+        c.style.setProperty("--flare-y", `${flareY.toFixed(1)}%`);
+        c.style.setProperty("--glare-alpha", glareAlpha.toFixed(2));
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
