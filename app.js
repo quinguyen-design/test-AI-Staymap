@@ -2723,6 +2723,7 @@ function renderSv1Slider() {
                       </div>
                     </div>
                   </div>
+                  <div class="sv1-bottom-laser-streak" aria-hidden="true"></div>
                   <div class="sv1-card-thumbs">
                     ${(s.photos || []).slice(0, 3).map((pUrl, tIdx) => `
                       <button type="button" class="sv1-card-thumb ${tIdx === 0 ? "active" : ""}" onclick="switchSv1CardPhoto(event, ${idx}, ${tIdx}, this)">
