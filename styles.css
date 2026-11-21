@@ -6118,3 +6118,65 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     height: 205px;
   }
 }
+
+
+/* Active-Theory Style 3D Helical Pillar Carousel (Bottom-Right -> Center -> Top-Left with rotateY) */
+.sv1-3d-orbit-stage {
+  perspective: 1150px;
+  height: 400px;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  cursor: grab;
+  touch-action: pan-y;
+}
+.sv1-3d-orbit-stage:active {
+  cursor: grabbing;
+}
+.sv1-3d-orbit-rotor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sv1-3d-orbit-card {
+  position: absolute;
+  width: 390px;
+  max-width: 78%;
+  height: 248px;
+  border-radius: 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.34);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 24px 54px rgba(2, 6, 23, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.14) inset;
+  backface-visibility: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, opacity, filter;
+}
+.sv1-3d-orbit-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.04) 38%, transparent 60%);
+  pointer-events: none;
+  z-index: 3;
+}
+.sv1-3d-orbit-card.is-center {
+  border-color: #ffd700;
+  box-shadow: 0 28px 60px rgba(241, 90, 34, 0.34), 0 18px 40px rgba(2, 6, 23, 0.6), 0 0 22px rgba(255, 215, 0, 0.22);
+}
+@media (max-width: 980px) {
+  .sv1-3d-orbit-stage {
+    height: 310px;
+  }
+  .sv1-3d-orbit-card {
+    width: 300px;
+    max-width: 82%;
+    height: 195px;
+  }
+}
