@@ -2491,13 +2491,13 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Bỏ góc nghiêng cố định (rotX = 0, rotZ = 0), giữ thẻ thẳng đứng sạch sẽ khi xoay quanh trụ
-        const arcAngle = slotDiff * 68; // degrees quanh trụ
+        // Mặt hình luôn hướng ra bên ngoài quanh mặt lồi của trụ (slotDiff > 0 ở dưới-phải -> rotY > 0; slotDiff < 0 ở trên-trái -> rotY < 0), không nghiêng rotX/rotZ
+        const arcAngle = slotDiff * 66; // degrees quanh trụ
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = -slotDiff * 52 + SV1_CYLINDER.mouseX * 4;
+        const rotY = slotDiff * 44 + SV1_CYLINDER.mouseX * 4;
         const rotX = SV1_CYLINDER.mouseY * -3;
         const scale = Math.max(0.84, 1 - absSlot * 0.1);
         const opacity = absSlot < 0.92 ? 1 : Math.max(0, 1 - (absSlot - 0.92) * 3.2);
