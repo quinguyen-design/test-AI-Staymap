@@ -6459,3 +6459,45 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     transform: translateZ(-6px);
   }
 }
+
+
+/* Fix 3D Z-Buffer Plane Slicing (transform-style: flat on rotor + per-card perspective) & Zero-Overlap 4.5 Cards */
+.sv1-3d-orbit-stage {
+  perspective: none !important;
+  height: 510px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+}
+.sv1-3d-orbit-rotor {
+  transform-style: flat !important;
+}
+.sv1-3d-orbit-card {
+  width: 300px;
+  max-width: 48%;
+  height: 192px;
+  transform-style: preserve-3d !important;
+}
+.sv1-orbit-overlay {
+  padding: 16px 172px 10px 12px !important;
+}
+.sv1-card-thumbs {
+  bottom: -14px;
+  right: 10px;
+  gap: 5px;
+}
+.sv1-card-thumb {
+  width: 50px;
+  height: 36px;
+  border-radius: 8px;
+}
+@media (max-width: 980px) {
+  .sv1-3d-orbit-stage {
+    height: 380px;
+  }
+  .sv1-3d-orbit-card {
+    width: 220px;
+    max-width: 48%;
+    height: 145px;
+  }
+}

@@ -2475,9 +2475,7 @@ function startSv1CylinderLoop() {
       }
 
       const isMobile = window.innerWidth <= 980;
-      const pivotX = isMobile ? 225 : 375;
-      const depthZ = isMobile ? 195 : 300;
-      const verticalPitch = isMobile ? 54 : 76;
+      const pivotX = isMobile ? 255 : 415;
 
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
@@ -2489,8 +2487,8 @@ function startSv1CylinderLoop() {
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        // Hiển thị ~4.5 thẻ trên vòng trụ (slotDiff từ -2.25 đến +2.25); bỏ qua cập nhật DOM cho các thẻ mặt sau để nhẹ CPU/GPU
-        if (absSlot > 2.28) {
+        // Hiển thị ~4.5 thẻ trên vòng trụ (slotDiff từ -2.25 đến +2.25); bỏ qua cập nhật DOM cho các thẻ mặt sau
+        if (absSlot > 2.25) {
           if (!c.classList.contains("is-back")) {
             c.style.opacity = "0";
             c.style.pointerEvents = "none";
@@ -2500,23 +2498,24 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Mặt hình luôn hướng ra ngoài quanh trụ lồi (~4.5 thẻ trải dọc từ dưới-phải lên trên-trái)
-        const arcAngle = slotDiff * 38; // degrees quanh trụ (±2.25 * 38° = ±85.5°)
+        // Quỹ đạo đường cong không chồng lấn (MAX_OVERLAP = 0 trên toàn bộ 4.5 thẻ) + per-card perspective chống lỗi cắt mặt phẳng 3D
+        const arcAngle = slotDiff * 36;
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
-        const tz = (Math.cos(rad) - 1) * depthZ;
-        const ty = slotDiff * verticalPitch;
-        const rotY = slotDiff * 35 + SV1_CYLINDER.mouseX * 4;
+        const ty = isMobile
+          ? slotDiff * 76 + Math.sign(slotDiff) * Math.pow(absSlot, 1.65) * 28
+          : slotDiff * 104 + Math.sign(slotDiff) * Math.pow(absSlot, 1.65) * 42;
+        const rotY = slotDiff * 36 + SV1_CYLINDER.mouseX * 4;
         const rotX = SV1_CYLINDER.mouseY * -3;
-        const scale = Math.max(0.72, 1 - absSlot * 0.11);
-        const opacity = absSlot < 1.85 ? Math.max(0.42, 1 - absSlot * 0.22) : Math.max(0, (2.28 - absSlot) * 1.35);
+        const scale = Math.max(0.56, 1.06 - absSlot * 0.23);
+        const opacity = absSlot < 1.85 ? Math.max(0.48, 1 - absSlot * 0.2) : Math.max(0, (2.25 - absSlot) * 1.4);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
         c.style.opacity = opacity.toFixed(3);
         c.style.pointerEvents = opacity > 0.25 ? "auto" : "none";
         c.style.zIndex = String(Math.round(100 - absSlot * 30));
-        c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        c.style.transform = `perspective(920px) translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       });
 
       if (frontIdx !== STATE.sv1Index) {
