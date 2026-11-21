@@ -2491,15 +2491,14 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Đảo ngược góc nghiêng theo đúng yêu cầu: rotY = -slotDiff * 56, rotX = -10, rotZ = +4
+        // Bỏ góc nghiêng cố định (rotX = 0, rotZ = 0), giữ thẻ thẳng đứng sạch sẽ khi xoay quanh trụ
         const arcAngle = slotDiff * 68; // degrees quanh trụ
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = -slotDiff * 56 + SV1_CYLINDER.mouseX * 5;
-        const rotX = -10 + SV1_CYLINDER.mouseY * -4;
-        const rotZ = 4;
+        const rotY = -slotDiff * 52 + SV1_CYLINDER.mouseX * 4;
+        const rotX = SV1_CYLINDER.mouseY * -3;
         const scale = Math.max(0.84, 1 - absSlot * 0.1);
         const opacity = absSlot < 0.92 ? 1 : Math.max(0, 1 - (absSlot - 0.92) * 3.2);
 
@@ -2508,7 +2507,7 @@ function startSv1CylinderLoop() {
         c.style.opacity = opacity.toFixed(3);
         c.style.pointerEvents = opacity > 0.25 ? "auto" : "none";
         c.style.zIndex = String(Math.round(100 - absSlot * 45));
-        c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       });
 
       if (frontIdx !== STATE.sv1Index) {
