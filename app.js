@@ -3124,6 +3124,7 @@ function openPropertyDetailView(propId) {
               </div>` : ""}
             </div>
           </div>` : ""}
+          </div>
         </div>
 
         <!-- Right Sticky Contact & Booking Sidebar -->
