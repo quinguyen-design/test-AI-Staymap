@@ -6963,3 +6963,9 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .sv1-card-3d.is-slide-switching .sv1-3d-orbit-card.is-center .sv1-orbit-frame {
   animation: sv1NeonLaserBurst 0.65s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
+
+
+/* Remove Central Axis Laser Line (.sv1-3d-orbit-stage::after) */
+.sv1-3d-orbit-stage::after {
+  display: none !important;
+}
