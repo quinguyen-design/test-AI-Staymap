@@ -2452,7 +2452,7 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
         </a>
         <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
           <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
-          <span class="phone-text">${slide.phoneMasked} • Bấm hiện số</span>
+          <span class="phone-text">${STATE.auth?.isLoggedIn ? slide.phone : `${slide.phoneMasked} • Bấm hiện số`}</span>
         </button>
       </div>
     `;
@@ -4348,6 +4348,9 @@ function updateAuthUI() {
   if (mBadge) mBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${verifiedText}`;
   if (mMeta && STATE.auth.identity) {
     mMeta.textContent = `Tài khoản: ${STATE.auth.identity} • ${isAdmin ? "Quản trị viên" : "Hạng Vàng"}`;
+  }
+  if (typeof updateSv1LeftAndControlsOnly === "function") {
+    updateSv1LeftAndControlsOnly();
   }
 }
 
