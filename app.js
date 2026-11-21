@@ -2537,15 +2537,15 @@ function startSv1CylinderLoop() {
         const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
         const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
 
-        // Vệt nắng phản quang quét ngang qua mặt kính từng thẻ theo góc xoay 3D + đốm nắng flare ngẫu nhiên
-        const sunSweep = 52 - slotDiff * 46 + Math.sin(t * 1.37 + i * 2.1) * 14 + SV1_CYLINDER.mouseX * 28;
-        const flareX = 38 + Math.sin(t * 1.19 + i * 1.7) * 28 - slotDiff * 18;
+        // Tia Laser chạy quanh viền (--laser-angle) & tia Laser quét sắc nét ngang mặt thẻ (--laser-scan) khi thẻ xuất hiện/xoay trên trục
+        const laserAngle = ((SV1_CYLINDER.progress * 420 + i * 110) % 360 + 360) % 360;
+        const laserScan = 50 - slotDiff * 58 + Math.sin(t * 1.6 + i * 1.9) * 16 + SV1_CYLINDER.mouseX * 32;
+        const flareX = 50 - slotDiff * 30 + Math.sin(t * 1.19 + i * 1.7) * 22;
         const flareY = 26 + Math.cos(t * 1.43 + i * 2.3) * 18;
-        const glareAlpha = Math.max(0.28, 0.88 - absSlot * 0.35 + Math.sin(t * 1.9 + i) * 0.12);
-        c.style.setProperty("--sun-sweep", `${sunSweep.toFixed(1)}%`);
+        c.style.setProperty("--laser-angle", `${laserAngle.toFixed(1)}deg`);
+        c.style.setProperty("--laser-scan", `${laserScan.toFixed(1)}%`);
         c.style.setProperty("--flare-x", `${flareX.toFixed(1)}%`);
         c.style.setProperty("--flare-y", `${flareY.toFixed(1)}%`);
-        c.style.setProperty("--glare-alpha", glareAlpha.toFixed(2));
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);

@@ -6850,3 +6850,116 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   position: relative;
   top: -1px;
 }
+
+
+/* Neon & Laser Light System on 3D Rotating Axis & VIP Cards */
+/* 1. Tia trục Laser phát sáng dọc tâm trục xoay 3D */
+.sv1-3d-orbit-stage::after {
+  content: "";
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%) rotate(-32deg);
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(241, 90, 34, 0.25) 18%,
+    #ff6a00 45%,
+    #ffffff 50%,
+    #ff3d00 55%,
+    rgba(241, 90, 34, 0.25) 82%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px #ff6a00, 0 0 22px rgba(241, 90, 34, 0.65);
+  opacity: 0.72;
+}
+
+/* 2. Viền Neon & Tia Laser chạy vòng quanh khung thẻ (Conic Laser Beam) */
+.sv1-3d-orbit-card .sv1-orbit-frame {
+  border: 2.5px solid transparent !important;
+  background:
+    linear-gradient(#0f172a, #0f172a) padding-box,
+    conic-gradient(
+      from var(--laser-angle, 0deg),
+      rgba(241, 90, 34, 0.22) 0deg,
+      rgba(255, 122, 0, 0.35) 220deg,
+      #ff5500 305deg,
+      #ffffff 346deg,
+      #ff9d00 356deg,
+      rgba(241, 90, 34, 0.22) 360deg
+    ) border-box !important;
+  box-shadow:
+    0 0 12px rgba(241, 90, 34, 0.32),
+    0 8px 18px rgba(15, 23, 42, 0.14) !important;
+}
+
+.sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  border: 3px solid transparent !important;
+  background:
+    linear-gradient(#0f172a, #0f172a) padding-box,
+    conic-gradient(
+      from var(--laser-angle, 0deg),
+      rgba(241, 90, 34, 0.35) 0deg,
+      #ff5500 120deg,
+      #ffffff 175deg,
+      #ff7a00 190deg,
+      rgba(241, 90, 34, 0.35) 300deg,
+      #ff3d00 336deg,
+      #ffffff 354deg,
+      #ff9d00 360deg
+    ) border-box !important;
+  box-shadow:
+    0 0 16px rgba(255, 106, 0, 0.65),
+    0 0 34px rgba(241, 90, 34, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.45) inset !important;
+}
+
+/* Đế dày 3D phát sáng Neon Cam-Đỏ */
+.sv1-3d-orbit-card::before {
+  background: linear-gradient(135deg, #ff3d00 0%, #ff9d00 48%, #ffffff 50%, #f15a22 54%, #c2410c 100%) !important;
+  box-shadow: 0 0 14px rgba(255, 94, 0, 0.45) !important;
+}
+
+/* 3. Tia Laser quét sắc nét ngang qua mặt thẻ khi thẻ xuất hiện & xoay trên trục */
+.sv1-orbit-frame .sv1-3d-glare {
+  opacity: 0.92 !important;
+  mix-blend-mode: screen;
+  background:
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent calc(var(--laser-scan, 50%) - 11%),
+      rgba(255, 85, 0, 0.22) calc(var(--laser-scan, 50%) - 3.5%),
+      rgba(255, 140, 0, 0.85) calc(var(--laser-scan, 50%) - 0.8%),
+      #ffffff var(--laser-scan, 50%),
+      rgba(255, 61, 0, 0.88) calc(var(--laser-scan, 50%) + 0.8%),
+      rgba(241, 90, 34, 0.2) calc(var(--laser-scan, 50%) + 3.8%),
+      transparent calc(var(--laser-scan, 50%) + 12%),
+      transparent 100%
+    ),
+    radial-gradient(
+      circle at var(--flare-x, 50%) var(--flare-y, 24%),
+      rgba(255, 122, 0, 0.36) 0%,
+      transparent 48%
+    ) !important;
+}
+
+@keyframes sv1NeonLaserBurst {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 106, 0, 0.85), 0 0 28px rgba(255, 61, 0, 0.75);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 106, 0, 0), 0 0 42px rgba(255, 145, 0, 0.85);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 106, 0, 0), 0 0 16px rgba(255, 106, 0, 0.65);
+  }
+}
+
+.sv1-card-3d.is-slide-switching .sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  animation: sv1NeonLaserBurst 0.65s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
