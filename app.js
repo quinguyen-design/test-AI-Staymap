@@ -2466,6 +2466,20 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
         dot.classList.toggle("active", idx === STATE.sv1Index);
       });
     }
+    const phoneEl = document.getElementById("sv1ActivePhoneBtn");
+    const rightEl = container.querySelector(".sv1-right");
+    if (phoneEl && rightEl && window.innerWidth > 980) {
+      const pRect = phoneEl.getBoundingClientRect();
+      const rRect = rightEl.getBoundingClientRect();
+      if (pRect.height > 0 && rRect.height > 0) {
+        const targetTop = pRect.top - rRect.top + pRect.height / 2 - 5;
+        dotsWrap.style.top = `${Math.round(targetTop)}px`;
+        dotsWrap.style.bottom = "auto";
+      }
+    } else {
+      dotsWrap.style.top = "";
+      dotsWrap.style.bottom = "";
+    }
   }
 }
 

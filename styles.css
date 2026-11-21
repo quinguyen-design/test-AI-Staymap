@@ -7041,3 +7041,21 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   transform: scale(1.28);
   box-shadow: 0 0 0 3px rgba(241, 90, 34, 0.22) !important;
 }
+
+
+/* Position 10 Circular Dots on Left of .sv1-right, Horizontally Level with Phone Button */
+.sv1-right #sv1AxisDots {
+  position: absolute;
+  left: 12px;
+  bottom: 42px;
+  margin-top: 0 !important;
+  justify-content: flex-start;
+  z-index: 12;
+}
+@media (max-width: 980px) {
+  .sv1-right #sv1AxisDots {
+    position: static;
+    justify-content: center;
+    margin-top: 8px !important;
+  }
+}
