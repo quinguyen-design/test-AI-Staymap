@@ -6969,29 +6969,3 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .sv1-3d-orbit-stage::after {
   display: none !important;
 }
-
-
-/* Randomized 3-Second Laser Scan Across Each Card (Fades Out Completely After 3s) */
-.sv1-orbit-frame .sv1-3d-glare {
-  opacity: var(--laser-opacity, 0) !important;
-  mix-blend-mode: screen;
-  background:
-    linear-gradient(
-      var(--laser-deg, 118deg),
-      transparent 0%,
-      transparent calc(var(--laser-scan, -30%) - 11%),
-      rgba(255, 85, 0, 0.24) calc(var(--laser-scan, -30%) - 3.2%),
-      rgba(255, 145, 0, 0.88) calc(var(--laser-scan, -30%) - 0.8%),
-      #ffffff var(--laser-scan, -30%),
-      rgba(255, 61, 0, 0.9) calc(var(--laser-scan, -30%) + 0.8%),
-      rgba(241, 90, 34, 0.22) calc(var(--laser-scan, -30%) + 3.5%),
-      transparent calc(var(--laser-scan, -30%) + 11%),
-      transparent 100%
-    ),
-    radial-gradient(
-      circle at var(--flare-x, 50%) var(--flare-y, 28%),
-      rgba(255, 145, 0, 0.42) 0%,
-      transparent 44%
-    ) !important;
-  transition: opacity 0.15s linear !important;
-}

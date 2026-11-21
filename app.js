@@ -2383,19 +2383,7 @@ const SV1_CYLINDER = {
   rafId: null
 };
 
-function spawnSv1RandomLaser3s() {
-  SV1_CYLINDER.laserStartMs = performance.now();
-  SV1_CYLINDER.laserDelayMs = Math.round(60 + Math.random() * 260); // xuất hiện ngẫu nhiên ngay khi vào tin
-  SV1_CYLINDER.laserDeg = Math.round(92 + Math.random() * 64); // góc quét ngẫu nhiên 92°..156°
-  SV1_CYLINDER.laserDir = Math.random() < 0.5 ? 1 : -1; // chiều quét ngẫu nhiên trái->phải hoặc phải->trái
-  SV1_CYLINDER.laserFreq = 1.15 + Math.random() * 0.75; // nhịp quét ngẫu nhiên trong 3s
-  SV1_CYLINDER.laserPhase = Math.random() * Math.PI * 2;
-  SV1_CYLINDER.flareBaseX = 22 + Math.random() * 56;
-  SV1_CYLINDER.flareBaseY = 18 + Math.random() * 52;
-}
-
 function triggerSv1BrandBorderSync() {
-  spawnSv1RandomLaser3s();
   const container = document.getElementById("sv1CardContainer");
   if (!container) return;
   container.classList.remove("is-slide-switching");
@@ -2549,33 +2537,15 @@ function startSv1CylinderLoop() {
         const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
         const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
 
-        // Tia Laser viền ngoài + Tia Laser quét ngang mặt thẻ (xuất hiện ngẫu nhiên, chạy ngẫu nhiên và kết thúc hẳn sau 3s trên mỗi tin)
+        // Tia Laser chạy quanh viền (--laser-angle) & tia Laser quét sắc nét ngang mặt thẻ (--laser-scan) khi thẻ xuất hiện/xoay trên trục
         const laserAngle = ((SV1_CYLINDER.progress * 420 + i * 110) % 360 + 360) % 360;
+        const laserScan = 50 - slotDiff * 58 + Math.sin(t * 1.6 + i * 1.9) * 16 + SV1_CYLINDER.mouseX * 32;
+        const flareX = 50 - slotDiff * 30 + Math.sin(t * 1.19 + i * 1.7) * 22;
+        const flareY = 26 + Math.cos(t * 1.43 + i * 2.3) * 18;
         c.style.setProperty("--laser-angle", `${laserAngle.toFixed(1)}deg`);
-
-        if (i === frontIdx && SV1_CYLINDER.laserStartMs) {
-          const elapsed = performance.now() - SV1_CYLINDER.laserStartMs - (SV1_CYLINDER.laserDelayMs || 0);
-          const duration = 3000; // đúng 3 giây trên mỗi tin
-          if (elapsed >= 0 && elapsed <= duration) {
-            const u = elapsed / duration; // 0 -> 1 trong 3s
-            const env = u < 0.12 ? u / 0.12 : u > 0.78 ? (1 - u) / 0.22 : 1;
-            const dir = SV1_CYLINDER.laserDir || 1;
-            const freq = SV1_CYLINDER.laserFreq || 1.4;
-            const ph = SV1_CYLINDER.laserPhase || 0;
-            const sweepRaw = 50 + dir * ((u - 0.5) * 115 + Math.sin(u * Math.PI * 2 * freq + ph) * 28);
-            const fx = (SV1_CYLINDER.flareBaseX || 50) + Math.sin(u * Math.PI * 3 + ph) * 26;
-            const fy = (SV1_CYLINDER.flareBaseY || 30) + Math.cos(u * Math.PI * 2.5 + ph) * 18;
-            c.style.setProperty("--laser-deg", `${SV1_CYLINDER.laserDeg || 116}deg`);
-            c.style.setProperty("--laser-scan", `${sweepRaw.toFixed(1)}%`);
-            c.style.setProperty("--flare-x", `${fx.toFixed(1)}%`);
-            c.style.setProperty("--flare-y", `${fy.toFixed(1)}%`);
-            c.style.setProperty("--laser-opacity", (env * 0.92).toFixed(2));
-          } else {
-            c.style.setProperty("--laser-opacity", "0");
-          }
-        } else {
-          c.style.setProperty("--laser-opacity", "0");
-        }
+        c.style.setProperty("--laser-scan", `${laserScan.toFixed(1)}%`);
+        c.style.setProperty("--flare-x", `${flareX.toFixed(1)}%`);
+        c.style.setProperty("--flare-y", `${flareY.toFixed(1)}%`);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
@@ -2724,7 +2694,6 @@ function renderSv1Slider() {
       </div>
     `;
     bindSv1OrbitInteractions(document.getElementById("sv1OrbitStage"));
-    spawnSv1RandomLaser3s();
     startSv1CylinderLoop();
   }
 
