@@ -2464,35 +2464,35 @@ function startSv1CylinderLoop() {
     if (rotor && total > 0) {
       if (SV1_CYLINDER.targetProgress !== null) {
         const diff = SV1_CYLINDER.targetProgress - SV1_CYLINDER.progress;
-        if (Math.abs(diff) < 0.004) {
+        if (Math.abs(diff) < 0.003) {
           SV1_CYLINDER.progress = SV1_CYLINDER.targetProgress;
           SV1_CYLINDER.targetProgress = null;
         } else {
-          SV1_CYLINDER.progress += diff * 0.075;
+          SV1_CYLINDER.progress += diff * 0.085;
         }
       } else if (!SV1_CYLINDER.paused && !SV1_CYLINDER.dragging) {
-        // Chuyển động chậm mượt quanh trụ xoắn ốc (từ dưới-phải xoay vòng qua chính giữa lên trên-trái)
-        SV1_CYLINDER.progress += 0.0032;
+        // Nhịp lật 3D giống video mẫu: khi thẻ vào giữa (gần số nguyên) sẽ lướt chậm lại để ngắm hình lớn, khi chuyển giao giữa 2 thẻ sẽ lật mở dứt khoát
+        const frac = SV1_CYLINDER.progress - Math.round(SV1_CYLINDER.progress);
+        const speedBoost = 0.0018 + Math.min(0.25, Math.abs(frac)) * 0.022;
+        SV1_CYLINDER.progress += speedBoost;
       }
 
       const isMobile = window.innerWidth <= 980;
-      const radiusX = isMobile ? 250 : 395;
-      const radiusZ = isMobile ? 180 : 260;
-      const verticalPitch = isMobile ? 82 : 112;
-      const stepDeg = 64; // góc tách rộng để các thẻ xoay vòng có khoảng cách rõ ràng, tuyệt đối không đè lên nhau
+      const pivotX = isMobile ? 235 : 370;
+      const depthZ = isMobile ? 210 : 320;
+      const verticalPitch = isMobile ? 75 : 105;
 
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
 
       const cards = rotor.querySelectorAll(".sv1-3d-orbit-card");
       cards.forEach((c, i) => {
-        // Khoảng cách chỉ số ngắn nhất từ thẻ i tới vị trí hiện tại
         let slotDiff = i - normProg;
         if (slotDiff > total / 2) slotDiff -= total;
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        if (absSlot > 1.38) {
+        if (absSlot > 1.18) {
           c.style.opacity = "0";
           c.style.pointerEvents = "none";
           c.classList.add("is-back");
@@ -2500,23 +2500,25 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Quỹ đạo trụ xoắn ốc tách rời: từ Dưới-Phải -> Giữa -> Trên-Trái, luôn có khoảng hở giữa các thẻ
-        const angleDeg = slotDiff * stepDeg;
-        const rad = (angleDeg * Math.PI) / 180;
-        const tx = Math.sin(rad) * radiusX;
-        const tz = (Math.cos(rad) - 1) * radiusZ;
+        // Lật cánh cửa xoay 3D quanh trụ (từ -82° dựng nghiêng bên dưới-phải -> lật mở phẳng 0° ở giữa -> lật khép +82° lên trên-trái)
+        const arcAngle = slotDiff * 76; // degrees
+        const rad = (arcAngle * Math.PI) / 180;
+        const tx = Math.sin(rad) * pivotX;
+        const tz = (Math.cos(rad) - 1) * depthZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = -angleDeg * 0.72 + SV1_CYLINDER.mouseX * 5;
-        const rotX = SV1_CYLINDER.mouseY * -4;
-        const scale = Math.max(0.82, 1 - absSlot * 0.12);
-        const opacity = absSlot < 0.95 ? 1 : Math.max(0, 1 - (absSlot - 0.95) * 2.3);
+        // Góc lật mặt thẻ mạnh (-82° -> 0° -> +82°) kết hợp perspective 760px tạo hiệu ứng lật hình thang 3D như video mẫu
+        const rotY = -slotDiff * 78 + SV1_CYLINDER.mouseX * 6;
+        const rotX = slotDiff * 6 + SV1_CYLINDER.mouseY * -5;
+        const rotZ = -slotDiff * 3.5;
+        const scale = Math.max(0.84, 1 - absSlot * 0.1);
+        const opacity = absSlot < 0.88 ? 1 : Math.max(0, 1 - (absSlot - 0.88) * 3.2);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
         c.style.opacity = opacity.toFixed(3);
         c.style.pointerEvents = opacity > 0.25 ? "auto" : "none";
-        c.style.zIndex = String(Math.round(100 - absSlot * 40));
-        c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+        c.style.zIndex = String(Math.round(100 - absSlot * 45));
+        c.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, ${tz.toFixed(1)}px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
       });
 
       if (frontIdx !== STATE.sv1Index) {
