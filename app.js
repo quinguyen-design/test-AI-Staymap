@@ -2476,10 +2476,10 @@ function startSv1CylinderLoop() {
       }
 
       const isMobile = window.innerWidth <= 980;
-      const radiusX = isMobile ? 135 : 195;
-      const radiusZ = isMobile ? 160 : 220;
-      const verticalPitch = isMobile ? 74 : 98;
-      const stepDeg = 52; // mỗi thẻ cách nhau 52° trên vòng trụ để khung hình chỉ hiện ~2.5 thẻ lớn
+      const radiusX = isMobile ? 250 : 395;
+      const radiusZ = isMobile ? 180 : 260;
+      const verticalPitch = isMobile ? 82 : 112;
+      const stepDeg = 64; // góc tách rộng để các thẻ xoay vòng có khoảng cách rõ ràng, tuyệt đối không đè lên nhau
 
       const normProg = ((SV1_CYLINDER.progress % total) + total) % total;
       const frontIdx = Math.round(normProg) % total;
@@ -2492,7 +2492,7 @@ function startSv1CylinderLoop() {
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        if (absSlot > 1.75) {
+        if (absSlot > 1.38) {
           c.style.opacity = "0";
           c.style.pointerEvents = "none";
           c.classList.add("is-back");
@@ -2500,16 +2500,16 @@ function startSv1CylinderLoop() {
           return;
         }
 
-        // Góc trên trụ dọc (rotateY) + độ cao xoắn ốc (translateY: dương ở dưới-phải -> 0 ở giữa -> âm ở trên-trái)
+        // Quỹ đạo trụ xoắn ốc tách rời: từ Dưới-Phải -> Giữa -> Trên-Trái, luôn có khoảng hở giữa các thẻ
         const angleDeg = slotDiff * stepDeg;
         const rad = (angleDeg * Math.PI) / 180;
         const tx = Math.sin(rad) * radiusX;
         const tz = (Math.cos(rad) - 1) * radiusZ;
         const ty = slotDiff * verticalPitch;
-        const rotY = -angleDeg * 0.78 + SV1_CYLINDER.mouseX * 5;
+        const rotY = -angleDeg * 0.72 + SV1_CYLINDER.mouseX * 5;
         const rotX = SV1_CYLINDER.mouseY * -4;
-        const scale = Math.max(0.76, 1 - absSlot * 0.12);
-        const opacity = absSlot < 1.15 ? 1 - absSlot * 0.18 : Math.max(0, 1 - (absSlot - 1.15) * 1.6);
+        const scale = Math.max(0.82, 1 - absSlot * 0.12);
+        const opacity = absSlot < 0.95 ? 1 : Math.max(0, 1 - (absSlot - 0.95) * 2.3);
 
         c.classList.remove("is-back");
         c.classList.toggle("is-center", i === frontIdx);
