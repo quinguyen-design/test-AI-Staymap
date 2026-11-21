@@ -2638,7 +2638,7 @@ function renderSv1Slider() {
               return `
                 <div class="sv1-3d-orbit-card ${idx === STATE.sv1Index ? "is-center" : ""}" data-orbit-idx="${idx}" onclick="handleSv1OrbitCardClick(${idx}, ${s.id})">
                   <div class="sv1-orbit-frame">
-                    <span class="sv1-orbit-chip"><i class="fa-solid fa-crown" style="margin-right:4px;"></i>ĐẶC QUYỀN</span>
+                    <span class="lc-vip-tag tag-dacquyen sv1-orbit-vip-tag">✦ ĐẶC QUYỀN</span>
                     <img class="sv1-orbit-photo" decoding="async" src="${s.photos[0]}" alt="${s.title}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&auto=format&fit=crop&q=80'">
                     <div class="sv1-3d-glare"></div>
                     <div class="sv1-orbit-overlay">
