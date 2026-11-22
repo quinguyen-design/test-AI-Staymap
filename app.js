@@ -1525,7 +1525,7 @@ function updateMapPins(catFilter = "all", focusId = null, customPool = null) {
     if (catFilter === "all") return true;
     return p.category === catFilter;
   });
-  const banners = rawPool.filter((p) => p.isVipPin || p.mapTier === "banner" || p.zoneId === 1).slice(0, 20);
+  const banners = rawPool.filter((p) => p.mapTier === "banner" || p.zoneId === 1).slice(0, 20);
   const vips = rawPool.filter((p) => !banners.includes(p) && p.tier !== "basic" && p.mapTier !== "basic" && p.zoneId !== 4).slice(0, 75);
   const basics = rawPool.filter((p) => p.tier === "basic" || p.mapTier === "basic" || p.zoneId === 4).slice(0, 65);
   const list = [...basics, ...vips, ...banners];
@@ -1548,7 +1548,7 @@ function updateMapPins(catFilter = "all", focusId = null, customPool = null) {
     let pinIconHtml = "";
     let pinZOffset = 0;
 
-    if (vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1) {
+    if (vipInfo.badgeClass === "tag-dacquyen" || item.mapTier === "banner" || item.zoneId === 1) {
       pinClass = "pin-vip-banner";
       pinIconHtml = '<i class="fa-solid fa-crown" style="color:#ff9d00;font-size:10px;"></i>';
       pinZOffset = 2000;
@@ -1587,7 +1587,7 @@ function updateMapPins(catFilter = "all", focusId = null, customPool = null) {
     });
 
     const marker = L.marker([item.lat, item.lng], { icon, zIndexOffset: pinZOffset });
-    const isBanner = vipInfo.badgeClass === "tag-dacquyen" || item.isVipPin || item.mapTier === "banner" || item.zoneId === 1;
+    const isBanner = vipInfo.badgeClass === "tag-dacquyen" || item.mapTier === "banner" || item.zoneId === 1;
     const bannerLocText = isBanner
       ? [item.ward, item.city].filter(Boolean).map((s) => s.toUpperCase()).join(", ")
       : "";
@@ -1718,7 +1718,7 @@ function closeHeroMapLeftDrawer() {
 function openHeroMapLeftDrawer(item) {
   const drawer = document.getElementById("heroMapLeftDrawer");
   if (!drawer || !item) return;
-  const isBanner = item.isVipPin || item.mapTier === "banner" || item.zoneId === 1;
+  const isBanner = item.mapTier === "banner" || item.zoneId === 1;
   const photos = (item.gallery && item.gallery.length ? item.gallery : [item.image]).slice(0, 4);
   let cardHtml = buildListingCardHTML(item).replace(
     `onclick="openPropertyDetailView(${item.id})"`,
@@ -2967,7 +2967,7 @@ function toggleFav(e, propId, btnEl) {
 
 // Helper: Priority Rank for 6-tier sorting (VIP Banner -> VIP 1 -> VIP 2 -> VIP 3 -> Tin thường -> Tin miễn phí)
 function getTierPriorityRank(item) {
-  if (item.zoneId === 1 || item.mapTier === "banner" || item.isVipPin) return 1;
+  if (item.zoneId === 1 || item.mapTier === "banner") return 1;
   if (item.tier === "spotlight") return 2;
   if (item.tier === "featured") return 3;
   if (item.tier === "prime") return 4;
@@ -6976,6 +6976,7 @@ const PORTAL_DATA = {
 
   PROPERTIES.forEach((p, idx) => {
     if (p.id === 2078) p.zoneId = 1;
+    p.isVipPin = Boolean(p.zoneId === 1 || p.mapTier === "banner");
     const vip = getPropertyVipDisplay(p);
     p.badge = vip.label || "Tin Cơ Bản";
     p.badgeClass = vip.badgeClass || "";
