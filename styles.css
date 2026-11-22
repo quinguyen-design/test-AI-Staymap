@@ -7178,3 +7178,12 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   max-height: calc(13.5px * 1.58 * 3) !important;
   min-height: calc(13.5px * 1.58 * 3) !important;
 }
+
+
+/* Center Additional Thumbnail Strip (.pd-carousel-thumbs) Horizontally Under Main Photo */
+.pd-carousel-thumbs {
+  justify-content: center !important;
+}
+#propertyGalleryBackdrop .ctt-modal-dialog > div:last-child > div:last-child {
+  justify-content: center !important;
+}
