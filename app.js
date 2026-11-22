@@ -2513,7 +2513,7 @@ function startSv1CylinderLoop() {
       }
 
       const isMobile = window.innerWidth <= 980;
-      const pivotX = isMobile ? 270 : 435;
+      const pivotX = isMobile ? 275 : 475;
 
       // Tọa độ ánh nắng chuyển động ngẫu nhiên đa tần số (non-repeating Lissajous sunlight) trên nền Banner & sân khấu 3D
       const t = SV1_CYLINDER.progress * Math.PI * 2;
@@ -2561,7 +2561,7 @@ function startSv1CylinderLoop() {
         const arcAngle = Math.min(86, Math.abs(slotDiff * 54)) * Math.sign(slotDiff);
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
-        const ty = slotDiff * (isMobile ? 104 : 148);
+        const ty = slotDiff * (isMobile ? 106 : 158);
         const rotY = slotDiff * 44 + SV1_CYLINDER.mouseX * 4;
         const rotX = SV1_CYLINDER.mouseY * -3;
         const scale = Math.max(0.66, 1.07 - absSlot * 0.24);

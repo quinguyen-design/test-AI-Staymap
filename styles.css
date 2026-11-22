@@ -7094,3 +7094,72 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     flex-wrap: wrap !important;
   }
 }
+
+
+/* 1/3 Left Info (32.5%) & 2/3 Right 3D Stage (67.5%) with Larger 455x290px Cards */
+.sv1-card-3d {
+  padding: 24px 26px !important;
+  gap: 20px !important;
+}
+.sv1-left {
+  width: 32.5% !important;
+  gap: 11px !important;
+}
+.sv1-price {
+  font-size: 42px !important;
+}
+.sv1-price span {
+  font-size: 19px !important;
+}
+.sv1-title {
+  font-size: 19.5px !important;
+}
+.sv1-desc {
+  font-size: 13.5px !important;
+}
+.sv1-specs {
+  gap: 4px !important;
+}
+.sv1-specs .sv1-spec-pill {
+  padding: 5px 5px !important;
+  font-size: 10.8px !important;
+  gap: 3.5px !important;
+}
+.sv1-cta-row {
+  gap: 8px !important;
+}
+.sv1-cta-row .sv1-btn-detail {
+  padding: 11px 14px !important;
+  font-size: 12.2px !important;
+}
+.sv1-cta-row #sv1ActivePhoneBtn {
+  padding: 4px 12px 4px 5px !important;
+  font-size: 12.2px !important;
+  gap: 6px !important;
+}
+.sv1-cta-row #sv1ActivePhoneBtn .sv1-r-phone-icon {
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 12px !important;
+}
+.sv1-3d-orbit-stage {
+  height: 520px !important;
+}
+.sv1-3d-orbit-card {
+  width: 455px !important;
+  max-width: 60% !important;
+  height: 290px !important;
+}
+@media (max-width: 980px) {
+  .sv1-left {
+    width: 100% !important;
+  }
+  .sv1-3d-orbit-stage {
+    height: 380px !important;
+  }
+  .sv1-3d-orbit-card {
+    width: 295px !important;
+    max-width: 58% !important;
+    height: 192px !important;
+  }
+}
