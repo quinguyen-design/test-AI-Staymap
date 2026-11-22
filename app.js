@@ -2437,7 +2437,7 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
       <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-title">
         ${slide.title}
       </a>
-      <p class="sv1-desc">${slide.desc}</p>
+      <p class="sv1-desc">${String(slide.desc || "").replace(/\s*\n+\s*/g, " ").trim()}</p>
       <div class="sv1-specs tabular-nums">
         <span class="sv1-spec-pill" title="Diện tích"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
         <span class="sv1-spec-pill" title="Phòng ngủ"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>

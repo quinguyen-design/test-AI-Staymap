@@ -7163,3 +7163,18 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
     height: 192px !important;
   }
 }
+
+
+/* Strictly Clamp VIP Banner Description (.sv1-desc) to Exactly 3 Lines */
+.sv1-desc {
+  font-size: 13.5px !important;
+  line-height: 1.58 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-height: calc(13.5px * 1.58 * 3) !important;
+  min-height: calc(13.5px * 1.58 * 3) !important;
+}
