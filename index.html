@@ -1244,8 +1244,14 @@
                   <input type="text" inputmode="decimal" id="dOtherCost" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:var(--ctt-orange);"></i> Internet <small class="util-unit">(Phòng)</small></span></div>
-                  <input type="text" inputmode="decimal" id="dInternet" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                  <div class="post-field-label"><span><i class="fa-solid fa-wifi" style="color:var(--ctt-orange);"></i> Internet <small id="dInternetUnitLabel" class="util-unit">(Phòng)</small></span></div>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" inputmode="decimal" id="dInternet" class="post-input tabular-nums" value="" autocomplete="off" onfocus="openStudioInternetUnitList()" onclick="openStudioInternetUnitList()" onblur="closeStudioInternetUnitDelay()" oninput="onStudioInternetInput(this)">
+                    <div id="dInternetUnitList" class="ctt-combo-list">
+                      <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioInternetUnit('phong')">Phòng</button>
+                      <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioInternetUnit('nguoi')">Người</button>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-shirt" style="color:var(--ctt-orange);"></i> Giặt Sấy <small id="dLaundryUnitLabel" class="util-unit">(Người)</small></span></div>
@@ -1260,8 +1266,14 @@
                   </div>
                 </div>
                 <div>
-                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Phí Rác <small class="util-unit">(Phòng)</small></span></div>
-                  <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" oninput="sanitizeStudioNumericK(this)">
+                  <div class="post-field-label"><span><i class="fa-solid fa-trash-can" style="color:var(--ctt-orange);"></i> Phí Rác <small id="dTrashUnitLabel" class="util-unit">(Phòng)</small></span></div>
+                  <div class="ctt-combo-wrap">
+                    <input type="text" inputmode="decimal" id="dTrash" class="post-input tabular-nums" value="" autocomplete="off" onfocus="openStudioTrashUnitList()" onclick="openStudioTrashUnitList()" onblur="closeStudioTrashUnitDelay()" oninput="onStudioTrashInput(this)">
+                    <div id="dTrashUnitList" class="ctt-combo-list">
+                      <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioTrashUnit('phong')">Phòng</button>
+                      <button type="button" class="ctt-combo-item" onmousedown="event.preventDefault(); selectStudioTrashUnit('nguoi')">Người</button>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <div class="post-field-label"><span><i class="fa-solid fa-motorcycle" style="color:var(--ctt-orange);"></i> Phí Xe <small class="util-unit">(Xe / Người)</small></span></div>

@@ -5514,6 +5514,84 @@ function onStudioRoomCountBlur(kind, inputEl) {
 let STUDIO_PRICE_TIMER = null;
 let STUDIO_WATER_TIMER = null;
 let STUDIO_LAUNDRY_TIMER = null;
+let STUDIO_INTERNET_TIMER = null;
+let STUDIO_TRASH_TIMER = null;
+
+function openStudioInternetUnitList() {
+  clearTimeout(STUDIO_INTERNET_TIMER);
+  const listEl = document.getElementById("dInternetUnitList");
+  if (!listEl) return;
+  const activeUnit = STUDIO_STATE.internetUnit || "phong";
+  listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
+    const unit = idx === 0 ? "phong" : "nguoi";
+    btn.classList.toggle("is-active", activeUnit === unit);
+  });
+  listEl.classList.add("is-open");
+}
+
+function closeStudioInternetUnitDelay() {
+  clearTimeout(STUDIO_INTERNET_TIMER);
+  STUDIO_INTERNET_TIMER = setTimeout(() => {
+    document.getElementById("dInternetUnitList")?.classList.remove("is-open");
+  }, 150);
+}
+
+function selectStudioInternetUnit(unit) {
+  clearTimeout(STUDIO_INTERNET_TIMER);
+  STUDIO_STATE.internetUnit = unit;
+  const labelEl = document.getElementById("dInternetUnitLabel");
+  if (labelEl) {
+    labelEl.textContent = unit === "nguoi" ? "(Người)" : "(Phòng)";
+    labelEl.style.display = "inline";
+  }
+  document.getElementById("dInternetUnitList")?.classList.remove("is-open");
+  const inputEl = document.getElementById("dInternet");
+  if (inputEl) inputEl.focus();
+  renderStudioPreview();
+}
+
+function onStudioInternetInput(inputEl) {
+  document.getElementById("dInternetUnitList")?.classList.remove("is-open");
+  sanitizeStudioNumericK(inputEl);
+}
+
+function openStudioTrashUnitList() {
+  clearTimeout(STUDIO_TRASH_TIMER);
+  const listEl = document.getElementById("dTrashUnitList");
+  if (!listEl) return;
+  const activeUnit = STUDIO_STATE.trashUnit || "phong";
+  listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
+    const unit = idx === 0 ? "phong" : "nguoi";
+    btn.classList.toggle("is-active", activeUnit === unit);
+  });
+  listEl.classList.add("is-open");
+}
+
+function closeStudioTrashUnitDelay() {
+  clearTimeout(STUDIO_TRASH_TIMER);
+  STUDIO_TRASH_TIMER = setTimeout(() => {
+    document.getElementById("dTrashUnitList")?.classList.remove("is-open");
+  }, 150);
+}
+
+function selectStudioTrashUnit(unit) {
+  clearTimeout(STUDIO_TRASH_TIMER);
+  STUDIO_STATE.trashUnit = unit;
+  const labelEl = document.getElementById("dTrashUnitLabel");
+  if (labelEl) {
+    labelEl.textContent = unit === "nguoi" ? "(Người)" : "(Phòng)";
+    labelEl.style.display = "inline";
+  }
+  document.getElementById("dTrashUnitList")?.classList.remove("is-open");
+  const inputEl = document.getElementById("dTrash");
+  if (inputEl) inputEl.focus();
+  renderStudioPreview();
+}
+
+function onStudioTrashInput(inputEl) {
+  document.getElementById("dTrashUnitList")?.classList.remove("is-open");
+  sanitizeStudioNumericK(inputEl);
+}
 
 function openStudioPriceUnitList() {
   clearTimeout(STUDIO_PRICE_TIMER);
@@ -6001,9 +6079,9 @@ function buildStudioAiDraft() {
   const elec = formatStudioAiFee(document.getElementById("dElec")?.value || "", "kWh");
   const water = formatStudioAiFee(document.getElementById("dWater")?.value || "", "người");
   const otherCost = formatStudioAiFee(document.getElementById("dOtherCost")?.value || "", "tháng");
-  const internet = formatStudioAiFee(document.getElementById("dInternet")?.value || "", "phòng");
+  const internet = formatStudioAiFee(document.getElementById("dInternet")?.value || "", STUDIO_STATE.internetUnit === "nguoi" ? "người" : "phòng");
   const laundry = formatStudioAiFee(document.getElementById("dLaundry")?.value || "", "người");
-  const trash = formatStudioAiFee(document.getElementById("dTrash")?.value || "", "phòng");
+  const trash = formatStudioAiFee(document.getElementById("dTrash")?.value || "", STUDIO_STATE.trashUnit === "nguoi" ? "người" : "phòng");
   const parking = formatStudioAiFee(document.getElementById("dParking")?.value || "", "xe/người/tháng");
   const maxPeople = (document.getElementById("dMaxPeople")?.value || "").replace(/\D/g, "");
   const extraPerson = formatStudioAiFee(document.getElementById("dExtraPerson")?.value || "", "người/tháng");
@@ -6466,6 +6544,18 @@ function initStudioPostListing(preselectedZoneId = null) {
     laundryUnitEl.textContent = "(Người)";
     laundryUnitEl.style.display = "inline";
   }
+  STUDIO_STATE.internetUnit = "phong";
+  const internetUnitEl = document.getElementById("dInternetUnitLabel");
+  if (internetUnitEl) {
+    internetUnitEl.textContent = "(Phòng)";
+    internetUnitEl.style.display = "inline";
+  }
+  STUDIO_STATE.trashUnit = "phong";
+  const trashUnitEl = document.getElementById("dTrashUnitLabel");
+  if (trashUnitEl) {
+    trashUnitEl.textContent = "(Phòng)";
+    trashUnitEl.style.display = "inline";
+  }
   const agreeEl = document.getElementById("agreePostTerms");
   if (agreeEl) agreeEl.checked = false;
   document.querySelectorAll("#postModalBackdrop .util-chk, #postModalBackdrop .svc-chk, #chkSchool").forEach((c) => {
@@ -6638,9 +6728,9 @@ function renderStudioPreview() {
       `Điện: <strong>${elec}</strong>`,
       `Nước: <strong>${water}</strong>`,
       otherRawVal ? `CP Khác: <strong>${otherRawVal}k</strong>` : "",
-      internetVal ? `Internet: <strong>${internetVal}k/Phòng</strong>` : "",
+      internetVal ? `Internet: <strong>${internetVal}k/${STUDIO_STATE.internetUnit === "nguoi" ? "Người" : "Phòng"}</strong>` : "",
       laundryVal ? `Giặt sấy: <strong>${laundryVal}k/${laundryUnitText}</strong>` : "",
-      trashVal ? `Phí rác: <strong>${trashVal}k/Phòng</strong>` : "",
+      trashVal ? `Phí rác: <strong>${trashVal}k/${STUDIO_STATE.trashUnit === "nguoi" ? "Người" : "Phòng"}</strong>` : "",
       parkingVal ? `Phí xe: <strong>${parkingVal}k/Xe</strong>` : "",
       maxPeopleVal ? `Giới hạn: <strong>${maxPeopleVal} người</strong>` : "",
       extraPersonVal ? `Phụ thu: <strong>${extraPersonVal}k/Người</strong>` : ""
@@ -6868,9 +6958,9 @@ function publishStudioListingNow() {
     elec: elecRaw ? `${elecRaw}k/kWh` : "Nhà nước",
     water: waterRaw ? `${waterRaw}k${STUDIO_STATE.waterUnit === "m3" ? "/m³" : "/Người"}` : "Nhà nước",
     otherCost: otherRaw ? `${otherRaw}k` : "",
-    internet: internetRaw ? `${internetRaw}k` : "",
+    internet: internetRaw ? `${internetRaw}k/${STUDIO_STATE.internetUnit === "nguoi" ? "Người" : "Phòng"}` : "",
     laundry: laundryRaw ? `${laundryRaw}k/${({ nguoi: "Người", lan: "1 Lần", kg: "Kg", phong: "Phòng" }[STUDIO_STATE.laundryUnit || "nguoi"])}` : "",
-    trash: trashRaw ? `${trashRaw}k` : "",
+    trash: trashRaw ? `${trashRaw}k/${STUDIO_STATE.trashUnit === "nguoi" ? "Người" : "Phòng"}` : "",
     parking: parkingRaw ? `${parkingRaw}k` : "",
     maxPeople: document.getElementById("dMaxPeople")?.value || "",
     extraPerson: extraPersonRaw ? `${extraPersonRaw}k` : "",
