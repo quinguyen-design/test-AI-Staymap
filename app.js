@@ -2374,7 +2374,8 @@ function executeMegaSearch() {
 const SV1_CYLINDER = {
   progress: 0, // đơn vị: số thứ tự slide liên tục (0 .. total)
   targetProgress: null,
-  paused: false,
+  hovering: false,
+  cardHoverPaused: false,
   inView: true,
   observerBound: false,
   dragging: false,
@@ -2383,6 +2384,9 @@ const SV1_CYLINDER = {
   lastY: 0,
   mouseX: 0,
   mouseY: 0,
+  smoothMouseX: 0,
+  smoothMouseY: 0,
+  lastFrameMs: 0,
   rafId: null
 };
 
@@ -2402,8 +2406,9 @@ function triggerSv1BrandBorderSync() {
   const container = document.getElementById("sv1CardContainer");
   if (!container) return;
   container.classList.remove("is-slide-switching");
-  void container.offsetWidth;
-  container.classList.add("is-slide-switching");
+  requestAnimationFrame(() => {
+    container.classList.add("is-slide-switching");
+  });
   clearTimeout(SV1_CYLINDER.pulseTimer);
   SV1_CYLINDER.pulseTimer = setTimeout(() => {
     container.classList.remove("is-slide-switching");
@@ -2414,7 +2419,6 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
   const slide = VIP_EXCLUSIVE_SLIDES[STATE.sv1Index];
   const container = document.getElementById("sv1CardContainer");
   if (!container || !slide) return;
-  if (withPulse) triggerSv1BrandBorderSync();
 
   const leftEl = container.querySelector(".sv1-left");
   if (leftEl) {
@@ -2430,25 +2434,29 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
         <div class="sv1-price tabular-nums">
           ${slide.price} <span>${slide.unit}</span>
         </div>
-        <button type="button" class="sv1-btn-map-focus sv1-btn-map-inline" onclick="focusPropertyOnHeroMap(${slide.id})">
-          <i class="fa-solid fa-map-location-dot" style="color:var(--ctt-orange);"></i> Bản Đồ
-        </button>
+        <div class="sv1-utility-pills tabular-nums">
+          <span class="sv1-spec-pill sv1-equal-pill" title="Giá điện"><i class="fa-solid fa-bolt"></i> ${String(slide.elec || "Nhà nước").replace(".500đ", ".5k").replace(".800đ", ".8k")}</span>
+          <span class="sv1-spec-pill sv1-equal-pill" title="Giá nước"><i class="fa-solid fa-droplet"></i> ${slide.water || "Nhà nước"}</span>
+          <span class="sv1-spec-pill sv1-equal-pill" title="Chi phí khác"><i class="fa-solid fa-receipt"></i> ${slide.otherCost || "150k"}</span>
+        </div>
       </div>
       <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-title">
         ${slide.title}
       </a>
       <p class="sv1-desc">${String(slide.desc || "").replace(/\s*\n+\s*/g, " ").trim()}</p>
-      <div class="sv1-specs tabular-nums">
-        <span class="sv1-spec-pill" title="Diện tích"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
-        <span class="sv1-spec-pill" title="Phòng ngủ"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
-        <span class="sv1-spec-pill" title="Nhà vệ sinh"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
-        <span class="sv1-spec-pill" title="Giá điện"><i class="fa-solid fa-bolt"></i> ${String(slide.elec || "Nhà nước").replace(".500đ", ".5k").replace(".800đ", ".8k")}</span>
-        <span class="sv1-spec-pill" title="Giá nước"><i class="fa-solid fa-droplet"></i> ${slide.water || "Nhà nước"}</span>
-        <span class="sv1-spec-pill" title="Chi phí khác"><i class="fa-solid fa-receipt"></i> ${slide.otherCost || "150k"}</span>
+      <div class="sv1-specs-row tabular-nums">
+        <div class="sv1-specs-left">
+          <span class="sv1-spec-pill sv1-equal-pill" title="Diện tích"><i class="fa-solid fa-maximize"></i> ${slide.area}</span>
+          <span class="sv1-spec-pill sv1-equal-pill" title="Phòng ngủ"><i class="fa-solid fa-bed"></i> ${slide.beds}</span>
+          <span class="sv1-spec-pill sv1-equal-pill" title="Nhà vệ sinh"><i class="fa-solid fa-bath"></i> ${slide.baths}</span>
+        </div>
+        <button type="button" class="sv1-btn-map-focus sv1-btn-map-cell" onclick="focusPropertyOnHeroMap(${slide.id})">
+          <i class="fa-solid fa-map-location-dot"></i> Bản Đồ
+        </button>
       </div>
       <div class="sv1-cta-row">
         <a href="javascript:void(0)" onclick="openPropertyDetailView(${slide.id})" class="sv1-btn-detail">
-          Xem chi tiết đặc quyền <i class="fa-solid fa-arrow-right"></i>
+          Chi Tiết Tin Đặc Quyền <i class="fa-solid fa-arrow-right"></i>
         </a>
         <button type="button" class="sv1-r-phone" id="sv1ActivePhoneBtn" onclick="revealSv1Phone(this, '${slide.phone}')">
           <span class="sv1-r-phone-icon"><i class="fa-solid fa-phone-volume"></i></span>
@@ -2489,7 +2497,11 @@ function updateSv1LeftAndControlsOnly(withPulse = false) {
 
 function startSv1CylinderLoop() {
   if (SV1_CYLINDER.rafId) return;
-  const tick = () => {
+  SV1_CYLINDER.lastFrameMs = performance.now();
+  const tick = (now) => {
+    const dt = SV1_CYLINDER.lastFrameMs ? Math.min(0.05, Math.max(0.001, (now - SV1_CYLINDER.lastFrameMs) / 1000)) : 0.016;
+    SV1_CYLINDER.lastFrameMs = now;
+
     // Tối ưu hiệu năng: tạm nghỉ tính toán 3D khi tab ẩn, khi đang mở trang chi tiết, hoặc khi đã cuộn qua khỏi Banner VIP
     if (document.hidden || !SV1_CYLINDER.inView || document.body.classList.contains("is-detail-view")) {
       SV1_CYLINDER.rafId = requestAnimationFrame(tick);
@@ -2500,17 +2512,23 @@ function startSv1CylinderLoop() {
     if (rotor && total > 0) {
       if (SV1_CYLINDER.targetProgress !== null) {
         const diff = SV1_CYLINDER.targetProgress - SV1_CYLINDER.progress;
-        if (Math.abs(diff) < 0.003) {
+        if (Math.abs(diff) < 0.0025) {
           SV1_CYLINDER.progress = SV1_CYLINDER.targetProgress;
           SV1_CYLINDER.targetProgress = null;
         } else {
-          SV1_CYLINDER.progress += diff * 0.085;
+          SV1_CYLINDER.progress += diff * (1 - Math.exp(-5.5 * dt));
         }
-      } else if (!SV1_CYLINDER.paused && !SV1_CYLINDER.dragging) {
-        const frac = SV1_CYLINDER.progress - Math.round(SV1_CYLINDER.progress);
-        const speedBoost = 0.0018 + Math.min(0.25, Math.abs(frac)) * 0.018;
-        SV1_CYLINDER.progress += speedBoost;
+      } else if (!SV1_CYLINDER.dragging && !SV1_CYLINDER.cardHoverPaused) {
+        // Trục xoay tuyến tính đều đặn, chỉ dừng khi người dùng đưa chuột vào hình thẻ tin
+        const baseRatePerSec = 0.24;
+        const hoverFactor = SV1_CYLINDER.hovering ? 0.38 : 1.0;
+        SV1_CYLINDER.progress += baseRatePerSec * hoverFactor * dt;
       }
+
+      // Nội suy mượt góc nghiêng chuột
+      const mouseLerp = 1 - Math.exp(-7 * dt);
+      SV1_CYLINDER.smoothMouseX += (SV1_CYLINDER.mouseX - SV1_CYLINDER.smoothMouseX) * mouseLerp;
+      SV1_CYLINDER.smoothMouseY += (SV1_CYLINDER.mouseY - SV1_CYLINDER.smoothMouseY) * mouseLerp;
 
       const isMobile = window.innerWidth <= 980;
       const pivotX = isMobile ? 275 : 475;
@@ -2546,8 +2564,8 @@ function startSv1CylinderLoop() {
         if (slotDiff < -total / 2) slotDiff += total;
 
         const absSlot = Math.abs(slotDiff);
-        // Hiển thị đúng 3 thẻ lớn trên vòng trụ (1 thẻ chính giữa + 1 thẻ dưới-phải + 1 thẻ trên-trái)
-        if (absSlot > 1.48) {
+        // Hiển thị mượt các thẻ trên vòng trụ và làm mờ êm ở 2 đầu trục
+        if (absSlot > 1.68) {
           if (!c.classList.contains("is-back")) {
             c.style.opacity = "0";
             c.style.pointerEvents = "none";
@@ -2558,14 +2576,14 @@ function startSv1CylinderLoop() {
         }
 
         // Quỹ đạo 3 thẻ lớn tách rời hoàn toàn, mặt luôn hướng ra ngoài + đế dày 3D -9px
-        const arcAngle = Math.min(86, Math.abs(slotDiff * 54)) * Math.sign(slotDiff);
+        const arcAngle = Math.min(88, Math.abs(slotDiff * 52)) * Math.sign(slotDiff);
         const rad = (arcAngle * Math.PI) / 180;
         const tx = Math.sin(rad) * pivotX;
         const ty = slotDiff * (isMobile ? 106 : 158);
-        const rotY = slotDiff * 44 + SV1_CYLINDER.mouseX * 4;
-        const rotX = SV1_CYLINDER.mouseY * -3;
-        const scale = Math.max(0.66, 1.07 - absSlot * 0.24);
-        const opacity = absSlot < 1.1 ? 1 - absSlot * 0.14 : Math.max(0, (1.48 - absSlot) * 2.2);
+        const rotY = slotDiff * 44 + SV1_CYLINDER.smoothMouseX * 4;
+        const rotX = SV1_CYLINDER.smoothMouseY * -3;
+        const scale = Math.max(0.64, 1.06 - absSlot * 0.22);
+        const opacity = Math.pow(Math.max(0, Math.cos((absSlot / 1.68) * (Math.PI / 2))), 0.82);
 
         // Tia Laser viền ngoài + Tia Laser quét ngang mặt thẻ (xuất hiện ngẫu nhiên, chạy ngẫu nhiên và kết thúc hẳn sau 3s trên mỗi tin)
         const laserAngle = ((SV1_CYLINDER.progress * 420 + i * 110) % 360 + 360) % 360;
@@ -2606,7 +2624,18 @@ function startSv1CylinderLoop() {
       if (frontIdx !== STATE.sv1Index) {
         STATE.sv1Index = frontIdx;
         STATE.sv1ThumbIndex = 0;
-        updateSv1LeftAndControlsOnly(true);
+        updateSv1LeftAndControlsOnly(false);
+      }
+
+      // 1 hiệu ứng chuyển cảnh mờ duy nhất cho phần thông tin (.sv1-left), không nhấn lại
+      if (containerEl) {
+        const leftInfoEl = containerEl.querySelector(".sv1-left");
+        if (leftInfoEl) {
+          let centerDist = Math.abs(normProg - frontIdx);
+          if (centerDist > total / 2) centerDist = total - centerDist;
+          const fadeOpacity = centerDist <= 0.24 ? 1 : Math.max(0.22, 1 - ((centerDist - 0.24) / 0.26) * 0.78);
+          leftInfoEl.style.opacity = fadeOpacity.toFixed(3);
+        }
       }
     }
     SV1_CYLINDER.rafId = requestAnimationFrame(tick);
@@ -2633,15 +2662,30 @@ function bindSv1OrbitInteractions(stage) {
   }
 
   stage.addEventListener("mouseenter", () => {
-    SV1_CYLINDER.paused = true;
+    SV1_CYLINDER.hovering = true;
+  });
+  stage.addEventListener("pointerover", (e) => {
+    if (e.target && e.target.closest(".sv1-3d-orbit-card")) {
+      SV1_CYLINDER.cardHoverPaused = true;
+    }
+  });
+  stage.addEventListener("pointerout", (e) => {
+    const related = e.relatedTarget;
+    if (!related || !related.closest || !related.closest(".sv1-3d-orbit-card")) {
+      SV1_CYLINDER.cardHoverPaused = false;
+    }
   });
   stage.addEventListener("mousemove", (e) => {
     const rect = stage.getBoundingClientRect();
     SV1_CYLINDER.mouseX = (e.clientX - rect.left) / rect.width - 0.5;
     SV1_CYLINDER.mouseY = (e.clientY - rect.top) / rect.height - 0.5;
+    if (e.target && e.target.closest && e.target.closest(".sv1-3d-orbit-card")) {
+      SV1_CYLINDER.cardHoverPaused = true;
+    }
   });
   stage.addEventListener("mouseleave", () => {
-    SV1_CYLINDER.paused = false;
+    SV1_CYLINDER.hovering = false;
+    SV1_CYLINDER.cardHoverPaused = false;
     SV1_CYLINDER.dragging = false;
     SV1_CYLINDER.mouseX = 0;
     SV1_CYLINDER.mouseY = 0;

@@ -17,7 +17,7 @@
   --ctt-grad-gold: linear-gradient(135deg, #f15a22 0%, #f15a22 50%, #f15a22 100%);
   
   /* Luxury Neutral & Surface Tokens */
-  --bg-page: #f6f7f9;
+  --bg-page: #ffffff;
   --bg-surface: #ffffff;
   --bg-obsidian: #0f172a;
   --text-main: #18181b;
@@ -1439,11 +1439,8 @@ button, input, select, textarea, .leaflet-container {
    ========================================================================== */
 .sv1-luxury-stage {
   position: relative;
-  padding: 36px 0 24px;
-  background:
-    radial-gradient(circle at 85% 20%, rgba(243, 114, 1, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 15% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 45%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 12px 0 18px;
+  background: #ffffff;
   perspective: 1400px;
   overflow: hidden;
 }
@@ -1992,13 +1989,19 @@ button, input, select, textarea, .leaflet-container {
    ========================================================================== */
 .lc-section {
   width: 100%;
-  padding: 28px 0 36px;
+  padding: 32px 0 40px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
 }
 
 .lc-section.lc-spotlight-zone {
-  background: linear-gradient(180deg, #fffaf5 0%, #f6f7f9 100%);
-  border-top: 1px solid #ffedd5;
-  border-bottom: 1px solid #f1f5f9;
+  background: #f4f6f9;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.lc-section.lc-prime-zone {
+  background: #f4f6f9;
 }
 
 .lc-wrap {
@@ -3537,8 +3540,8 @@ button, input, select, textarea, .leaflet-container {
   margin-top: 14px;
   padding: 12px 16px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #fffaf5 0%, #fff3eb 100%);
-  border: 1px solid #fed7aa;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -5842,7 +5845,7 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   background: #0f172a;
   box-shadow: 0 22px 48px rgba(2, 6, 23, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
   transform-style: preserve-3d;
-  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.45s ease, border-color 0.35s ease;
+  transition: border-color 0.35s ease;
   cursor: pointer;
   will-change: transform, opacity;
 }
@@ -6777,32 +6780,13 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 .sv1-card-3d {
   position: relative;
   background:
-    radial-gradient(circle at var(--bg-sun-x, 68%) var(--bg-sun-y, 34%), rgba(255, 198, 92, 0.34) 0%, rgba(241, 90, 34, 0.13) 34%, transparent 66%) padding-box,
-    radial-gradient(circle at var(--bg-sun2-x, 26%) var(--bg-sun2-y, 72%), rgba(255, 224, 150, 0.28) 0%, rgba(255, 157, 0, 0.08) 40%, transparent 70%) padding-box,
-    linear-gradient(135deg, #ffffff 0%, #fff9f2 58%, #ffefe0 100%) padding-box,
-    linear-gradient(135deg, #f15a22 0%, #ff7a00 50%, #ff9d00 100%) border-box !important;
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #f15a22 0%, #f37201 100%) border-box !important;
 }
 
-/* Tia nắng chéo chuyển động ngẫu nhiên phía sau trục xoay 3D */
+/* Ẩn tia nắng cam vàng phía sau trục xoay 3D để nền trắng tinh khiết, tương phản cao */
 .sv1-3d-orbit-stage::before {
-  content: "";
-  position: absolute;
-  inset: -30px -40px;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    linear-gradient(
-      118deg,
-      transparent 10%,
-      rgba(255, 183, 77, 0.16) 24%,
-      rgba(255, 236, 179, 0.34) 31%,
-      transparent 42%,
-      rgba(241, 90, 34, 0.13) 54%,
-      rgba(255, 213, 128, 0.28) 61%,
-      transparent 74%
-    ),
-    radial-gradient(circle at var(--stage-sun-x, 54%) var(--stage-sun-y, 42%), rgba(255, 210, 110, 0.38) 0%, rgba(241, 90, 34, 0.14) 36%, transparent 68%);
-  animation: sv1SunRayBreathe 9.5s ease-in-out infinite;
+  display: none !important;
 }
 
 /* Luồng ánh nắng & vệt sáng phản quang quét ngang qua mặt kính thẻ khi thẻ xoay */
@@ -7102,45 +7086,139 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
   gap: 20px !important;
 }
 .sv1-left {
-  width: 32.5% !important;
-  gap: 11px !important;
+  width: 35% !important;
+  gap: 10px !important;
+}
+.sv1-price-row {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  width: 100%;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
 }
 .sv1-price {
-  font-size: 42px !important;
+  font-size: 34px !important;
+  line-height: 1.05 !important;
+  white-space: nowrap;
 }
 .sv1-price span {
-  font-size: 19px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+.sv1-utility-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 .sv1-title {
-  font-size: 19.5px !important;
+  font-size: 19px !important;
 }
 .sv1-desc {
   font-size: 13.5px !important;
 }
-.sv1-specs {
-  gap: 4px !important;
+.sv1-equal-pill {
+  width: 74px !important;
+  min-width: 74px !important;
+  max-width: 74px !important;
+  height: 29px !important;
+  padding: 0 4px !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  font-size: 10.2px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box !important;
+  flex: 0 0 74px !important;
 }
-.sv1-specs .sv1-spec-pill {
-  padding: 5px 5px !important;
-  font-size: 10.8px !important;
-  gap: 3.5px !important;
+.sv1-equal-pill i {
+  font-size: 9.8px !important;
+  flex-shrink: 0;
+}
+.sv1-specs-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100%;
+}
+.sv1-specs-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.sv1-specs-row .sv1-btn-map-cell {
+  margin-left: auto;
+  height: 29px !important;
+  padding: 0 13px !important;
+  border-radius: 99px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  font-size: 11.2px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05) !important;
+  cursor: pointer;
+}
+.sv1-specs-row .sv1-btn-map-cell i {
+  color: var(--ctt-orange) !important;
+  font-size: 11px !important;
+}
+.sv1-specs-row .sv1-btn-map-cell:hover {
+  background: #f8fafc !important;
+  border-color: #94a3b8 !important;
 }
 .sv1-cta-row {
-  gap: 8px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
 }
-.sv1-cta-row .sv1-btn-detail {
-  padding: 11px 14px !important;
-  font-size: 12.2px !important;
+.sv1-cta-row .sv1-btn-detail,
+.sv1-cta-row #sv1ActivePhoneBtn {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 42px !important;
+  justify-content: center !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
 }
 .sv1-cta-row #sv1ActivePhoneBtn {
-  padding: 4px 12px 4px 5px !important;
-  font-size: 12.2px !important;
+  padding: 0 10px 0 6px !important;
   gap: 6px !important;
 }
 .sv1-cta-row #sv1ActivePhoneBtn .sv1-r-phone-icon {
   width: 28px !important;
   height: 28px !important;
   font-size: 12px !important;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.sv1-cta-row .sv1-btn-detail {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.sv1-cta-row .sv1-btn-detail:hover {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+}
+.sv1-cta-row #sv1ActivePhoneBtn:hover .sv1-r-phone-icon {
+  background: #0f172a !important;
+  color: #ffffff !important;
 }
 .sv1-3d-orbit-stage {
   height: 520px !important;
@@ -7186,4 +7264,49 @@ body.is-detail-view .sticky-contact-bar .zalo-btn-footer {
 }
 #propertyGalleryBackdrop .ctt-modal-dialog > div:last-child > div:last-child {
   justify-content: center !important;
+}
+
+/* Flat, Shadow-Free, Borderless Seamless VIP Banner (.sv1) */
+.sv1-card-3d,
+.sv1-card-3d:hover {
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 6px 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+.sv1-card-3d::before {
+  display: none !important;
+  content: none !important;
+}
+.sv1-card-3d .sv1-3d-orbit-card,
+.sv1-card-3d .sv1-orbit-frame,
+.sv1-card-3d .sv1-3d-orbit-card.is-center .sv1-orbit-frame,
+.sv1-card-3d .sv1-3d-orbit-card:not(.is-center) .sv1-orbit-frame,
+.sv1-card-3d .sv1-spec-pill,
+.sv1-card-3d .sv1-btn-map-cell,
+.sv1-card-3d .sv1-btn-detail,
+.sv1-card-3d .sv1-r-phone,
+.sv1-card-3d .sv1-card-thumb {
+  box-shadow: none !important;
+  filter: none !important;
+}
+.sv1-card-3d.is-slide-switching .sv1-3d-orbit-card.is-center .sv1-orbit-frame {
+  animation: none !important;
+}
+/* Lock .sv1-left height so info rows never bounce when switching slides */
+.sv1-left .sv1-loc {
+  min-height: 21px !important;
+}
+.sv1-left .sv1-title {
+  line-height: 1.35 !important;
+  min-height: calc(19px * 1.35 * 2) !important;
+  max-height: calc(19px * 1.35 * 2) !important;
+}
+.sv1-left {
+  transform: none !important;
+  will-change: opacity;
 }
