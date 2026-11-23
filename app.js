@@ -5534,15 +5534,39 @@ function closeStudioPriceUnitDelay() {
   }, 150);
 }
 
+function getStudioPriceUnitText() {
+  return ({ ngay: "Ngày", thang: "Tháng", nam: "Năm" }[STUDIO_STATE.priceUnit || "thang"]);
+}
+
+function formatStudioPriceText(rawPrice) {
+  const num = parseFloat(String(rawPrice ?? "").replace(/,/g, ".").trim());
+  if (!Number.isFinite(num) || num <= 0) {
+    return `${rawPrice || "--"} Triệu`;
+  }
+  if (num < 1) {
+    return `${Math.round(num * 1000000).toLocaleString("vi-VN")}đ`;
+  }
+  return `${num} Triệu`;
+}
+
+function updateStudioPriceUnitLabel() {
+  const labelEl = document.getElementById("dPriceUnitLabel");
+  if (!labelEl) return;
+  const unitText = getStudioPriceUnitText();
+  const rawVal = document.getElementById("dPrice")?.value || "";
+  const num = parseFloat(rawVal);
+  if (Number.isFinite(num) && num > 0 && num < 1) {
+    labelEl.textContent = `(${Math.round(num * 1000000).toLocaleString("vi-VN")}đ / ${unitText})`;
+  } else {
+    labelEl.textContent = `(Triệu / ${unitText})`;
+  }
+  labelEl.style.display = "inline";
+}
+
 function selectStudioPriceUnit(unit) {
   clearTimeout(STUDIO_PRICE_TIMER);
   STUDIO_STATE.priceUnit = unit;
-  const labelMap = { ngay: "Ngày", thang: "Tháng", nam: "Năm" };
-  const labelEl = document.getElementById("dPriceUnitLabel");
-  if (labelEl) {
-    labelEl.textContent = `(Triệu / ${labelMap[unit] || "Tháng"})`;
-    labelEl.style.display = "inline";
-  }
+  updateStudioPriceUnitLabel();
   document.getElementById("dPriceUnitList")?.classList.remove("is-open");
   const inputEl = document.getElementById("dPrice");
   if (inputEl) inputEl.focus();
@@ -5551,6 +5575,7 @@ function selectStudioPriceUnit(unit) {
 
 function onStudioPriceInput() {
   document.getElementById("dPriceUnitList")?.classList.remove("is-open");
+  updateStudioPriceUnitLabel();
   renderStudioPreview();
 }
 
@@ -6528,7 +6553,7 @@ function renderStudioPreview() {
           </div>
           <div class="lc-card-body" style="padding-top:20px;">
             <div class="lc-card-toprow">
-              <div class="lc-card-price tabular-nums">${price} Triệu <span>| ${({ ngay: "Ngày", thang: "Tháng", nam: "Năm" }[STUDIO_STATE.priceUnit || "thang"])}</span></div>
+              <div class="lc-card-price tabular-nums">${formatStudioPriceText(price)} <span>| ${getStudioPriceUnitText()}</span></div>
               <div style="position:relative;display:inline-flex;align-items:center;">
                 ${stickerHTML}
                 <span class="lc-card-type">${STUDIO_STATE.catLabel}</span>
@@ -6568,7 +6593,7 @@ function renderStudioPreview() {
           <i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);"></i> ${fullAddr}
         </div>
         <div style="font-size:26px;font-weight:900;color:var(--ctt-orange);line-height:1.1;margin-bottom:6px;" class="tabular-nums">
-          ${price} Triệu <span style="font-size:13px;color:#64748b;font-weight:600;">| Tháng</span>
+          ${formatStudioPriceText(price)} <span style="font-size:13px;color:#64748b;font-weight:600;">| ${getStudioPriceUnitText()}</span>
         </div>
         <div style="font-size:14.5px;font-weight:900;color:#0f172a;line-height:1.35;margin-bottom:6px;">${title}</div>
         <p style="font-size:11.5px;color:#475569;line-height:1.45;margin-bottom:10px;">${desc}</p>
@@ -6656,7 +6681,7 @@ function renderStudioPreview() {
         </div>
         <div style="display:grid;gap:8px;font-size:11.5px;color:#334155;">
           <div style="background:#fffaf5;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;" class="tabular-nums">
-            <strong style="color:var(--ctt-orange);font-size:15px;">${price} Triệu/tháng</strong> • Cọc ${STUDIO_STATE.deposit || "Thỏa Thuận"} • ${area} m² • ${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}
+            <strong style="color:var(--ctt-orange);font-size:15px;">${formatStudioPriceText(price)}/${getStudioPriceUnitText().toLowerCase()}</strong> • Cọc ${STUDIO_STATE.deposit || "Thỏa Thuận"} • ${area} m² • ${STUDIO_STATE.beds} • ${STUDIO_STATE.baths}
           </div>
           <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px;">
             <div style="font-size:10.5px;font-weight:800;color:#0f172a;margin-bottom:4px;">CHI PHÍ SINH HOẠT & QUY ĐỊNH</div>
@@ -6832,7 +6857,8 @@ function publishStudioListingNow() {
     project: getValidStudioComboValue("project") || "",
     price: priceNum,
     priceMillion: priceNum,
-    priceText: `${priceNum} Triệu`,
+    priceText: formatStudioPriceText(priceNum),
+    unit: getStudioPriceUnitText(),
     city: cityVal,
     ward: wardVal,
     fullAddress: buildStudioFullAddress() || `${wardVal}, ${cityVal}`,

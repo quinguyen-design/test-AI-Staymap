@@ -69,7 +69,7 @@
 - **Quy chuẩn chi tiết từng bước:**
   - **Bước 1 (Phân loại & Địa chỉ):** Chọn loại hình BĐS, Tỉnh/Thành, Phường/Xã, Dự án/Đường, Tên người đăng, SĐT (chuẩn 10 số VN).
   - **Bước 2 (Thông Số & Chi Phí):**
-    - **Giá Thuê (`#dPrice`):** Trình bày bằng `.ctt-combo-wrap` giống hệt **Nước** và **Giặt Sấy**. Nhãn hiển thị đơn vị động `#dPriceUnitLabel` (**mặc định `(Triệu / Tháng)`**). Khi click/focus vào ô Giá Thuê, xổ danh sách `#dPriceUnitList` theo đúng thứ tự: **`Ngày` → `Tháng` (mặc định active) → `Năm`**, đồng bộ đơn vị sang phần Xem Trước (`| Ngày`, `| Tháng`, `| Năm`).
+    - **Giá Thuê (`#dPrice`):** Trình bày bằng `.ctt-combo-wrap` giống hệt **Nước** và **Giặt Sấy**. Nhãn hiển thị đơn vị động `#dPriceUnitLabel` (**mặc định `(Triệu / Tháng)`**). Khi click/focus vào ô Giá Thuê, xổ danh sách `#dPriceUnitList` theo đúng thứ tự: **`Ngày` → `Tháng` (mặc định active) → `Năm`**, đồng bộ đơn vị sang phần Xem Trước (`| Ngày`, `| Tháng`, `| Năm`). Nếu giá nhập **dưới 1** (ví dụ `0.7`), tự động quy đổi sang đơn vị `đ` (`700.000đ`) trên cả nhãn diễn giải, xem trước và tin đã đăng.
     - **Tiền Cọc**, **Diện Tích**, **Phòng Ngủ**, **Nhà Vệ Sinh**, **Điện / Nước (`m³` | `Người`) / Trọn Gói CP Khác / Internet / Giặt Sấy (`Người` | `1 Lần` | `Kg` | `Phòng`) / Phí Rác / Phí Xe / Giới Hạn Người**.
   - **Bước 3 (Tiêu Đề, Mô Tả & Hình Ảnh):** Giới hạn tiêu đề 70 ký tự, nút AI gợi ý nội dung (`Click Ngay`), tải tối đa 9 ảnh & chọn ảnh bìa.
   - **Bước 4 (Chọn Gói Tin & Thanh Toán):** 6 gói tin thực (`Banner Đặc Quyền`, `TOP 1 Hiển Thị`, `TOP 2 Nổi Bật`, `TOP 3 Hiệu Quả`, `Tin Cơ Bản`, `Đăng Tin Miễn Phí`), bộ tính phí minh bạch và nạp ví VietQR/MoMo (`+11%`).
