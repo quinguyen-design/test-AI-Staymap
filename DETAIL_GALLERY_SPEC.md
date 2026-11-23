@@ -1,18 +1,12 @@
-# Hướng Dẫn Trình Bày Hình Ảnh & Hiển Thị Đầu Trang — Trang Tin Chi Tiết (ChoThueTot.vn)
+# Hướng Dẫn Trình Bày Hình Ảnh — Trang Tin Chi Tiết (ChoThueTot.vn)
 
-*(Tài liệu đặc tả phần điều hướng vào trang chi tiết và hiển thị hình ảnh trong trang chi tiết tin đăng, trích xuất chuẩn từ mã nguồn `app.js` và `styles.css`.)*
+*(Tài liệu đặc tả phần hiển thị hình ảnh trong trang chi tiết tin đăng, trích xuất chuẩn từ mã nguồn `app.js` và `styles.css`.)*
 
 ---
 
-## 0. Điều Hướng Khi Click Vào Tin (Ẩn Bản Đồ Đầu Trang)
+## 0. Hành Vi Hiển Thị Đầu Trang Khi Click Vào Tin
 
-- **Yêu cầu UX:** Khi người dùng click vào bất kỳ tin đăng nào (trên Hero Map, Banner VIP hoặc các tầng tin), giao diện **phải vào thẳng phần hình ảnh & thông tin tin đăng ở đầu trang**, **không hiển thị khối Bản Đồ đầu trang (`#heroMap` cao `540px`)** phía trên nội dung tin chi tiết.
-- **Cách triển khai chuẩn:**
-  1. Trong `openPropertyDetailView(propId)` ([app.js](app.js#L3434-L3438)): gắn class `is-detail-view` vào `document.body`, ẩn các route khác, hiện `#view-detail` và gọi `window.scrollTo({ top: 0, behavior: "instant" })`.
-  2. Trong CSS ([styles.css](styles.css#L7314-L7334)): khi có `body.is-detail-view`:
-     - Thu gọn `.site-header-hero.hero-is-map` về `height: auto !important; min-height: 0 !important; background: #ffffff !important; border-bottom: 1px solid #e2e8f0;`.
-     - Ẩn hoàn toàn `#heroMap`, `.hero-map-hud-bottom`, `.hero-map-left-drawer` (`display: none !important;`), chỉ giữ lại thanh Header (`.site-header-bar` & `.site-header-nav`) gọn gàng ở trên cùng.
-     - Khi quay lại trang chủ (`closePropertyDetailView`), gỡ class `is-detail-view` để bản đồ đầu trang hiển thị lại bình thường.
+- Khi click vào tin (`openPropertyDetailView(propId)`), bản đồ đầu trang (`#heroMap` cao `540px`) vẫn giữ nguyên ở đầu trang và tự động zoom đến vị trí tin đăng cùng các ghim lân cận (`updateMapPins("all", item.id)`), phía dưới là toàn bộ phần `#view-detail` (Breadcrumb, Tiêu đề, Khung ảnh chi tiết và Cột liên hệ).
 
 ---
 

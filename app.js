@@ -3435,7 +3435,6 @@ function openPropertyDetailView(propId) {
   document.querySelectorAll(".app-route-view").forEach((el) => (el.style.display = "none"));
   const detailView = document.getElementById("view-detail");
   detailView.style.display = "block";
-  window.scrollTo({ top: 0, behavior: "instant" });
 
   // Zoom Hero Map to this property and show nearby pins
   updateMapPins("all", item.id);
