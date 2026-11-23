@@ -5511,8 +5511,48 @@ function onStudioRoomCountBlur(kind, inputEl) {
   renderStudioPreview();
 }
 
+let STUDIO_PRICE_TIMER = null;
 let STUDIO_WATER_TIMER = null;
 let STUDIO_LAUNDRY_TIMER = null;
+
+function openStudioPriceUnitList() {
+  clearTimeout(STUDIO_PRICE_TIMER);
+  const listEl = document.getElementById("dPriceUnitList");
+  if (!listEl) return;
+  const activeUnit = STUDIO_STATE.priceUnit || "thang";
+  const order = ["ngay", "thang", "nam"];
+  listEl.querySelectorAll(".ctt-combo-item").forEach((btn, idx) => {
+    btn.classList.toggle("is-active", activeUnit === order[idx]);
+  });
+  listEl.classList.add("is-open");
+}
+
+function closeStudioPriceUnitDelay() {
+  clearTimeout(STUDIO_PRICE_TIMER);
+  STUDIO_PRICE_TIMER = setTimeout(() => {
+    document.getElementById("dPriceUnitList")?.classList.remove("is-open");
+  }, 150);
+}
+
+function selectStudioPriceUnit(unit) {
+  clearTimeout(STUDIO_PRICE_TIMER);
+  STUDIO_STATE.priceUnit = unit;
+  const labelMap = { ngay: "Ngày", thang: "Tháng", nam: "Năm" };
+  const labelEl = document.getElementById("dPriceUnitLabel");
+  if (labelEl) {
+    labelEl.textContent = `(Triệu / ${labelMap[unit] || "Tháng"})`;
+    labelEl.style.display = "inline";
+  }
+  document.getElementById("dPriceUnitList")?.classList.remove("is-open");
+  const inputEl = document.getElementById("dPrice");
+  if (inputEl) inputEl.focus();
+  renderStudioPreview();
+}
+
+function onStudioPriceInput() {
+  document.getElementById("dPriceUnitList")?.classList.remove("is-open");
+  renderStudioPreview();
+}
 
 function openStudioWaterUnitList() {
   clearTimeout(STUDIO_WATER_TIMER);
@@ -6383,6 +6423,12 @@ function initStudioPostListing(preselectedZoneId = null) {
   if (bedsEl) bedsEl.value = "1";
   const bathsEl = document.getElementById("dBaths");
   if (bathsEl) bathsEl.value = "1";
+  STUDIO_STATE.priceUnit = "thang";
+  const priceUnitEl = document.getElementById("dPriceUnitLabel");
+  if (priceUnitEl) {
+    priceUnitEl.textContent = "(Triệu / Tháng)";
+    priceUnitEl.style.display = "inline";
+  }
   STUDIO_STATE.waterUnit = "nguoi";
   const waterUnitEl = document.getElementById("dWaterUnitLabel");
   if (waterUnitEl) {
@@ -6482,7 +6528,7 @@ function renderStudioPreview() {
           </div>
           <div class="lc-card-body" style="padding-top:20px;">
             <div class="lc-card-toprow">
-              <div class="lc-card-price tabular-nums">${price} Triệu <span>| Tháng</span></div>
+              <div class="lc-card-price tabular-nums">${price} Triệu <span>| ${({ ngay: "Ngày", thang: "Tháng", nam: "Năm" }[STUDIO_STATE.priceUnit || "thang"])}</span></div>
               <div style="position:relative;display:inline-flex;align-items:center;">
                 ${stickerHTML}
                 <span class="lc-card-type">${STUDIO_STATE.catLabel}</span>
