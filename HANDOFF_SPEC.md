@@ -59,7 +59,9 @@
 - **Sticky Nav + Segmented Search Bar (`.site-header-nav`):**
   - Trái: Nút dropdown `CHO THUÊ` liệt kê 6 danh mục loại hình.
   - Giữa: Thanh tìm kiếm 3 phân đoạn (`.hsp-bar.hsp-segmented`):
-    1. `Địa điểm / Dự án` (`#hspSearchInput` + `#segLocPopover`, `min-width: 320px`).
+    1. `Địa điểm / Từ khóa` (`#hspSearchInput` + `#segLocPopover`, `min-width: 340px`):
+       - **Chưa gõ:** Hiện sẵn nhóm **Từ khóa phổ biến** 1-click (`Full nội thất`, `Gần Metro`, `Thang máy`, `Sân vườn`, `Duplex`, `Mặt tiền`) cùng **Dự án / Phường / Tên đường**.
+       - **Khi gõ (hỗ trợ không dấu, đa từ khóa):** Đếm trực tiếp số tin khớp toàn văn (`matchesKeywordAcrossListing` dò qua tiêu đề, mô tả, địa chỉ, dự án, loại hình, nội thất, hướng, điện/nước, tiện ích, dịch vụ) và đồng bộ ghim trên `#heroMap` khi tìm kiếm.
     2. `Loại hình` (`#segCatDisplay` + `#segCatPopover`).
     3. `Mức giá` + nút `Lọc` (mở Mega-Search Panel 2 cột rộng, không tràn khung 280px) + nút tìm kiếm cam.
   - Phải: Menu điều hướng (`TRANG CHỦ`, `BẢNG GIÁ`, `TIN TỨC`, `ƯU ĐÃI`).

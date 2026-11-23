@@ -186,11 +186,11 @@
       <div class="shn-search">
         <form role="search" autocomplete="off" onsubmit="event.preventDefault();executeMegaSearch();" style="margin:0;">
         <div class="hsp-bar hsp-segmented" id="hspBar">
-          <!-- Segment 1: Location / Project Autocomplete -->
+          <!-- Segment 1: Location / Project / Full-Text Keyword Autocomplete -->
           <div class="hsp-seg-field hsp-seg-loc" onclick="openSegPopover('loc', event)">
-            <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Dự án</span>
-            <input type="search" id="hspSearchInput" name="ctt_q_place" class="hsp-input" placeholder="Nhập đường, phường, dự án..." autocomplete="one-time-code" aria-autocomplete="list" readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" oninput="renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
-            <div class="hsp-seg-popover" id="segLocPopover" style="min-width:320px;" onclick="event.stopPropagation()"></div>
+            <span class="hsp-seg-label"><i class="fa-solid fa-location-dot" style="color:var(--ctt-orange);margin-right:3px;"></i>Địa điểm / Từ khóa</span>
+            <input type="search" id="hspSearchInput" name="ctt_q_place" class="hsp-input" placeholder="Nhập đường, phường, dự án hoặc từ khóa..." autocomplete="one-time-code" aria-autocomplete="list" readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" oninput="delete this.dataset.pickedLabel;renderSegLocSuggestions(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();executeMegaSearch();}">
+            <div class="hsp-seg-popover" id="segLocPopover" style="min-width:340px;" onclick="event.stopPropagation()"></div>
           </div>
 
           <div class="hsp-seg-divider"></div>
