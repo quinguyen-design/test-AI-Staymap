@@ -1,7 +1,7 @@
 # ChoThueTot.vn (Staymap) — Tài Liệu Bàn Giao Kỹ Thuật Đầy Đủ (Full Spec 100%)
 
 - **Repository chuẩn đối chiếu:** `https://github.com/quinguyen-design/test-AI-Staymap` (nhánh `main`)
-- **3 tệp mã nguồn chính:** [index.html](index.html), [styles.css](styles.css), [app.js](app.js)
+- **Tệp mã nguồn chính:** [index.html](index.html), [dang-tin-demo.html](dang-tin-demo.html) (trang Đăng Tin độc lập đồng bộ 1:1), [styles.css](styles.css), [app.js](app.js), [data/vn_admin_units_2025.js](data/vn_admin_units_2025.js)
 - **Phạm vi đặc tả đầy đủ:**
   1. Hệ thống thiết kế & Nhịp điệu nền toàn trang
   2. **Hero Map & Thanh Tìm Kiếm** (`.site-header-hero.hero-is-map`, `.site-header-nav`)

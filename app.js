@@ -1150,6 +1150,13 @@ const LANDMARKS = {
 // INITIALIZATION & ROUTER
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.CTT_STANDALONE_POST_DEMO) {
+    restoreAuthSession();
+    updateWalletUI();
+    initStudioPostListing(null);
+    goToModalWizardStep(1, true);
+    return;
+  }
   restoreAuthSession();
   updateAuthUI();
   initHeroMap();
@@ -3948,6 +3955,10 @@ function openPostModal() {
 }
 
 function closePostModal() {
+  if (window.CTT_STANDALONE_POST_DEMO) {
+    window.location.href = "index.html";
+    return;
+  }
   document.getElementById("postModalBackdrop")?.classList.remove("is-open");
 }
 
@@ -6962,7 +6973,10 @@ function publishStudioListingNow() {
     });
   }
 
-  const newId = existingProp ? existingProp.id : PROPERTIES.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0) + 1;
+  const maxExistingId = PROPERTIES.reduce((max, p) => Math.max(max, Number(p.id) || 0), 0);
+  const newId = existingProp
+    ? existingProp.id
+    : (window.CTT_STANDALONE_POST_DEMO ? Math.max(maxExistingId + 1, 10000 + (Date.now() % 89999)) : maxExistingId + 1);
   const priceNum = parseFloat(document.getElementById("dPrice")?.value || "6.5");
   const coverPhoto = STUDIO_STATE.photos[STUDIO_STATE.coverIndex] || STUDIO_STATE.photos[0];
   const elecRaw = (document.getElementById("dElec")?.value || "").replace(/k/gi, "").trim();
@@ -7086,6 +7100,16 @@ function publishStudioListingNow() {
     STATE.sv1Index = 0;
     STATE.sv1ThumbIndex = 0;
     renderSv1Slider();
+  }
+  if (window.CTT_STANDALONE_POST_DEMO) {
+    showCttNotice(
+      `Đăng tin thành công (#${newId})`,
+      `• Gói hiển thị: ${z.name} (${dur.label})\n• Tổng thanh toán (gồm VAT 8%): ${new Intl.NumberFormat("vi-VN").format(grandTotal)}đ\n• Đang mở Trang Chi Tiết Bài Viết vừa xuất bản!`
+    );
+    setTimeout(() => {
+      window.location.href = `index.html${buildPropertySeoUrl(newProp)}`;
+    }, 850);
+    return;
   }
   renderAllHomeGrids();
   updateMapPins("all", newId);
